@@ -13,7 +13,7 @@ Der rote Faden sind Webers Notizen: Notiz 1 ist offen und nennt den ersten Schri
 5. FraudDesk: bei jeder Zahlung VoP-Abfrage starten und Lieferantenakte öffnen. Nordlicht IT und Stadtwerke West weiterbearbeiten, Mira Energie ablehnen → Notiz 4 öffnet mit **103** (1 weiter, 2 abgelehnt = 0, 3 weiter).
 6. ZV-Cockpit → PHANTOME → „Compliance-Stopp setzen“: Freigabecode **362** (3 Fehlalarme im EmbargoCheck, 6 Muster-Buchungen, Überweisung 2 abgelehnt), Gründe „Sanktionstreffer“ und „Geldwäsche über Nova Trade“. Danach „eskalieren und über -1200 prüfen“.
 7. Interner Täter: Mail → „Vorstandsmail“ → Kopfzeilen: gesendet von PC-ZV-114. Intranet: PC-ZV-114 gehört Sven Kranz (Zahlungsverkehr). Mail → Gesendet: 15:31 ging von Webers entsperrtem PC eine Mail an s.kranz, obwohl Weber laut Chat seit 15:26 weg war. Weitere Belege: Mira-Kontoänderung durch s.kranz (FraudDesk), 1. Freigabe von PHANTOME von PC-ZV-114 (ZV-Cockpit).
-8. Hinweisgebersystem: Sven Kranz, die vier Belege (nicht Albers/Kuchen), „Meldung an Compliance und Revision, Beweise sichern, PC sperren, Person nicht ansprechen“.
+8. Hinweisgebersystem: Sven Kranz auswählen. Es gibt zwei Versuche; nach dem zweiten falschen Verdacht ist das Spiel verloren.
 </details>
 
 ## Lokal testen

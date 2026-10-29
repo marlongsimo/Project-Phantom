@@ -79,6 +79,13 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .dicon .ic{font-size:30px;position:relative;line-height:1}
 .phase{border-color:#2f6b8c;background:linear-gradient(135deg,#10283f,#101d30)}.phase b{display:block;margin-top:4px;font-size:1.05rem}
 .phase.p2{border-color:var(--amber);background:linear-gradient(135deg,#3a2c10,#101d30)}.phase.p2 .eyebrow{color:var(--amber)}
+.suspects{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0}
+.suspect{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;border:2px solid #c6d0dd;border-radius:10px;padding:14px 10px;background:#fff;cursor:pointer}
+.suspect input{position:absolute;opacity:0}
+.suspect .av{font-size:2.4rem;line-height:1.1}
+.suspect small{color:#5d6b80}
+.suspect:has(input:checked){border-color:#5b3f8c;background:#f1ebfb}
+.suspect.out{opacity:.4;text-decoration:line-through;cursor:not-allowed}
 .badge.new{background:#ffca70;color:#3a2f00}
 .badge{position:absolute;top:-5px;right:-12px;background:#e81123;color:#fff;border-radius:9px;font-size:.66rem;font-weight:700;padding:1px 5px;text-shadow:none}
 .taskbar{position:absolute;left:0;right:0;bottom:0;height:46px;background:rgba(12,20,32,.94);display:flex;align-items:center;gap:3px;padding:0 6px;color:#fff;z-index:900;overflow:hidden}
@@ -358,7 +365,7 @@ const STEPS = [
   {label:"ZV-Cockpit: Stopp setzen und dokumentieren", done:() => S.f.stopped},
   {label:"Den internen Helfer finden und melden", done:() => S.f.insider}];
 function objective(){
-  if (S.f.stopped) return "PHANTOME ist gestoppt. Jetzt der interne Helfer: Wer hat Weber weggelockt und seinen PC benutzt? Sammelt Belege und meldet sie im Hinweisgebersystem.";
+  if (S.f.stopped) return "PHANTOME ist gestoppt. Jetzt der interne Helfer: Wer hat Weber weggelockt und seinen PC benutzt? Sammelt Spuren und meldet die Person im Hinweisgebersystem – ihr habt nur zwei Versuche.";
   if (S.f.code) return "Compliance-Stopp ist eingetragen. Wählt im ZV-Cockpit das richtige weitere Vorgehen.";
   if (!S.v.notesSeen) return "Öffnet Webers Notizen auf dem Desktop und lest Notiz 1.";
   if (!S.v.zvSel) return "Holt euch im ZV-Cockpit die Empfängerdaten der Zahlung PHANTOME.";
@@ -375,7 +382,7 @@ function hintText(){
     if (!S.v.hdrSeen) return "Öffnet in der Mail eine der „Vorstandsmails“ und klickt auf „Kopfzeilen anzeigen“. Von welchem Rechner kam sie?";
     if (!S.v.pcSeen) return "Sucht im Intranet nach dem Rechnernamen aus den Kopfzeilen (PC-ZV-114).";
     if (!S.v.sentSeen) return "Schaut in Webers Mail unter „Gesendet“. Passt die Uhrzeit zu Webers letzter Chatnachricht?";
-    return "Die vier Belege stehen in Mail (Kopfzeilen, Gesendet), FraudDesk (Lieferantenakte Mira) und ZV-Cockpit (1. Freigabe). Und: den Verdächtigen nicht warnen.";
+    return "Mehrere Spuren führen zum selben Rechner: die Kopfzeilen der Vorstandsmails, die Lieferantenakte von Mira im FraudDesk und die 1. Freigabe von PHANTOME im ZV-Cockpit. Wem gehört er?";
   }
   if (S.f.code) return "Freigeben ist keine Option. Denkt an Dokumentation, Eskalation und Prüfung über einen bekannten Kanal.";
   if (!S.v.notesSeen) return "Klickt auf dem Desktop auf „Notizen“. Notiz 1 ist nicht gesperrt.";
@@ -654,42 +661,35 @@ RENDER.intranet = b => {
 };
 
 /* ---------- Hinweisgebersystem ---------- */
-const WB_PEOPLE = [["", "– bitte wählen –"], ["albers","Katrin Albers (FCU)"], ["yilmaz","Deniz Yilmaz (FCU)"], ["kranz","Sven Kranz (Zahlungsverkehr)"], ["brandt","Lena Brandt (Zahlungsverkehr)"]];
-const WB_EVIDENCE = [
-  ["hdr", "Die beiden „Vorstandsmails“ wurden laut Kopfzeilen vom Rechner PC-ZV-114 verschickt.", true],
-  ["sent", "Um 15:31 ging von Webers entsperrtem PC eine Mail an s.kranz – Weber war da schon weg.", true],
-  ["mira", "Die Kontoänderung bei Mira Energie hat s.kranz ohne Rückruf erfasst.", true],
-  ["release", "Die 1. Freigabe von PHANTOME kam vom Arbeitsplatz PC-ZV-114.", true],
-  ["albers", "Katrin Albers hat Weber um 15:39 im Chat gesucht.", false],
-  ["cake", "Im Team-Chat wurde heute Kuchen angeboten.", false]];
-const WB_DEC = [
-  ["ok", "Meldung über das Hinweisgebersystem an Compliance und Interne Revision. Beweise sichern: Webers PC sofort sperren, nichts löschen. Die verdächtige Person nicht ansprechen."],
-  ["confront", "Die verdächtige Person direkt zur Rede stellen, bevor sie Feierabend macht.", "Damit wird der Verdächtige gewarnt – Beweise könnten verschwinden. Ermitteln ist Aufgabe von Compliance und Revision."],
-  ["chat", "Das ganze Team im Chat warnen, damit niemand mehr mit ihm spricht.", "Das verletzt Vertraulichkeit und Persönlichkeitsrechte und verurteilt vor. Hinweise gehören in den geschützten Meldeweg."],
-  ["delete", "Die gefälschten Mails löschen, damit niemand mehr darauf hereinfällt.", "Das wäre Beweisvernichtung. Verdächtige Mails werden gesichert und gemeldet, nicht gelöscht."]];
+const SUSPECTS = [
+  {id:"albers", name:"Katrin Albers", dept:"Financial Crime Unit", pc:"PC-FCU-421", icon:"👩‍💼"},
+  {id:"yilmaz", name:"Deniz Yilmaz", dept:"Financial Crime Unit", pc:"PC-FCU-425", icon:"🧑‍💼"},
+  {id:"brandt", name:"Lena Brandt", dept:"Zahlungsverkehr", pc:"PC-ZV-118", icon:"👩‍💻"},
+  {id:"kranz", name:"Sven Kranz", dept:"Zahlungsverkehr", pc:"PC-ZV-114", icon:"🧑‍💻"}];
+const SUSPECT_H = "i8i5jc9p2x";
 RENDER.whistle = b => {
   b.className = "wbody";
-  if (S.f.insider){ b.innerHTML = `<div class="appbar" style="background:#5b3f8c">📣 Hinweisgebersystem <small>vertraulich</small></div><p><span class="tag ok">✓ Hinweis übermittelt</span></p><p>Eingangsnummer <b class="mono">HG-2026-0417</b>. Compliance und Interne Revision übernehmen.</p>`; return; }
-  b.innerHTML = `<div class="appbar" style="background:#5b3f8c">📣 Hinweisgebersystem <small>vertraulich · geschützt</small></div>
-    <p class="mini">Hier können Beschäftigte vertraulich Hinweise auf Regelverstöße melden. Hinweisgebende sind geschützt.</p>
-    <p style="margin:10px 0 4px"><b>1. Um wen geht es?</b></p>
-    <select id="wbWho" aria-label="Person">${WB_PEOPLE.map(([v,t]) => `<option value="${v}">${t}</option>`).join("")}</select>
-    <p style="margin:14px 0 4px"><b>2. Welche belegbaren Hinweise habt ihr?</b> <span class="mini muted">(alle zutreffenden ankreuzen)</span></p>
-    ${WB_EVIDENCE.map(([v,t]) => `<label class="choice"><input type="checkbox" name="wbE" value="${v}"><span>${t}</span></label>`).join("")}
-    <p style="margin:14px 0 4px"><b>3. Was tut ihr jetzt?</b></p>
-    ${WB_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="wbD" value="${v}"><span>${t}</span></label>`).join("")}
+  const head = `<div class="appbar" style="background:#5b3f8c">📣 Hinweisgebersystem <small>vertraulich · geschützt</small></div>`;
+  if (S.f.insider){ b.innerHTML = head + `<p><span class="tag ok">✓ Hinweis übermittelt</span></p><p>Eingangsnummer <b class="mono">HG-2026-0417</b>. Compliance und Interne Revision übernehmen.</p>`; return; }
+  const left = 2 - (S.v.accuseFails || 0);
+  b.innerHTML = head + `<h3>Wer hat Weber weggelockt und seinen PC benutzt?</h3>
+    <p class="mini">Wählt die Person, gegen die sich der Hinweis richtet. Die Interne Revision prüft jeden Hinweis – ein falscher Verdacht trifft einen unschuldigen Menschen.</p>
+    <p><span class="tag ${left === 2 ? "info" : "warn"}">${left === 2 ? "2 Versuche" : "Letzter Versuch!"}</span></p>
+    <div class="suspects">${SUSPECTS.map(p => `<label class="suspect ${(S.v.ruledOut || []).includes(p.id) ? "out" : ""}"><input type="radio" name="sus" value="${p.id}" ${(S.v.ruledOut || []).includes(p.id) ? "disabled" : ""}><span class="av">${p.icon}</span><b>${p.name}</b><small>${p.dept}</small></label>`).join("")}</div>
     <div class="row"><button class="primary" id="wbBtn">Hinweis absenden</button></div>`;
   $("wbBtn").addEventListener("click", () => {
-    const who = $("wbWho").value, ev = [...b.querySelectorAll("input[name=wbE]:checked")].map(x => x.value), d = (b.querySelector("input[name=wbD]:checked") || {}).value;
-    if (!who || !ev.length || !d){ fb("whistle", "Füllt alle drei Punkte aus."); return; }
-    if (who !== "kranz") return wrong("whistle", "Die Beweise zeigen auf eine andere Person. Wem gehört der Rechner PC-ZV-114?");
-    const okE = WB_EVIDENCE.filter(e => e[2]).map(e => e[0]);
-    if (ev.some(e => !okE.includes(e))) return wrong("whistle", "Mindestens ein angekreuzter Punkt ist kein Beleg gegen die Person. Meldet nur, was ihr belegen könnt.");
-    if (!okE.every(e => ev.includes(e))) return wrong("whistle", "Es fehlen belegbare Hinweise. Schaut in Mail (Kopfzeilen und „Gesendet“), FraudDesk und ZV-Cockpit.");
-    if (d !== "ok") return wrong("whistle", WB_DEC.find(x => x[0] === d)[2]);
-    S.f.insider = true; S.score += 250; narrate("Hinweisgebersystem: Hinweis gegen Sven Kranz mit vier Belegen übermittelt. Webers PC wird gesperrt und gesichert.");
-    render("whistle"); fb("whistle", "Hinweis übermittelt. +250 Punkte.", "good"); updateHud();
-    setTimeout(() => finish(false), 1200);
+    const who = (b.querySelector("input[name=sus]:checked") || {}).value;
+    if (!who){ fb("whistle", "Wählt eine Person aus."); return; }
+    if (hash(who) === SUSPECT_H){
+      S.f.insider = true; S.score += 250; narrate("Hinweisgebersystem: Hinweis gegen Sven Kranz übermittelt. Webers PC wird gesperrt und als Beweis gesichert.");
+      render("whistle"); fb("whistle", "Hinweis übermittelt. +250 Punkte.", "good"); updateHud();
+      setTimeout(() => finish(false), 1200); return;
+    }
+    S.v.accuseFails = (S.v.accuseFails || 0) + 1; (S.v.ruledOut = S.v.ruledOut || []).push(who);
+    const name = SUSPECTS.find(p => p.id === who).name;
+    if (S.v.accuseFails >= 2){ S.f.wrongAccused = name; narrate("Hinweisgebersystem: Auch der zweite Hinweis (" + name + ") war falsch."); finish(false); return; }
+    narrate("Hinweisgebersystem: Die Revision findet keine Belege gegen " + name + ". Noch ein Versuch.");
+    render("whistle"); wrong("whistle", "Die Revision findet keine Belege gegen " + name + ". Prüft die Spuren noch einmal – ihr habt nur noch einen Versuch.");
   });
 };
 
@@ -985,7 +985,6 @@ function phaseTwo(){
       $("game").classList.remove("hidden"); updateHud();
       narrate("Weber am Telefon: Die Vorstandsmail war gefälscht, jemand im Haus hilft Northbridge. Phase 2: den Helfer finden und melden.");
       notify("Phase 2 von 2", "Fangt bei der Mail an, die Weber weggelockt hat.", "mail");
-      setTimeout(() => { if (!S.ended) chatIn("Komisch: Sven Kranz aus dem Zahlungsverkehr ist um halb vier aus Webers Büro gekommen. Was wollte der denn da, wenn Weber gar nicht da war?"); }, 120000);
     }});
 }
 
@@ -1011,14 +1010,21 @@ function begin(){
 function finish(timeout){
   if (S.ended) return; S.ended = true; S.timeout = timeout; clearInterval(S.timerId);
   const remaining = Math.max(0, S.deadline - Date.now()), mins = Math.floor(remaining/60000);
-  const bonus = timeout ? 0 : Math.min(250, mins*5); S.score += bonus;
+  const bonus = timeout || S.f.wrongAccused ? 0 : Math.min(250, mins*5); S.score += bonus;
   const elapsed = Math.min(3000, Math.round((Date.now() - S.startAt)/1000)), t = storyTime();
   const parts = solvedCount() + (S.f.insider ? 1 : 0);
   window.phantomeResult = {team:S.team, score:S.score, completed:parts, mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout, stopped:!!S.f.stopped, insider:!!S.f.insider};
   const weber = ["Um 16:34 kommt Weber zurück, außer Atem. „Raum 12.04 ist ein Lager. Ich stand vor verschlossener Tür, und mein Ausweis ging plötzlich nicht mehr.“",
     "Er sieht auf seinen Bildschirm und wird blass. „Ich habe in der Eile meinen PC nicht gesperrt. Genau darauf hat er gesetzt.“"];
   let lines, title, eyebrow, head, text;
-  if (!S.f.stopped){
+  if (S.f.wrongAccused){
+    lines = ["Zwei Hinweise, zwei falsche Namen. Die Interne Revision lädt " + S.f.wrongAccused + " zu einem Gespräch – zu Unrecht.",
+      "PHANTOME bleibt zwar gestoppt. Aber während alle auf die falsche Person schauen, löscht Sven Kranz aus dem Zahlungsverkehr in Ruhe seine Spuren.",
+      ...weber,
+      "Ein falscher Verdacht hat Folgen: für den Ruf eines unschuldigen Menschen – und für die Aufklärung."];
+    title = "Falscher Verdacht"; eyebrow = "VERLOREN"; head = "Der Täter ist entkommen.";
+    text = "Die Zahlung ist gestoppt, aber der Hinweis traf zweimal die falsche Person. In der Nachbesprechung: Welche Spuren hätten zu Sven Kranz geführt?";
+  } else if (!S.f.stopped){
     lines = ["16:30 Uhr. Der Buchungslauf startet. 214 Zahlungen gehen raus – auch PHANTOME.",
       "3,8 Millionen Euro an Northbridge S.A. – eine Firma, die auf der Sanktionsliste steht.",
       "Am Montag: Meldung an die Aufsicht, interne Sonderprüfung, Anfragen der Presse. Ein Bußgeld in Millionenhöhe steht im Raum – der Reputationsschaden ist kaum zu beziffern.",
