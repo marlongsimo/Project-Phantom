@@ -1,6 +1,6 @@
 # Projekt Phantome – Compliance Escape Room
 
-Ein Escape Room im Browser mit Story. Freitag, 16:58 Uhr: Senior-Analyst Weber ist verschwunden, ihr seid in seinem Büro eingeschlossen, und um 17:50 Uhr verlassen 3,8 Mio. Euro automatisch die Bank. Untersucht den Raum (Telefon, Kaffeetasse, Aktenschrank, Pinnwand, Papierkorb, Laptop), löst drei Fälle – Sanktionen, Geldwäsche, Fraud – und setzt aus den Codefragmenten den Not-Stopp-Code zusammen.
+Ein Escape Room im Browser mit Story. Freitag, 16:58 Uhr: Senior-Analyst Weber ist verschwunden, ihr seid in seinem Büro eingeschlossen, und um 17:50 Uhr verlassen 3,8 Mio. Euro automatisch die Bank. Untersucht den Raum (Telefon, Kaffeetasse, Aktenschrank, Pinnwand, Papierkorb, Laptop), löst drei Fälle – Sanktionen, Geldwäsche und den Fraud-Desk mit drei zurückgehaltenen Zahlungen – und setzt aus den Codefragmenten den Not-Stopp-Code zusammen.
 
 <details><summary>Lösung für Spielleitung</summary>
 
@@ -8,7 +8,7 @@ Ein Escape Room im Browser mit Story. Freitag, 16:58 Uhr: Senior-Analyst Weber i
 2. Aktenschrank: Viktor Marin, Listen-ID SAN-8839 → A = 7.
 3. Papierkorb + Pinnwand → Laptop-Passwort `weber2604`.
 4. Kontoanalyse: alle Bareinzahlungen und Überweisungen an Nova Trade Ltd. (6 Buchungen) → B = 6.
-5. Posteingang: Domain, Druck/Geheimhaltung/Vier-Augen-Umgehung, MRZ-Prüfung → C = 3.
+5. Fraud-Desk: Nordlicht IT und Stadtwerke West weiterbearbeiten, Mira Energie ablehnen → C = 3.
 6. Not-Stopp-Terminal: Reihenfolge WER → WIE → WOMIT = **763**, dann „Not-Stopp bestätigen, dokumentieren, eskalieren, verifizieren“.
 </details>
 

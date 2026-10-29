@@ -110,6 +110,13 @@ dialog::backdrop{background:rgba(3,8,15,.78)}
 .voicemail .vtext p{margin:6px 0 0}
 .laptop{background:#0b1626;border:6px solid #33465f;border-radius:12px;padding:16px}
 .apps{display:flex;gap:12px;flex-wrap:wrap}
+.vop{display:inline-block;padding:2px 8px;border-radius:6px;font-weight:700;font-size:.88rem}
+.vop.ok{background:#d9f3e3;color:#1d6b40}.vop.no{background:#fbdde0;color:#a3202f}
+.ctx{margin:0;padding-left:18px}.ctx li{margin:2px 0}
+.decide{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.decide label{display:flex;gap:8px;align-items:center;border:2px solid #cfc7b2;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:700;background:#fffdf7}
+.decide label:has(input:checked).go{border-color:#2f8f5a;background:#e3f6ea}
+.decide label:has(input:checked).stop{border-color:#b5303f;background:#fde5e8}
 .app{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:200px;text-align:left}
 .mail{border:1px solid #d6cfbd;border-radius:8px;margin:8px 0;background:#fffdf7}
 .mail summary{padding:9px 12px;cursor:pointer;font-size:.92rem;word-break:break-word}
@@ -330,7 +337,7 @@ dialog::backdrop{background:rgba(3,8,15,.78)}
   <div class="grid">
     <div class="card"><div class="num">PHANTOM 1 · SANKTIONEN</div><h3>Northbridge S.A.</h3><p class="muted mini">Eigentums- und Kontrollverhältnisse bis zur natürlichen Person verfolgen. Ein möglicher Treffer wird anhand von Identitätsmerkmalen (z. B. Geburtsdatum) geprüft, nicht allein am Namen – und dann dokumentiert eskaliert.</p></div>
     <div class="card"><div class="num">PHANTOM 2 · GELDWÄSCHE</div><h3>Nova Trade Ltd.</h3><p class="muted mini">Bareinzahlungen knapp unter Schwellen mit zeitnaher Weiterleitung passen nicht zum Profil eines Studenten. Das ist ein Indikator für eine vertiefte Prüfung, keine automatische Verdachtsfeststellung – Gesamtbild und interne Meldewege zählen.</p></div>
-    <div class="card"><div class="num">PHANTOM 3 · FRAUD</div><h3>Die falsche Vorstandsmail</h3><p class="muted mini">Abweichende Domain, Zeitdruck, Geheimhaltung, Umgehung des Vier-Augen-Prinzips und ein unstimmiges Dokument. Immer über einen unabhängig bekannten Kanal verifizieren – nie per Antwort auf die verdächtige Nachricht.</p></div>
+    <div class="card"><div class="num">PHANTOM 3 · FRAUD</div><h3>Die umgeleitete Mira-Zahlung</h3><p class="muted mini">Verification of Payee ist ein Prüfbaustein, keine Entscheidung für sich. Abgelehnt wird erst, wenn die Kombination stimmt: VoP-Abweichung, kurzfristig geänderte Kontoverbindung, unpassender Zahlungskontext. Plausible Zahlungen werden nach den üblichen Kontrollen weiterbearbeitet. Kontoänderungen und „Vorstandsanweisungen“ immer über einen unabhängig bekannten Kanal verifizieren.</p></div>
   </div>
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Identität, Kontext, wirtschaftlichen Zweck und interne Verfahren prüfen. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren – und den Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
@@ -441,7 +448,7 @@ function objective(){
   const open = [];
   if (!f.sanctions) open.push("die Akte im Aktenschrank prüfen");
   if (!f.laptop) open.push("Webers Laptop entsperren");
-  else { if (!f.aml) open.push("die Kontoanalyse auf dem Laptop"); if (!f.fraud) open.push("den Posteingang auf dem Laptop"); }
+  else { if (!f.aml) open.push("die Kontoanalyse auf dem Laptop"); if (!f.fraud) open.push("den Fraud-Desk auf dem Laptop"); }
   if (open.length) return "Offen: " + open.join(" · ");
   return "Alle drei Fragmente gefunden. Gebt den Code am Not-Stopp-Terminal ein – in der richtigen Reihenfolge.";
 }
@@ -453,7 +460,7 @@ function hintText(){
   if (!f.sanctions) return "Verfolgt die Kette AeroTrans → Calder → Northbridge bis zur natürlichen Person. Auf der Liste stehen ähnliche Namen – vergleicht das Geburtsdatum mit der Passkopie.";
   if (!f.laptop) return "Das Laptop-Passwort kombiniert zwei Hinweise: einen Zettel im Papierkorb und den Dienstplan an der Pinnwand.";
   if (!f.aml) return "Achtet auf das Muster: Bargeld rein, am selben Tag Überweisung an denselben Empfänger raus. Gehalt, Miete und Kleinbeträge sind Ablenkung.";
-  if (!f.fraud) return "Vergleicht die Absenderadresse mit der Telefonliste an der Pinnwand. Achtet auf Druck, Geheimhaltung und das Prüfergebnis des Anhangs.";
+  if (!f.fraud) return "Am Fraud-Desk ist nur eine Zahlung abzulehnen. Sucht die, bei der mehrere Warnsignale zusammenkommen: VoP-Abweichung, frisch geänderte Kontoverbindung, unpassender Zahlungskontext. Ein Zurückhaltungsgrund allein ist kein Betrug.";
   return "Die Reihenfolge steht auf dem gelben Zettel an der Pinnwand: WER → WIE → WOMIT. Wer steckt dahinter? Wie fließt das Geld? Womit wird getäuscht?";
 }
 $("hintBtn").addEventListener("click", () => {
@@ -596,16 +603,19 @@ function laptop(view){
   }
   if (view === "aml") return amlView();
   if (view === "mail") return mailView();
+  if (view === "fraud") return fraudView();
   openModal({eyebrow:"Webers Laptop", title:"Desktop",
-    html:`<div class="laptop"><p class="muted mini" style="margin-bottom:12px">Zwei Fenster sind noch geöffnet:</p><div class="apps">
+    html:`<div class="laptop"><p class="muted mini" style="margin-bottom:12px">Drei Fenster sind noch geöffnet:</p><div class="apps">
       <button class="app" id="appAml"><span>📊 Kontoanalyse – Fall K.</span><small class="muted">${S.f.aml ? "✓ abgeschlossen" : "Weber hat hier zuletzt gearbeitet"}</small></button>
-      <button class="app" id="appMail"><span>✉️ Posteingang (3)</span><small class="muted">${S.f.fraud ? "✓ abgeschlossen" : "1 Nachricht als „dringend“ markiert"}</small></button></div></div>`});
+      <button class="app" id="appFraud"><span>🛡️ Fraud-Desk</span><small class="muted">${S.f.fraud ? "✓ abgeschlossen" : "3 Zahlungen zurückgehalten"}</small></button>
+      <button class="app" id="appMail"><span>✉️ Posteingang (3)</span><small class="muted">1 Nachricht als „dringend“ markiert</small></button></div></div>`});
   $("appAml").addEventListener("click", () => laptop("aml"));
+  $("appFraud").addEventListener("click", () => laptop("fraud"));
   $("appMail").addEventListener("click", () => laptop("mail"));
 }
 function checkPw(){
   const pw = $("pw").value.toLowerCase().replace(/\s+/g,"");
-  if (pw === "weber2604"){ S.f.laptop = true; narrate("Webers Laptop ist entsperrt. Geöffnet: eine Kontoanalyse und der Posteingang."); updateAll(); laptop(); }
+  if (pw === "weber2604"){ S.f.laptop = true; narrate("Webers Laptop ist entsperrt. Geöffnet: eine Kontoanalyse, der Fraud-Desk und der Posteingang."); updateAll(); laptop(); }
   else { wrong("Falsches Passwort. Der Bildschirm wackelt kurz."); $("pw").value = ""; }
 }
 
@@ -650,37 +660,62 @@ function checkAML(){
   else wrong("Das Muster ist noch unvollständig – es fehlen zusammengehörige Buchungen.");
 }
 
-const FRAUD_OPTS = [
-  ["domain","Die Absenderdomain weicht von der offiziellen Bankdomain ab"],
-  ["logo","Die E-Mail enthält das Logo der Bank"],
-  ["pressure","Zeitdruck, Geheimhaltung und die Aufforderung, das Vier-Augen-Prinzip zu umgehen"],
-  ["time","Die E-Mail wurde nach 16 Uhr verschickt"],
-  ["mrz","Die beigefügte Passkopie besteht die automatische Dokumentenprüfung nicht"],
-  ["formal","Die E-Mail ist in förmlichem Ton geschrieben"]];
-const FRAUD_OK = ["domain","pressure","mrz"];
+const PAYMENTS = [
+  {id:"nordlicht", name:"Nordlicht IT GmbH", iban:"DE21 2005 0000 0041 7733 18", amount:"4.860,00 €",
+    purpose:"RE-2026-1187 · Wartung Serverraum Oktober", vop:true, vopText:"Übereinstimmung – Name passt zum Konto",
+    hold:"Betrag über der Einzelfreigabegrenze von 4.500 €",
+    context:["Lieferant seit 2021, monatliche Wartungspauschale 4.860 €","Rechnung RE-2026-1187 liegt vor, Betrag und Leistungszeitraum stimmen","IBAN in der Lieferantenakte seit 2021 unverändert"],
+    ok:"go", why:"VoP stimmt, Rechnung und Lieferantenakte passen zusammen. Zurückgehalten wurde sie nur wegen der Betragsgrenze – nach der üblichen Zweitfreigabe kann sie weiterbearbeitet werden."},
+  {id:"mira", name:"Mira Energie GmbH", iban:"neu: LT59 3250 0612 9944 0187 (bisher DE88 3006 0601 0005 5521 40)", amount:"48.750,00 €",
+    purpose:"Vorauszahlung Q4 – sofort fällig", vop:false, vopText:"Keine Übereinstimmung – Name passt nicht zum Konto",
+    hold:"VoP-Abweichung, neue Empfänger-IBAN",
+    context:["Bisher monatliche Abschläge von ca. 3.900 € auf die bekannte deutsche IBAN","Kontoänderung heute um 16:31 per E-Mail von buchhaltung@mira-energie-gmbh.example – in der Lieferantenakte steht @mira-energie.example","Keine Rückrufbestätigung über die hinterlegte Telefonnummer","Vorauszahlungen sind im Liefervertrag nicht vorgesehen"],
+    ok:"stop", why:"VoP-Abweichung, kurzfristig geänderte Kontoverbindung über eine fremde Domain, ein Betrag weit über dem üblichen Abschlag und eine im Vertrag nicht vorgesehene Vorauszahlung. Erst die Kombination macht die Entscheidung eindeutig: ablehnen, Lieferanten über die bekannte Nummer kontaktieren, Fall melden."},
+  {id:"stadtwerke", name:"Stadtwerke West GmbH", iban:"DE47 3705 0198 0012 6688 02", amount:"1.284,30 €",
+    purpose:"Vertragskonto 7004 5512 · Nachzahlung Jahresabrechnung 2026", vop:true, vopText:"Übereinstimmung – Name passt zum Konto",
+    hold:"Betrag weicht stark vom üblichen Abschlag (210 €) ab",
+    context:["Vertragskonto 7004 5512 ist in den Stammdaten hinterlegt","Jahresabrechnung liegt vor und weist eine Nachzahlung von 1.284,30 € aus","IBAN seit Vertragsbeginn bekannt"],
+    ok:"go", why:"VoP stimmt, Verwendungszweck und Vertragsdaten sind plausibel. Die Abweichung vom Abschlag erklärt die Jahresabrechnung – die Zahlung wird nach den üblichen Kontrollen weiterbearbeitet."}];
+function fraudView(){
+  const done = S.f.fraud;
+  openModal({eyebrow:"Webers Laptop · Fall 3", title:"Fraud-Desk: Drei Zahlungen, eine Falle",
+    html:`<p>Das Zahlungsverkehrssystem hat heute drei Überweisungen zur manuellen Prüfung zurückgehalten. Webers Notiz auf dem Bildschirmrand: <span class="handwriting">„Nur eine davon ist faul. Nicht alles stoppen, was komisch aussieht!“</span></p>
+    ${PAYMENTS.map((p,i) => `<div class="doc"><span class="stamp">ZURÜCKGEHALTEN</span><h3>Überweisung ${i+1} – ${p.name}</h3>
+      <table><tr><th>Empfänger</th><td>${p.name}<br><small class="mono">${p.iban}</small></td></tr>
+      <tr><th>Betrag</th><td><strong>${p.amount}</strong></td></tr>
+      <tr><th>Verwendungszweck</th><td>${p.purpose}</td></tr>
+      <tr><th>Verification of Payee</th><td><span class="vop ${p.vop ? "ok" : "no"}">${p.vop ? "✓" : "✕"} ${p.vopText}</span></td></tr>
+      <tr><th>Grund der Zurückhaltung</th><td>${p.hold}</td></tr>
+      <tr><th>Zahlungskontext</th><td><ul class="ctx">${p.context.map(c => `<li>${c}</li>`).join("")}</ul></td></tr></table>
+      <div class="decide">${[["go","Weiterbearbeiten"],["stop","Ablehnen"]].map(([v,t]) => `<label class="${v}"><input type="radio" name="pay-${p.id}" value="${v}" ${done ? (v === p.ok ? "checked disabled" : "disabled") : ""}><span>${t}</span></label>`).join("")}</div>
+      ${done ? `<p class="mini" style="margin:10px 0 0"><strong>Begründung:</strong> ${p.why}</p>` : ""}</div>`).join("")}
+    ${done ? `<p class="handwriting">16:31 die Kontoänderung, 16:36 die Vorstandsmail, 16:38 der Anruf bei Weber. Dieselbe Masche, dieselben Leute.</p>` + fragReveal("C", S.frag.C, "Phantom Nr. 3: die umgeleitete Mira-Zahlung.") :
+    `<p><strong>Aufgabe:</strong> Trefft für jede Zahlung eine Entscheidung. Erst wenn alle drei stimmen, wird der Fall abgeschlossen.</p>`}`,
+    actions:[...(done ? [] : [{text:"Entscheidungen buchen", primary:true, fn:checkFraud}]), {text:"← Desktop", fn:() => laptop()}]});
+}
+function checkFraud(){
+  const dec = Object.fromEntries(PAYMENTS.map(p => [p.id, (document.querySelector(`input[name="pay-${p.id}"]:checked`) || {}).value]));
+  if (PAYMENTS.some(p => !dec[p.id])){ feedback("Trefft für jede der drei Zahlungen eine Entscheidung."); return; }
+  if (PAYMENTS.every(p => dec[p.id] === p.ok)){
+    S.f.fraud = true; S.frag.C = CODE[2]; S.score += 250;
+    narrate("Phantom Nr. 3: Die Zahlung an „Mira Energie“ sollte auf ein neues Konto umgeleitet werden – Kontoänderung um 16:31 von einer fremden Domain, VoP-Abweichung. Abgelehnt. Die beiden anderen Zahlungen laufen weiter. Fragment C = " + CODE[2] + ".");
+    fraudView();
+    feedback("Alle drei Entscheidungen sind richtig. VoP ist ein Prüfbaustein, keine Entscheidung für sich: Erst Zahlungskontext, Stammdaten und Belege zusammen ergeben das Bild. +250 Punkte.", "good");
+    updateAll();
+  } else if (dec.mira !== "stop") wrong("Eine Zahlung zeigt mehrere Warnsignale gleichzeitig. Einzeln wären sie vielleicht erklärbar, in Kombination nicht.");
+  else wrong("Ihr lehnt eine Zahlung ab, die sich vollständig belegen lässt. Eine Zurückhaltung allein ist noch kein Betrugsverdacht.");
+}
 function mailView(){
-  openModal({eyebrow:"Webers Laptop · Fall 3", title:"Posteingang",
+  openModal({eyebrow:"Webers Laptop", title:"Posteingang",
     html:`<div class="doc" style="padding:10px 12px">
       <details class="mail"><summary><strong>16:12</strong> · IT-Sicherheit &lt;it-sicherheit@hausbank.example&gt; · Erinnerung: Phishing-Awareness-Woche</summary><div class="mb">Liebe Kolleginnen und Kollegen, achtet diese Woche besonders auf ungewöhnliche Zahlungsaufforderungen. Im Zweifel: Rückruf über die bekannte Durchwahl. Eure IT-Sicherheit</div></details>
       <details class="mail" open><summary><strong>16:36</strong> · Assistenz des Vorstands &lt;assistenz.vorstand@hausbank-vorstand.example&gt; · <strong style="color:#b5303f">DRINGEND – Zahlung PHANTOME sofort freigeben</strong></summary><div class="mb">
         <p>Sehr geehrter Herr Weber,</p><p>die Zahlung PHANTOME (3,8 Mio. EUR, Northbridge S.A.) muss heute ohne Verzögerung ausgeführt werden. Der Vorstand erwartet absolute Vertraulichkeit. Bitte umgehen Sie ausnahmsweise das Vier-Augen-Prinzip; ich bestätige die Anweisung im Namen des Vorstands.</p><p>Bitte keine Rückfragen per Telefon. Bestätigen Sie die Ausführung nur per Antwort auf diese E-Mail.</p><p>Mit Nachdruck<br>Assistenz des Vorstands</p>
         <p class="mini" style="margin:0;border-top:1px dashed #d6cfbd;padding-top:8px">📎 Pass_Vorstandsmitglied.pdf · <span style="color:#b5303f;font-weight:700">Automatische Dokumentenprüfung: MRZ-Prüfziffer ungültig</span></p></div></details>
       <details class="mail"><summary><strong>16:50</strong> · K. Albers &lt;k.albers@hausbank.example&gt; · Phantome-Akte?</summary><div class="mb">Hast du die Phantome-Akte noch bei dir im Schrank? Ich bin ab fünf weg, schönes Wochenende! – Katrin</div></details></div>
-    ${S.f.fraud ? `<p class="handwriting">16:36 die Mail, 16:38 der Anruf bei Weber. Jemand wollte ihn aus dem Büro haben.</p>` + fragReveal("C", S.frag.C, "Phantom Nr. 3: die falsche Vorstandsassistenz.") :
-    `<p><strong>Aufgabe:</strong> Weber hat notiert: <span class="handwriting">„3 echte Warnsignale – der Rest ist Rauschen.“</span> Wählt genau diese drei.</p>
-    <div id="fraudChoices">${FRAUD_OPTS.map(([v,t]) => `<label class="choice"><input type="checkbox" value="${v}"><span>${t}</span></label>`).join("")}</div>`}`,
-    actions:[...(S.f.fraud ? [] : [{text:"Warnsignale prüfen", primary:true, fn:checkFraud}]), {text:"← Desktop", fn:() => laptop()}]});
-}
-function checkFraud(){
-  const sel = [...document.querySelectorAll("#fraudChoices input:checked")].map(x => x.value);
-  if (sel.length === 3 && FRAUD_OK.every(x => sel.includes(x))){
-    S.f.fraud = true; S.frag.C = CODE[2]; S.score += 250;
-    narrate("Phantom Nr. 3: Die „Vorstandsmail“ kam von einer fremden Domain, mit Druck, Geheimhaltung und unstimmigem Pass – zwei Minuten vor dem Anruf, der Weber weggelockt hat. Fragment C = " + CODE[2] + ".");
-    mailView();
-    feedback("Drei Warnsignale erkannt. Sichere Reaktion: nicht freigeben, über die bekannte Durchwahl verifizieren, eskalieren. +250 Punkte.", "good");
-    updateAll();
-  } else if (sel.some(x => !FRAUD_OK.includes(x))) wrong("Mindestens ein gewählter Punkt ist kein belastbares Warnsignal.");
-  else wrong("Es fehlen noch Warnsignale – Weber spricht von genau drei.");
+    <p class="handwriting">16:36 eine „Vorstandsmail“ von einer fremden Domain, 16:38 der Anruf bei Weber. Jemand wollte ihn aus dem Büro haben.</p>`,
+    actions:[{text:"← Desktop", fn:() => laptop()}]});
+  if (!S.f.mailRead){ S.f.mailRead = true; narrate("Posteingang: Um 16:36 forderte eine angebliche Vorstandsassistenz von einer fremden Domain, PHANTOME sofort und ohne Vier-Augen-Prinzip freizugeben."); }
 }
 
 function terminal(){
@@ -759,7 +794,7 @@ function finish(timeout){
     : [`${t} Uhr. Das Terminal piept dreimal. ZAHLUNG PHANTOME – GESTOPPT.`,
       "Das rote Licht über der Tür springt auf Grün. Mit einem Klicken löst sich die Sperre.",
       "Im Flur kommt euch Weber entgegen, außer Atem. „Im zwölften Stock war niemand. Kein Vorstand, kein Termin – und mein Ausweis war plötzlich gesperrt.“",
-      "Er sieht die Akte, den Laptop, das Terminal. „Northbridge. Nova Trade. Die falsche Vorstandsmail. Ihr habt alle drei Phantome gefunden.“",
+      "Er sieht die Akte, den Laptop, das Terminal. „Northbridge. Nova Trade. Die umgeleitete Mira-Zahlung. Ihr habt alle drei Phantome gefunden.“",
       "Wer die Sicherheitssperre ausgelöst hat, bleibt vorerst offen – ab Montag ermittelt die Interne Revision. Aber 3,8 Millionen Euro bleiben, wo sie hingehören."];
   cutscene({eyebrow:"Epilog", title: timeout ? "Zu spät" : "Die Tür ist offen", lines, button:"Zur Auswertung →", onDone:() => {
     $("final").classList.remove("hidden");
