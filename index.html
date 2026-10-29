@@ -212,7 +212,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   </div>
   <div class="grid">
     <div class="card"><div class="num">SO WIRD GESPIELT</div><h3>Folgt Webers Notizen</h3><p class="muted">Notiz 1 ist offen und sagt euch, wo ihr anfangt. Die weiteren Notizen sind mit Zahlencodes gesperrt.</p></div>
-    <div class="card"><div class="num">DER ROTE FADEN</div><h3>Prüfen → Code → nächste Notiz</h3><p class="muted">Jede richtig abgeschlossene Prüfung erzeugt eine Vorgangsnummer. Sie öffnet die nächste Notiz – bis zum Freigabecode für den Stopp.</p></div>
+    <div class="card"><div class="num">DER ROTE FADEN</div><h3>Prüfen → Code → nächste Notiz</h3><p class="muted">Jede Notiz ist mit einem Rätsel gesperrt, das nur lösen kann, wer die Prüfung davor geschafft hat. So geht es Notiz für Notiz weiter – bis zum Freigabecode für den Stopp.</p></div>
     <div class="card"><div class="num">PUNKTE</div><h3>Jede Minute zählt</h3><p class="muted">+250 pro gelöster Prüfung, −20 pro Fehlversuch, −50 pro Hinweis. Restzeit bringt einen Bonus.</p></div>
   </div>
 </section>
@@ -285,7 +285,11 @@ h3{font-size:1.05rem;margin-bottom:6px}
 const $ = id => document.getElementById(id);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const pad = n => String(n).padStart(2, "0");
-const CODE = "362";
+// Codes sind nur als Hash hinterlegt, damit sie nicht im Seitenquelltext stehen.
+const hash = s => { let a = 0xdeadbeef, b = 0x41c6ce57; for (const ch of "phantome:" + s){ const c = ch.charCodeAt(0); a = Math.imul(a ^ c, 2654435761); b = Math.imul(b ^ c, 1597334677); }
+  a = Math.imul(a ^ (a >>> 16), 2246822507) ^ Math.imul(b ^ (b >>> 13), 3266489909); b = Math.imul(b ^ (b >>> 16), 2246822507) ^ Math.imul(a ^ (a >>> 13), 3266489909);
+  return (4294967296 * (2097151 & b) + (a >>> 0)).toString(36); };
+const CODE_H = "1mth4pmbq8h";
 const VORGANG = {embargo:"3108", aml:"2604", fraud:"7190"};
 const S = {team:"", startAt:0, deadline:0, timerId:null, ended:false, score:0, mistakes:0, hints:0, log:[], firedEvents:{},
   f:{embargo:false, aml:false, fraud:false, code:false},
@@ -361,7 +365,7 @@ function objective(){
   if (!S.notes.n3) return "Öffnet Notiz 3 und löst Webers Rätsel – die Antwort steckt im AML-Monitor.";
   if (!S.f.fraud) return "Prüft im FraudDesk alle drei Zahlungen und entscheidet jede einzeln.";
   if (!S.notes.n4) return "Öffnet Notiz 4 und löst Webers Rätsel – die Antwort steckt im FraudDesk.";
-  return "Setzt im ZV-Cockpit den Compliance-Stopp für PHANTOME – mit Freigabecode, Vorgangsnummern und Begründung.";
+  return "Setzt im ZV-Cockpit den Compliance-Stopp für PHANTOME – mit Webers Freigabecode und einer belegbaren Begründung.";
 }
 function hintText(){
   if (S.f.stopped){
@@ -506,7 +510,7 @@ function notify(title, text, app){
 }
 const on = (root, sel, ev, fn) => root.querySelectorAll(sel).forEach(el => el.addEventListener(ev, fn));
 function vorgangBox(key, next){
-  return `<div class="vorgang"><div><div class="mini muted">Vorgangsnummer</div><b>${VORGANG[key]}</b></div><div class="mini">Prüfung abgeschlossen und dokumentiert.<br>Notiert die Nummer – ihr braucht sie für die Dokumentation des Stopps. Weiter geht es mit <b>${next}</b>.</div></div>`;
+  return `<div class="vorgang"><div><div class="mini muted">Vorgangsnummer</div><b>${VORGANG[key]}</b></div><div class="mini">Prüfung abgeschlossen und dokumentiert.<br>Weiter geht es mit <b>${next}</b> in Webers Notizen.</div></div>`;
 }
 function solved(app, key, nextNote, narr, msg){
   S.f[key] = true; S.score += 250; narrate(narr);
@@ -522,12 +526,11 @@ Die Zahlung PHANTOME – 3,8 Mio. € – darf um 16:30 NICHT rausgehen. Ich bin
 
 Ich habe meine Spur auf vier Notizen verteilt. Ab Notiz 2 sind sie gesperrt – man weiß ja nie, wer mitliest.
 So kommt ihr weiter: Jede Notiz ist mit einem Rätsel gesperrt. Die Antwort findet ihr nur, wenn ihr die Prüfung davor wirklich gelöst habt.
-Jede abgeschlossene Prüfung bekommt außerdem eine Vorgangsnummer. Schreibt sie euch auf – ihr braucht sie am Ende für die Dokumentation!
 
 SCHRITT 1 → ZV-Cockpit + EmbargoCheck
 Holt euch im ZV-Cockpit die Daten des Empfängers von PHANTOME.
 Dann prüft ihn selbst im EmbargoCheck. Vorsicht: Es gibt mehrere Firmen mit fast gleichem Namen.`},
-  n2:{title:"2 · Das Geld", code:"4417", riddle:"Die vierstellige Nummer des Listeneintrags, der wirklich zum Empfänger von PHANTOME gehört.", text:`Gut gemacht. Der Empfänger steht wirklich auf der Sanktionsliste.
+  n2:{title:"2 · Das Geld", code:"1dp01qu7ixb", riddle:"Die vierstellige Nummer des Listeneintrags, der wirklich zum Empfänger von PHANTOME gehört.", text:`Gut gemacht. Der Empfänger steht wirklich auf der Sanktionsliste.
 
 Aber woher kommt das Geld für PHANTOME? Ich glaube, es wird über viele kleine Konten gesammelt.
 
@@ -535,14 +538,14 @@ SCHRITT 2 → AML-Monitor
 Öffnet Alert A-2291. Schaut euch zuerst das Kundenprofil an, dann die Umsätze.
 Markiert alle Buchungen, die zum Muster gehören.
 Und dann prüft, wohin das Geld fließt. Kommt euch die Adresse bekannt vor?`},
-  n3:{title:"3 · Die Falle", code:"24050", riddle:"Wie viel Geld hat Jonas K. insgesamt an Nova Trade überwiesen? Betrag in Euro – ohne Cent und ohne Punkt.", text:`Das Muster ist eindeutig: Der Student ist ein Strohmann. Und das Geld landet bei Leuten, die wir schon kennen.
+  n3:{title:"3 · Die Falle", code:"2135pxw35o8", riddle:"Wie viel Geld hat Jonas K. insgesamt an Nova Trade überwiesen? Betrag in Euro – ohne Cent und ohne Punkt.", text:`Das Muster ist eindeutig: Der Student ist ein Strohmann. Und das Geld landet bei Leuten, die wir schon kennen.
 
 Heute versuchen dieselben Leute noch etwas anderes: Im FraudDesk hängen drei zurückgehaltene Zahlungen. Eine davon ist eine Falle – die anderen beiden sind echte Rechnungen.
 
 SCHRITT 3 → FraudDesk
 Startet bei jeder Zahlung die VoP-Abfrage und schaut in die Lieferantenakte. Erst dann entscheiden: weiterbearbeiten oder ablehnen.
 Achtung: Nicht alles stoppen, was komisch aussieht!`},
-  n4:{title:"4 · Der Stopp", code:"103", riddle:"Geht die drei Überweisungen im FraudDesk der Reihe nach durch. Wird sie weiterbearbeitet, schreibt ihre Nummer. Wird sie abgelehnt, schreibt eine 0.", text:`Ihr habt alle drei Spuren. Jetzt muss PHANTOME gestoppt werden.
+  n4:{title:"4 · Der Stopp", code:"qammigcr1f", riddle:"Geht die drei Überweisungen im FraudDesk der Reihe nach durch. Wird sie weiterbearbeitet, schreibt ihre Nummer. Wird sie abgelehnt, schreibt eine 0.", text:`Ihr habt alle drei Spuren. Jetzt muss PHANTOME gestoppt werden.
 
 SCHRITT 4 → ZV-Cockpit
 PHANTOME anklicken und den Compliance-Stopp setzen.
@@ -553,7 +556,6 @@ Meinen Freigabecode schreibe ich nirgends hin. Aber wer meine drei Fälle wirkli
   3. Ziffer: Welche Nummer hatte die Überweisung, die ihr im FraudDesk abgelehnt habt?
 
 Ohne Dokumentation nimmt das System den Stopp nicht an:
-• alle drei Vorgangsnummern eintragen
 • nur die Gründe ankreuzen, die ihr wirklich belegen könnt
 
 Danach eskalieren. Und die „Vorstandsanweisung“ in meinem Postfach nur über die bekannte Durchwahl -1200 prüfen – nie per Antwort auf die Mail.
@@ -574,7 +576,7 @@ RENDER.notes = b => {
     const go = () => {
       const c = $("noteCode").value.replace(/\D/g, "");
       if (!c){ fb("notes", "Gebt einen Zahlencode ein."); return; }
-      if (c === n.code){ S.notes[id] = true; fb("notes", n.title + " ist geöffnet.", "good"); narrate(n.title + " geöffnet."); render("notes"); updateHud(); }
+      if (hash(c) === n.code){ S.notes[id] = true; fb("notes", n.title + " ist geöffnet.", "good"); narrate(n.title + " geöffnet."); render("notes"); updateHud(); }
       else { wrong("notes", "Falscher Code. Die Notiz bleibt gesperrt."); $("noteCode").value = ""; }
     };
     $("noteBtn").addEventListener("click", go); $("noteCode").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
@@ -927,28 +929,23 @@ RENDER.zv = b => {
     ${S.f.stopped ? `<p><span class="tag no">COMPLIANCE-STOPP · ESKALIERT</span></p>` : S.f.code ? `<p><span class="tag ok">Compliance-Stopp eingetragen</span> Wie geht es jetzt weiter?</p>${ZV_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="zvdec" value="${v}"><span>${t}</span></label>`).join("")}<div class="row"><button class="primary" id="zvDecBtn">Bestätigen</button></div>` :
     `<div class="row"><button id="zvRelease">Jetzt freigeben</button><button id="zvOpenStop" class="primary">Compliance-Stopp setzen …</button></div>
     <div id="zvForm" class="${S.v.zvForm ? "" : "hidden"}" style="margin-top:12px">
-      ${canStop ? "" : `<p class="tag warn">Ihr braucht Webers Freigabecode und alle drei Vorgangsnummern.</p>`}
+      ${canStop ? "" : `<p class="tag warn">Ihr braucht Webers Freigabecode.</p>`}
       <p style="margin:10px 0 4px"><b>1. Freigabecode</b> von m.weber (3 Ziffern)</p>
       <input id="zvCode" inputmode="numeric" maxlength="3" placeholder="_ _ _" aria-label="Freigabecode" class="mono" style="max-width:140px;font-size:1.15rem;letter-spacing:.3em">
-      <p style="margin:12px 0 4px"><b>2. Bezug: Vorgangsnummern</b> aus EmbargoCheck, AML-Monitor und FraudDesk</p>
-      <div class="row" style="margin-top:0">${[0,1,2].map(i => `<input class="zvV mono" inputmode="numeric" maxlength="4" placeholder="Vorgang ${i+1}" aria-label="Vorgangsnummer ${i+1}" style="max-width:130px">`).join("")}</div>
-      <p style="margin:12px 0 4px"><b>3. Begründung</b> – nur belegbare Gründe ankreuzen</p>
+      <p style="margin:12px 0 4px"><b>2. Begründung</b> – nur belegbare Gründe ankreuzen</p>
       ${ZV_REASONS.map(([v,t]) => `<label class="choice"><input type="checkbox" name="zvr" value="${v}"><span>${t}</span></label>`).join("")}
       <div class="row"><button class="primary" id="zvStop">Stopp eintragen</button></div></div>`}`;
   if ($("zvRelease")) $("zvRelease").addEventListener("click", () => wrong("zv", "Mit offenem Compliance-Vermerk darf die Zahlung nicht freigegeben werden."));
   if ($("zvOpenStop")) $("zvOpenStop").addEventListener("click", () => { S.v.zvForm = true; $("zvForm").classList.remove("hidden"); $("zvForm").scrollIntoView({block:"nearest"}); });
   if ($("zvStop")) $("zvStop").addEventListener("click", () => {
-    const c = $("zvCode").value.replace(/\D/g, ""), vs = [...b.querySelectorAll(".zvV")].map(x => x.value.replace(/\D/g, ""));
+    const c = $("zvCode").value.replace(/\D/g, "");
     const rs = [...b.querySelectorAll("input[name=zvr]:checked")].map(x => x.value);
-    if (c !== CODE) return wrong("zv", "Freigabecode ungültig.");
-    const need = Object.values(VORGANG);
-    if (vs.some(v => !v)) return fb("zv", "Tragt alle drei Vorgangsnummern ein.");
-    if (!need.every(n => vs.includes(n))) return wrong("zv", "Mindestens eine Vorgangsnummer gehört nicht zu diesem Fall.");
+    if (hash(c) !== CODE_H) return wrong("zv", "Freigabecode ungültig.");
     if (!rs.length) return fb("zv", "Kreuzt mindestens einen Grund an.");
     const okR = ZV_REASONS.filter(r => r[2]).map(r => r[0]);
     if (rs.some(r => !okR.includes(r))) return wrong("zv", "Ein hoher Betrag oder ein Auslandsbezug allein sind kein Stoppgrund. Nennt nur, was ihr in den Prüfungen belegt habt.");
     if (!okR.every(r => rs.includes(r))) return wrong("zv", "Die Begründung ist unvollständig. Welche zwei Prüfungen betreffen PHANTOME direkt?");
-    S.f.code = true; S.score += 150; narrate("ZV-Cockpit: Compliance-Stopp für PHANTOME eingetragen – mit Freigabecode, drei Vorgangsnummern und Begründung.");
+    S.f.code = true; S.score += 150; narrate("ZV-Cockpit: Compliance-Stopp für PHANTOME eingetragen – mit Freigabecode und Begründung.");
     fb("zv", "Stopp eingetragen und dokumentiert. +150 Punkte.", "good"); updateHud(); render("zv");
   });
   if ($("zvDecBtn")) $("zvDecBtn").addEventListener("click", () => {
