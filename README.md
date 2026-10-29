@@ -1,15 +1,16 @@
 # Projekt Phantome – Compliance Escape Room
 
-Ein Escape Room im Browser mit Story. Freitag, 16:58 Uhr: Senior-Analyst Weber ist verschwunden, ihr seid in seinem Büro eingeschlossen, und um 17:50 Uhr verlassen 3,8 Mio. Euro automatisch die Bank. Untersucht den Raum (Telefon, Kaffeetasse, Aktenschrank, Pinnwand, Papierkorb, Laptop), löst drei Fälle – Sanktionen, Geldwäsche und den Fraud-Desk mit drei zurückgehaltenen Zahlungen – und setzt aus den Codefragmenten den Not-Stopp-Code zusammen.
+Ein Escape Room im Browser mit Story, der fast vollständig auf einem nachgebauten PC spielt. Freitag, 15:40 Uhr: Senior-Analyst Matthias Weber war an etwas Großem dran und ist verschwunden. Um 16:30 Uhr startet der Buchungslauf – und mit ihm eine Zahlung über 3,8 Mio. Euro, hinter der Geldwäsche und ein Embargoverstoß stecken. Die Teams setzen sich an Webers PC (Mail, Chat, Dokumente, verschlüsselte Notizen, Papierkorb) und arbeiten mit der Prüfsoftware: EmbargoCheck, AML-Monitor, FraudDesk und ZV-Cockpit.
 
 <details><summary>Lösung für Spielleitung</summary>
 
-1. Anrufbeantworter abhören → Schlüssel unter der Kaffeetasse.
-2. Aktenschrank: Viktor Marin, Listen-ID SAN-8839 → A = 7.
-3. Papierkorb + Pinnwand → Laptop-Passwort `weber2604`.
-4. Kontoanalyse: alle Bareinzahlungen und Überweisungen an Nova Trade Ltd. (6 Buchungen) → B = 6.
-5. Fraud-Desk: Nordlicht IT und Stadtwerke West weiterbearbeiten, Mira Energie ablehnen → C = 3.
-6. Not-Stopp-Terminal: Reihenfolge WER → WIE → WOMIT = **763**, dann „Not-Stopp bestätigen, dokumentieren, eskalieren, verifizieren“.
+1. Chat: Weber schreibt, das Notizen-Passwort sei „das, was die vertuschen wollen“.
+2. Dokumente → Konnossement: Schiff AURORA STAR, IMO 9387421, Baujahr 2006.
+3. EmbargoCheck: Namenssuche ergibt keinen Treffer, die IMO-Nummer 9387421 trifft EMB-4417 „KESTREL“ (Post-it: „Namen kann man ändern. Nummern nicht.“). Bewertung: echter Treffer, eskalieren.
+4. Notizen-Passwort: `KESTREL`. Die Notizen erklären, wie man den Freigabecode herleitet.
+5. AML-Monitor, Alert A-2291: alle Bareinzahlungen und Überweisungen an Nova Trade Ltd. markieren (6 Buchungen).
+6. FraudDesk: Nordlicht IT und Stadtwerke West weiterbearbeiten, Überweisung 2 (Mira Energie) ablehnen.
+7. ZV-Cockpit → PHANTOME → Freigabecode **762** (EMB-441**7**, **6** Buchungen, Überweisung **2**), dann „Compliance-Stopp bestätigen, dokumentieren, eskalieren, verifizieren“.
 </details>
 
 ## Lokal testen

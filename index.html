@@ -6,25 +6,26 @@
 <meta name="theme-color" content="#08111f">
 <title>Projekt Phantome – Compliance Escape Room</title>
 <style>
-:root{--bg:#08111f;--panel:#101d30;--panel2:#14243a;--line:#2b405b;--text:#e8f0fa;--muted:#9eb0c7;--cyan:#52e0d0;--amber:#ffca70;--red:#ff6b78;--green:#7ee0a3;--paper:#f3efe4;--ink:#1d2533}
+:root{--bg:#08111f;--panel:#101d30;--panel2:#14243a;--line:#2b405b;--text:#e8f0fa;--muted:#9eb0c7;--cyan:#52e0d0;--amber:#ffca70;--red:#ff6b78;--green:#7ee0a3;--paper:#fbf8f0;--ink:#1d2533;--os:#0f6cbd}
 *{box-sizing:border-box}
 html{background:var(--bg)}
 body{margin:0;background:radial-gradient(ellipse at 15% 0%,#142a42 0,transparent 45%),var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
 button,input{font:inherit}
 button{cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:10px 15px;color:var(--text);background:#1b3049;font-weight:650}
 button:hover{border-color:var(--cyan)}
-button:disabled{opacity:.4;cursor:not-allowed}
+button:disabled{opacity:.45;cursor:not-allowed}
 .primary{background:var(--cyan);color:#06151b;border-color:var(--cyan)}
 .subtle{background:transparent}
-input[type=text],input:not([type]),input[type=password]{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:#0b1626;color:var(--text)}
+input{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:#0b1626;color:var(--text)}
+input[type=radio],input[type=checkbox]{width:auto}
 input:focus{outline:2px solid var(--cyan);outline-offset:1px}
-.wrap{max-width:1180px;margin:auto;padding:20px 16px}
+.wrap{max-width:1320px;margin:auto;padding:20px 16px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:20px}
 .brand{display:flex;align-items:center;gap:12px}
 .mark{width:42px;height:42px;border:1px solid var(--cyan);border-radius:12px;display:grid;place-items:center;color:var(--cyan);font-weight:900;letter-spacing:-2px;flex:none}
 .eyebrow{color:var(--cyan);font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800}
 .muted{color:var(--muted)}.mini{font-size:.88rem}
-.timer{border:1px solid var(--line);border-radius:12px;padding:8px 14px;text-align:right;min-width:130px}
+.timer{border:1px solid var(--line);border-radius:12px;padding:8px 14px;text-align:right;min-width:150px}
 .timer strong{display:block;font-size:1.35rem;font-variant-numeric:tabular-nums}
 .timer small{color:var(--muted);font-size:.72rem;letter-spacing:.08em}
 .timer.urgent strong{color:var(--red)}
@@ -43,93 +44,136 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .num{color:var(--cyan);font-size:.78rem;letter-spacing:.12em;font-weight:800}
 .field{display:flex;gap:10px;margin:18px 0 10px;flex-wrap:wrap}.field input{flex:1;min-width:180px}
 .notice{border-left:3px solid var(--amber);background:rgba(255,202,112,.08);padding:12px 14px;border-radius:0 10px 10px 0;margin:16px 0}
+.hand{font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive}
 
 /* Cutscene */
 .cutscene{max-width:760px;margin:6vh auto;padding:clamp(22px,5vw,44px);border:1px solid var(--line);border-radius:22px;background:#0a1525;box-shadow:0 30px 80px rgba(0,0,0,.4)}
-.cutscene .story{font-size:1.12rem;min-height:220px;cursor:pointer}
+.cutscene .story{font-size:1.12rem;min-height:240px;cursor:pointer}
 .cutscene .story p{margin-bottom:14px}
 .cutscene .story p:last-child:after{content:"▌";color:var(--cyan);animation:blink 1s steps(1) infinite;margin-left:2px}
 @keyframes blink{50%{opacity:0}}
 
-/* Game */
-.layout{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(260px,.8fr);gap:18px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
-.scenebox{background:#060e1a;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:12px}
-#scene{display:block;width:100%;height:auto}
-.hot{cursor:pointer;transition:filter .2s}
-.hot:hover,.hot:focus{filter:drop-shadow(0 0 7px rgba(82,224,208,.95));outline:none}
-.blinkled{animation:blink 1s steps(1) infinite}
-.steam{animation:steam 3s ease-in-out infinite;opacity:0}
-.steam:nth-of-type(2){animation-delay:1.4s}
-@keyframes steam{0%{opacity:0;transform:translateY(4px)}40%{opacity:.6}100%{opacity:0;transform:translateY(-10px)}}
-.objects{display:flex;flex-wrap:wrap;gap:8px}
-.objects button{padding:7px 11px;font-size:.88rem;font-weight:600}
-.objects button.done{border-color:#2f6b55;color:var(--green)}
-.objective{font-size:1.02rem}
-.side-stat{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:7px 0}
+/* Layout */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:18px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.side-stat{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:6px 0}
 .side-stat:last-child{border-bottom:0}
-.inv{display:flex;flex-wrap:wrap;gap:8px}
-.item{border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:6px 10px;font-size:.85rem}
-.item.frag{border-color:var(--amber);color:var(--amber);font-weight:800;font-variant-numeric:tabular-nums}
-.log{max-height:260px;overflow:auto;font-size:.88rem;display:flex;flex-direction:column;gap:9px}
+.facts{margin:0;padding-left:18px;font-size:.88rem}.facts li{margin:4px 0}
+.log{max-height:240px;overflow:auto;font-size:.86rem;display:flex;flex-direction:column;gap:8px}
 .log div{border-left:2px solid var(--line);padding-left:10px}
 .log time{color:var(--cyan);font-weight:700;margin-right:6px;font-variant-numeric:tabular-nums}
 
-/* Modal */
-dialog{width:min(860px,calc(100vw - 24px));max-height:calc(100vh - 32px);border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);padding:0}
-dialog::backdrop{background:rgba(3,8,15,.78)}
-.mhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel);z-index:2}
-.mbody{padding:18px 20px}
-.mactions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-.close{padding:6px 11px}
-.doc{background:var(--paper);color:var(--ink);border-radius:8px;padding:16px 18px;margin:12px 0;position:relative;box-shadow:0 8px 24px rgba(0,0,0,.25)}
-.doc h3{color:#0e1726}
-.doc table{width:100%;border-collapse:collapse;font-size:.92rem}
-.doc th,.doc td{text-align:left;padding:7px 8px;border-bottom:1px solid #d6cfbd;vertical-align:top}
-.doc th{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:#5a6272}
-.doc small{color:#5a6272}
-.stamp{position:absolute;right:14px;top:12px;border:2px solid #b5303f;color:#b5303f;font-weight:900;font-size:.7rem;letter-spacing:.1em;padding:2px 7px;border-radius:4px;transform:rotate(4deg)}
-.handwriting{font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive;color:#9cc0ff}
-.doc .handwriting{color:#1c3f8a}
-.postit{background:#ffe37a;color:#3a2f00;padding:14px 16px;border-radius:3px;display:inline-block;transform:rotate(-2deg);box-shadow:0 6px 16px rgba(0,0,0,.3);margin:8px 8px 8px 0}
-.postit.handwriting{color:#3a2f00}
-.docs2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* Monitor & Desktop */
+.monitor{position:relative;background:linear-gradient(#1a2433,#121a26);border-radius:18px;padding:14px 14px 30px;box-shadow:0 30px 70px rgba(0,0,0,.45),inset 0 0 0 1px #2a3850}
+.monitor:after{content:"hausbank";position:absolute;left:50%;bottom:8px;transform:translateX(-50%);font-size:.7rem;letter-spacing:.2em;color:#4c5d77;text-transform:uppercase}
+.postit-m{position:absolute;z-index:3;background:#ffe37a;color:#3a2f00;padding:9px 11px;width:150px;font-size:.92rem;line-height:1.25;box-shadow:0 6px 14px rgba(0,0,0,.4)}
+.postit-m.a{top:-12px;right:28px;transform:rotate(4deg)}
+.postit-m.b{bottom:2px;left:18px;width:128px;transform:rotate(-4deg);background:#ffb3c1;color:#4a0d1a}
+.screen{position:relative;height:clamp(540px,74vh,740px);border-radius:5px;overflow:hidden;background:radial-gradient(ellipse at 70% 30%,#1d5a8a 0,#123b63 35%,#0b2240 75%);font-size:15px}
+.screen:before{content:"hausbank";position:absolute;right:6%;bottom:16%;font-size:clamp(2.5rem,7vw,5.5rem);font-weight:900;letter-spacing:-.05em;color:rgba(255,255,255,.06);pointer-events:none}
+.icons{position:absolute;left:8px;top:8px;bottom:54px;display:grid;grid-auto-flow:column;grid-template-rows:repeat(auto-fill,86px);grid-auto-columns:88px;gap:2px}
+.dicon{width:86px;height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:transparent;border:1px solid transparent;border-radius:6px;color:#fff;font-size:.76rem;font-weight:500;text-shadow:0 1px 3px #000;padding:4px;line-height:1.15;text-align:center}
+.dicon:hover,.dicon:focus{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.28)}
+.dicon .ic{font-size:30px;position:relative;line-height:1}
+.badge{position:absolute;top:-5px;right:-12px;background:#e81123;color:#fff;border-radius:9px;font-size:.66rem;font-weight:700;padding:1px 5px;text-shadow:none}
+.taskbar{position:absolute;left:0;right:0;bottom:0;height:46px;background:rgba(12,20,32,.94);display:flex;align-items:center;gap:3px;padding:0 6px;color:#fff;z-index:900;overflow:hidden}
+.taskbar .logo{width:38px;height:36px;display:grid;place-items:center;color:#52b6ff;font-size:1.3rem;flex:none;background:transparent;border:0;border-radius:4px;padding:0}
+.taskbar .logo:hover{background:rgba(255,255,255,.1)}
+.showdesk{width:10px;height:46px;border:0;border-left:1px solid #3b4a60;border-radius:0;background:transparent;padding:0;flex:none}
+.showdesk:hover{background:rgba(255,255,255,.15)}
+.startmenu{position:absolute;left:6px;bottom:52px;width:260px;background:rgba(22,32,48,.97);border:1px solid #33465f;border-radius:10px;padding:8px;z-index:960;box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.startmenu .sm-head{color:#9eb0c7;font-size:.72rem;letter-spacing:.12em;padding:6px 10px;text-transform:uppercase}
+.startmenu button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:transparent;border:0;border-radius:6px;color:#fff;padding:8px 10px;font-weight:500;font-size:.88rem}
+.startmenu button:hover{background:rgba(255,255,255,.1)}
+.tbtn{height:36px;padding:0 10px;background:transparent;border:0;border-bottom:2px solid transparent;border-radius:4px;color:#dfe8f3;font-weight:500;font-size:.82rem;white-space:nowrap;flex:none}
+.tbtn:hover{background:rgba(255,255,255,.09)}
+.tbtn.active{background:rgba(255,255,255,.14);border-bottom-color:#52b6ff}
+.tray{margin-left:auto;text-align:right;font-size:.76rem;line-height:1.25;padding:0 6px;flex:none;font-variant-numeric:tabular-nums}
+.tray b{color:#ffb3c1;font-weight:700}
+.win{position:absolute;background:#f3f5f8;color:#1d2533;border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.5);display:flex;flex-direction:column;overflow:hidden;border:1px solid #8aa0bc;font-size:.94rem}
+.wtitle{height:36px;display:flex;align-items:center;gap:8px;padding:0 0 0 12px;background:#dfe6ef;font-size:.84rem;font-weight:600;cursor:move;user-select:none;flex:none;touch-action:none}
+.win.focus .wtitle{background:#c9d8ea}
+.wtitle span.t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wtitle .wb{margin-left:auto;display:flex;flex:none}
+.wtitle .wb button{width:42px;height:36px;border:0;border-radius:0;background:transparent;color:#1d2533;padding:0;font-weight:400}
+.wtitle .wb button:hover{background:rgba(0,0,0,.08)}
+.wtitle .wb button.x:hover{background:#e81123;color:#fff}
+.wbody{flex:1;overflow:auto;padding:14px 16px;min-height:0}
+.wbody.flush{padding:0;display:flex}
+.wfb{flex:none;margin:0;padding:10px 14px;border-top:1px solid #c9d3e0;background:#e8eef6;font-size:.9rem}
+.wfb.good{background:#e3f6ea;color:#14532d}
+.wfb.bad{background:#fde5e8;color:#7a1c27}
+.win button{background:#fff;color:#1d2533;border:1px solid #b5c1d1;border-radius:6px;padding:7px 13px;font-weight:600}
+.win button:hover{border-color:var(--os)}
+.win button.primary{background:var(--os);color:#fff;border-color:var(--os)}
+.win input{background:#fff;color:#1d2533;border:1px solid #b5c1d1;border-radius:6px;padding:8px 10px}
+.win input:focus{outline:2px solid var(--os)}
+.win h3{color:#0e1726}
+.win .muted{color:#5d6b80}
+.win .hand{color:#1c3f8a}
+.split{display:flex;flex:1;min-width:0}
+.split .list{width:250px;flex:none;border-right:1px solid #cfd8e3;overflow:auto;background:#eaeff5}
+.split .pane{flex:1;overflow:auto;padding:14px 18px;min-width:0}
+.li{display:block;width:100%;text-align:left;border:0!important;border-bottom:1px solid #d5dde8!important;border-radius:0!important;background:transparent!important;padding:9px 12px!important;font-weight:400!important;font-size:.86rem}
+.li:hover{background:#dde6f1!important}
+.li.sel{background:#cfe0f5!important}
+.li.unread{font-weight:700!important}
+.li small{display:block;color:#5d6b80;font-weight:400}
+.appbar{display:flex;align-items:center;gap:10px;padding:10px 14px;margin:-14px -16px 14px;color:#fff;font-weight:700;font-size:.9rem}
+.appbar small{font-weight:400;opacity:.85;margin-left:auto}
+.doc{background:var(--paper);color:var(--ink);border:1px solid #d9d1bd;border-radius:6px;padding:14px 16px;margin:10px 0;position:relative}
+.doc table,.tbl{width:100%;border-collapse:collapse;font-size:.88rem}
+.doc th,.doc td,.tbl th,.tbl td{text-align:left;padding:6px 8px;border-bottom:1px solid #dcd5c4;vertical-align:top}
+.doc th,.tbl th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#5a6272}
+.tbl{background:#fff;border:1px solid #d3dbe6}
+.tbl td,.tbl th{border-bottom-color:#e3e8ef}
+.tbl tr.click{cursor:pointer}.tbl tr.click:hover td{background:#eef4fb}
+.tbl tr.sel td{background:#fff1c7}
+.tbl tr.warn td{background:#fff6e0}
+.stamp{position:absolute;right:12px;top:10px;border:2px solid #b5303f;color:#b5303f;font-weight:900;font-size:.66rem;letter-spacing:.1em;padding:2px 7px;border-radius:4px;transform:rotate(4deg);background:rgba(255,255,255,.6)}
 .mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
-.feedback{margin-top:14px;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel2)}
-.feedback.good{border-color:#2f6b55;background:rgba(126,224,163,.1)}
-.feedback.bad{border-color:#743b4b;background:rgba(255,107,120,.1)}
-.choice{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;cursor:pointer;background:var(--panel2)}
-.choice input{margin-top:5px;accent-color:var(--cyan)}
-.txrow{cursor:pointer}
-.txrow.sel td{background:#ffe7a8}
-.txrow input{accent-color:#b5303f}
-.frag-reveal{display:flex;align-items:center;gap:14px;margin-top:14px;padding:14px;border:1px dashed var(--amber);border-radius:12px;background:rgba(255,202,112,.07)}
-.frag-reveal b{font-size:2.2rem;color:var(--amber);font-variant-numeric:tabular-nums;line-height:1}
-.voicemail{background:#0b1626;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0}
-.voicemail .vtext{font-style:italic;margin-top:8px}
-.voicemail .vtext p{margin:6px 0 0}
-.laptop{background:#0b1626;border:6px solid #33465f;border-radius:12px;padding:16px}
-.apps{display:flex;gap:12px;flex-wrap:wrap}
-.vop{display:inline-block;padding:2px 8px;border-radius:6px;font-weight:700;font-size:.88rem}
-.vop.ok{background:#d9f3e3;color:#1d6b40}.vop.no{background:#fbdde0;color:#a3202f}
+.doc td,.tbl td{overflow-wrap:anywhere}
+.tag{display:inline-block;padding:1px 8px;border-radius:5px;font-weight:700;font-size:.8rem;white-space:nowrap}
+.tag.ok{background:#d9f3e3;color:#1d6b40}.tag.no{background:#fbdde0;color:#a3202f}.tag.warn{background:#ffefc2;color:#7a5200}.tag.info{background:#dce8f7;color:#1f4f86}
+.choice{display:flex;gap:10px;align-items:flex-start;border:1px solid #c6d0dd;border-radius:8px;padding:9px 12px;margin:7px 0;cursor:pointer;background:#fff}
+.choice input{margin-top:5px;accent-color:var(--os)}
 .ctx{margin:0;padding-left:18px}.ctx li{margin:2px 0}
-.decide{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-.decide label{display:flex;gap:8px;align-items:center;border:2px solid #cfc7b2;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:700;background:#fffdf7}
+.decide{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.decide label{display:flex;gap:8px;align-items:center;border:2px solid #cfc7b2;border-radius:8px;padding:7px 13px;cursor:pointer;font-weight:700;background:#fff}
 .decide label:has(input:checked).go{border-color:#2f8f5a;background:#e3f6ea}
 .decide label:has(input:checked).stop{border-color:#b5303f;background:#fde5e8}
-.app{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:200px;text-align:left}
-.mail{border:1px solid #d6cfbd;border-radius:8px;margin:8px 0;background:#fffdf7}
-.mail summary{padding:9px 12px;cursor:pointer;font-size:.92rem;word-break:break-word}
-.mail .mb{padding:4px 14px 12px;border-top:1px solid #e6dfcc;font-size:.94rem}
-.keypad{display:grid;grid-template-columns:repeat(3,64px);gap:8px;margin:12px 0}
-.keypad button{height:52px;font-size:1.2rem}
-.codedisplay{font-family:ui-monospace,Consolas,monospace;font-size:2rem;letter-spacing:.4em;background:#050b14;border:1px solid #743b4b;color:var(--red);border-radius:10px;padding:8px 16px;display:inline-block;min-width:180px}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);width:max-content;max-width:min(620px,calc(100vw - 32px));background:#0f2034;border:1px solid var(--cyan);border-radius:12px;padding:12px 16px;z-index:50;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.row input{flex:1;min-width:160px}
+.lock{max-width:380px;margin:30px auto;text-align:center}
+.lock .big{font-size:3rem}
+.chatmsg{max-width:78%;padding:8px 12px;border-radius:12px;margin:6px 0;font-size:.9rem;background:#fff;border:1px solid #d3dbe6}
+.chatmsg.me{margin-left:auto;background:#dbe8fb;border-color:#bcd2f1}
+.chatmsg small{display:block;color:#5d6b80;font-size:.72rem;margin-bottom:2px}
+.notif{position:absolute;right:10px;bottom:54px;width:min(320px,calc(100% - 20px));background:#1f2b3d;color:#fff;border-radius:8px;padding:11px 14px;z-index:950;box-shadow:0 10px 30px rgba(0,0,0,.5);cursor:pointer;font-size:.86rem;border-left:4px solid #52b6ff}
+.notif b{display:block;margin-bottom:2px}
+.notesbg{background:#fffbe8}
+.notetext{white-space:pre-wrap;font-size:.95rem;line-height:1.6}
 .bigscore{font-size:clamp(2.4rem,7vw,4.4rem);font-weight:900;letter-spacing:-.05em;color:var(--cyan);margin:6px 0}
 .rowbuttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.feedback{margin-top:14px;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel2)}
 .footer{text-align:center;color:var(--muted);font-size:.78rem;padding:28px 0 8px}
-@media(max-width:900px){.layout{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.docs2{grid-template-columns:1fr}}
-@media(max-width:520px){.top{flex-wrap:wrap}.timer{min-width:0}.doc{padding:12px}.doc th,.doc td{padding:6px 4px;font-size:.84rem}.mbody,.mhead{padding:14px}}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.grid{grid-template-columns:1fr}}
+@media(max-width:700px){
+  .top{flex-wrap:wrap}.timer{min-width:0}
+  .monitor{padding:8px 8px 24px;border-radius:12px}
+  .postit-m.a{top:-10px;right:8px;width:128px;font-size:.8rem}
+  .postit-m.b{display:none}
+  .screen{height:78vh}
+  .icons{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,84px);grid-template-rows:none;grid-auto-rows:84px;right:8px;top:56px}
+  .win{left:0!important;top:0!important;width:100%!important;height:calc(100% - 46px)!important;border-radius:0}
+  .wtitle{cursor:default}
+  .split{flex-direction:column}.split .list{width:100%;max-height:34%;border-right:0;border-bottom:1px solid #cfd8e3}
+  .tbtn{padding:0 7px;font-size:.76rem}
+  .doc{padding:10px}.doc th,.doc td,.tbl th,.tbl td{padding:5px 4px;font-size:.8rem}
+  .stamp{position:static;display:inline-block;margin-bottom:6px}
+  .doc table{table-layout:fixed}.doc th{width:36%;letter-spacing:.02em;overflow-wrap:anywhere}.tag{white-space:normal}
+  .wbody{padding:12px}.appbar{margin:-12px -12px 12px}
+}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -137,25 +181,25 @@ dialog::backdrop{background:rgba(3,8,15,.78)}
 <div class="wrap">
 <header class="top">
   <div class="brand"><div class="mark">PP</div><div><div class="eyebrow">Financial Crime Unit · 4. OG</div><strong>PROJEKT PHANTOME</strong></div></div>
-  <div class="timer" id="timerBox"><small>ZAHLUNG IN</small><strong id="timer">50:00</strong><small id="clock">Uhrzeit 17:00</small></div>
+  <div class="timer" id="timerBox"><small>BUCHUNGSLAUF IN</small><strong id="timer">50:00</strong><small id="clock">Uhrzeit 15:40</small></div>
 </header>
 <main>
 
 <section id="start">
   <div class="hero">
-    <span class="pill">ESCAPE ROOM · TRAINING</span><span class="pill">3 PHANTOME</span><span class="pill">50 MINUTEN</span>
-    <h1>Eine Zahlung.<br>Drei Phantome.<br>Eine verschlossene Tür.</h1>
-    <p class="muted" style="max-width:660px;font-size:1.08rem">Freitag, kurz vor fünf. Senior-Analyst Weber hat euch in sein Büro bestellt – „wegen Phantome“. Doch Weber ist verschwunden, und um 17:50 Uhr verlassen 3,8 Millionen Euro automatisch die Bank. Ihr seid seine letzte Sicherung.</p>
+    <span class="pill">ESCAPE ROOM · TRAINING</span><span class="pill">EIN PC · ACHT PROGRAMME</span><span class="pill">50 MINUTEN</span>
+    <h1>Weber ist weg.<br>Sein PC ist noch an.</h1>
+    <p class="muted" style="max-width:680px;font-size:1.08rem">Freitag, 15:40 Uhr. Senior-Analyst Matthias Weber war an etwas Großem dran – dann ist er verschwunden. Um 16:30 Uhr startet der Buchungslauf, und mit ihm eine Zahlung über 3,8 Millionen Euro, hinter der Geldwäsche und ein Embargoverstoß stecken könnten. Deckt Webers Hinweise auf und stoppt sie rechtzeitig.</p>
     <div class="field" style="max-width:460px">
       <input id="teamName" maxlength="40" placeholder="Teamname eingeben" aria-label="Teamname">
       <button class="primary" id="startBtn">Büro betreten →</button>
     </div>
-    <p class="mini muted">Alle Personen, Unternehmen, Adressen, Domains und Listeneinträge sind fiktiv. Dieses Lernspiel ersetzt keine internen Arbeitsanweisungen.</p>
+    <p class="mini muted">Alle Personen, Unternehmen, Schiffe, Häfen, Domains und Listeneinträge sind fiktiv. Dieses Lernspiel ersetzt keine internen Arbeitsanweisungen.</p>
   </div>
   <div class="grid">
-    <div class="card"><div class="num">SO WIRD GESPIELT</div><h3>Untersucht den Raum</h3><p class="muted">Klickt auf Gegenstände in Webers Büro. Manche sind verschlossen – den Schlüssel findet ihr woanders.</p></div>
-    <div class="card"><div class="num">EUER ZIEL</div><h3>Drei Fragmente, ein Code</h3><p class="muted">Jeder gelöste Fall liefert eine Ziffer. Zusammen öffnen sie das Not-Stopp-Terminal – und die Tür.</p></div>
-    <div class="card"><div class="num">PUNKTE</div><h3>Jede Minute zählt</h3><p class="muted">+250 pro Fall, −20 pro Fehlversuch, −50 pro Hinweis. Restzeit bringt einen Bonus.</p></div>
+    <div class="card"><div class="num">SO WIRD GESPIELT</div><h3>Webers Arbeitsplatz</h3><p class="muted">Öffnet Programme auf seinem Desktop: Mail, Chat, Dokumente, verschlüsselte Notizen – und die Prüfsoftware für Embargo, Geldwäsche und Betrug.</p></div>
+    <div class="card"><div class="num">EUER ZIEL</div><h3>Compliance-Stopp setzen</h3><p class="muted">Webers Freigabecode steht nirgends. Ihr müsst ihn aus seinen Fällen herleiten – und die Zahlung im ZV-Cockpit vor 16:30 Uhr stoppen.</p></div>
+    <div class="card"><div class="num">PUNKTE</div><h3>Jede Minute zählt</h3><p class="muted">+250 pro gelöstem Fall, −20 pro Fehlversuch, −50 pro Hinweis. Restzeit bringt einen Bonus.</p></div>
   </div>
 </section>
 
@@ -170,162 +214,37 @@ dialog::backdrop{background:rgba(3,8,15,.78)}
 
 <section id="game" class="hidden">
   <div class="layout">
-    <div>
-      <div class="scenebox">
-<svg id="scene" viewBox="0 0 1000 560" role="group" aria-label="Webers Büro">
-  <defs>
-    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b2350"/><stop offset=".62" stop-color="#b8546a"/><stop offset="1" stop-color="#ffb070"/></linearGradient>
-    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#162a43"/><stop offset="1" stop-color="#0f1e31"/></linearGradient>
-    <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ff9a62" stop-opacity=".22"/><stop offset="1" stop-color="#ff9a62" stop-opacity="0"/></radialGradient>
-  </defs>
-  <rect width="1000" height="430" fill="url(#wall)"/>
-  <ellipse cx="430" cy="250" rx="320" ry="190" fill="url(#glow)"/>
-  <rect y="430" width="1000" height="130" fill="#0b1625"/>
-  <line x1="0" y1="430" x2="1000" y2="430" stroke="#22374f" stroke-width="3"/>
-  <ellipse cx="490" cy="440" rx="240" ry="14" fill="#060d18"/>
-
-  <!-- Uhr -->
-  <g aria-hidden="true">
-    <circle cx="135" cy="88" r="34" fill="#e8f0fa" stroke="#3a5373" stroke-width="5"/>
-    <g stroke="#1d2533" stroke-width="2"><line x1="135" y1="58" x2="135" y2="64"/><line x1="165" y1="88" x2="159" y2="88"/><line x1="135" y1="118" x2="135" y2="112"/><line x1="105" y1="88" x2="111" y2="88"/></g>
-    <line id="hourHand" x1="135" y1="88" x2="135" y2="70" stroke="#1d2533" stroke-width="4" stroke-linecap="round" transform="rotate(150 135 88)"/>
-    <line id="minHand" x1="135" y1="88" x2="135" y2="62" stroke="#b5303f" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="135" cy="88" r="3" fill="#1d2533"/>
-  </g>
-
-  <!-- Fenster -->
-  <g class="hot" data-obj="window" tabindex="0" role="button" aria-label="Fenster"><title>Fenster</title>
-    <rect x="300" y="50" width="260" height="190" fill="url(#sky)"/>
-    <path d="M300 240 V190 h30 v-30 h25 v40 h20 v-60 h35 v60 h15 v-25 h30 v45 h25 v-70 h30 v70 h20 v-30 h30 V240 Z" fill="#0b1424"/>
-    <g fill="#ffca70" opacity=".75"><rect x="383" y="145" width="5" height="6"/><rect x="396" y="160" width="5" height="6"/><rect x="383" y="178" width="5" height="6"/><rect x="488" y="135" width="5" height="6"/><rect x="498" y="158" width="5" height="6"/><rect x="488" y="190" width="5" height="6"/><rect x="338" y="172" width="5" height="6"/><rect x="438" y="190" width="5" height="6"/><rect x="540" y="205" width="5" height="6"/></g>
-    <rect x="300" y="50" width="260" height="190" fill="none" stroke="#3a5373" stroke-width="8"/>
-    <line x1="430" y1="50" x2="430" y2="240" stroke="#3a5373" stroke-width="5"/>
-    <rect x="290" y="238" width="280" height="10" rx="2" fill="#2c4260"/>
-  </g>
-
-  <!-- Aktenschrank -->
-  <g class="hot" data-obj="cabinet" tabindex="0" role="button" aria-label="Aktenschrank"><title>Aktenschrank</title>
-    <rect x="60" y="150" width="150" height="280" rx="4" fill="#26384f" stroke="#344b68" stroke-width="3"/>
-    <g fill="#2d425c"><rect x="72" y="162" width="126" height="80" rx="3"/><rect x="72" y="252" width="126" height="80" rx="3"/><rect x="72" y="342" width="126" height="80" rx="3"/></g>
-    <g fill="#e8f0fa" opacity=".7"><rect x="118" y="172" width="34" height="12"/><rect x="118" y="262" width="34" height="12"/><rect x="118" y="352" width="34" height="12"/></g>
-    <g fill="#8ea3bd"><rect x="115" y="196" width="40" height="6" rx="3"/><rect x="115" y="286" width="40" height="6" rx="3"/><rect x="115" y="376" width="40" height="6" rx="3"/></g>
-    <g id="padlock"><path d="M128 214 v-7 a7 7 0 0 1 14 0 v7" stroke="#ffca70" stroke-width="3" fill="none"/><rect x="124" y="213" width="22" height="17" rx="3" fill="#ffca70"/><circle cx="135" cy="221" r="2.5" fill="#5a4300"/></g>
-  </g>
-
-  <!-- Pflanze -->
-  <g aria-hidden="true"><ellipse cx="248" cy="352" rx="14" ry="30" fill="#2f6b55" transform="rotate(-25 248 352)"/><ellipse cx="262" cy="345" rx="12" ry="34" fill="#37795f"/><ellipse cx="276" cy="356" rx="13" ry="28" fill="#2f6b55" transform="rotate(28 276 356)"/><rect x="242" y="380" width="40" height="50" rx="4" fill="#3d2f28"/></g>
-
-  <!-- Schreibtisch -->
-  <g aria-hidden="true">
-    <rect x="280" y="335" width="420" height="16" rx="3" fill="#5a4332"/>
-    <rect x="295" y="351" width="18" height="79" fill="#3f2f24"/>
-    <rect x="570" y="351" width="115" height="79" fill="#4a3829"/>
-    <line x1="576" y1="390" x2="679" y2="390" stroke="#3a2c20" stroke-width="2"/>
-    <rect x="615" y="367" width="24" height="5" rx="2" fill="#8a7460"/><rect x="615" y="405" width="24" height="5" rx="2" fill="#8a7460"/>
-  </g>
-
-  <!-- Telefon -->
-  <g class="hot" data-obj="phone" tabindex="0" role="button" aria-label="Telefon mit Anrufbeantworter"><title>Telefon</title>
-    <rect x="310" y="294" width="88" height="44" fill="transparent"/>
-    <rect x="315" y="310" width="78" height="25" rx="5" fill="#1e2d42" stroke="#31455f" stroke-width="2"/>
-    <rect x="320" y="299" width="62" height="13" rx="6" fill="#2a3d55"/>
-    <g fill="#5d7391"><circle cx="330" cy="322" r="2.2"/><circle cx="339" cy="322" r="2.2"/><circle cx="348" cy="322" r="2.2"/><circle cx="357" cy="322" r="2.2"/></g>
-    <circle id="phoneLed" class="blinkled" cx="381" cy="322" r="4.5" fill="#ff6b78"/>
-  </g>
-
-  <!-- Laptop -->
-  <g class="hot" data-obj="laptop" tabindex="0" role="button" aria-label="Webers Laptop"><title>Laptop</title>
-    <rect id="laptopScreen" x="420" y="245" width="120" height="82" rx="4" fill="#0a1220" stroke="#3a4f6a" stroke-width="4"/>
-    <g id="laptopLock"><path d="M474 283 v-6 a6 6 0 0 1 12 0 v6" stroke="#9eb0c7" stroke-width="2.5" fill="none"/><rect x="471" y="282" width="18" height="14" rx="2" fill="#9eb0c7"/></g>
-    <g id="laptopOpen" class="hidden" fill="#52e0d0" opacity=".8"><rect x="432" y="258" width="60" height="5" rx="2"/><rect x="432" y="270" width="90" height="4" rx="2"/><rect x="432" y="280" width="75" height="4" rx="2"/><rect x="432" y="290" width="84" height="4" rx="2"/><rect x="432" y="300" width="50" height="4" rx="2"/></g>
-    <path d="M405 327 h150 l10 8 h-170 z" fill="#8193ab"/>
-  </g>
-
-  <!-- Tasse -->
-  <g class="hot" data-obj="mug" tabindex="0" role="button" aria-label="Kaffeetasse"><title>Kaffeetasse</title>
-    <rect x="584" y="262" width="52" height="76" fill="transparent"/>
-    <path class="steam" d="M597 292 q-5 -8 0 -16 q5 -8 0 -16" stroke="#cfd8e3" stroke-width="2" fill="none"/>
-    <path class="steam" d="M609 292 q-5 -8 0 -16 q5 -8 0 -16" stroke="#cfd8e3" stroke-width="2" fill="none"/>
-    <rect x="590" y="302" width="28" height="33" rx="4" fill="#dfe5ee"/>
-    <path d="M618 309 q12 0 12 10 q0 10 -12 10" stroke="#dfe5ee" stroke-width="4" fill="none"/>
-    <rect x="596" y="312" width="16" height="10" rx="2" fill="#52e0d0" opacity=".6"/>
-  </g>
-
-  <!-- Pinnwand -->
-  <g class="hot" data-obj="pinboard" tabindex="0" role="button" aria-label="Pinnwand"><title>Pinnwand</title>
-    <rect x="590" y="60" width="180" height="150" rx="4" fill="#8b6b47" stroke="#5c4630" stroke-width="6"/>
-    <rect x="604" y="74" width="58" height="76" fill="#eef1f5" transform="rotate(-3 633 112)"/>
-    <g stroke="#9aa6b6" stroke-width="2"><line x1="610" y1="88" x2="652" y2="86"/><line x1="610" y1="98" x2="655" y2="96"/><line x1="611" y1="108" x2="650" y2="106"/><line x1="611" y1="118" x2="654" y2="116"/></g>
-    <rect x="676" y="72" width="76" height="52" fill="#dfe7f0" transform="rotate(2 714 98)"/>
-    <g stroke="#9aa6b6" stroke-width="2"><line x1="684" y1="86" x2="742" y2="88"/><line x1="684" y1="96" x2="736" y2="98"/><line x1="684" y1="106" x2="744" y2="108"/></g>
-    <rect x="700" y="140" width="50" height="50" fill="#ffe37a" transform="rotate(5 725 165)"/>
-    <g stroke="#7a6500" stroke-width="2"><line x1="707" y1="158" x2="742" y2="161"/><line x1="706" y1="170" x2="736" y2="173"/></g>
-    <g fill="#ff4757"><circle cx="633" cy="76" r="4"/><circle cx="714" cy="74" r="4"/><circle cx="725" cy="142" r="4"/></g>
-    <rect x="612" y="160" width="62" height="38" fill="#cfe6ff" transform="rotate(-4 643 179)"/>
-  </g>
-
-  <!-- Not-Stopp-Terminal -->
-  <g class="hot" data-obj="terminal" tabindex="0" role="button" aria-label="Not-Stopp-Terminal"><title>Not-Stopp-Terminal</title>
-    <rect x="786" y="205" width="80" height="136" fill="transparent"/>
-    <text x="826" y="218" font-size="11" font-weight="800" fill="#ff6b78" text-anchor="middle" letter-spacing="1.5">NOT-STOPP</text>
-    <rect id="termFrame" x="790" y="225" width="72" height="112" rx="6" fill="#1a2638" stroke="#ff6b78" stroke-width="2"/>
-    <rect x="799" y="234" width="54" height="24" rx="2" fill="#07101c"/>
-    <text id="termText" x="826" y="250" font-size="9" font-weight="700" fill="#ff6b78" text-anchor="middle" font-family="monospace">GESPERRT</text>
-    <g fill="#33465f"><rect x="801" y="266" width="12" height="9" rx="2"/><rect x="820" y="266" width="12" height="9" rx="2"/><rect x="839" y="266" width="12" height="9" rx="2"/><rect x="801" y="280" width="12" height="9" rx="2"/><rect x="820" y="280" width="12" height="9" rx="2"/><rect x="839" y="280" width="12" height="9" rx="2"/><rect x="801" y="294" width="12" height="9" rx="2"/><rect x="820" y="294" width="12" height="9" rx="2"/><rect x="839" y="294" width="12" height="9" rx="2"/></g>
-    <circle cx="826" cy="320" r="10" fill="#ff4757" stroke="#7a1c27" stroke-width="2"/>
-  </g>
-
-  <!-- Papierkorb -->
-  <g class="hot" data-obj="trash" tabindex="0" role="button" aria-label="Papierkorb"><title>Papierkorb</title>
-    <rect x="710" y="366" width="66" height="66" fill="transparent"/>
-    <circle cx="737" cy="380" r="9" fill="#e8e2cf"/><circle cx="751" cy="383" r="7" fill="#ffe37a"/>
-    <path d="M715 384 h56 l-6 46 h-44 z" fill="#2a3b52" stroke="#3d5372" stroke-width="2"/>
-  </g>
-
-  <!-- Tür -->
-  <g class="hot" data-obj="door" tabindex="0" role="button" aria-label="Bürotür"><title>Tür</title>
-    <rect x="903" y="86" width="54" height="16" rx="3" fill="#07101c"/>
-    <circle id="doorLed" cx="930" cy="94" r="4.5" fill="#ff6b78"/>
-    <rect x="880" y="110" width="100" height="320" fill="#1b2c44" stroke="#2f4664" stroke-width="4"/>
-    <rect x="894" y="128" width="72" height="120" rx="3" fill="none" stroke="#2a405d" stroke-width="3"/>
-    <rect x="894" y="268" width="72" height="140" rx="3" fill="none" stroke="#2a405d" stroke-width="3"/>
-    <rect x="889" y="262" width="16" height="6" rx="3" fill="#8ea3bd"/>
-  </g>
-</svg>
-      </div>
-      <div class="panel">
-        <div class="eyebrow" style="margin-bottom:8px">Gegenstände im Raum</div>
-        <div class="objects" id="objectList"></div>
+    <div class="monitor">
+      <div class="postit-m a hand">Namen kann man ändern.<br>Nummern nicht.</div>
+      <div class="postit-m b hand">16:30 Buchungslauf!!</div>
+      <div class="screen" id="screen">
+        <div class="icons" id="icons"></div>
+        <div id="windows"></div>
+        <div id="notif" class="notif hidden" role="status" aria-live="polite"></div>
+        <div class="startmenu hidden" id="startmenu" role="menu"></div>
+        <div class="taskbar"><button class="logo" id="startBtnOs" aria-label="Startmenü">⊞</button><div id="tasks" style="display:flex;gap:3px;overflow:hidden"></div><div class="tray"><span id="trayTime">15:40</span><br><b id="trayRun">Lauf 16:30</b></div><button class="showdesk" id="showDesk" aria-label="Desktop anzeigen" title="Desktop anzeigen"></button></div>
       </div>
     </div>
     <aside>
-      <div class="panel">
-        <div class="eyebrow">Aktuelles Ziel</div>
-        <p class="objective" id="objective" style="margin:6px 0 0"></p>
-      </div>
-      <div class="panel">
-        <div class="eyebrow" style="margin-bottom:8px">Inventar</div>
-        <div class="inv" id="inventory"></div>
-      </div>
-      <div class="panel">
-        <div class="eyebrow" style="margin-bottom:8px">Notizbuch</div>
-        <div class="log" id="log" aria-live="polite"></div>
-      </div>
+      <div class="panel"><div class="eyebrow">Aktuelles Ziel</div><p id="objective" style="margin:6px 0 0"></p></div>
+      <div class="panel"><div class="eyebrow" style="margin-bottom:6px">Erkenntnisse</div><ul class="facts" id="facts"></ul></div>
+      <div class="panel"><div class="eyebrow" style="margin-bottom:8px">Ermittlungsprotokoll</div><div class="log" id="log" aria-live="polite"></div></div>
       <div class="panel">
         <div class="eyebrow">Team <span id="teamLabel" style="color:var(--text)"></span></div>
         <div class="side-stat"><span class="muted">Punkte</span><strong id="score">0</strong></div>
-        <div class="side-stat"><span class="muted">Phantome gefunden</span><strong id="stationCount">0 / 3</strong></div>
+        <div class="side-stat"><span class="muted">Fälle gelöst</span><strong id="stationCount">0 / 3</strong></div>
         <div class="side-stat"><span class="muted">Fehlversuche</span><strong id="mistakes">0</strong></div>
         <div class="side-stat"><span class="muted">Hinweise</span><strong id="hints">0</strong></div>
       </div>
       <button class="subtle" id="hintBtn" style="width:100%">Hinweis verwenden (−50 P.)</button>
+      <div id="hintBox" class="feedback hidden mini"></div>
     </aside>
   </div>
 </section>
 
 <section id="final" class="hidden">
   <div class="hero">
-    <div class="eyebrow" id="finalEyebrow">FALL ABGESCHLOSSEN</div>
+    <div class="eyebrow" id="finalEyebrow"></div>
     <h1 id="finalTitle"></h1>
     <p class="muted" id="finalText" style="max-width:680px"></p>
     <div class="bigscore" id="finalScore">0 Punkte</div>
@@ -333,53 +252,47 @@ dialog::backdrop{background:rgba(3,8,15,.78)}
     <div class="rowbuttons"><button class="primary" id="copyBtn">Ergebnis kopieren</button><button id="restartBtn">Neue Runde starten</button></div>
     <div id="copyFeedback" class="feedback hidden"></div>
   </div>
-  <h2 style="margin-top:28px">Nachbesprechung: die drei Phantome</h2>
+  <h2 style="margin-top:28px">Nachbesprechung: was hinter PHANTOME steckt</h2>
   <div class="grid">
-    <div class="card"><div class="num">PHANTOM 1 · SANKTIONEN</div><h3>Northbridge S.A.</h3><p class="muted mini">Eigentums- und Kontrollverhältnisse bis zur natürlichen Person verfolgen. Ein möglicher Treffer wird anhand von Identitätsmerkmalen (z. B. Geburtsdatum) geprüft, nicht allein am Namen – und dann dokumentiert eskaliert.</p></div>
-    <div class="card"><div class="num">PHANTOM 2 · GELDWÄSCHE</div><h3>Nova Trade Ltd.</h3><p class="muted mini">Bareinzahlungen knapp unter Schwellen mit zeitnaher Weiterleitung passen nicht zum Profil eines Studenten. Das ist ein Indikator für eine vertiefte Prüfung, keine automatische Verdachtsfeststellung – Gesamtbild und interne Meldewege zählen.</p></div>
-    <div class="card"><div class="num">PHANTOM 3 · FRAUD</div><h3>Die umgeleitete Mira-Zahlung</h3><p class="muted mini">Verification of Payee ist ein Prüfbaustein, keine Entscheidung für sich. Abgelehnt wird erst, wenn die Kombination stimmt: VoP-Abweichung, kurzfristig geänderte Kontoverbindung, unpassender Zahlungskontext. Plausible Zahlungen werden nach den üblichen Kontrollen weiterbearbeitet. Kontoänderungen und „Vorstandsanweisungen“ immer über einen unabhängig bekannten Kanal verifizieren.</p></div>
+    <div class="card"><div class="num">EMBARGO · EMBARGOCHECK</div><h3>Die umbenannte KESTREL</h3><p class="muted mini">Ein Namensabgleich allein reicht nicht: Schiffe werden umbenannt, die IMO-Nummer bleibt. Auch Transportweg, Ship-to-Ship-Transfers und Endverwendung gehören zur Embargo-Prüfung. Ein bestätigter Treffer wird nicht freigegeben, sondern dokumentiert und eskaliert.</p></div>
+    <div class="card"><div class="num">GELDWÄSCHE · AML-MONITOR</div><h3>Fall K. und Nova Trade</h3><p class="muted mini">Bareinzahlungen knapp unter Schwellen mit zeitnaher Weiterleitung passen nicht zum Profil eines Studenten. Das ist ein Indikator für eine vertiefte Prüfung, keine automatische Verdachtsfeststellung. Andere Alerts zeigen: Nicht jede Auffälligkeit ist Geldwäsche.</p></div>
+    <div class="card"><div class="num">BETRUG · FRAUDDESK</div><h3>Die umgeleitete Mira-Zahlung</h3><p class="muted mini">Verification of Payee ist ein Prüfbaustein, keine Entscheidung für sich. Abgelehnt wird erst bei der Kombination aus VoP-Abweichung, kurzfristig geänderter Kontoverbindung und unpassendem Zahlungskontext. Plausible Zahlungen werden nach den üblichen Kontrollen weiterbearbeitet.</p></div>
   </div>
-  <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Identität, Kontext, wirtschaftlichen Zweck und interne Verfahren prüfen. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren – und den Kunden nicht über laufende Prüfungen informieren.</div>
+  <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Identität, Kontext, wirtschaftlichen Zweck und interne Verfahren prüfen. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle verifizieren – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Keine echten Kundendaten verwenden · Version 2.0</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Keine echten Kundendaten verwenden · Version 3.0</footer>
 </div>
-
-<dialog id="modal" aria-labelledby="mTitle">
-  <div class="mhead"><div><div class="eyebrow" id="mEyebrow"></div><h2 id="mTitle"></h2></div><button class="close subtle" id="mClose" aria-label="Schließen">✕</button></div>
-  <div class="mbody"><div id="mBody"></div><div id="mFeedback" class="feedback hidden" role="status" aria-live="polite"></div><div class="mactions" id="mActions"></div></div>
-</dialog>
-<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
 <script>
 (() => {
 const $ = id => document.getElementById(id);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const CODE = "763";
-const S = {team:"", startAt:0, deadline:0, timerId:null, ended:false, score:0, mistakes:0, hints:0, log:[], entry:"",
-  f:{voicemail:false, key:false, opened:false, pinboard:false, trash:false, laptop:false, sanctions:false, aml:false, fraud:false, code:false},
-  frag:{A:null, B:null, C:null}};
-const OBJECTS = [
-  ["phone","Telefon"],["mug","Kaffeetasse"],["cabinet","Aktenschrank"],["pinboard","Pinnwand"],["trash","Papierkorb"],
-  ["laptop","Laptop"],["terminal","Not-Stopp-Terminal"],["door","Tür"],["window","Fenster"]];
+const pad = n => String(n).padStart(2, "0");
+const CODE = "762";
+const S = {team:"", startAt:0, deadline:0, timerId:null, ended:false, score:0, mistakes:0, hints:0, log:[], facts:[], firedEvents:{},
+  f:{embargo:false, notes:false, aml:false, fraud:false, code:false},
+  v:{mail:0, chat:"albers", doc:"bl", note:"n1", alert:null, amlSel:[], fraudDec:{}, query:"", searched:"", zvSel:false},
+  unread:{mail:2, chat:1}};
 
-/* ---------- Zeit & Story-Uhr ---------- */
+/* ---------- Zeit ---------- */
 const storyMin = () => S.startAt ? Math.min(50, Math.floor((Date.now() - S.startAt)/60000)) : 0;
-const storyTime = () => "17:" + String(storyMin()).padStart(2,"0");
+const storyTime = (m = storyMin()) => { const t = 40 + m; return (15 + Math.floor(t/60)) + ":" + pad(t % 60); };
 function tick(){
   const remaining = Math.max(0, S.deadline - Date.now()), sec = Math.ceil(remaining/1000);
-  $("timer").textContent = String(Math.floor(sec/60)).padStart(2,"0") + ":" + String(sec%60).padStart(2,"0");
+  $("timer").textContent = pad(Math.floor(sec/60)) + ":" + pad(sec % 60);
   $("clock").textContent = "Uhrzeit " + storyTime();
+  $("trayTime").textContent = storyTime();
+  $("trayRun").textContent = "Lauf in " + Math.ceil(sec/60) + " Min.";
   $("timerBox").classList.toggle("urgent", sec <= 300);
-  const m = storyMin();
-  $("minHand").setAttribute("transform", `rotate(${m*6} 135 88)`);
-  $("hourHand").setAttribute("transform", `rotate(${150 + m*0.5} 135 88)`);
+  EVENTS.forEach((e, i) => { if (!S.firedEvents[i] && storyMin() >= e.at){ S.firedEvents[i] = true; e.fn(); } });
+  if (WIN.zv) { const el = $("zvCountdown"); if (el) el.textContent = pad(Math.floor(sec/60)) + ":" + pad(sec % 60); }
   if (remaining <= 0) finish(true);
 }
 
-/* ---------- Typewriter & Cutscenes ---------- */
+/* ---------- Cutscenes ---------- */
 let typing = false, skipType = false;
-async function typeLines(el, lines, speed = 18){
+async function typeLines(el, lines, speed = 17){
   el.innerHTML = ""; typing = true; skipType = false;
   for (const line of lines){
     const p = document.createElement("p"); el.appendChild(p);
@@ -388,7 +301,7 @@ async function typeLines(el, lines, speed = 18){
       if (skipType){ p.textContent = line; break; }
       p.textContent = line.slice(0, i); await sleep(speed);
     }
-    if (!skipType) await sleep(380);
+    if (!skipType) await sleep(350);
   }
   typing = false;
 }
@@ -397,7 +310,7 @@ function cutscene({eyebrow, title, lines, button = "Weiter →", onDone}){
   ["start","game","final"].forEach(id => $(id).classList.add("hidden"));
   $("cutscene").classList.remove("hidden");
   $("csEyebrow").textContent = eyebrow; $("csTitle").textContent = title; $("csBtn").textContent = button;
-  csDone = onDone; window.scrollTo(0,0);
+  csDone = onDone; window.scrollTo(0, 0);
   typeLines($("csText"), lines);
 }
 $("csText").addEventListener("click", () => { skipType = true; });
@@ -406,403 +319,539 @@ $("csBtn").addEventListener("click", () => {
   $("cutscene").classList.add("hidden"); const fn = csDone; csDone = null; fn && fn();
 });
 
-/* ---------- UI-Helfer ---------- */
+/* ---------- HUD ---------- */
 function narrate(text){ S.log.unshift({t: storyTime(), text}); renderLog(); }
 function renderLog(){
   $("log").innerHTML = "";
   S.log.forEach(e => { const d = document.createElement("div"), t = document.createElement("time");
     t.textContent = e.t; d.appendChild(t); d.appendChild(document.createTextNode(e.text)); $("log").appendChild(d); });
 }
-let toastTimer;
-function toast(text){ $("toast").textContent = text; $("toast").classList.remove("hidden");
-  clearTimeout(toastTimer); toastTimer = setTimeout(() => $("toast").classList.add("hidden"), 8000); }
-function feedback(text, kind = ""){
-  if ($("modal").open){ $("mFeedback").className = "feedback " + kind; $("mFeedback").textContent = text; }
-  else toast(text);
-}
-function openModal({eyebrow, title, html, actions = []}){
-  $("mEyebrow").textContent = eyebrow; $("mTitle").textContent = title; $("mBody").innerHTML = html;
-  $("mFeedback").className = "feedback hidden"; $("mFeedback").textContent = "";
-  $("mActions").innerHTML = "";
-  actions.forEach(({text, fn, primary}) => { const b = document.createElement("button"); b.textContent = text;
-    if (primary) b.className = "primary"; b.addEventListener("click", fn); $("mActions").appendChild(b); });
-  if (!$("modal").open) $("modal").showModal();
-  $("modal").scrollTop = 0;
-}
-function closeModal(){ if ($("modal").open) $("modal").close(); }
-$("mClose").addEventListener("click", closeModal);
-$("modal").addEventListener("close", updateAll);
-
-function wrong(msg){ S.mistakes++; S.score = Math.max(0, S.score - 20); feedback(msg + " (−20 Punkte)", "bad"); updateStats(); }
-function fragReveal(letter, digit, text){
-  return `<div class="frag-reveal"><b>${digit}</b><div><div class="eyebrow">Codefragment ${letter}</div><span class="mini">${text}</span></div></div>`;
-}
-const solvedCount = () => [S.f.sanctions, S.f.aml, S.f.fraud].filter(Boolean).length;
-
-/* ---------- Ziel, Hinweise, Status ---------- */
+function addFact(text){ if (!S.facts.includes(text)){ S.facts.push(text); updateHud(); } }
+const solvedCount = () => [S.f.embargo, S.f.aml, S.f.fraud].filter(Boolean).length;
 function objective(){
   const f = S.f;
-  if (!f.voicemail) return "Das rote Licht am Telefon blinkt. Hört den Anrufbeantworter ab.";
-  if (!f.key) return "Findet den Schlüssel für den Aktenschrank.";
-  if (f.code) return "Der Code ist korrekt. Trefft am Terminal die richtige Entscheidung.";
+  if (f.code) return "Code akzeptiert. Wählt im ZV-Cockpit das weitere Vorgehen.";
+  if (!f.notes){
+    if (!S.facts.length) return "Verschafft euch einen Überblick auf Webers PC. Was hat er zuletzt getan?";
+    return "Webers Notizen sind verschlüsselt. Findet heraus, was „der wahre Name“ ist.";
+  }
   const open = [];
-  if (!f.sanctions) open.push("die Akte im Aktenschrank prüfen");
-  if (!f.laptop) open.push("Webers Laptop entsperren");
-  else { if (!f.aml) open.push("die Kontoanalyse auf dem Laptop"); if (!f.fraud) open.push("den Fraud-Desk auf dem Laptop"); }
-  if (open.length) return "Offen: " + open.join(" · ");
-  return "Alle drei Fragmente gefunden. Gebt den Code am Not-Stopp-Terminal ein – in der richtigen Reihenfolge.";
+  if (!f.embargo) open.push("Embargo-Treffer bewerten (EmbargoCheck)");
+  if (!f.aml) open.push("Alert A-2291 prüfen (AML-Monitor)");
+  if (!f.fraud) open.push("zurückgehaltene Zahlungen entscheiden (FraudDesk)");
+  if (open.length) return "Leitet den Freigabecode her: " + open.join(" · ");
+  return "Ihr habt alles für den Freigabecode. Setzt im ZV-Cockpit den Compliance-Stopp für PHANTOME.";
 }
 function hintText(){
   const f = S.f;
-  if (!f.voicemail) return "Auf dem Schreibtisch blinkt das Telefon. Dort wartet eine Nachricht von Weber.";
-  if (!f.key) return "Weber sagt, der Schlüssel liegt da, wo sein Kaffee steht. Schaut euch die Tasse genauer an.";
   if (f.code) return "Freigeben ist keine Option. Denkt an Dokumentation, Eskalation und Verifizierung über einen bekannten Kanal.";
-  if (!f.sanctions) return "Verfolgt die Kette AeroTrans → Calder → Northbridge bis zur natürlichen Person. Auf der Liste stehen ähnliche Namen – vergleicht das Geburtsdatum mit der Passkopie.";
-  if (!f.laptop) return "Das Laptop-Passwort kombiniert zwei Hinweise: einen Zettel im Papierkorb und den Dienstplan an der Pinnwand.";
-  if (!f.aml) return "Achtet auf das Muster: Bargeld rein, am selben Tag Überweisung an denselben Empfänger raus. Gehalt, Miete und Kleinbeträge sind Ablenkung.";
-  if (!f.fraud) return "Am Fraud-Desk ist nur eine Zahlung abzulehnen. Sucht die, bei der mehrere Warnsignale zusammenkommen: VoP-Abweichung, frisch geänderte Kontoverbindung, unpassender Zahlungskontext. Ein Zurückhaltungsgrund allein ist kein Betrug.";
-  return "Die Reihenfolge steht auf dem gelben Zettel an der Pinnwand: WER → WIE → WOMIT. Wer steckt dahinter? Wie fließt das Geld? Womit wird getäuscht?";
+  if (!f.notes && !S.v.chatSeen) return "Lest Webers letzte Chatnachrichten. Er erklärt dort, wo seine Erkenntnisse liegen.";
+  if (!f.notes && !S.v.searchedImo){
+    if (!S.v.blSeen) return "„Das, was die vertuschen wollen“ betrifft das Schiff. Öffnet in „Dokumente“ das Konnossement von PHANTOME.";
+    return "Der Post-it am Monitor: Namen kann man ändern, Nummern nicht. Sucht im EmbargoCheck nicht nach dem Schiffsnamen, sondern nach der IMO-Nummer.";
+  }
+  if (!f.notes) return "Das Notizen-Passwort ist der wahre Name des Schiffs – er steht im Treffer des EmbargoCheck.";
+  if (!f.embargo) return "Vergleicht IMO-Nummer und Baujahr aus dem Konnossement mit dem Treffer. Stimmen sie überein, ist es dasselbe Schiff – egal wie es heute heißt.";
+  if (!f.aml) return "Im AML-Monitor: Achtet auf das Muster aus Bareinzahlung und Weiterleitung am selben Tag an denselben Empfänger. Gehalt, Miete und Kleinbeträge sind Ablenkung.";
+  if (!f.fraud) return "Im FraudDesk ist nur eine Zahlung abzulehnen – die, bei der VoP-Abweichung, frisch geänderte Kontoverbindung und unpassender Zahlungskontext zusammenkommen.";
+  return "Webers Notiz „Compliance-Stopp“: letzte Ziffer der Schiffs-Listen-ID, Anzahl der Muster-Buchungen in Fall K., Nummer der abgelehnten Überweisung.";
 }
 $("hintBtn").addEventListener("click", () => {
   if (S.ended || !S.startAt) return;
-  if (S.hints >= 6){ feedback("Alle sechs verfügbaren Hinweise wurden verwendet."); return; }
+  if (S.hints >= 6){ showHint("Alle sechs verfügbaren Hinweise wurden verwendet."); return; }
   S.hints++; S.score = Math.max(0, S.score - 50);
-  const h = hintText(); feedback("HINWEIS: " + h + " (−50 Punkte)"); narrate("Hinweis: " + h); updateStats();
+  const h = hintText(); showHint("HINWEIS: " + h + " (−50 Punkte)"); narrate("Hinweis: " + h); updateHud();
 });
-function updateStats(){
+function showHint(t){ $("hintBox").textContent = t; $("hintBox").classList.remove("hidden"); }
+function updateHud(){
   $("score").textContent = S.score; $("mistakes").textContent = S.mistakes; $("hints").textContent = S.hints;
   $("stationCount").textContent = solvedCount() + " / 3"; $("teamLabel").textContent = S.team;
-}
-function updateAll(){
-  updateStats();
   $("objective").textContent = objective();
-  const inv = [];
-  if (S.f.key && !S.f.opened) inv.push(`<span class="item">🔑 Kleiner Schlüssel</span>`);
-  if (S.f.trash) inv.push(`<span class="item">📝 „Nachname + Personalnummer“</span>`);
-  ["A","B","C"].forEach(k => inv.push(S.frag[k] !== null ? `<span class="item frag">${k} = ${S.frag[k]}</span>` : `<span class="item muted">${k} = ?</span>`));
-  $("inventory").innerHTML = inv.join("");
-  const done = {phone:S.f.voicemail, mug:S.f.key, cabinet:S.f.sanctions, pinboard:S.f.pinboard, trash:S.f.trash, laptop:S.f.aml && S.f.fraud, terminal:S.ended};
-  $("objectList").innerHTML = "";
-  OBJECTS.forEach(([id, name]) => { const b = document.createElement("button"); b.textContent = (done[id] ? "✓ " : "") + name;
-    if (done[id]) b.className = "done"; b.addEventListener("click", () => interact(id)); $("objectList").appendChild(b); });
-  $("padlock").classList.toggle("hidden", S.f.opened);
-  $("phoneLed").classList.toggle("blinkled", !S.f.voicemail);
-  $("phoneLed").setAttribute("fill", S.f.voicemail ? "#2f6b55" : "#ff6b78");
-  $("laptopLock").classList.toggle("hidden", S.f.laptop); $("laptopOpen").classList.toggle("hidden", !S.f.laptop);
-  $("laptopScreen").setAttribute("fill", S.f.laptop ? "#123447" : "#0a1220");
-  $("termText").textContent = S.ended ? "GESTOPPT" : `${solvedCount()}/3 · CODE`;
+  $("facts").innerHTML = S.facts.length ? S.facts.map(f => `<li>${f}</li>`).join("") : `<li class="muted">Noch nichts. Fangt an zu suchen.</li>`;
+  renderIcons(); renderTasks();
 }
 
-/* ---------- Objekte ---------- */
-document.querySelectorAll("#scene .hot").forEach(g => {
-  g.addEventListener("click", () => interact(g.dataset.obj));
-  g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); interact(g.dataset.obj); } });
-});
-function interact(id){
+/* ---------- Fenster-Manager ---------- */
+const WIN = {}; let zTop = 10, winCount = 0;
+const APPS = {
+  mail:{label:"Mail", icon:"✉️", title:"Mail – m.weber@hausbank.example", w:760, h:470},
+  chat:{label:"Chat", icon:"💬", title:"Chat", w:640, h:450},
+  docs:{label:"Dokumente", icon:"📁", title:"Dokumente – Fälle", w:760, h:500},
+  notes:{label:"Notizen", icon:"📝", title:"Notizen", w:640, h:460},
+  embargo:{label:"EmbargoCheck", icon:"🚢", title:"EmbargoCheck – Screening-Arbeitsplatz", w:800, h:520},
+  aml:{label:"AML-Monitor", icon:"📈", title:"AML-Monitor – Transaktionsüberwachung", w:800, h:520},
+  fraud:{label:"FraudDesk", icon:"🛡️", title:"FraudDesk – Zahlungsprüfung", w:800, h:540},
+  zv:{label:"ZV-Cockpit", icon:"💶", title:"ZV-Cockpit – Zahlungsverkehr", w:820, h:520},
+  trash:{label:"Papierkorb", icon:"🗑️", title:"Papierkorb", w:620, h:420}};
+function renderIcons(){
+  $("icons").innerHTML = "";
+  Object.entries(APPS).forEach(([id, a]) => {
+    const b = document.createElement("button"); b.className = "dicon"; b.setAttribute("aria-label", a.label);
+    const badge = S.unread[id] ? `<span class="badge">${S.unread[id]}</span>` : "";
+    const lock = id === "notes" && !S.f.notes ? `<span class="badge" style="background:#5d6b80">🔒</span>` : "";
+    b.innerHTML = `<span class="ic">${a.icon}${badge}${lock}</span><span>${a.label}</span>`;
+    b.addEventListener("click", () => openApp(id)); $("icons").appendChild(b);
+  });
+}
+function renderTasks(){
+  $("tasks").innerHTML = "";
+  Object.keys(WIN).forEach(id => {
+    const b = document.createElement("button"); b.className = "tbtn" + (WIN[id].el.classList.contains("focus") && !WIN[id].min ? " active" : "");
+    b.textContent = APPS[id].icon + " " + APPS[id].label;
+    b.addEventListener("click", () => { const w = WIN[id]; if (w.min || !w.el.classList.contains("focus")) focusWin(id); else { w.min = true; w.el.classList.add("hidden"); w.el.classList.remove("focus"); renderTasks(); } });
+    $("tasks").appendChild(b);
+  });
+}
+function toggleStart(force){
+  const m = $("startmenu"), show = force ?? m.classList.contains("hidden");
+  if (show){ m.innerHTML = `<div class="sm-head">m.weber · Programme</div>` + Object.entries(APPS).map(([id,a]) => `<button data-app="${id}">${a.icon} ${a.label}${id === "notes" && !S.f.notes ? " 🔒" : ""}</button>`).join("");
+    m.querySelectorAll("button").forEach(x => x.addEventListener("click", () => { toggleStart(false); openApp(x.dataset.app); })); }
+  m.classList.toggle("hidden", !show);
+}
+$("startBtnOs").addEventListener("click", e => { e.stopPropagation(); toggleStart(); });
+$("screen").addEventListener("pointerdown", e => { if (!e.target.closest("#startmenu,#startBtnOs")) toggleStart(false); });
+$("showDesk").addEventListener("click", () => { Object.values(WIN).forEach(w => { w.min = true; w.el.classList.add("hidden"); w.el.classList.remove("focus"); }); renderTasks(); });
+function openApp(id){
   if (S.ended || !S.startAt) return;
-  ({phone, mug, cabinet, pinboard, trash, laptop:() => laptop(), terminal, door, window: windowView})[id]();
+  if (!WIN[id]){
+    const a = APPS[id], scr = $("screen"), sw = scr.clientWidth, sh = scr.clientHeight - 46;
+    const w = Math.min(a.w, sw - 20), h = Math.min(a.h, sh - 16), n = winCount++ % 5;
+    const el = document.createElement("div"); el.className = "win"; el.setAttribute("role","dialog"); el.setAttribute("aria-label", a.title);
+    el.style.width = w + "px"; el.style.height = h + "px";
+    el.style.left = Math.max(4, Math.min(sw - w - 4, 110 + n*30)) + "px"; el.style.top = Math.max(4, Math.min(sh - h - 4, 12 + n*26)) + "px";
+    el.innerHTML = `<div class="wtitle"><span>${a.icon}</span><span class="t">${a.title}</span><div class="wb"><button class="m" aria-label="Minimieren">—</button><button class="x" aria-label="Schließen">✕</button></div></div><div class="wbody"></div><div class="wfb hidden" role="status" aria-live="polite"></div>`;
+    $("windows").appendChild(el);
+    WIN[id] = {id, el, body: el.querySelector(".wbody"), fb: el.querySelector(".wfb"), min:false};
+    el.addEventListener("pointerdown", () => focusWin(id), true);
+    el.querySelector(".x").addEventListener("click", e => { e.stopPropagation(); el.remove(); delete WIN[id]; renderTasks(); });
+    el.querySelector(".m").addEventListener("click", e => { e.stopPropagation(); WIN[id].min = true; el.classList.add("hidden"); el.classList.remove("focus"); renderTasks(); });
+    makeDraggable(WIN[id]);
+    render(id);
+  }
+  focusWin(id);
+  if (id === "mail" || id === "chat"){ S.unread[id] = 0; renderIcons(); }
 }
+function focusWin(id){
+  const w = WIN[id]; if (!w) return;
+  Object.values(WIN).forEach(o => o.el.classList.remove("focus"));
+  w.min = false; w.el.classList.remove("hidden"); w.el.classList.add("focus"); w.el.style.zIndex = ++zTop; renderTasks();
+}
+function makeDraggable(w){
+  const bar = w.el.querySelector(".wtitle");
+  bar.addEventListener("pointerdown", e => {
+    if (e.target.closest("button") || window.innerWidth <= 700) return;
+    const r = w.el.getBoundingClientRect(), s = $("screen").getBoundingClientRect(), dx = e.clientX - r.left, dy = e.clientY - r.top;
+    const move = ev => {
+      const x = Math.max(-r.width + 140, Math.min(s.width - 140, ev.clientX - s.left - dx));
+      const y = Math.max(0, Math.min(s.height - 46 - 36, ev.clientY - s.top - dy));
+      w.el.style.left = x + "px"; w.el.style.top = y + "px";
+    };
+    const up = () => { removeEventListener("pointermove", move); removeEventListener("pointerup", up); };
+    addEventListener("pointermove", move); addEventListener("pointerup", up);
+  });
+}
+function render(id){ if (WIN[id]) RENDER[id](WIN[id].body); }
+function fb(id, text, kind = ""){ const w = WIN[id]; if (!w) return; w.fb.className = "wfb " + kind; w.fb.textContent = text; }
+function wrong(id, msg){ S.mistakes++; S.score = Math.max(0, S.score - 20); fb(id, msg + " (−20 Punkte)", "bad"); updateHud(); }
+let notifTimer;
+function notify(title, text, app){
+  const n = $("notif"); n.innerHTML = ""; const b = document.createElement("b"); b.textContent = title; n.appendChild(b); n.appendChild(document.createTextNode(text));
+  n.onclick = () => { n.classList.add("hidden"); if (app) openApp(app); };
+  n.classList.remove("hidden"); clearTimeout(notifTimer); notifTimer = setTimeout(() => n.classList.add("hidden"), 8000);
+}
+const on = (root, sel, ev, fn) => root.querySelectorAll(sel).forEach(el => el.addEventListener(ev, fn));
 
-const VOICEMAILS = [
-  {from:"Unbekannte Nummer", time:"16:38", lines:["„Guten Tag Herr Weber, hier das Büro des Vorstands. Der Vorstand möchte Sie sofort sprechen – Raum 12.04, zwölfter Stock. Es ist dringend und vertraulich. Bitte kommen Sie gleich hoch.“"]},
-  {from:"Weber (Mobil)", time:"16:44", lines:["„Hier Weber. Ich bin auf dem Weg in den Zwölften – angeblich will mich der Vorstand sprechen. Merkwürdig, die Nummer kannte ich nicht.",
-    "Falls ich nicht rechtzeitig zurück bin: Phantome darf um zehn vor sechs auf keinen Fall raus. Ich habe den Code für den Not-Stopp aufgeteilt – drei Fälle, drei Ziffern.",
-    "Den Schlüssel für den Aktenschrank findet ihr da, wo mein Kaffee steht. Und traut keiner Mail, die es eilig hat.“"]}];
-function phone(){
-  openModal({eyebrow:"Anrufbeantworter", title: S.f.voicemail ? "2 Nachrichten" : "2 neue Nachrichten",
-    html: VOICEMAILS.map((m,i) => `<div class="voicemail"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><span><strong>Nachricht ${i+1}</strong> · ${m.time} Uhr · <span class="muted">${m.from}</span></span><button data-vm="${i}">▶ Abspielen</button></div><div class="vtext" id="vm${i}"></div></div>`).join("")});
-  document.querySelectorAll("[data-vm]").forEach(b => b.addEventListener("click", async () => {
-    const i = +b.dataset.vm;
-    document.querySelectorAll("[data-vm]").forEach(x => x.disabled = true); b.textContent = "♪ läuft …";
-    await typeLines($("vm"+i), VOICEMAILS[i].lines, 14);
-    document.querySelectorAll("[data-vm]").forEach(x => x.disabled = false); b.textContent = "↻ Nochmal";
-    if (i === 0 && !S.f.vm0){ S.f.vm0 = true; narrate("Nachricht von 16:38: Ein angebliches Vorstandsbüro bestellt Weber „dringend und vertraulich“ in Raum 12.04 – von einer unbekannten Nummer."); }
-    if (i === 1 && !S.f.voicemail){ S.f.voicemail = true; narrate("Weber hat den Not-Stopp-Code auf drei Fälle verteilt. Der Schrankschlüssel liegt „da, wo mein Kaffee steht“."); updateAll(); }
-  }));
-}
+/* ---------- Mail ---------- */
+const MAILS = [
+  {time:"15:36", from:"Assistenz des Vorstands", addr:"assistenz.vorstand@hausbank-vorstand.example", subj:"PHANTOME – Ausführung im Lauf 16:30 sicherstellen", read:false,
+    body:`<p>Sehr geehrter Herr Weber,</p><p>der Vorstand erwartet, dass die Zahlung PHANTOME (3,8 Mio. EUR, Northbridge S.A.) im Buchungslauf um 16:30 Uhr ausgeführt wird. Ihr Compliance-Vermerk verzögert ein strategisch wichtiges Geschäft.</p><p>Bitte behandeln Sie die Angelegenheit streng vertraulich und verzichten Sie auf Rückfragen per Telefon. Eine kurze Bestätigung per Antwort auf diese E-Mail genügt.</p><p>Mit freundlichen Grüßen<br>Assistenz des Vorstands</p>`},
+  {time:"15:10", from:"ZV-Batch", addr:"zv-batch@hausbank.example", subj:"Buchungslauf 16:30 – 1 Zahlung mit offenem Compliance-Vermerk", read:false,
+    body:`<p>Automatische Nachricht.</p><p>Im Buchungslauf heute 16:30 Uhr ist 1 Zahlung mit offenem Compliance-Vermerk enthalten:</p><p class="mono">PHANTOME · Northbridge S.A. · 3.800.000,00 EUR · Fallverantwortlich: m.weber</p><p>Ohne Compliance-Stopp wird die Zahlung bei Fristablauf automatisch zweitfreigegeben.</p>`},
+  {time:"14:55", from:"IT-Sicherheit", addr:"it-sicherheit@hausbank.example", subj:"Erinnerung: Phishing-Awareness-Woche", read:true,
+    body:`<p>Liebe Kolleginnen und Kollegen,</p><p>achtet diese Woche besonders auf ungewöhnliche Zahlungsaufforderungen und Kontoänderungen. Interne Adressen enden immer auf <b class="mono">@hausbank.example</b>. Im Zweifel: Rückruf über die bekannte Durchwahl – nie über Kontaktdaten aus der verdächtigen Nachricht.</p><p>Eure IT-Sicherheit</p>`},
+  {time:"13:47", from:"Katrin Albers", addr:"k.albers@hausbank.example", subj:"Übergabe ans Abendteam 15:45", read:true,
+    body:`<p>Hi Matthias,</p><p>denk bitte an die Übergabe ans Abendteam um 15:45 bei dir. Du wolltest ihnen ja noch „was zeigen“ 😉</p><p>Katrin</p>`}];
+const RENDER = {};
+RENDER.mail = b => {
+  const m = MAILS[S.v.mail]; m.read = true;
+  b.className = "wbody flush";
+  b.innerHTML = `<div class="split"><div class="list">${MAILS.map((x,i) => `<button class="li ${i === S.v.mail ? "sel" : ""} ${x.read ? "" : "unread"}" data-i="${i}">${x.from}<small>${x.time} · ${x.subj}</small></button>`).join("")}</div>
+    <div class="pane"><h3>${m.subj}</h3><p class="mini muted" style="margin-bottom:12px">Von: <b>${m.from}</b> &lt;<span class="mono">${m.addr}</span>&gt; · heute ${m.time}<br>An: m.weber@hausbank.example</p>${m.body}</div></div>`;
+  on(b, ".li", "click", e => { S.v.mail = +e.currentTarget.dataset.i; render("mail"); });
+  if (S.v.mail === 0 && !S.v.fakeSeen){ S.v.fakeSeen = true; narrate("Mail 15:36: Eine „Assistenz des Vorstands“ drängt von einer fremden Domain darauf, PHANTOME um 16:30 auszuführen – ohne Rückfragen per Telefon."); }
+};
 
-function mug(){
-  if (!S.f.key){
-    S.f.key = true; narrate("Unter Webers Kaffeetasse klebt ein kleiner Schlüssel – er passt zum Vorhängeschloss am Aktenschrank.");
-    openModal({eyebrow:"Schreibtisch", title:"Kaffeetasse", html:`<p>Der Kaffee ist noch lauwarm. Aufdruck: <em>„Erst prüfen, dann zahlen.“</em></p><p>Als ihr die Tasse anhebt, klebt etwas am Boden: <strong>ein kleiner Messingschlüssel</strong>. 🔑</p>`});
-    updateAll();
-  } else openModal({eyebrow:"Schreibtisch", title:"Kaffeetasse", html:`<p>Nur noch ein Kaffeerand. Den Schlüssel habt ihr bereits.</p>`});
-}
+/* ---------- Chat ---------- */
+const CHATS = {
+  albers:{name:"Katrin Albers", msgs:[
+    {me:false, t:"13:48", text:"Denkst du an die Übergabe? 15:45 bei dir."},
+    {me:true, t:"13:50", text:"Ja. Und ich muss euch was zeigen."},
+    {me:true, t:"15:18", text:"Katrin, ich bin an was Großem dran. PHANTOME ist nicht sauber – das Schiff, das Geld, alles."},
+    {me:false, t:"15:19", text:"Wie meinst du das?"},
+    {me:true, t:"15:21", text:"Erklär ich später. Hab alles in meine Notizen geschrieben, verschlüsselt. Passwort ist das, was die vertuschen wollen."},
+    {me:true, t:"15:26", text:"Muss kurz runter. Da will mich jemand sprechen, angeblich vom Vorstand. Bin gleich zurück."},
+    {me:false, t:"15:39", text:"Matthias? Das Abendteam steht vor deinem Büro."}]},
+  team:{name:"FCU-Team", msgs:[
+    {me:false, t:"12:02", who:"D. Yilmaz", text:"Kuchen in der Küche 🎂"},
+    {me:false, t:"14:40", who:"ZV-Bot", text:"Buchungslauf heute 16:30. Offene Compliance-Vermerke bitte bis dahin klären."}]}};
+RENDER.chat = b => {
+  const c = CHATS[S.v.chat];
+  b.className = "wbody flush";
+  b.innerHTML = `<div class="split"><div class="list">${Object.entries(CHATS).map(([k,x]) => `<button class="li ${k === S.v.chat ? "sel" : ""}" data-k="${k}">${x.name}<small>${x.msgs[x.msgs.length-1].text.slice(0,38)}…</small></button>`).join("")}</div>
+    <div class="pane" style="background:#eef2f7">${c.msgs.map(m => `<div class="chatmsg ${m.me ? "me" : ""}"><small>${m.me ? "Matthias Weber" : (m.who || c.name)} · ${m.t}</small>${m.text}</div>`).join("")}</div></div>`;
+  on(b, ".li", "click", e => { S.v.chat = e.currentTarget.dataset.k; render("chat"); });
+  const p = b.querySelector(".pane"); p.scrollTop = p.scrollHeight;
+  if (S.v.chat === "albers" && !S.v.chatSeen){ S.v.chatSeen = true;
+    narrate("Chat: Weber war „an was Großem dran“. Seine Erkenntnisse stehen in den verschlüsselten Notizen – „Passwort ist das, was die vertuschen wollen“. Um 15:26 ging er zu einem angeblichen Vorstandstermin.");
+    addFact("Notizen-Passwort: „das, was die vertuschen wollen“"); }
+};
 
-function cabinet(){
-  if (!S.f.key){ openModal({eyebrow:"Aktenschrank", title:"Verschlossen", html:`<p>Die oberste Schublade ist mit einem kleinen Vorhängeschloss gesichert. Auf dem Etikett steht in Webers Schrift: <span class="handwriting">„Phantome – nur für mich“</span>.</p><p class="muted">Ihr braucht einen Schlüssel.</p>`}); return; }
-  if (!S.f.opened){ S.f.opened = true; narrate("Der Schlüssel passt. In der Schublade: die Akte AeroTrans GmbH."); updateAll(); }
-  openModal({eyebrow:"Aktenschrank · Fall 1", title:"Akte AeroTrans GmbH",
-    html:`<p>In der Schublade liegt nur eine Akte. Auf dem Deckel hat Weber mit Rotstift notiert: <span class="handwriting">„Wem gehört das eigentlich wirklich?“</span></p>
-    <div class="doc"><span class="stamp">IN FREIGABE</span><h3>Zahlungsauftrag</h3>
-      <table><tr><th>Auftraggeber</th><td>AeroTrans GmbH, Hamburg</td></tr><tr><th>Empfänger</th><td>Northbridge S.A., Panama-Stadt</td></tr><tr><th>Betrag</th><td><strong>3.800.000,00 EUR</strong></td></tr><tr><th>Zweck</th><td>„Beratungsleistungen Projekt PHANTOME“</td></tr><tr><th>Ausführung</th><td>heute, 17:50 Uhr (automatisch)</td></tr></table></div>
-    <div class="docs2">
-      <div class="doc"><h3>Eigentümerstruktur</h3><table>
-        <tr><th>Gesellschaft</th><th>Gesellschafter</th></tr>
-        <tr><td>AeroTrans GmbH</td><td>Calder Holdings Ltd., Limassol – 100 %</td></tr>
-        <tr><td>Calder Holdings Ltd.</td><td>Northbridge S.A., Panama – 80 %<br>Streubesitz – 20 %</td></tr>
-        <tr><td>Northbridge S.A.<br><small>Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt</small></td><td>eine natürliche Person – 100 %<br><small>siehe Passkopie</small></td></tr></table></div>
-      <div class="doc"><h3>Passkopie (Auszug)</h3><table><tr><th>Name</th><td>MARIN</td></tr><tr><th>Vorname</th><td>VIKTOR</td></tr><tr><th>Geburtsdatum</th><td>14.03.1974</td></tr><tr><th>Funktion</th><td>Director, Northbridge S.A.</td></tr></table></div>
-    </div>
-    <div class="doc"><span class="stamp">FIKTIV</span><h3>Abgleich Sanktionsliste – mögliche Treffer</h3><table>
-      <tr><th>Listen-ID</th><th>Name</th><th>Geburtsdatum</th><th>Typ</th></tr>
-      <tr><td class="mono">SAN-2207</td><td>Viktor MARINOV</td><td>02.11.1981</td><td>Person</td></tr>
-      <tr><td class="mono">SAN-5150</td><td>Victor MARIN</td><td>14.03.1962</td><td>Person</td></tr>
-      <tr><td class="mono">SAN-8839</td><td>Viktor MARIN</td><td>14.03.1974</td><td>Person</td></tr>
-      <tr><td class="mono">SAN-9311</td><td>MARIN TRADING LTD</td><td>–</td><td>Gesellschaft</td></tr></table></div>
-    ${S.f.sanctions ? `<p class="handwriting">Hinten in der Akte klebt ein Zettel von Weber: „Phantom Nr. 1 = Northbridge. Erste Ziffer: ${S.frag.A}“</p>` + fragReveal("A", S.frag.A, "Phantom Nr. 1: Northbridge S.A.") : `
-    <p><strong>Aufgabe:</strong> Wer ist die natürliche Person am Ende der Eigentumskette – und welcher Listeneintrag passt wirklich zu ihr?</p>
-    <div class="field"><input id="ubo" placeholder="Name der natürlichen Person" aria-label="Wirtschaftlich Berechtigter"><input id="sanCode" placeholder="Listen-ID, z. B. SAN-0000" aria-label="Listen-ID"></div>`}`,
-    actions: S.f.sanctions ? [] : [{text:"Prüfung einreichen", primary:true, fn:checkSanctions}]});
-}
-function checkSanctions(){
-  const u = $("ubo").value.trim().toLowerCase().replace(/,/g," ").replace(/\s+/g," ");
-  const c = $("sanCode").value.toUpperCase().replace(/[^A-Z0-9]/g,"");
-  const nameOk = u === "viktor marin" || u === "marin viktor";
-  const codeOk = c === "SAN8839" || c === "8839";
-  if (nameOk && codeOk){
-    S.f.sanctions = true; S.frag.A = CODE[0]; S.score += 250;
-    narrate("Phantom Nr. 1: Hinter AeroTrans steht über Calder und Northbridge Viktor Marin – möglicher Treffer SAN-8839. Fragment A = " + CODE[0] + ".");
-    cabinet();
-    feedback("Möglicher Treffer korrekt identifiziert. In der Praxis: nicht freigeben, Prüfung dokumentieren und eskalieren. +250 Punkte.", "good");
-    updateAll();
-  } else if (nameOk) wrong("Die Person stimmt – aber ein ähnlicher Name reicht nicht. Vergleicht die Identitätsmerkmale mit der Passkopie.");
-  else wrong("Noch nicht korrekt. Verfolgt die Struktur Ebene für Ebene bis zur natürlichen Person.");
-}
+/* ---------- Dokumente ---------- */
+const DOCS = {
+  za:{folder:"PHANTOME", name:"Zahlungsauftrag_PHANTOME.pdf", html:`<div class="doc"><span class="stamp">IN FREIGABE</span><h3>Zahlungsauftrag</h3><table>
+    <tr><th>Auftraggeber</th><td>AeroTrans GmbH, Hamburg</td></tr><tr><th>Empfänger</th><td>Northbridge S.A., Panama-Stadt</td></tr>
+    <tr><th>Betrag</th><td><b>3.800.000,00 EUR</b></td></tr><tr><th>Zweck</th><td>Ersatzteile Industriegasturbinen, Lieferung gem. B/L 77120</td></tr>
+    <tr><th>Ausführung</th><td>Buchungslauf heute 16:30 Uhr</td></tr></table></div>`},
+  re:{folder:"PHANTOME", name:"Handelsrechnung_AT-2026-311.pdf", html:`<div class="doc"><h3>Handelsrechnung AT-2026-311</h3><table>
+    <tr><th>Verkäufer</th><td>AeroTrans GmbH, Hamburg</td></tr><tr><th>Käufer</th><td>Northbridge S.A., Panama-Stadt</td></tr>
+    <tr><th>Ware</th><td>14 Kisten Ersatzteile für Industriegasturbinen</td></tr><tr><th>Lieferbedingung</th><td>CIF Port Sarel (Freihafen)</td></tr>
+    <tr><th>Endverwender</th><td><i>„wird nachgereicht“</i></td></tr><tr><th>Wert</th><td>3.800.000,00 EUR</td></tr></table></div>`},
+  bl:{folder:"PHANTOME", name:"Konnossement_BL-77120.pdf", html:`<div class="doc"><span class="stamp">KOPIE</span><h3>Konnossement (Bill of Lading) Nr. 77120</h3><table>
+    <tr><th>Ablader</th><td>AeroTrans GmbH, Hamburg</td></tr><tr><th>Empfänger</th><td>an Order der Northbridge S.A.</td></tr><tr><th>Meldeadresse</th><td>Calder Holdings Ltd., Limassol</td></tr>
+    <tr><th>Schiff</th><td><b>MV AURORA STAR</b></td></tr><tr><th>IMO-Nr.</th><td class="mono"><b>9387421</b></td></tr><tr><th>Baujahr</th><td>2006</td></tr>
+    <tr><th>Ladehafen</th><td>Hamburg</td></tr><tr><th>Löschhafen</th><td>Port Sarel (Freihafen)</td></tr>
+    <tr><th>Bemerkung</th><td>Umschlag Ship-to-Ship auf Reede vorgesehen</td></tr></table>
+    <p class="hand" style="margin:10px 0 0">← Warum STS-Umschlag, wenn es einen Hafen gibt?? – W.</p></div>`},
+  ow:{folder:"PHANTOME", name:"Eigentümerstruktur.pdf", html:`<div class="doc"><h3>Eigentümerstruktur AeroTrans GmbH</h3><table>
+    <tr><th>Gesellschaft</th><th>Gesellschafter</th></tr><tr><td>AeroTrans GmbH</td><td>Calder Holdings Ltd., Limassol – 100 %</td></tr>
+    <tr><td>Calder Holdings Ltd.</td><td>Northbridge S.A., Panama – 80 %, Streubesitz – 20 %</td></tr>
+    <tr><td>Northbridge S.A.<br><small>Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt</small></td><td>Viktor Marin – 100 %</td></tr></table></div>`},
+  pr:{folder:"Privat", name:"Urlaub_Ostsee.jpg", html:`<p class="muted">Die Datei kann nicht angezeigt werden.</p>`}};
+RENDER.docs = b => {
+  b.className = "wbody flush";
+  const folders = [...new Set(Object.values(DOCS).map(d => d.folder))];
+  b.innerHTML = `<div class="split"><div class="list">${folders.map(f => `<div style="padding:8px 12px;font-size:.74rem;font-weight:800;letter-spacing:.08em;color:#5d6b80">📂 ${f.toUpperCase()}</div>` +
+    Object.entries(DOCS).filter(([,d]) => d.folder === f).map(([k,d]) => `<button class="li ${k === S.v.doc ? "sel" : ""}" data-k="${k}">📄 ${d.name}</button>`).join("")).join("")}</div>
+    <div class="pane"><p class="mini muted mono" style="margin:0">Fälle › ${DOCS[S.v.doc].folder} › ${DOCS[S.v.doc].name}</p>${DOCS[S.v.doc].html}</div></div>`;
+  on(b, ".li", "click", e => { S.v.doc = e.currentTarget.dataset.k; render("docs"); });
+  if (S.v.doc === "bl" && !S.v.blSeen){ S.v.blSeen = true; narrate("Konnossement: Die Ware reist auf der MV AURORA STAR, IMO 9387421, Baujahr 2006 – mit geplantem Ship-to-Ship-Umschlag."); addFact("Schiff laut Konnossement: AURORA STAR · IMO 9387421 · Bj. 2006"); }
+};
 
-function pinboard(){
-  if (!S.f.pinboard){ S.f.pinboard = true; narrate("Pinnwand: Dienstplan mit Personalnummern, interne Telefonliste und ein gelber Zettel „WER → WIE → WOMIT“."); updateAll(); }
-  openModal({eyebrow:"Wand", title:"Pinnwand",
-    html:`<div class="docs2">
-      <div class="doc"><h3>Dienstplan KW 44 · FCU</h3><table><tr><th>Name</th><th>PNr.</th><th>Fr</th></tr>
-        <tr><td>Albers, K.</td><td class="mono">1188</td><td>Früh</td></tr><tr><td>Weber, M.</td><td class="mono">2604</td><td>Spät</td></tr><tr><td>Yilmaz, D.</td><td class="mono">3051</td><td>frei</td></tr></table></div>
-      <div class="doc"><h3>Interne Telefonliste</h3><table>
-        <tr><td>Vorstandsbüro</td><td class="mono">-1200</td></tr><tr><td colspan="2"><small class="mono">vorstand@hausbank.example</small></td></tr>
-        <tr><td>Compliance-Hotline</td><td class="mono">-4400</td></tr>
-        <tr><td>IT-Sicherheit</td><td class="mono">-4911</td></tr><tr><td colspan="2"><small class="mono">it-sicherheit@hausbank.example</small></td></tr></table>
-        <p class="mini" style="margin:8px 0 0">Alle internen Adressen enden auf <strong class="mono">@hausbank.example</strong>.</p></div></div>
-    <div class="postit handwriting" style="font-size:1.25rem">Not-Stopp:<br>WER → WIE → WOMIT</div>
-    <div class="postit" style="background:#cfe6ff;color:#14304f;transform:rotate(1.5deg)">Foto vom Betriebsausflug: Weber mit einer Kappe „Vier Augen sehen mehr“.</div>`});
-}
+/* ---------- Notizen ---------- */
+const NOTES = {
+  n1:{title:"PHANTOME – Stand 15:15", text:`Zahlung 3,8 Mio. € AeroTrans → Northbridge. Buchungslauf heute 16:30.
+Erste Freigabe kam über die Sammelkennung zv.batch07?! Die ist nur für Gehaltsläufe. Wer war das?
 
-function trash(){
-  if (!S.f.trash){ S.f.trash = true; narrate("Im Papierkorb: ein zerknüllter Zettel mit dem Aufbau von Webers Laptop-Passwort."); updateAll(); }
-  openModal({eyebrow:"Unter dem Schreibtisch", title:"Papierkorb",
-    html:`<p>Kaffeefilter, ein Werbeprospekt – und ein zerknüllter gelber Zettel. Ihr streicht ihn glatt:</p>
-    <div class="postit handwriting" style="font-size:1.15rem">Neues Laptop-PW:<br>Nachname + Personalnummer<br><small>(klein, ohne Leerzeichen)</small><br>NICHT aufschreiben!!</div>
-    <p class="muted mini">Typisch Weber.</p>`});
-}
+WER?   AeroTrans → Calder Holdings → Northbridge S.A. → Viktor Marin.
+WOMIT? Ware reist auf der AURORA STAR. Das Schiff ist nicht, was es scheint → EmbargoCheck.
+WOHER? Alert A-2291 (Fall K.) im AML-Monitor. Empfänger Nova Trade – Adresse prüfen!
+UND:   Heute 3 Zahlungen im FraudDesk zurückgehalten. Eine davon ist eine Falle. Dieselben Leute?`},
+  n2:{title:"Compliance-Stopp", text:`Falls ich PHANTOME nicht selbst stoppen kann:
+Im ZV-Cockpit Compliance-Stopp setzen. Dafür braucht es meinen Freigabecode.
+Der steht nirgends – aber wer meine Fälle löst, kann ihn herleiten:
 
-function laptop(view){
-  if (!S.f.laptop){
-    openModal({eyebrow:"Schreibtisch", title:"Webers Laptop",
-      html:`<div class="laptop"><p class="mono">Bildschirm gesperrt · Benutzer: m.weber</p><input id="pw" type="password" placeholder="Passwort" aria-label="Passwort" autocomplete="off"></div>`,
-      actions:[{text:"Entsperren", primary:true, fn:checkPw}]});
-    $("pw").addEventListener("keydown", e => { if (e.key === "Enter") checkPw(); });
+  1. Ziffer = letzte Ziffer der Listen-ID des Schiffs
+  2. Ziffer = Anzahl der Buchungen, die in Fall K. das Muster bilden
+  3. Ziffer = Nummer der Überweisung im FraudDesk, die abgelehnt werden muss
+
+Danach: dokumentieren, eskalieren. Vorstand nur über die -1200 verifizieren.
+Und traut keiner Mail, die es eilig hat.`},
+  n3:{title:"To-do", text:`☐ Zahnarzt Mo 8:30
+☐ Blumen für Mama
+☐ Revision informieren?  ← erst Beweise sammeln!!`}};
+RENDER.notes = b => {
+  if (!S.f.notes){
+    b.className = "wbody notesbg";
+    b.innerHTML = `<div class="lock"><div class="big">🔒</div><h3>Diese Notizen sind verschlüsselt</h3><p class="muted mini">Passworthinweis: <i>„Der wahre Name.“</i></p>
+      <div class="row"><input id="notesPw" type="password" placeholder="Passwort" aria-label="Notizen-Passwort" autocomplete="off"><button class="primary" id="notesBtn">Entsperren</button></div></div>`;
+    const go = () => {
+      const pw = $("notesPw").value.toUpperCase().replace(/[^A-Z]/g, "").replace(/^MV/, "");
+      if (pw === "KESTREL"){
+        S.f.notes = true; S.score += 100; fb("notes", "Notizen entschlüsselt. +100 Punkte.", "good");
+        narrate("Webers Notizen sind entschlüsselt. Er hat drei Spuren verfolgt – und erklärt, wie man seinen Freigabecode für den Compliance-Stopp herleitet.");
+        addFact("Freigabecode = Listen-ID-Endziffer Schiff · Anzahl Muster-Buchungen Fall K. · Nr. der abgelehnten Überweisung");
+        render("notes"); updateHud();
+      } else { wrong("notes", "Falsches Passwort."); $("notesPw").value = ""; }
+    };
+    $("notesBtn").addEventListener("click", go); $("notesPw").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
     return;
   }
-  if (view === "aml") return amlView();
-  if (view === "mail") return mailView();
-  if (view === "fraud") return fraudView();
-  openModal({eyebrow:"Webers Laptop", title:"Desktop",
-    html:`<div class="laptop"><p class="muted mini" style="margin-bottom:12px">Drei Fenster sind noch geöffnet:</p><div class="apps">
-      <button class="app" id="appAml"><span>📊 Kontoanalyse – Fall K.</span><small class="muted">${S.f.aml ? "✓ abgeschlossen" : "Weber hat hier zuletzt gearbeitet"}</small></button>
-      <button class="app" id="appFraud"><span>🛡️ Fraud-Desk</span><small class="muted">${S.f.fraud ? "✓ abgeschlossen" : "3 Zahlungen zurückgehalten"}</small></button>
-      <button class="app" id="appMail"><span>✉️ Posteingang (3)</span><small class="muted">1 Nachricht als „dringend“ markiert</small></button></div></div>`});
-  $("appAml").addEventListener("click", () => laptop("aml"));
-  $("appFraud").addEventListener("click", () => laptop("fraud"));
-  $("appMail").addEventListener("click", () => laptop("mail"));
-}
-function checkPw(){
-  const pw = $("pw").value.toLowerCase().replace(/\s+/g,"");
-  if (pw === "weber2604"){ S.f.laptop = true; narrate("Webers Laptop ist entsperrt. Geöffnet: eine Kontoanalyse, der Fraud-Desk und der Posteingang."); updateAll(); laptop(); }
-  else { wrong("Falsches Passwort. Der Bildschirm wackelt kurz."); $("pw").value = ""; }
-}
+  b.className = "wbody flush";
+  const n = NOTES[S.v.note];
+  b.innerHTML = `<div class="split"><div class="list">${Object.entries(NOTES).map(([k,x]) => `<button class="li ${k === S.v.note ? "sel" : ""}" data-k="${k}">${x.title}</button>`).join("")}</div>
+    <div class="pane notesbg"><h3>${n.title}</h3><div class="notetext"></div></div></div>`;
+  b.querySelector(".notetext").textContent = n.text;
+  on(b, ".li", "click", e => { S.v.note = e.currentTarget.dataset.k; render("notes"); });
+};
 
+/* ---------- EmbargoCheck ---------- */
+const EMB_DEC = [
+  ["noname","Kein Treffer – der Name AURORA STAR steht nicht auf der Liste.", "Namen lassen sich ändern. Maßgeblich ist die Identität des Schiffs – und die belegt die IMO-Nummer."],
+  ["hit","Echter Treffer – IMO-Nummer und Baujahr stimmen überein. Nicht freigeben, Fall dokumentieren und eskalieren."],
+  ["transport","Unerheblich – das Schiff ist nur Transportmittel. Geprüft werden nur Auftraggeber und Empfänger.", "Auch Transportmittel, Transportweg und Endverwendung gehören zur Embargo-Prüfung."]];
+RENDER.embargo = b => {
+  b.className = "wbody";
+  const q = S.v.searched, Q = q.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  let result = "";
+  if (q){
+    if (Q.includes("9387421") || Q.includes("KESTREL") || Q.includes("EMB4417")){
+      result = `<div class="doc" style="border-color:#e2a0a8"><span class="stamp">TREFFER</span><h3>EMB-4417 · Schiff KESTREL</h3><table>
+        <tr><th>IMO-Nr.</th><td class="mono"><b>9387421</b></td></tr><tr><th>Baujahr</th><td>2006</td></tr><tr><th>Typ</th><td>Mehrzweckfrachter</td></tr>
+        <tr><th>Gelistet seit</th><td>03/2024 · Embargoliste (fiktiv)</td></tr>
+        <tr><th>Grund</th><td>Transport embargierter Güter, verdeckte Ship-to-Ship-Transfers, wiederholtes Abschalten des Positionssignals (AIS)</td></tr>
+        <tr><th>Hinweis</th><td>Schiff wurde 2025 umbenannt. Neuer Name in der Liste noch nicht erfasst.</td></tr></table></div>
+        ${S.f.embargo ? `<p><span class="tag no">✕ Treffer bestätigt · Zahlung nicht freigeben · eskaliert</span></p>` :
+        `<p><b>Treffer bewerten:</b> Handelt es sich um das Schiff aus dem Fall PHANTOME?</p>${EMB_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="emb" value="${v}"><span>${t}</span></label>`).join("")}
+        <div class="row"><button class="primary" id="embBtn">Bewertung speichern</button></div>`}`;
+    } else result = `<p style="margin-top:12px"><span class="tag ok">✓ Kein Treffer</span> für „<span class="mono" id="qEcho"></span>“</p>`;
+  }
+  b.innerHTML = `<div class="appbar" style="background:#7a1c27">🚢 EmbargoCheck <small>Benutzer: m.weber</small></div>
+    <h3>Offener Prüffall: PHANTOME</h3><p class="mini muted">Zahlung 3.800.000,00 EUR · AeroTrans GmbH → Northbridge S.A. · Automatisches Screening von heute 14:58</p>
+    <table class="tbl"><tr><th>Geprüftes Merkmal</th><th>Wert</th><th>Ergebnis</th></tr>
+      <tr><td>Auftraggeber</td><td>AeroTrans GmbH</td><td><span class="tag ok">kein Treffer</span></td></tr>
+      <tr><td>Empfänger</td><td>Northbridge S.A.</td><td><span class="tag ok">kein Treffer</span></td></tr>
+      <tr><td>Ware</td><td>Ersatzteile Industriegasturbinen</td><td><span class="tag warn">Güterprüfung offen</span></td></tr>
+      <tr><td>Schiff (Namensabgleich)</td><td>AURORA STAR</td><td><span class="tag ok">kein Treffer</span></td></tr>
+      <tr><td>Bestimmungsort</td><td>Port Sarel (Freihafen)</td><td><span class="tag info">Umschlag STS</span></td></tr></table>
+    <h3 style="margin-top:16px">Manuelle Suche</h3><p class="mini muted" style="margin:0">Name, IMO-Nummer oder Listen-ID</p>
+    <div class="row" style="margin-top:6px"><input id="embQ" placeholder="Suchbegriff" aria-label="Suchbegriff"><button class="primary" id="embSearch">Suchen</button></div>${result}`;
+  $("embQ").value = S.v.query;
+  if ($("qEcho")) $("qEcho").textContent = q;
+  const search = () => { S.v.query = $("embQ").value; S.v.searched = S.v.query.trim();
+    const Qn = S.v.searched.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if ((Qn.includes("9387421") || Qn.includes("KESTREL")) && !S.v.searchedImo){ S.v.searchedImo = true;
+      narrate("EmbargoCheck: Die IMO-Nummer 9387421 trifft auf EMB-4417 – das Schiff KESTREL, 2025 umbenannt."); addFact("IMO 9387421 = KESTREL · Listen-ID EMB-4417"); updateHud(); }
+    render("embargo"); };
+  $("embSearch").addEventListener("click", search); $("embQ").addEventListener("keydown", e => { if (e.key === "Enter") search(); });
+  if ($("embBtn")) $("embBtn").addEventListener("click", () => {
+    const v = (b.querySelector("input[name=emb]:checked") || {}).value;
+    if (!v){ fb("embargo", "Wählt eine Bewertung."); return; }
+    if (v === "hit"){
+      S.f.embargo = true; S.score += 250;
+      narrate("Fall Embargo gelöst: Die AURORA STAR ist die gelistete KESTREL (EMB-4417). Die Ware für PHANTOME soll per Ship-to-Ship-Transfer verschwinden.");
+      addFact("Embargo: Treffer bestätigt – AURORA STAR ist die KESTREL (EMB-4417)");
+      render("embargo"); fb("embargo", "Richtig: Gleiche IMO-Nummer, gleiches Baujahr – dasselbe Schiff. Nicht freigeben, dokumentieren, eskalieren. +250 Punkte.", "good"); updateHud(); render("zv");
+    } else wrong("embargo", EMB_DEC.find(d => d[0] === v)[2]);
+  });
+};
+
+/* ---------- AML-Monitor ---------- */
 const TX = [
-  ["01.10.","Gehalt Muster GmbH","+ 1.850,00 €"],
-  ["02.10.","Bareinzahlung Filiale Altona","+ 9.800,00 €"],
-  ["02.10.","Überweisung an Nova Trade Ltd.","− 9.600,00 €"],
-  ["04.10.","Miete Hausverwaltung","− 620,00 €"],
-  ["05.10.","Bareinzahlung Filiale Eimsbüttel","+ 9.950,00 €"],
-  ["05.10.","Überweisung an Nova Trade Ltd.","− 9.700,00 €"],
-  ["07.10.","Streamingdienst","− 12,99 €"],
-  ["08.10.","Privatüberweisung „Geburtstag“","+ 75,00 €"],
-  ["09.10.","Bareinzahlung Filiale Altona","+ 4.900,00 €"],
-  ["09.10.","Überweisung an Nova Trade Ltd.","− 4.750,00 €"],
-  ["12.10.","Stromversorger","− 84,00 €"],
-  ["13.10.","Gehalt Muster GmbH","+ 1.850,00 €"]];
+  ["01.10.","Gehalt Muster GmbH","+ 1.850,00 €"],["02.10.","Bareinzahlung Filiale Altona","+ 9.800,00 €"],["02.10.","Überweisung an Nova Trade Ltd.","− 9.600,00 €"],
+  ["04.10.","Miete Hausverwaltung","− 620,00 €"],["05.10.","Bareinzahlung Filiale Eimsbüttel","+ 9.950,00 €"],["05.10.","Überweisung an Nova Trade Ltd.","− 9.700,00 €"],
+  ["07.10.","Streamingdienst","− 12,99 €"],["08.10.","Privatüberweisung „Geburtstag“","+ 75,00 €"],["09.10.","Bareinzahlung Filiale Altona","+ 4.900,00 €"],
+  ["09.10.","Überweisung an Nova Trade Ltd.","− 4.750,00 €"],["12.10.","Stromversorger","− 84,00 €"],["13.10.","Gehalt Muster GmbH","+ 1.850,00 €"]];
 const TX_OK = [1,2,4,5,8,9];
-function amlView(){
-  openModal({eyebrow:"Webers Laptop · Fall 2", title:"Kontoanalyse – Fall K.",
-    html:`<p>Weber hat das Konto markiert, weil ihm ein Empfängername bekannt vorkam. Seine Notiz am Rand: <span class="handwriting">„Passt das zum Kunden?“</span></p>
-    <div class="doc"><span class="stamp">FIKTIV</span><h3>Kontoinhaber: Jonas K., 20, Student</h3><p class="mini" style="margin-bottom:8px">Kundenprofil: Minijob, erwartete Umsätze bis ca. 2.500 € / Monat · Kontoauszug 01.–13. Oktober</p>
-      <table><thead><tr><th></th><th>Datum</th><th>Buchungstext</th><th style="text-align:right">Betrag</th></tr></thead><tbody>
-      ${TX.map((t,i) => `<tr class="txrow"><td><input type="checkbox" value="${i}" aria-label="Buchung ${i+1} markieren" ${S.f.aml ? (TX_OK.includes(i) ? "checked disabled" : "disabled") : ""}></td><td>${t[0]}</td><td>${t[1]}</td><td style="text-align:right;white-space:nowrap">${t[2]}</td></tr>`).join("")}
-      </tbody></table></div>
-    ${S.f.aml ? `<div class="doc"><h3>Empfängerdaten Nova Trade Ltd.</h3><p style="margin:0">Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt</p><p class="handwriting" style="margin:6px 0 0">Dieselbe Adresse wie Northbridge?! → zweite Ziffer: ${S.frag.B}</p></div>` + fragReveal("B", S.frag.B, "Phantom Nr. 2: Nova Trade Ltd.") :
-    `<p><strong>Aufgabe:</strong> Markiert alle Buchungen, die zusammen das auffällige Muster bilden. Unauffälliges bleibt frei.</p>`}`,
-    actions:[...(S.f.aml ? [] : [{text:"Muster prüfen", primary:true, fn:checkAML}]), {text:"← Desktop", fn:() => laptop()}]});
-  document.querySelectorAll(".txrow input").forEach(cb => { const sync = () => cb.closest("tr").classList.toggle("sel", cb.checked); sync(); cb.addEventListener("change", sync); });
-  document.querySelectorAll(".txrow").forEach(r => r.addEventListener("click", e => { const cb = r.querySelector("input");
-    if (e.target !== cb && !cb.disabled){ cb.checked = !cb.checked; cb.dispatchEvent(new Event("change")); } }));
-}
-function checkAML(){
-  const sel = [...document.querySelectorAll(".txrow input:checked")].map(x => +x.value);
-  const falsePos = sel.some(i => !TX_OK.includes(i)), missing = TX_OK.some(i => !sel.includes(i));
-  if (!falsePos && !missing){
-    S.f.aml = true; S.frag.B = CODE[1]; S.score += 250;
-    narrate("Phantom Nr. 2: Drei Bareinzahlungen, jeweils am selben Tag an Nova Trade Ltd. weitergeleitet – an dieselbe Adresse wie Northbridge. Fragment B = " + CODE[1] + ".");
-    amlView();
-    feedback("Muster erkannt: Bareinzahlungen mit zeitnaher Weiterleitung passen nicht zum Profil. Das löst eine vertiefte Prüfung aus – keine automatische Verdachtsmeldung. +250 Punkte.", "good");
-    updateAll();
-  } else if (falsePos) wrong("Mindestens eine markierte Buchung ist für sich unauffällig. Was passt nicht zum Kundenprofil?");
-  else wrong("Das Muster ist noch unvollständig – es fehlen zusammengehörige Buchungen.");
-}
+const ALERTS = [
+  {id:"A-2291", who:"Jonas K., 20, Student", rule:"Bargeld + zeitnahe Weiterleitung", status:"offen", open:true},
+  {id:"A-2288", who:"Bäckerei Sommer e.K.", rule:"Bargeld über Schwelle", status:"geschlossen", note:"Tägliche Bareinzahlungen der Tageslosung, branchenüblich und zum Umsatzprofil passend. Kein Anfangsverdacht."},
+  {id:"A-2285", who:"R. Hansen", rule:"Auslandseingang ungewöhnlich", status:"geschlossen", note:"Mieteinnahmen einer Ferienwohnung in Dänemark, Mietvertrag liegt vor. Plausibel."}];
+RENDER.aml = b => {
+  b.className = "wbody";
+  const head = `<div class="appbar" style="background:#1f4f86">📈 AML-Monitor <small>Queue: m.weber</small></div>`;
+  const a = ALERTS.find(x => x.id === S.v.alert);
+  if (!a){
+    b.innerHTML = head + `<h3>Alerts</h3><table class="tbl"><tr><th>Alert</th><th>Kunde</th><th>Regel</th><th>Status</th></tr>
+      ${ALERTS.map(x => `<tr class="click" data-id="${x.id}"><td class="mono">${x.id}</td><td>${x.who}</td><td>${x.rule}</td><td>${x.open ? (S.f.aml ? `<span class="tag no">eskaliert</span>` : `<span class="tag warn">offen ⚑</span>`) : `<span class="tag info">geschlossen</span>`}</td></tr>`).join("")}</table>
+      <p class="mini muted">Klickt auf einen Alert, um ihn zu öffnen.</p>`;
+    on(b, "tr.click", "click", e => { S.v.alert = e.currentTarget.dataset.id; render("aml"); });
+    return;
+  }
+  if (!a.open){
+    b.innerHTML = head + `<button id="amlBack">← Alle Alerts</button><h3 style="margin-top:12px">${a.id} · ${a.who}</h3><p><span class="tag info">geschlossen</span> Regel: ${a.rule}</p><div class="doc"><b>Abschlussvermerk:</b> ${a.note}</div><p class="mini muted">Nicht jeder Alert ist Geldwäsche: Entscheidend ist, ob die Umsätze zum Kunden passen.</p>`;
+    $("amlBack").addEventListener("click", () => { S.v.alert = null; render("aml"); });
+    return;
+  }
+  const done = S.f.aml;
+  b.innerHTML = head + `<button id="amlBack">← Alle Alerts</button>
+    <h3 style="margin-top:12px">A-2291 · Jonas K., 20, Student</h3>
+    <p class="mini">Kundenprofil: Minijob, erwartete Umsätze bis ca. 2.500 € / Monat · Webers Vermerk: <span class="hand">„Passt das zum Kunden? Nova Trade kenne ich doch …“</span></p>
+    <table class="tbl"><tr><th></th><th>Datum</th><th>Buchungstext</th><th style="text-align:right">Betrag</th></tr>
+    ${TX.map((t,i) => `<tr class="click ${S.v.amlSel.includes(i) ? "sel" : ""}" data-i="${i}"><td><input type="checkbox" ${S.v.amlSel.includes(i) ? "checked" : ""} ${done ? "disabled" : ""} aria-label="Buchung ${i+1}"></td><td>${t[0]}</td><td>${t[1]}</td><td style="text-align:right;white-space:nowrap">${t[2]}</td></tr>`).join("")}</table>
+    ${done ? `<div class="doc"><h3>Gegenpartei Nova Trade Ltd.</h3><p style="margin:0">Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt – <b>identisch mit der Adresse der Northbridge S.A.</b></p></div><p><span class="tag no">Alert eskaliert · vertiefte Prüfung</span> · ${TX_OK.length} Buchungen bilden das Muster.</p>` :
+    `<p><b>Aufgabe:</b> Markiert alle Buchungen, die zusammen das auffällige Muster bilden. Unauffälliges bleibt frei.</p><div class="row"><button class="primary" id="amlBtn">Muster bestätigen</button></div>`}`;
+  $("amlBack").addEventListener("click", () => { S.v.alert = null; render("aml"); });
+  if (!done) on(b, "tr.click", "click", e => { const i = +e.currentTarget.dataset.i;
+    S.v.amlSel = S.v.amlSel.includes(i) ? S.v.amlSel.filter(x => x !== i) : [...S.v.amlSel, i];
+    const tr = e.currentTarget; tr.classList.toggle("sel"); tr.querySelector("input").checked = S.v.amlSel.includes(i); });
+  if ($("amlBtn")) $("amlBtn").addEventListener("click", () => {
+    const sel = S.v.amlSel, falsePos = sel.some(i => !TX_OK.includes(i)), missing = TX_OK.some(i => !sel.includes(i));
+    if (!falsePos && !missing){
+      S.f.aml = true; S.score += 250;
+      narrate("Fall Geldwäsche gelöst: Bareinzahlungen werden am selben Tag an Nova Trade weitergeleitet – an dieselbe Adresse wie Northbridge. 6 Buchungen bilden das Muster.");
+      addFact("AML: 6 Buchungen bilden das Muster · Nova Trade sitzt bei Northbridge");
+      render("aml"); fb("aml", "Muster erkannt: Das passt nicht zum Profil und löst eine vertiefte Prüfung aus – keine automatische Verdachtsmeldung. +250 Punkte.", "good"); updateHud();
+    } else if (falsePos) wrong("aml", "Mindestens eine markierte Buchung ist für sich unauffällig. Was passt nicht zum Kundenprofil?");
+    else wrong("aml", "Das Muster ist noch unvollständig – es fehlen zusammengehörige Buchungen.");
+  });
+};
 
+/* ---------- FraudDesk ---------- */
 const PAYMENTS = [
   {id:"nordlicht", name:"Nordlicht IT GmbH", iban:"DE21 2005 0000 0041 7733 18", amount:"4.860,00 €",
     purpose:"RE-2026-1187 · Wartung Serverraum Oktober", vop:true, vopText:"Übereinstimmung – Name passt zum Konto",
     hold:"Betrag über der Einzelfreigabegrenze von 4.500 €",
     context:["Lieferant seit 2021, monatliche Wartungspauschale 4.860 €","Rechnung RE-2026-1187 liegt vor, Betrag und Leistungszeitraum stimmen","IBAN in der Lieferantenakte seit 2021 unverändert"],
-    ok:"go", why:"VoP stimmt, Rechnung und Lieferantenakte passen zusammen. Zurückgehalten wurde sie nur wegen der Betragsgrenze – nach der üblichen Zweitfreigabe kann sie weiterbearbeitet werden."},
+    ok:"go", why:"VoP stimmt, Rechnung und Lieferantenakte passen zusammen. Zurückgehalten wurde sie nur wegen der Betragsgrenze – nach der üblichen Zweitfreigabe wird sie weiterbearbeitet."},
   {id:"mira", name:"Mira Energie GmbH", iban:"neu: LT59 3250 0612 9944 0187 (bisher DE88 3006 0601 0005 5521 40)", amount:"48.750,00 €",
     purpose:"Vorauszahlung Q4 – sofort fällig", vop:false, vopText:"Keine Übereinstimmung – Name passt nicht zum Konto",
     hold:"VoP-Abweichung, neue Empfänger-IBAN",
-    context:["Bisher monatliche Abschläge von ca. 3.900 € auf die bekannte deutsche IBAN","Kontoänderung heute um 16:31 per E-Mail von buchhaltung@mira-energie-gmbh.example – in der Lieferantenakte steht @mira-energie.example","Keine Rückrufbestätigung über die hinterlegte Telefonnummer","Vorauszahlungen sind im Liefervertrag nicht vorgesehen"],
+    context:["Bisher monatliche Abschläge von ca. 3.900 € auf die bekannte deutsche IBAN","Kontoänderung heute um 15:02 per E-Mail von buchhaltung@mira-energie-gmbh.example – in der Lieferantenakte steht @mira-energie.example","Keine Rückrufbestätigung über die hinterlegte Telefonnummer","Vorauszahlungen sind im Liefervertrag nicht vorgesehen"],
     ok:"stop", why:"VoP-Abweichung, kurzfristig geänderte Kontoverbindung über eine fremde Domain, ein Betrag weit über dem üblichen Abschlag und eine im Vertrag nicht vorgesehene Vorauszahlung. Erst die Kombination macht die Entscheidung eindeutig: ablehnen, Lieferanten über die bekannte Nummer kontaktieren, Fall melden."},
   {id:"stadtwerke", name:"Stadtwerke West GmbH", iban:"DE47 3705 0198 0012 6688 02", amount:"1.284,30 €",
     purpose:"Vertragskonto 7004 5512 · Nachzahlung Jahresabrechnung 2026", vop:true, vopText:"Übereinstimmung – Name passt zum Konto",
     hold:"Betrag weicht stark vom üblichen Abschlag (210 €) ab",
     context:["Vertragskonto 7004 5512 ist in den Stammdaten hinterlegt","Jahresabrechnung liegt vor und weist eine Nachzahlung von 1.284,30 € aus","IBAN seit Vertragsbeginn bekannt"],
     ok:"go", why:"VoP stimmt, Verwendungszweck und Vertragsdaten sind plausibel. Die Abweichung vom Abschlag erklärt die Jahresabrechnung – die Zahlung wird nach den üblichen Kontrollen weiterbearbeitet."}];
-function fraudView(){
+RENDER.fraud = b => {
+  b.className = "wbody";
   const done = S.f.fraud;
-  openModal({eyebrow:"Webers Laptop · Fall 3", title:"Fraud-Desk: Drei Zahlungen, eine Falle",
-    html:`<p>Das Zahlungsverkehrssystem hat heute drei Überweisungen zur manuellen Prüfung zurückgehalten. Webers Notiz auf dem Bildschirmrand: <span class="handwriting">„Nur eine davon ist faul. Nicht alles stoppen, was komisch aussieht!“</span></p>
+  b.innerHTML = `<div class="appbar" style="background:#2f6b55">🛡️ FraudDesk <small>3 Zahlungen zurückgehalten</small></div>
+    <h3>Drei Zahlungen, eine Falle</h3><p class="mini">Das Zahlungsverkehrssystem hat heute drei Überweisungen zur manuellen Prüfung zurückgehalten. Webers Haftnotiz am Bildschirmrand: <span class="hand">„Nur eine ist faul. Nicht alles stoppen, was komisch aussieht!“</span></p>
     ${PAYMENTS.map((p,i) => `<div class="doc"><span class="stamp">ZURÜCKGEHALTEN</span><h3>Überweisung ${i+1} – ${p.name}</h3>
       <table><tr><th>Empfänger</th><td>${p.name}<br><small class="mono">${p.iban}</small></td></tr>
-      <tr><th>Betrag</th><td><strong>${p.amount}</strong></td></tr>
-      <tr><th>Verwendungszweck</th><td>${p.purpose}</td></tr>
-      <tr><th>Verification of Payee</th><td><span class="vop ${p.vop ? "ok" : "no"}">${p.vop ? "✓" : "✕"} ${p.vopText}</span></td></tr>
+      <tr><th>Betrag</th><td><b>${p.amount}</b></td></tr><tr><th>Verwendungszweck</th><td>${p.purpose}</td></tr>
+      <tr><th>Verification of Payee</th><td><span class="tag ${p.vop ? "ok" : "no"}">${p.vop ? "✓" : "✕"} ${p.vopText}</span></td></tr>
       <tr><th>Grund der Zurückhaltung</th><td>${p.hold}</td></tr>
       <tr><th>Zahlungskontext</th><td><ul class="ctx">${p.context.map(c => `<li>${c}</li>`).join("")}</ul></td></tr></table>
-      <div class="decide">${[["go","Weiterbearbeiten"],["stop","Ablehnen"]].map(([v,t]) => `<label class="${v}"><input type="radio" name="pay-${p.id}" value="${v}" ${done ? (v === p.ok ? "checked disabled" : "disabled") : ""}><span>${t}</span></label>`).join("")}</div>
-      ${done ? `<p class="mini" style="margin:10px 0 0"><strong>Begründung:</strong> ${p.why}</p>` : ""}</div>`).join("")}
-    ${done ? `<p class="handwriting">16:31 die Kontoänderung, 16:36 die Vorstandsmail, 16:38 der Anruf bei Weber. Dieselbe Masche, dieselben Leute.</p>` + fragReveal("C", S.frag.C, "Phantom Nr. 3: die umgeleitete Mira-Zahlung.") :
-    `<p><strong>Aufgabe:</strong> Trefft für jede Zahlung eine Entscheidung. Erst wenn alle drei stimmen, wird der Fall abgeschlossen.</p>`}`,
-    actions:[...(done ? [] : [{text:"Entscheidungen buchen", primary:true, fn:checkFraud}]), {text:"← Desktop", fn:() => laptop()}]});
-}
-function checkFraud(){
-  const dec = Object.fromEntries(PAYMENTS.map(p => [p.id, (document.querySelector(`input[name="pay-${p.id}"]:checked`) || {}).value]));
-  if (PAYMENTS.some(p => !dec[p.id])){ feedback("Trefft für jede der drei Zahlungen eine Entscheidung."); return; }
-  if (PAYMENTS.every(p => dec[p.id] === p.ok)){
-    S.f.fraud = true; S.frag.C = CODE[2]; S.score += 250;
-    narrate("Phantom Nr. 3: Die Zahlung an „Mira Energie“ sollte auf ein neues Konto umgeleitet werden – Kontoänderung um 16:31 von einer fremden Domain, VoP-Abweichung. Abgelehnt. Die beiden anderen Zahlungen laufen weiter. Fragment C = " + CODE[2] + ".");
-    fraudView();
-    feedback("Alle drei Entscheidungen sind richtig. VoP ist ein Prüfbaustein, keine Entscheidung für sich: Erst Zahlungskontext, Stammdaten und Belege zusammen ergeben das Bild. +250 Punkte.", "good");
-    updateAll();
-  } else if (dec.mira !== "stop") wrong("Eine Zahlung zeigt mehrere Warnsignale gleichzeitig. Einzeln wären sie vielleicht erklärbar, in Kombination nicht.");
-  else wrong("Ihr lehnt eine Zahlung ab, die sich vollständig belegen lässt. Eine Zurückhaltung allein ist noch kein Betrugsverdacht.");
-}
-function mailView(){
-  openModal({eyebrow:"Webers Laptop", title:"Posteingang",
-    html:`<div class="doc" style="padding:10px 12px">
-      <details class="mail"><summary><strong>16:12</strong> · IT-Sicherheit &lt;it-sicherheit@hausbank.example&gt; · Erinnerung: Phishing-Awareness-Woche</summary><div class="mb">Liebe Kolleginnen und Kollegen, achtet diese Woche besonders auf ungewöhnliche Zahlungsaufforderungen. Im Zweifel: Rückruf über die bekannte Durchwahl. Eure IT-Sicherheit</div></details>
-      <details class="mail" open><summary><strong>16:36</strong> · Assistenz des Vorstands &lt;assistenz.vorstand@hausbank-vorstand.example&gt; · <strong style="color:#b5303f">DRINGEND – Zahlung PHANTOME sofort freigeben</strong></summary><div class="mb">
-        <p>Sehr geehrter Herr Weber,</p><p>die Zahlung PHANTOME (3,8 Mio. EUR, Northbridge S.A.) muss heute ohne Verzögerung ausgeführt werden. Der Vorstand erwartet absolute Vertraulichkeit. Bitte umgehen Sie ausnahmsweise das Vier-Augen-Prinzip; ich bestätige die Anweisung im Namen des Vorstands.</p><p>Bitte keine Rückfragen per Telefon. Bestätigen Sie die Ausführung nur per Antwort auf diese E-Mail.</p><p>Mit Nachdruck<br>Assistenz des Vorstands</p>
-        <p class="mini" style="margin:0;border-top:1px dashed #d6cfbd;padding-top:8px">📎 Pass_Vorstandsmitglied.pdf · <span style="color:#b5303f;font-weight:700">Automatische Dokumentenprüfung: MRZ-Prüfziffer ungültig</span></p></div></details>
-      <details class="mail"><summary><strong>16:50</strong> · K. Albers &lt;k.albers@hausbank.example&gt; · Phantome-Akte?</summary><div class="mb">Hast du die Phantome-Akte noch bei dir im Schrank? Ich bin ab fünf weg, schönes Wochenende! – Katrin</div></details></div>
-    <p class="handwriting">16:36 eine „Vorstandsmail“ von einer fremden Domain, 16:38 der Anruf bei Weber. Jemand wollte ihn aus dem Büro haben.</p>`,
-    actions:[{text:"← Desktop", fn:() => laptop()}]});
-  if (!S.f.mailRead){ S.f.mailRead = true; narrate("Posteingang: Um 16:36 forderte eine angebliche Vorstandsassistenz von einer fremden Domain, PHANTOME sofort und ohne Vier-Augen-Prinzip freizugeben."); }
-}
-
-function terminal(){
-  if (S.f.code) return decisionView();
-  S.entry = "";
-  openModal({eyebrow:"Wand neben der Tür", title:"Not-Stopp-Terminal",
-    html:`<p>Ein rotes Display: <span class="mono">ZAHLUNG PHANTOME · AUSFÜHRUNG 17:50 · STOPP-CODE EINGEBEN (3 STELLEN)</span></p>
-    <div class="codedisplay" id="codeDisplay">_ _ _</div>
-    <div class="keypad" id="keypad">${[1,2,3,4,5,6,7,8,9].map(n => `<button data-k="${n}">${n}</button>`).join("")}<button data-k="del" aria-label="Löschen">⌫</button><button data-k="0">0</button><button data-k="ok" class="primary">OK</button></div>
-    <p class="muted mini">Gefundene Fragmente: ${["A","B","C"].map(k => `${k} = ${S.frag[k] ?? "?"}`).join(" · ")}</p>`});
-  $("keypad").addEventListener("click", e => { const k = e.target.dataset && e.target.dataset.k; if (!k) return;
-    if (k === "del") S.entry = S.entry.slice(0,-1);
-    else if (k === "ok") return checkCode();
-    else if (S.entry.length < 3) S.entry += k;
-    $("codeDisplay").textContent = (S.entry + "___").slice(0,3).split("").join(" ");
+      <div class="decide">${[["go","Weiterbearbeiten"],["stop","Ablehnen"]].map(([v,t]) => `<label class="${v}"><input type="radio" name="pay-${p.id}" value="${v}" ${done ? (v === p.ok ? "checked disabled" : "disabled") : (S.v.fraudDec[p.id] === v ? "checked" : "")}><span>${t}</span></label>`).join("")}</div>
+      ${done ? `<p class="mini" style="margin:10px 0 0"><b>Begründung:</b> ${p.why}</p>` : ""}</div>`).join("")}
+    ${done ? `<p class="hand">15:02 die Kontoänderung, 15:26 der angebliche Vorstandstermin, 15:36 die „Vorstandsmail“. Dieselbe Masche.</p>` :
+    `<p><b>Aufgabe:</b> Trefft für jede Zahlung eine Entscheidung. Erst wenn alle drei stimmen, wird der Fall abgeschlossen.</p><div class="row"><button class="primary" id="fraudBtn">Entscheidungen buchen</button></div>`}`;
+  on(b, ".decide input", "change", e => { S.v.fraudDec[e.target.name.slice(4)] = e.target.value; });
+  if ($("fraudBtn")) $("fraudBtn").addEventListener("click", () => {
+    const dec = S.v.fraudDec;
+    if (PAYMENTS.some(p => !dec[p.id])){ fb("fraud", "Trefft für jede der drei Zahlungen eine Entscheidung."); return; }
+    if (PAYMENTS.every(p => dec[p.id] === p.ok)){
+      S.f.fraud = true; S.score += 250;
+      narrate("Fall Betrug gelöst: Die Zahlung an „Mira Energie“ sollte auf ein fremdes Konto umgeleitet werden – abgelehnt. Nordlicht IT und Stadtwerke West werden weiterbearbeitet.");
+      addFact("FraudDesk: Überweisung 2 (Mira Energie) abgelehnt");
+      render("fraud"); fb("fraud", "Alle drei Entscheidungen sind richtig. VoP ist ein Prüfbaustein, keine Entscheidung für sich. +250 Punkte.", "good"); updateHud(); render("zv");
+    } else if (dec.mira !== "stop") wrong("fraud", "Eine Zahlung zeigt mehrere Warnsignale gleichzeitig. Einzeln wären sie vielleicht erklärbar, in Kombination nicht.");
+    else wrong("fraud", "Ihr lehnt eine Zahlung ab, die sich vollständig belegen lässt. Eine Zurückhaltung allein ist noch kein Betrugsverdacht.");
   });
-}
-function checkCode(){
-  if (S.entry.length < 3){ feedback("Der Code hat drei Stellen."); return; }
-  if (S.entry === CODE){ S.f.code = true; S.score += 100; narrate("Der Code " + CODE + " wird akzeptiert. Das Terminal verlangt eine letzte Bestätigung."); updateAll(); decisionView(); }
-  else { S.entry = ""; $("codeDisplay").textContent = "_ _ _"; wrong("FALSCHER CODE. Das Display blinkt rot. Stimmt die Reihenfolge?"); }
-}
-const DECISIONS = [
-  ["ok","Not-Stopp bestätigen, den Fall dokumentieren und an Compliance bzw. den Geldwäschebeauftragten eskalieren. Die angebliche Vorstandsanweisung über die bekannte Durchwahl -1200 verifizieren."],
-  ["release","Zahlung doch freigeben – die Anweisung kommt schließlich vom Vorstand. Die Prüfung kann am Montag nachgeholt werden.", "Eine ungeprüfte „Vorstandsanweisung“ ersetzt keine Prüfung. Genau darauf setzen die Täter."],
-  ["reply","Per Antwort auf die E-Mail bei der Vorstandsassistenz nachfragen, ob die Anweisung echt ist.", "Die Antwort landet direkt bei den Tätern. Verifiziert wird nur über einen unabhängig bekannten Kanal."],
-  ["warn","Die AeroTrans GmbH anrufen und vorwarnen, dass ihre Zahlung geprüft wird.", "Kunden dürfen nicht über laufende Prüfungen oder mögliche Meldungen informiert werden (Tipping-off-Verbot). Das könnte Ermittlungen gefährden."]];
-function decisionView(){
-  openModal({eyebrow:"Not-Stopp-Terminal", title:"Letzte Bestätigung",
-    html:`<p class="mono" style="color:var(--green)">CODE AKZEPTIERT.</p><p>Das Terminal fragt: <strong>Wie wird weiter verfahren?</strong></p>
-    ${DECISIONS.map(([v,t]) => `<label class="choice"><input type="radio" name="dec" value="${v}"><span>${t}</span></label>`).join("")}`,
-    actions:[{text:"Bestätigen", primary:true, fn:() => {
-      const v = (document.querySelector("input[name=dec]:checked") || {}).value;
-      if (!v){ feedback("Wählt eine Option."); return; }
-      if (v === "ok"){ S.score += 150; finish(false); }
-      else wrong(DECISIONS.find(d => d[0] === v)[2]);
-    }}]});
-}
+};
 
-function door(){
-  openModal({eyebrow:"Ausgang", title:"Bürotür", html:`<p>Die Klinke gibt nicht nach. Über der Tür leuchtet ein rotes Licht. Auf dem kleinen Display: <span class="mono" style="color:var(--red)">SICHERHEITSSPERRE AKTIV · ENTRIEGELUNG NUR ÜBER NOT-STOPP</span></p><p class="muted">Wer hat die Sperre ausgelöst – und warum genau jetzt?</p>`});
-}
-function windowView(){
-  openModal({eyebrow:"Fenster", title:"Blick auf die Stadt", html:`<p>Die Sonne geht hinter der Skyline unter, in den Büros gehen die ersten Lichter an. Es ist ${storyTime()} Uhr.</p><p class="muted">Irgendwo auf der anderen Seite der Welt wartet ein Konto in Panama auf 3,8 Millionen Euro.</p>`});
-}
+/* ---------- ZV-Cockpit ---------- */
+const ZV_DEC = [
+  ["ok","Compliance-Stopp bestätigen, den Fall dokumentieren und an Compliance bzw. den Geldwäschebeauftragten eskalieren. Die angebliche Vorstandsanweisung über die bekannte Durchwahl -1200 verifizieren."],
+  ["release","Zahlung doch laufen lassen – die Anweisung kommt schließlich vom Vorstand. Die Prüfung wird am Montag nachgeholt.", "Eine ungeprüfte „Vorstandsanweisung“ ersetzt keine Prüfung. Genau darauf setzen die Täter."],
+  ["reply","Per Antwort auf die Vorstandsmail nachfragen, ob die Anweisung echt ist.", "Die Antwort landet direkt bei den Tätern. Verifiziert wird nur über einen unabhängig bekannten Kanal."],
+  ["warn","Die AeroTrans GmbH anrufen und vorwarnen, dass ihre Zahlung geprüft wird.", "Kunden dürfen nicht über laufende Prüfungen oder mögliche Meldungen informiert werden (Tipping-off-Verbot)."]];
+RENDER.zv = b => {
+  b.className = "wbody";
+  const fs = id => !S.f.fraud ? `<span class="tag warn">zurückgehalten</span>` : id === "mira" ? `<span class="tag no">abgelehnt</span>` : `<span class="tag info">Zweitfreigabe</span>`;
+  const remaining = Math.max(0, S.deadline - Date.now()), sec = Math.ceil(remaining/1000);
+  b.innerHTML = `<div class="appbar" style="background:#0f3e6e">💶 ZV-Cockpit <small>Nächster Buchungslauf 16:30 · noch <b id="zvCountdown">${pad(Math.floor(sec/60))}:${pad(sec%60)}</b></small></div>
+    <h3>Buchungslauf 16:30 – Auszug</h3>
+    <table class="tbl"><tr><th>Empfänger</th><th style="text-align:right">Betrag</th><th>Status</th></tr>
+      <tr><td>Sammelauftrag Gehälter Oktober</td><td style="text-align:right">1.214.880,00 €</td><td><span class="tag ok">freigegeben</span></td></tr>
+      <tr><td>Nordlicht IT GmbH</td><td style="text-align:right">4.860,00 €</td><td>${fs("nordlicht")}</td></tr>
+      <tr><td>Mira Energie GmbH</td><td style="text-align:right">48.750,00 €</td><td>${fs("mira")}</td></tr>
+      <tr><td>Stadtwerke West GmbH</td><td style="text-align:right">1.284,30 €</td><td>${fs("stadtwerke")}</td></tr>
+      <tr class="click warn" id="zvPh"><td><b>Northbridge S.A. · PHANTOME</b></td><td style="text-align:right"><b>3.800.000,00 €</b></td><td><span class="tag warn">⚠ Compliance-Vermerk offen</span></td></tr></table>
+    <p class="mini muted">+ 209 weitere Zahlungen ohne Auffälligkeiten</p>
+    <div id="zvDetail"></div>`;
+  $("zvPh").addEventListener("click", () => { S.v.zvSel = true; render("zv"); });
+  if (!S.v.zvSel) return;
+  const d = $("zvDetail");
+  d.innerHTML = `<div class="doc"><h3>PHANTOME · Northbridge S.A.</h3><table>
+    <tr><th>Betrag</th><td>3.800.000,00 EUR · Ersatzteile Industriegasturbinen</td></tr>
+    <tr><th>1. Freigabe</th><td>heute 15:12 · Kennung <span class="mono">zv.batch07</span> (Sammelkennung)</td></tr>
+    <tr><th>2. Freigabe</th><td>automatisch bei Fristablauf (Buchungslauf 16:30)</td></tr>
+    <tr><th>Compliance-Vermerk</th><td>offen · Fallverantwortlich: m.weber</td></tr></table></div>
+    ${S.f.code ? `<p><span class="tag ok">Freigabecode akzeptiert</span> Wie wird weiter verfahren?</p>${ZV_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="zvdec" value="${v}"><span>${t}</span></label>`).join("")}<div class="row"><button class="primary" id="zvDecBtn">Bestätigen</button></div>` :
+    `<div class="row"><button id="zvRelease">Jetzt freigeben</button></div>
+    <p style="margin:14px 0 4px"><b>Compliance-Stopp setzen</b> – Freigabecode des Fallverantwortlichen (3 Ziffern):</p>
+    <div class="row"><input id="zvCode" inputmode="numeric" maxlength="3" placeholder="_ _ _" aria-label="Freigabecode" class="mono" style="max-width:140px;font-size:1.2rem;letter-spacing:.3em"><button class="primary" id="zvStop">Compliance-Stopp setzen</button></div>`}`;
+  if ($("zvRelease")) $("zvRelease").addEventListener("click", () => wrong("zv", "Mit offenem Compliance-Vermerk darf die Zahlung nicht freigegeben werden."));
+  if ($("zvStop")){
+    const go = () => { const c = $("zvCode").value.replace(/\D/g, "");
+      if (c.length !== 3){ fb("zv", "Der Freigabecode hat drei Ziffern."); return; }
+      if (c === CODE){ S.f.code = true; S.score += 100; narrate("Der Freigabecode " + CODE + " wird akzeptiert. Das ZV-Cockpit verlangt eine Begründung."); fb("zv", "Freigabecode korrekt. +100 Punkte.", "good"); updateHud(); render("zv"); }
+      else { wrong("zv", "Freigabecode ungültig."); $("zvCode").value = ""; } };
+    $("zvStop").addEventListener("click", go); $("zvCode").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
+  }
+  if ($("zvDecBtn")) $("zvDecBtn").addEventListener("click", () => {
+    const v = (b.querySelector("input[name=zvdec]:checked") || {}).value;
+    if (!v){ fb("zv", "Wählt eine Option."); return; }
+    if (v === "ok"){ S.score += 150; finish(false); } else wrong("zv", ZV_DEC.find(x => x[0] === v)[2]);
+  });
+};
 
-/* ---------- Spielablauf ---------- */
+/* ---------- Papierkorb ---------- */
+RENDER.trash = b => {
+  b.className = "wbody";
+  const open = S.v.trashOpen;
+  b.innerHTML = `<table class="tbl"><tr><th>Name</th><th>Gelöscht</th></tr>
+    <tr class="click" id="trDoc"><td>📄 Entwurf_Hinweis_Revision.docx</td><td>heute 15:24</td></tr>
+    <tr class="click" id="trImg"><td>🖼️ Screenshot_Freigabe.png</td><td>heute 15:23</td></tr></table>
+    ${open === "doc" ? `<div class="doc"><span class="stamp">ENTWURF</span><p class="mini muted" style="margin:0 0 8px">An: Interne Revision · Betreff: Vertraulich – PHANTOME</p>
+      <p>Ich habe Hinweise, dass die Zahlung PHANTOME intern an den üblichen Kontrollen vorbei angelegt wurde. Die erste Freigabe erfolgte über die Sammelkennung <span class="mono">zv.batch07</span>, die eigentlich nur für Gehaltsläufe genutzt wird. Zugriff darauf haben nur …</p>
+      <p class="muted mini" style="margin:0">[Entwurf nicht gespeichert – Dokument endet hier]</p></div>` : ""}
+    ${open === "img" ? `<p class="muted">Die Datei ist beschädigt und kann nicht angezeigt werden.</p>` : ""}`;
+  $("trDoc").addEventListener("click", () => { S.v.trashOpen = "doc"; render("trash");
+    if (!S.v.trashSeen){ S.v.trashSeen = true; narrate("Papierkorb: Weber hatte einen Hinweis an die Interne Revision begonnen – und um 15:24 gelöscht. Die PHANTOME-Freigabe lief über die Sammelkennung zv.batch07. Wer hat darauf Zugriff?"); } });
+  $("trImg").addEventListener("click", () => { S.v.trashOpen = "img"; render("trash"); });
+};
+
+/* ---------- Zeitgesteuerte Ereignisse ---------- */
+function chatIn(text, from = "albers"){
+  CHATS[from].msgs.push({me:false, t:storyTime(), text}); S.unread.chat++; renderIcons(); render("chat");
+  notify(CHATS[from].name, text, "chat");
+}
+function mailIn(m){ MAILS.unshift({...m, time:storyTime(), read:false}); S.v.mail++; S.unread.mail++; renderIcons(); render("mail"); notify(m.from, m.subj, "mail"); }
+const EVENTS = [
+  {at:6, fn:() => chatIn("Seid ihr in Webers Büro? Er geht nicht ans Handy. Das ist nicht seine Art.")},
+  {at:18, fn:() => mailIn({from:"ZV-Batch", addr:"zv-batch@hausbank.example", subj:"Erinnerung: Buchungslauf in 30 Minuten", body:`<p>Automatische Nachricht. Der Buchungslauf startet um 16:30 Uhr. 1 Zahlung mit offenem Compliance-Vermerk (PHANTOME).</p>`})},
+  {at:28, fn:() => chatIn("Der Empfang sagt, Weber ist um 15:27 mit einem Mann im Anzug zum Aufzug gegangen. Keiner kennt ihn. Im 12. Stock war heute gar keine Vorstandssitzung …")},
+  {at:38, fn:() => mailIn({from:"Assistenz des Vorstands", addr:"assistenz.vorstand@hausbank-vorstand.example", subj:"LETZTE ERINNERUNG: PHANTOME", body:`<p>Herr Weber,</p><p>wir erwarten die Ausführung von PHANTOME im Lauf um 16:30 Uhr. Jede weitere Verzögerung wird Konsequenzen haben.</p><p>Assistenz des Vorstands</p>`})},
+  {at:45, fn:() => notify("ZV-Cockpit", "Buchungslauf startet in 5 Minuten.", "zv")}];
+
+/* ---------- Ablauf ---------- */
 function start(){
   S.team = $("teamName").value.trim() || "Team Phantome";
-  cutscene({eyebrow:"Prolog", title:"Freitag, 16:58 Uhr",
-    lines:["Financial Crime Unit, vierte Etage. Senior-Analyst Weber hat euch für fünf Uhr in sein Büro bestellt – „wegen Phantome“. Mehr stand nicht in seiner Nachricht.",
-      "Das Büro ist leer. Sein Kaffee ist noch warm. Auf seinem zweiten Bildschirm steht eine Zahlung über 3,8 Millionen Euro nach Panama. Ausführung: heute, 17:50 Uhr. Automatisch.",
-      "Hinter euch fällt die Tür ins Schloss. Ein rotes Licht. Eine Computerstimme: „Sicherheitssperre aktiv. Entriegelung nur über das Not-Stopp-Terminal.“",
-      "Auf dem Schreibtisch blinkt das Telefon.",
-      "Ihr habt 50 Minuten."],
-    button:"Spiel starten →", onDone: begin});
+  cutscene({eyebrow:"Prolog", title:"Freitag, 15:40 Uhr",
+    lines:["Financial Crime Unit, vierte Etage. Ihr seid das Abendteam und kommt zur Übergabe in das Büro von Senior-Analyst Matthias Weber.",
+      "Das Büro ist leer. Seine Jacke hängt über dem Stuhl, der Kaffee ist noch warm. Sein Handy geht direkt auf die Mailbox.",
+      "Webers PC ist nicht gesperrt. Das macht Weber nie.",
+      "Am Monitor kleben zwei Zettel. Auf dem Desktop: Mail, Chat, Notizen – und die Prüfsoftware, mit der er den ganzen Tag gearbeitet hat.",
+      "Im Zahlungsverkehr wartet eine Zahlung über 3,8 Millionen Euro an eine Firma in Panama. Projektname: PHANTOME. Buchungslauf: 16:30 Uhr.",
+      "Steckt dahinter Geldwäsche oder ein Embargoverstoß, drohen Bußgelder in Millionenhöhe, Ermittlungen und Schlagzeilen. Der Schaden für die Bank wäre enorm.",
+      "Weber war an etwas Großem dran. Jetzt müsst ihr weitermachen. Ihr habt 50 Minuten."],
+    button:"An Webers PC setzen →", onDone: begin});
 }
 function begin(){
   S.startAt = Date.now(); S.deadline = S.startAt + 50*60*1000;
   $("game").classList.remove("hidden");
-  narrate("Ihr seid in Webers Büro eingeschlossen. Die Zahlung PHANTOME wird um 17:50 Uhr ausgeführt.");
-  S.timerId = setInterval(tick, 1000); tick(); updateAll();
+  narrate("Ihr sitzt an Webers PC. Der Buchungslauf startet um 16:30 Uhr.");
+  updateHud();
+  S.timerId = setInterval(tick, 1000); tick();
 }
 function finish(timeout){
-  if (S.ended) return; S.ended = true; clearInterval(S.timerId); closeModal();
+  if (S.ended) return; S.ended = true; clearInterval(S.timerId);
   const remaining = Math.max(0, S.deadline - Date.now()), mins = Math.floor(remaining/60000);
   const bonus = timeout ? 0 : Math.min(250, mins*5); S.score += bonus;
   const elapsed = Math.round((Date.now() - S.startAt)/1000), t = storyTime();
   window.phantomeResult = {team:S.team, score:S.score, completed:solvedCount(), mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout};
-  $("doorLed").setAttribute("fill", timeout ? "#ff6b78" : "#7ee0a3"); updateAll();
   const lines = timeout ? [
-      "17:50 Uhr. Auf dem Terminal erscheint ein einziges Wort: AUSGEFÜHRT.",
-      "3,8 Millionen Euro sind auf dem Weg nach Panama-Stadt. Calle 50, Torre Ámbar, Büro 1207.",
-      "Um 18:05 Uhr öffnet der Sicherheitsdienst die Tür. Im Flur steht Weber, sein Ausweis baumelt nutzlos am Band. Er sagt nichts. Er muss nichts sagen.",
-      `Ihr habt ${solvedCount()} von 3 Phantomen gefunden. Zeit für die Nachbesprechung.`]
-    : [`${t} Uhr. Das Terminal piept dreimal. ZAHLUNG PHANTOME – GESTOPPT.`,
-      "Das rote Licht über der Tür springt auf Grün. Mit einem Klicken löst sich die Sperre.",
-      "Im Flur kommt euch Weber entgegen, außer Atem. „Im zwölften Stock war niemand. Kein Vorstand, kein Termin – und mein Ausweis war plötzlich gesperrt.“",
-      "Er sieht die Akte, den Laptop, das Terminal. „Northbridge. Nova Trade. Die umgeleitete Mira-Zahlung. Ihr habt alle drei Phantome gefunden.“",
-      "Wer die Sicherheitssperre ausgelöst hat, bleibt vorerst offen – ab Montag ermittelt die Interne Revision. Aber 3,8 Millionen Euro bleiben, wo sie hingehören."];
-  cutscene({eyebrow:"Epilog", title: timeout ? "Zu spät" : "Die Tür ist offen", lines, button:"Zur Auswertung →", onDone:() => {
+      "16:30 Uhr. Der Buchungslauf startet. 214 Zahlungen gehen raus – auch PHANTOME.",
+      "3,8 Millionen Euro an Northbridge S.A. Für Turbinenteile an Bord eines Schiffs, das auf einer Embargoliste steht.",
+      "Am Montag: Meldung an die Aufsicht, interne Sonderprüfung, Anfragen der Presse. Ein Bußgeld in Millionenhöhe steht im Raum – der Reputationsschaden ist kaum zu beziffern.",
+      "Webers Platz bleibt leer.",
+      `Ihr habt ${solvedCount()} von 3 Fällen gelöst. Zeit für die Nachbesprechung.`]
+    : [`${t} Uhr. Im ZV-Cockpit springt der Status um: PHANTOME – COMPLIANCE-STOPP · ESKALIERT.`,
+      "Um 16:30 Uhr startet der Buchungslauf. 213 Zahlungen gehen raus. PHANTOME nicht.",
+      "Der Fall geht an den Geldwäschebeauftragten: das umbenannte Schiff, die Gelder über Nova Trade, die umgeleitete Mira-Zahlung. Das Vorstandsbüro bestätigt über die -1200: Es gab nie eine Anweisung.",
+      "Webers Platz bleibt leer. Sein Handy ist aus. Und die Frage aus seinem gelöschten Entwurf ist offen: Wer hatte Zugriff auf zv.batch07?",
+      "Da klingelt auf seinem Schreibtisch das Telefon. Unbekannte Nummer."];
+  cutscene({eyebrow:"Epilog", title: timeout ? "16:30 Uhr – zu spät" : "Gestoppt.", lines, button:"Zur Auswertung →", onDone:() => {
     $("final").classList.remove("hidden");
-    $("finalEyebrow").textContent = timeout ? "ZEIT ABGELAUFEN" : "MISSION ERFÜLLT";
-    $("finalTitle").textContent = timeout ? "Die Phantome sind entkommen." : "Zahlung gestoppt.";
-    $("finalText").textContent = timeout ? "Die Zeit ist abgelaufen. Geht in der Nachbesprechung durch, welche Warnsignale noch offen waren." : `Ihr habt den Raum um ${t} Uhr verlassen – ${mins} Minuten vor der Ausführung. Zeitbonus: +${bonus} Punkte. In der Praxis gelten stets die internen Eskalations- und Prüfprozesse.`;
+    $("finalEyebrow").textContent = timeout ? "ZEIT ABGELAUFEN" : "MISSION ERFÜLLT · FORTSETZUNG FOLGT";
+    $("finalTitle").textContent = timeout ? "PHANTOME ist durchgelaufen." : "Zahlung gestoppt.";
+    $("finalText").textContent = timeout ? "Die Zeit ist abgelaufen. Geht in der Nachbesprechung durch, welche Hinweise noch offen waren." : `Ihr habt den Compliance-Stopp um ${t} Uhr gesetzt – ${mins} Minuten vor dem Buchungslauf. Zeitbonus: +${bonus} Punkte. In der Praxis gelten stets die internen Eskalations- und Prüfprozesse.`;
     $("finalScore").textContent = S.score + " Punkte"; $("finalTeam").textContent = S.team;
-    $("finalStats").textContent = `${solvedCount()}/3 Phantome · ${S.mistakes} Fehlversuche · ${S.hints} Hinweise · ${Math.floor(elapsed/60)}:${String(elapsed%60).padStart(2,"0")} Min.`;
+    $("finalStats").textContent = `${solvedCount()}/3 Fälle · ${S.mistakes} Fehlversuche · ${S.hints} Hinweise · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min.`;
   }});
 }
 $("startBtn").addEventListener("click", start);
@@ -810,7 +859,7 @@ $("teamName").addEventListener("keydown", e => { if (e.key === "Enter") start();
 $("restartBtn").addEventListener("click", () => location.reload());
 $("copyBtn").addEventListener("click", async () => {
   const r = window.phantomeResult; if (!r) return;
-  const txt = `Projekt Phantome – Ergebnis\nTeam: ${r.team}\nPunkte: ${r.score}\nPhantome gefunden: ${r.completed}/3\nFehlversuche: ${r.mistakes}\nHinweise: ${r.hints}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.\nZeit abgelaufen: ${r.timeout ? "Ja" : "Nein"}`;
+  const txt = `Projekt Phantome – Ergebnis\nTeam: ${r.team}\nPunkte: ${r.score}\nFälle gelöst: ${r.completed}/3\nFehlversuche: ${r.mistakes}\nHinweise: ${r.hints}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.\nZeit abgelaufen: ${r.timeout ? "Ja" : "Nein"}`;
   try { await navigator.clipboard.writeText(txt); $("copyFeedback").textContent = "Ergebnis wurde in die Zwischenablage kopiert."; }
   catch(e){ $("copyFeedback").textContent = txt; }
   $("copyFeedback").classList.remove("hidden");
