@@ -75,6 +75,9 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .dicon{width:86px;height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:transparent;border:1px solid transparent;border-radius:6px;color:#fff;font-size:.76rem;font-weight:500;text-shadow:0 1px 3px #000;padding:4px;line-height:1.15;text-align:center}
 .dicon:hover,.dicon:focus{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.28)}
 .dicon .ic{font-size:30px;position:relative;line-height:1}
+.phase{border-color:#2f6b8c;background:linear-gradient(135deg,#10283f,#101d30)}.phase b{display:block;margin-top:4px;font-size:1.05rem}
+.phase.p2{border-color:var(--amber);background:linear-gradient(135deg,#3a2c10,#101d30)}.phase.p2 .eyebrow{color:var(--amber)}
+.badge.new{background:#ffca70;color:#3a2f00}
 .badge{position:absolute;top:-5px;right:-12px;background:#e81123;color:#fff;border-radius:9px;font-size:.66rem;font-weight:700;padding:1px 5px;text-shadow:none}
 .taskbar{position:absolute;left:0;right:0;bottom:0;height:46px;background:rgba(12,20,32,.94);display:flex;align-items:center;gap:3px;padding:0 6px;color:#fff;z-index:900;overflow:hidden}
 .taskbar .logo{width:38px;height:36px;display:grid;place-items:center;color:#52b6ff;font-size:1.3rem;flex:none;background:transparent;border:0;border-radius:4px;padding:0}
@@ -191,7 +194,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
 <div class="wrap">
 <header class="top">
   <div class="brand"><div class="mark">PP</div><div><div class="eyebrow">Financial Crime Unit · 4. OG</div><strong>PROJEKT PHANTOME</strong></div></div>
-  <div class="timer" id="timerBox"><small>BUCHUNGSLAUF IN</small><strong id="timer">50:00</strong><small id="clock">Uhrzeit 15:40</small></div>
+  <div class="timer" id="timerBox"><small id="timerLbl">BUCHUNGSLAUF IN</small><strong id="timer">50:00</strong><small id="clock">Uhrzeit 15:40</small></div>
 </header>
 <main>
 
@@ -236,6 +239,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
       </div>
     </div>
     <aside>
+      <div class="panel phase" id="phaseBox"><div class="eyebrow" id="phaseLbl">Phase 1 von 2</div><b id="phaseTitle">Die Zahlung PHANTOME stoppen</b></div>
       <div class="panel"><div class="eyebrow">Nächster Schritt</div><p id="objective" style="margin:6px 0 0"></p></div>
       <div class="panel"><div class="eyebrow" style="margin-bottom:6px">Fortschritt</div><ol class="steps" id="steps"></ol></div>
       <div class="panel"><div class="eyebrow" style="margin-bottom:8px">Ermittlungsprotokoll</div><div class="log" id="log" aria-live="polite"></div></div>
@@ -296,7 +300,7 @@ function tick(){
   $("timer").textContent = pad(Math.floor(sec/60)) + ":" + pad(sec % 60);
   $("clock").textContent = "Uhrzeit " + storyTime();
   $("trayTime").textContent = storyTime();
-  $("trayRun").textContent = "Lauf in " + Math.ceil(sec/60) + " Min.";
+  $("trayRun").textContent = (S.f.stopped ? "16:30 in " : "Lauf in ") + Math.ceil(sec/60) + " Min.";
   $("timerBox").classList.toggle("urgent", sec <= 300);
   EVENTS.forEach((e, i) => { if (!S.firedEvents[i] && storyMin() >= e.at){ S.firedEvents[i] = true; e.fn(); } });
   const el = $("zvCountdown"); if (el) el.textContent = pad(Math.floor(sec/60)) + ":" + pad(sec % 60);
@@ -396,6 +400,11 @@ function renderLog(){
 function updateHud(){
   $("score").textContent = S.score; $("mistakes").textContent = S.mistakes; $("hints").textContent = S.hints; $("teamLabel").textContent = S.team;
   $("objective").textContent = objective();
+  const p2 = !!S.f.stopped;
+  $("phaseBox").classList.toggle("p2", p2);
+  $("phaseLbl").textContent = p2 ? "Phase 2 von 2" : "Phase 1 von 2";
+  $("phaseTitle").textContent = p2 ? "Den Helfer im Haus finden und melden" : "Die Zahlung PHANTOME stoppen";
+  $("timerLbl").textContent = p2 ? "ZEIT BIS 16:30" : "BUCHUNGSLAUF IN";
   const cur = STEPS.findIndex(s => !s.done());
   $("steps").innerHTML = STEPS.map((s,i) => `<li class="${s.done() ? "done" : i === cur ? "cur" : ""}">${s.label}</li>`).join("");
   renderIcons(); renderTasks();
@@ -413,11 +422,14 @@ const APPS = {
   zv:{label:"ZV-Cockpit", icon:"💶", title:"ZV-Cockpit – Zahlungsverkehr", w:780, h:520},
   intranet:{label:"Intranet", icon:"🏢", title:"Intranet – Mitarbeiterverzeichnis", w:680, h:440},
   whistle:{label:"Hinweisgeber", icon:"📣", title:"Hinweisgebersystem", w:720, h:540}};
+const PHASE2_APPS = ["intranet","whistle"];
+const visibleApps = () => Object.entries(APPS).filter(([id]) => S.f.stopped || !PHASE2_APPS.includes(id));
 function renderIcons(){
   $("icons").innerHTML = "";
-  Object.entries(APPS).forEach(([id, a]) => {
+  visibleApps().forEach(([id, a]) => {
     const b = document.createElement("button"); b.className = "dicon"; b.setAttribute("aria-label", a.label);
-    const badge = S.unread[id] ? `<span class="badge">${S.unread[id]}</span>` : "";
+    const isNew = PHASE2_APPS.includes(id) && !(S.v.opened || {})[id];
+    const badge = S.unread[id] ? `<span class="badge">${S.unread[id]}</span>` : isNew ? `<span class="badge new">NEU</span>` : "";
     b.innerHTML = `<span class="ic">${a.icon}${badge}</span><span>${a.label}</span>`;
     b.addEventListener("click", () => openApp(id)); $("icons").appendChild(b);
   });
@@ -434,7 +446,7 @@ function renderTasks(){
 function minimize(id){ const w = WIN[id]; w.min = true; w.el.classList.add("hidden"); w.el.classList.remove("focus"); renderTasks(); }
 function toggleStart(force){
   const m = $("startmenu"), show = force ?? m.classList.contains("hidden");
-  if (show){ m.innerHTML = `<div class="sm-head">m.weber · Programme</div>` + Object.entries(APPS).map(([id,a]) => `<button data-app="${id}">${a.icon} ${a.label}</button>`).join("");
+  if (show){ m.innerHTML = `<div class="sm-head">m.weber · Programme</div>` + visibleApps().map(([id,a]) => `<button data-app="${id}">${a.icon} ${a.label}${PHASE2_APPS.includes(id) && !(S.v.opened || {})[id] ? " · NEU" : ""}</button>`).join("");
     m.querySelectorAll("button").forEach(x => x.addEventListener("click", () => { toggleStart(false); openApp(x.dataset.app); })); }
   m.classList.toggle("hidden", !show);
 }
@@ -459,7 +471,8 @@ function openApp(id){
     render(id);
   }
   focusWin(id);
-  if (id === "mail" || id === "chat"){ S.unread[id] = 0; renderIcons(); }
+  (S.v.opened = S.v.opened || {})[id] = true;
+  if (id === "mail" || id === "chat" || PHASE2_APPS.includes(id)){ S.unread[id] = 0; renderIcons(); }
 }
 function focusWin(id){
   const w = WIN[id]; if (!w) return;
@@ -933,7 +946,7 @@ RENDER.zv = b => {
   if ($("zvDecBtn")) $("zvDecBtn").addEventListener("click", () => {
     const v = (b.querySelector("input[name=zvdec]:checked") || {}).value;
     if (!v){ fb("zv", "Wählt eine Option."); return; }
-    if (v === "ok"){ S.score += 100; S.f.stopped = true; narrate("PHANTOME ist gestoppt und eskaliert. Offen bleibt: Wer im Haus hilft Northbridge – und hat Weber weggelockt?"); fb("zv", "Gestoppt und eskaliert. +100 Punkte. Jetzt: Wer ist der interne Helfer?", "good"); updateHud(); render("zv"); notify("Neue Aufgabe", "Findet heraus, wer Weber weggelockt hat, und meldet es im Hinweisgebersystem.", "whistle"); } else wrong("zv", ZV_DEC.find(x => x[0] === v)[2]);
+    if (v === "ok"){ S.score += 100; S.f.stopped = true; narrate("PHANTOME ist gestoppt und eskaliert. Offen bleibt: Wer im Haus hilft Northbridge – und hat Weber weggelockt?"); fb("zv", "Gestoppt und eskaliert. +100 Punkte.", "good"); updateHud(); render("zv"); setTimeout(phaseTwo, 900); } else wrong("zv", ZV_DEC.find(x => x[0] === v)[2]);
   });
 };
 
@@ -943,10 +956,28 @@ function mailIn(m){ MAILS.inbox.unshift({...m, time:storyTime(), read:false}); i
 const EVENTS = [
   {at:6, fn:() => chatIn("Seid ihr in Webers Büro? Er geht nicht ans Handy. Das ist nicht seine Art.")},
   {at:18, fn:() => mailIn({from:"ZV-Batch", addr:"zv-batch@hausbank.example", subj:"Erinnerung: Buchungslauf in 30 Minuten", hdr:`Received: from zv-batch01.hausbank.intern (10.4.1.20)`, body:`<p>Automatische Nachricht. Der Buchungslauf startet um 16:30 Uhr. 1 Zahlung mit offenem Compliance-Vermerk (PHANTOME).</p>`})},
-  {at:24, fn:() => chatIn("Komisch: Sven Kranz aus dem Zahlungsverkehr ist um halb vier aus Webers Büro gekommen. Was wollte der denn da, wenn Weber gar nicht da war?")},
   {at:31, fn:() => chatIn("Der Empfang sagt: Raum 12.04 ist ein Lagerraum. Da findet nie ein Vorstandsgespräch statt. Wer schickt Weber denn dahin?")},
   {at:38, fn:() => mailIn({from:"Assistenz des Vorstands", addr:"assistenz.vorstand@hausbank-vorstand.example", subj:"LETZTE ERINNERUNG: PHANTOME", fake:true, hdr:FAKE_HDR, body:`<p>Herr Weber,</p><p>wir erwarten die Ausführung von PHANTOME im Lauf um 16:30 Uhr. Jede weitere Verzögerung wird Konsequenzen haben.</p><p>Assistenz des Vorstands</p>`})},
   {at:45, fn:() => notify("ZV-Cockpit", "Buchungslauf startet in 5 Minuten.", "zv")}];
+
+/* ---------- Phase 2 ---------- */
+function phaseTwo(){
+  if (S.ended) return;
+  Object.keys(WIN).forEach(minimize);
+  cutscene({eyebrow:"Zwischenspiel", title:"Gestoppt. Aber es ist noch nicht vorbei.", lines:[
+    `${storyTime()} Uhr. Im ZV-Cockpit steht: PHANTOME – COMPLIANCE-STOPP · ESKALIERT. Ihr atmet durch.`,
+    "Da klingelt Webers Telefon. Auf dem Display: eine interne Nummer aus dem Treppenhaus im 12. Stock.",
+    "„Hier Weber. Ich sitze im Treppenhaus fest – mein Ausweis ist plötzlich gesperrt. Raum 12.04 ist ein Lager. Da war nie ein Vorstand.“",
+    "„Die Mail, die mich hochgeschickt hat, war gefälscht. Und sie kam genau in dem Moment, als ich PHANTOME auf dem Tisch hatte. Das ist kein Zufall: Jemand bei uns im Haus hilft denen.“",
+    "„Und ich habe in der Eile meinen PC nicht gesperrt … Schaut nach, was an meinem Rechner passiert ist, während ich weg war. Findet heraus, wer es war, und meldet es über das Hinweisgebersystem. Aber sprecht niemanden an!“",
+    "Auf Webers Desktop erscheinen zwei neue Programme: Intranet und Hinweisgebersystem."],
+    button:"Weiter ermitteln →", onDone:() => {
+      $("game").classList.remove("hidden"); updateHud();
+      narrate("Weber am Telefon: Die Vorstandsmail war gefälscht, jemand im Haus hilft Northbridge. Phase 2: den Helfer finden und melden.");
+      notify("Phase 2 von 2", "Fangt bei der Mail an, die Weber weggelockt hat.", "mail");
+      setTimeout(() => { if (!S.ended) chatIn("Komisch: Sven Kranz aus dem Zahlungsverkehr ist um halb vier aus Webers Büro gekommen. Was wollte der denn da, wenn Weber gar nicht da war?"); }, 120000);
+    }});
+}
 
 /* ---------- Ablauf ---------- */
 function start(){
