@@ -19,7 +19,8 @@ button:disabled{opacity:.45;cursor:not-allowed}
 input{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:#0b1626;color:var(--text)}
 input[type=radio],input[type=checkbox]{width:auto}
 input:focus{outline:2px solid var(--cyan);outline-offset:1px}
-.wrap{max-width:1320px;margin:auto;padding:20px 16px}
+.wrap{max-width:1900px;margin:auto;padding:20px 16px}
+#start,#final,#cutscene{max-width:1200px;margin-left:auto;margin-right:auto}
 .top{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:20px}
 .brand{display:flex;align-items:center;gap:12px}
 .mark{width:42px;height:42px;border:1px solid var(--cyan);border-radius:12px;display:grid;place-items:center;color:var(--cyan);font-weight:900;letter-spacing:-2px;flex:none}
@@ -54,7 +55,8 @@ h3{font-size:1.05rem;margin-bottom:6px}
 @keyframes blink{50%{opacity:0}}
 
 /* Layout */
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:18px;align-items:start}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:18px;align-items:start}
+.layout aside{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
 .side-stat{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:6px 0}
 .side-stat:last-child{border-bottom:0}
@@ -69,7 +71,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .postit-m{position:absolute;z-index:3;background:#ffe37a;color:#3a2f00;padding:9px 11px;width:150px;font-size:.92rem;line-height:1.25;box-shadow:0 6px 14px rgba(0,0,0,.4)}
 .postit-m.a{top:-12px;right:28px;transform:rotate(4deg)}
 .postit-m.b{bottom:2px;left:18px;width:128px;transform:rotate(-4deg);background:#ffb3c1;color:#4a0d1a}
-.screen{position:relative;height:clamp(540px,74vh,740px);border-radius:5px;overflow:hidden;background:radial-gradient(ellipse at 70% 30%,#1d5a8a 0,#123b63 35%,#0b2240 75%);font-size:15px}
+.screen{position:relative;height:max(520px,calc(100vh - 215px));border-radius:5px;overflow:hidden;background:radial-gradient(ellipse at 70% 30%,#1d5a8a 0,#123b63 35%,#0b2240 75%);font-size:15px}
 .screen:before{content:"hausbank";position:absolute;right:6%;bottom:16%;font-size:clamp(2.5rem,7vw,5.5rem);font-weight:900;letter-spacing:-.05em;color:rgba(255,255,255,.06);pointer-events:none}
 .icons{position:absolute;left:8px;top:8px;bottom:54px;display:grid;grid-auto-flow:column;grid-template-rows:repeat(auto-fill,86px);grid-auto-columns:88px;gap:2px}
 .dicon{width:86px;height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:transparent;border:1px solid transparent;border-radius:6px;color:#fff;font-size:.76rem;font-weight:500;text-shadow:0 1px 3px #000;padding:4px;line-height:1.15;text-align:center}
@@ -160,7 +162,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .rowbuttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 .feedback{margin-top:14px;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel2)}
 .footer{text-align:center;color:var(--muted);font-size:.78rem;padding:28px 0 8px}
-@media(max-width:1000px){.layout{grid-template-columns:1fr}.grid{grid-template-columns:1fr}}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.layout aside{position:static;max-height:none}.grid{grid-template-columns:1fr}}
 @media(max-width:700px){
   .top{flex-wrap:wrap}.timer{min-width:0}
   .monitor{padding:8px 8px 24px;border-radius:12px}
@@ -181,6 +183,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .steps{margin:0;padding-left:22px;font-size:.88rem}.steps li{margin:4px 0;color:var(--muted)}
 .steps li.done{color:var(--green)}.steps li.done::marker{content:"✓  "}
 .steps li.cur{color:var(--text);font-weight:700}
+.steps li.more{list-style:none;color:var(--muted);font-style:italic}
 .steps .code{font-family:ui-monospace,Consolas,monospace;color:var(--amber);font-weight:700;margin-left:4px}
 .riddle{background:#fff6c9;border:1px dashed #c9a400;border-radius:8px;padding:10px 12px;margin:0 auto 12px;font-size:1rem;color:#3a2f00;text-align:left}
 .vorgang{display:flex;gap:16px;align-items:center;margin-top:12px;padding:12px 14px;border:2px dashed #0f6cbd;border-radius:10px;background:#e8f1fc}
@@ -413,7 +416,9 @@ function updateHud(){
   $("phaseTitle").textContent = p2 ? "Den Helfer im Haus finden und melden" : "Die Zahlung PHANTOME stoppen";
   $("timerLbl").textContent = p2 ? "ZEIT BIS 16:30" : "BUCHUNGSLAUF IN";
   const cur = STEPS.findIndex(s => !s.done());
-  $("steps").innerHTML = STEPS.map((s,i) => `<li class="${s.done() ? "done" : i === cur ? "cur" : ""}">${s.label}</li>`).join("");
+  // Nur erledigte Schritte und den aktuellen zeigen – der Rest bleibt eine Überraschung.
+  const shown = cur === -1 ? STEPS : STEPS.slice(0, cur + 1);
+  $("steps").innerHTML = shown.map((s,i) => `<li class="${s.done() ? "done" : i === cur ? "cur" : ""}">${s.label}</li>`).join("") + (cur !== -1 && cur < STEPS.length - 1 ? `<li class="more">… weitere Schritte folgen</li>` : "");
   renderIcons(); renderTasks();
 }
 
@@ -464,7 +469,7 @@ function openApp(id){
   if (S.ended || !S.startAt) return;
   if (!WIN[id]){
     const a = APPS[id], scr = $("screen"), sw = scr.clientWidth, sh = scr.clientHeight - 46;
-    const w = Math.min(a.w, sw - 20), h = Math.min(a.h, sh - 16), n = winCount++ % 5;
+    const k = Math.min(1.35, Math.max(1, sw / 1000)), w = Math.min(Math.round(a.w * k), sw - 20), h = Math.min(Math.round(a.h * k), sh - 16), n = winCount++ % 5;
     const el = document.createElement("div"); el.className = "win"; el.setAttribute("role","dialog"); el.setAttribute("aria-label", a.title);
     el.style.width = w + "px"; el.style.height = h + "px";
     el.style.left = Math.max(4, Math.min(sw - w - 4, 110 + n*30)) + "px"; el.style.top = Math.max(4, Math.min(sh - h - 4, 12 + n*26)) + "px";
@@ -986,7 +991,7 @@ function phaseTwo(){
 
 /* ---------- Ablauf ---------- */
 function start(){
-  S.team = $("teamName").value.trim() || "Team Phantome";
+  S.team = $("teamName").value.trim() || "Phantome";
   cutscene({eyebrow:"Prolog", title:"Freitag, 15:40 Uhr",
     lines:["Financial Crime Unit, vierte Etage. Ihr seid das Abendteam und kommt zur Übergabe in das Büro von Senior-Analyst Matthias Weber.",
       "Das Büro ist leer. Seine Jacke hängt über dem Stuhl, der Kaffee ist noch warm. Sein Handy geht direkt auf die Mailbox.",
