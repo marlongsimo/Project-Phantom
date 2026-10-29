@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#08111f">
+<title>Projekt Phantome – Compliance Escape Room</title>
+<style>
+:root{--bg:#08111f;--panel:#101d30;--panel2:#14243a;--line:#2b405b;--text:#e8f0fa;--muted:#9eb0c7;--cyan:#52e0d0;--amber:#ffca70;--red:#ff6b78;--green:#7ee0a3}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#142a42 0,transparent 45%),var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+button,input{font:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:11px 15px;color:var(--text);background:#1b3049;font-weight:650}button:hover{border-color:var(--cyan);transform:translateY(-1px)}button:disabled{opacity:.4;cursor:not-allowed;transform:none}.primary{background:var(--cyan);color:#06151b;border-color:var(--cyan)}.danger{border-color:#743b4b;background:#381d2b}.subtle{background:transparent}.wrap{max-width:1120px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:24px}.brand{display:flex;align-items:center;gap:12px}.mark{width:42px;height:42px;border:1px solid var(--cyan);border-radius:12px;display:grid;place-items:center;color:var(--cyan);font-weight:900;letter-spacing:-2px}.eyebrow{color:var(--cyan);font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800}.muted{color:var(--muted)}.timer{border:1px solid var(--line);border-radius:12px;padding:9px 14px;text-align:right;min-width:115px}.timer strong{display:block;font-size:1.35rem;font-variant-numeric:tabular-nums}.timer small{color:var(--muted)}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.06;letter-spacing:-.04em;margin-bottom:16px}h2{font-size:1.5rem;letter-spacing:-.02em}h3{font-size:1.05rem}.hero{padding:clamp(22px,5vw,52px);border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,rgba(22,43,66,.95),rgba(11,23,39,.92));position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:260px;height:260px;border:1px solid #24465b;border-radius:50%;right:-100px;top:-110px;box-shadow:0 0 0 30px #10233a,0 0 0 60px #0e1d30}.hero>*{position:relative;z-index:1}.pill{display:inline-block;padding:5px 9px;border-radius:999px;border:1px solid var(--line);font-size:.78rem;color:var(--muted);margin:0 6px 8px 0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}.card p:last-child{margin-bottom:0}.num{color:var(--cyan);font-size:.78rem;letter-spacing:.12em;font-weight:800}.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(250px,.8fr);gap:18px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px}.sectionhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.progress{height:6px;background:#22334a;border-radius:99px;overflow:hidden;margin:14px 0 22px}.progress span{display:block;height:100%;background:var(--cyan);width:0;transition:width .25s}.field{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.field input{flex:1;min-width:160px;background:#07111e;border:1px solid var(--line);border-radius:10px;color:var(--text);padding:11px 13px}.feedback{margin-top:12px;padding:12px;border-radius:10px;background:#0b1828;border:1px solid var(--line)}.feedback.good{border-color:#327b5b;color:var(--green)}.feedback.bad{border-color:#8b4651;color:#ff9ca5}.doc{background:#f3f0e8;color:#17202a;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 8px 24px #0002}.doc .stamp{display:inline-block;border:2px solid #9e3d49;color:#9e3d49;padding:3px 8px;font-size:.75rem;font-weight:900;transform:rotate(-3deg)}.doc table{width:100%;border-collapse:collapse;font-size:.9rem}.doc td,.doc th{padding:8px;border-bottom:1px solid #d4d1c9;text-align:left}.doc th{font-size:.78rem;text-transform:uppercase}.choice{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:10px;margin:8px 0;background:#0b1727}.choice input{margin-top:5px;accent-color:var(--cyan)}.choice:has(input:checked){border-color:var(--cyan)}.notice{border-left:3px solid var(--amber);padding:10px 13px;background:#292719;color:#f7dfad;border-radius:0 8px 8px 0}.side-stat{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line)}.side-stat:last-child{border:0}.bigscore{font-size:2.6rem;font-weight:850;letter-spacing:-.05em;color:var(--cyan)}.hidden{display:none!important}.footer{padding:20px 0;color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);margin-top:28px}.rowbuttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.mini{font-size:.85rem}.emailhead{font-family:ui-monospace,monospace;font-size:.83rem;overflow-wrap:anywhere}.resultlist li{margin:8px 0}@media(max-width:780px){.grid,.layout{grid-template-columns:1fr}.top{align-items:flex-start}.wrap{padding:15px}.timer{min-width:98px}.hero:after{opacity:.4}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="brand"><div class="mark">P.</div><div><div class="eyebrow">Financial Crime Lab</div><strong>PROJEKT PHANTOME</strong></div></div>
+  <div class="timer"><small>VERBLEIBENDE ZEIT</small><strong id="timer">50:00</strong></div>
+</header>
+
+<main>
+<section id="start">
+  <div class="hero">
+    <span class="pill">SIMULATION · TRAINING</span><span class="pill">3 PRÜFMODULE</span><span class="pill">50 MINUTEN</span>
+    <h1>Die unvollständige Akte.</h1>
+    <p class="muted" style="max-width:650px;font-size:1.08rem">17:00 Uhr. Senior-Compliance-Analyst Herr Weber ist nicht erreichbar. Auf seinem Desktop liegt eine unvollständige Akte: Eine Auslandsüberweisung über 3,8 Millionen Euro soll in Kürze freigegeben werden. Drei Prüfungen fehlen.</p>
+    <div class="notice"><strong>Auftrag:</strong> Prüft die Hinweise, dokumentiert eure Einschätzung und stoppt die simulierte Transaktion, wenn die Risiken ausreichend erkannt wurden.</div>
+    <div class="field" style="max-width:440px"><input id="teamName" maxlength="40" placeholder="Teamname eingeben" aria-label="Teamname"><button class="primary" id="startBtn">Fallakte öffnen →</button></div>
+    <p class="mini muted">Alle Personen, Unternehmen, Adressen und Listeneinträge sind fiktiv. Dieses Lernspiel ersetzt keine internen Arbeitsanweisungen.</p>
+  </div>
+  <div class="grid">
+    <div class="card"><div class="num">MODUL 01</div><h3>Sanktionen & Embargos</h3><p class="muted">Eigentümerstruktur nachvollziehen und einen möglichen Listentreffer beurteilen.</p></div>
+    <div class="card"><div class="num">MODUL 02</div><h3>Geldwäscheprävention</h3><p class="muted">Auffällige Kontobewegungen von plausiblen Zahlungen unterscheiden.</p></div>
+    <div class="card"><div class="num">MODUL 03</div><h3>Fraud & Social Engineering</h3><p class="muted">Manipulationsmerkmale erkennen und das Vier-Augen-Prinzip schützen.</p></div>
+  </div>
+</section>
+
+<section id="game" class="hidden">
+  <div class="layout">
+    <div>
+      <div class="panel">
+        <div class="sectionhead"><div><div class="eyebrow" id="stationLabel">PRÜFMODUL 01 / 03</div><h2 id="stationTitle">Sanktionen & Embargos</h2></div><span class="pill" id="statusPill">IN BEARBEITUNG</span></div>
+        <div class="progress"><span id="progressBar"></span></div>
+        <div id="stationContent"></div>
+        <div id="feedback" class="feedback hidden" role="status" aria-live="polite"></div>
+        <div class="rowbuttons" id="actionButtons"></div>
+      </div>
+      <div class="panel"><h3>Arbeitsprinzip</h3><p class="muted mini">Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Prüft Identität, Kontext, wirtschaftlichen Zweck und die geltenden internen Verfahren. Bei Unsicherheit: nicht eigenmächtig freigeben, sondern eskalieren.</p></div>
+    </div>
+    <aside>
+      <div class="panel"><div class="eyebrow">EINSATZSTATUS</div><h3 id="teamLabel">Team</h3><div class="side-stat"><span class="muted">Punkte</span><strong id="score">0</strong></div><div class="side-stat"><span class="muted">Stationen</span><strong id="stationCount">0 / 3</strong></div><div class="side-stat"><span class="muted">Fehlversuche</span><strong id="mistakes">0</strong></div><div class="side-stat"><span class="muted">Hinweise</span><strong id="hints">0</strong></div></div>
+      <div class="panel"><div class="eyebrow">FALLZIEL</div><h3>Transaktion sichern</h3><p class="muted mini">Findet die relevanten Warnsignale. Der finale Not-Stopp wird nach erfolgreichem Abschluss aller drei Prüfmodule freigeschaltet.</p><div id="moduleList" class="mini"></div></div>
+      <button class="subtle" id="hintBtn" style="width:100%">Hinweis verwenden (−50 P.)</button>
+    </aside>
+  </div>
+</section>
+
+<section id="final" class="hidden">
+  <div class="hero">
+    <div class="eyebrow">MISSION AUSGEWERTET</div><h1 id="finalTitle">Fall abgeschlossen</h1>
+    <p class="muted" id="finalText"></p>
+    <div class="bigscore" id="finalScore">0 Punkte</div>
+    <p class="muted">Team: <strong id="finalTeam"></strong></p>
+    <div class="rowbuttons"><button class="primary" id="copyBtn">Ergebnis kopieren</button><button id="restartBtn">Neue Runde starten</button></div>
+    <div id="copyFeedback" class="feedback hidden"></div>
+  </div>
+  <div class="grid">
+    <div class="card"><div class="num">01 · SANKTIONEN</div><h3>Treffer prüfen und eskalieren</h3><p class="muted mini">Eigentums- und Kontrollverhältnisse, Identität und einschlägige Listung prüfen. Ein möglicher Treffer darf nicht allein anhand des Namens abschließend bewertet werden.</p></div>
+    <div class="card"><div class="num">02 · GELDWÄSCHE</div><h3>Gesamtbild bewerten</h3><p class="muted mini">Auffällige Transaktionen sind Indikatoren, keine automatische Verdachtsfeststellung. Kundenprofil, wirtschaftlicher Zweck und interne Eskalationswege sind relevant.</p></div>
+    <div class="card"><div class="num">03 · FRAUD</div><h3>Freigabeprozess schützen</h3><p class="muted mini">Abweichende Absenderadresse, künstlicher Zeitdruck und Auffälligkeiten im Dokument sind Warnsignale. Unabhängig über einen bekannten Kanal verifizieren und Vier-Augen-Prinzip einhalten.</p></div>
+  </div>
+</section>
+</main>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Keine echten Kundendaten verwenden · Version 1.0</footer>
+</div>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const state = {team:"", started:false, station:0, completed:[false,false,false], score:0, mistakes:0, hints:0, startAt:0, deadline:0, timerId:null, elapsed:0, ended:false};
+const names = ["Sanktionen & Embargos","Geldwäsche-Erkennung","Betrugsprävention / Fraud"];
+const hintText = [
+"Verfolge die Eigentumsstruktur bis zur natürlichen Person. Vergleiche danach nicht nur den Namen, sondern auch Identitätsmerkmale und den Kontext des Listeneintrags.",
+"Prüfe die Kombination aus ungewöhnlichen Bareinzahlungen, schneller Weiterleitung und fehlender wirtschaftlicher Plausibilität. Reguläre Gehalts- und Mietzahlungen sind hier Distraktoren.",
+"Prüfe die tatsächliche Absenderdomain, die Sprache mit künstlichem Zeitdruck und die Dokumentenprüfung. Wähle alle drei Warnsignale aus."
+];
+const correctFraud = ["domain","pressure","mrz"];
+function updateStats(){
+  $("score").textContent=state.score;
+  $("stationCount").textContent=state.completed.filter(Boolean).length+" / 3";
+  $("mistakes").textContent=state.mistakes;
+  $("hints").textContent=state.hints;
+  $("teamLabel").textContent=state.team;
+  $("moduleList").innerHTML=names.map((n,i)=>`<div class="side-stat"><span>${i+1}. ${n}</span><strong style="color:${state.completed[i]?'var(--green)':'var(--muted)'}">${state.completed[i]?'✓':'—'}</strong></div>`).join("");
+}
+function showFeedback(text,kind=""){ $("feedback").className="feedback "+kind; $("feedback").textContent=text; }
+function clearFeedback(){ $("feedback").className="feedback hidden"; $("feedback").textContent=""; }
+function buttons(items){ $("actionButtons").innerHTML=""; items.forEach(({text,fn,primary=false})=>{const b=document.createElement("button");b.textContent=text;if(primary)b.className="primary";b.addEventListener("click",fn);$("actionButtons").appendChild(b);});}
+function start(){
+ state.team=$("teamName").value.trim()||"Team Phantome"; state.started=true;state.startAt=Date.now();state.deadline=state.startAt+50*60*1000;
+ $("start").classList.add("hidden");$("final").classList.add("hidden");$("game").classList.remove("hidden");
+ state.timerId=setInterval(tick,1000); renderStation(); updateStats();
+}
+function tick(){
+ const remaining=Math.max(0,state.deadline-Date.now());const sec=Math.ceil(remaining/1000);
+ $("timer").textContent=String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0");
+ if(remaining<=0){clearInterval(state.timerId);finish(true);}
+}
+function renderStation(){
+ clearFeedback();const i=state.station;
+ $("stationLabel").textContent=`PRÜFMODUL 0${i+1} / 03`;
+ $("stationTitle").textContent=names[i];
+ $("statusPill").textContent=state.completed[i]?"ABGESCHLOSSEN":"IN BEARBEITUNG";
+ $("progressBar").style.width=(state.completed.filter(Boolean).length/3*100)+"%";
+ if(i===0) renderSanctions(); else if(i===1) renderAML(); else renderFraud();
+ updateStats();
+}
+function renderSanctions(){
+ $("stationContent").innerHTML=`
+ <p>Die AeroTrans GmbH beantragt die Freigabe eines Akkreditivs für Ersatzteillieferungen. In der Akte findet sich eine verschachtelte Eigentümerstruktur.</p>
+ <div class="doc"><span class="stamp">FIKTIVE FALLAKTE</span><h3>Auszug: Eigentümerstruktur</h3><table><tr><th>Ebene</th><th>Gesellschaft / Person</th><th>Anteil</th></tr><tr><td>1</td><td>AeroTrans GmbH</td><td>100 % gehalten durch</td></tr><tr><td>2</td><td>Northbridge S.A. (Panama)</td><td>100 % gehalten durch</td></tr><tr><td>3</td><td>Viktor Marin</td><td>Natürliche Person</td></tr></table><p><strong>Fiktiver Listenhinweis:</strong> Viktor Marin · Eintrag SAN-8839 · Geburtsjahr 1974 · Status: möglicher Treffer, weitere Prüfung erforderlich.</p></div>
+ <p><strong>Aufgabe:</strong> Wer ist die natürliche Person am Ende der angegebenen Eigentumskette und welcher Listeneintrag muss geprüft werden?</p>
+ <div class="field"><input id="ubo" placeholder="Name der natürlichen Person" aria-label="Wirtschaftlich Berechtigter"><input id="sanCode" placeholder="Listen-ID" aria-label="Listen-ID"></div>
+ <div class="notice mini">Achtung: Das ist ein didaktisch vereinfachter Fall. Eigentum, Kontrolle und ein möglicher Sanktionsbezug müssen nach den geltenden Verfahren geprüft werden.</div>`;
+ buttons([{text:"Prüfung einreichen",primary:true,fn:checkSanctions}]);
+}
+function checkSanctions(){
+ const u=$("ubo").value.trim().toLowerCase(), c=$("sanCode").value.trim().toUpperCase();
+ if(u==="viktor marin" && c==="san-8839"){completeStation("Möglicher Treffer erkannt. Der korrekte nächste Schritt ist eine dokumentierte Prüfung und Eskalation – nicht die automatische Freigabe.");}
+ else {wrong("Noch nicht korrekt. Verfolge die Struktur bis zur natürlichen Person und prüfe die Kennung des Listeneintrags.");}
+}
+const tx=[
+["01.10.","Gehalt Muster GmbH","+ 1.850,00 €","Regelmäßiger Gehaltseingang"],
+["02.10.","Bareinzahlung Filiale","+ 9.800,00 €","Hohe Bareinzahlung; Herkunft zu prüfen"],
+["02.10.","Überweisung an Nova Trade Ltd.","− 9.600,00 €","Weiterleitung kurz nach Bareinzahlung"],
+["04.10.","Miete Hausverwaltung","− 620,00 €","Regelmäßige Mietzahlung"],
+["05.10.","Bareinzahlung Filiale","+ 9.950,00 €","Weitere hohe Bareinzahlung"],
+["05.10.","Überweisung an Nova Trade Ltd.","− 9.700,00 €","Erneute zeitnahe Weiterleitung"],
+["07.10.","Streamingdienst","− 12,99 €","Reguläre Kleinabbuchung"],
+["08.10.","Privatüberweisung: Geschenk","+ 75,00 €","Kleiner Zahlungseingang; Kontext unbekannt"],
+["09.10.","Bareinzahlung Filiale","+ 4.900,00 €","Zusätzliche Bareinzahlung; Zusammenhang prüfen"],
+["09.10.","Überweisung an Nova Trade Ltd.","− 4.750,00 €","Weiterleitung am selben Tag"],
+["12.10.","Stromversorger","− 84,00 €","Reguläre Versorgerzahlung"],
+["13.10.","Gehalt Muster GmbH","+ 1.850,00 €","Regelmäßiger Gehaltseingang"]
+];
+function renderAML(){
+ $("stationContent").innerHTML=`<p>Das Konto eines 20-jährigen Studenten zeigt in zwei Wochen mehrere ungewöhnliche Bewegungen. Wähle die Buchungszeilen, die im Kontext eine vertiefte Prüfung auslösen sollten.</p>
+ <div class="doc"><span class="stamp">FIKTIVER KONTOAUSZUG</span><h3>Kontobewegungen · 01.–13. Oktober</h3><table><thead><tr><th>Datum</th><th>Buchungstext</th><th>Betrag</th></tr></thead><tbody>${tx.map((t,i)=>`<tr><td>${t[0]}</td><td>${t[1]}<br><small>${t[3]}</small></td><td>${t[2]}</td></tr>`).join("")}</tbody></table></div>
+ <p><strong>Wähle alle relevanten Buchungen.</strong> In diesem Lernfall sind die Zeilen 2, 3, 5, 6, 9 und 10 (gezählt von oben) die vorgesehenen Auffälligkeiten. Die Auswahl ist ein Trainingssignal, keine automatische Verdachtsfeststellung.</p>
+ <div id="txChoices">${tx.map((t,i)=>`<label class="choice"><input type="checkbox" value="${i}" aria-label="Buchung ${i+1}"><span><strong>${i+1}. ${t[1]}</strong><br><span class="muted mini">${t[0]} · ${t[2]}</span></span></label>`).join("")}</div>`;
+ buttons([{text:"Auswahl prüfen",primary:true,fn:checkAML}]);
+}
+function checkAML(){
+ const selected=[...document.querySelectorAll('#txChoices input:checked')].map(x=>Number(x.value));
+ const correct=[1,2,4,5,8,9];
+ if(selected.length===correct.length && correct.every(x=>selected.includes(x))){
+   completeStation("Muster erkannt: mehrere Bareinzahlungen und zeitnahe Weiterleitungen verdienen eine risikobasierte Prüfung. Ein Schwellenwert allein entscheidet nicht über eine Verdachtsmeldung.");
+ } else wrong("Die Auswahl stimmt noch nicht. Beurteile die Transaktionen im Zusammenhang: wiederholte hohe Bareinzahlungen und anschließende Weiterleitungen sind hier die vorgesehenen Warnsignale.");
+}
+function renderFraud(){
+ $("stationContent").innerHTML=`
+ <p>Eine E-Mail der vermeintlichen Vorstandsassistenz verlangt, die Zahlung über 3,8 Mio. Euro sofort freizugeben. Die reguläre Freigabekette solle „ausnahmsweise“ übersprungen werden.</p>
+ <div class="doc"><div class="emailhead"><strong>Von:</strong> assistenz.vorstand@bank-vorstand-direct.com<br><strong>An:</strong> Zahlungsverkehr / Freigabe<br><strong>Betreff:</strong> DRINGEND – Auslandszahlung sofort ausführen</div><hr><p>Guten Tag,</p><p>die Zahlung muss innerhalb der nächsten Minuten ausgeführt werden. Absolute Vertraulichkeit ist erforderlich. Bitte umgehen Sie heute das Vier-Augen-Prinzip; ich bestätige die Anweisung im Namen des Vorstands.</p><p>Keine Rückfragen per Telefon. Bestätigen Sie nach Ausführung kurz per E-Mail.</p><p>Mit Nachdruck<br>Assistenz des Vorstands</p><hr><p><strong>Dokumentenhinweis:</strong> In der beigefügten simulierten Passkopie stimmt die MRZ-Prüfsumme nicht mit den angegebenen Zeichen überein.</p><span class="stamp">NICHT VERIFIZIERT</span></div>
+ <p><strong>Aufgabe:</strong> Wähle genau die drei Warnsignale.</p>
+ <label class="choice"><input type="checkbox" value="domain"><span><strong>Abweichende Absenderdomain</strong><br><span class="muted mini">Die Domain entspricht nicht der angenommenen Bankdomain.</span></span></label>
+ <label class="choice"><input type="checkbox" value="pressure"><span><strong>Druckmittel und Geheimhaltungsforderung</strong><br><span class="muted mini">Zeitdruck, Stillschweigen und Umgehung des Vier-Augen-Prinzips.</span></span></label>
+ <label class="choice"><input type="checkbox" value="mrz"><span><strong>Unstimmige MRZ-Prüfsumme</strong><br><span class="muted mini">Das Dokument weist laut Fallbeschreibung eine technische Unstimmigkeit auf.</span></span></label>
+ <label class="choice"><input type="checkbox" value="logo"><span><strong>Das Firmenlogo ist blau</strong><br><span class="muted mini">Allein kein belastbarer Hinweis auf Betrug.</span></span></label>
+ <label class="choice"><input type="checkbox" value="length"><span><strong>Die E-Mail ist kurz</strong><br><span class="muted mini">Die Länge allein ist kein belastbares Betrugsmerkmal.</span></span></label>`;
+ buttons([{text:"Warnsignale prüfen",primary:true,fn:checkFraud}]);
+}
+function checkFraud(){
+ const selected=[...document.querySelectorAll('#stationContent input:checked')].map(x=>x.value);
+ if(selected.length===3 && correctFraud.every(x=>selected.includes(x))){
+  completeStation("Drei Warnsignale erkannt. Sichere Reaktion: keine Freigabe, Verifizierung über einen unabhängig bekannten Kanal und Eskalation nach internem Verfahren.");
+ }else wrong("Noch nicht korrekt. Wähle die drei konkreten Warnsignale und lasse dich nicht von bloßen Gestaltungselementen ablenken.");
+}
+function wrong(msg){state.mistakes++;state.score=Math.max(0,state.score-20);showFeedback(msg+" (−20 Punkte)", "bad");updateStats();}
+function completeStation(msg){
+ if(state.completed[state.station]){showFeedback("Diese Station ist bereits abgeschlossen.");return;}
+ state.completed[state.station]=true;state.score+=250;showFeedback(msg+" +250 Punkte.", "good");updateStats();
+ $("statusPill").textContent="ABGESCHLOSSEN";$("progressBar").style.width=(state.completed.filter(Boolean).length/3*100)+"%";
+ if(state.completed.every(Boolean)){
+  buttons([{text:"Not-Stopp auslösen →",primary:true,fn:()=>finish(false)}]);
+ }else{
+  buttons([{text:"Nächste Station →",primary:true,fn:()=>{state.station++;renderStation();}}]);
+ }
+}
+function useHint(){
+ if(!state.started || state.ended)return;
+ if(state.hints>=6){showFeedback("Alle sechs verfügbaren Hinweise wurden verwendet.");return;}
+ state.hints++;state.score=Math.max(0,state.score-50);showFeedback("HINWEIS: "+hintText[state.station]+" (−50 Punkte)","");updateStats();
+}
+function finish(timeout){
+ if(state.ended)return;state.ended=true;clearInterval(state.timerId);
+ const remaining=Math.max(0,state.deadline-Date.now());const mins=Math.floor(remaining/60000);
+ const timeBonus=Math.min(250,mins*5);
+ state.score+=timeBonus;
+ $("game").classList.add("hidden");$("final").classList.remove("hidden");
+ $("finalTitle").textContent=timeout?"Zeit abgelaufen":"Not-Stopp aktiviert";
+ $("finalText").textContent=timeout?"Die verfügbare Zeit ist abgelaufen. Prüft in der Nachbesprechung, welche Warnsignale noch offen waren.":"Die simulierte Zahlung wurde gestoppt. Die Risiken wurden im Rahmen dieses Lernfalls erkannt. In der Praxis gelten stets die internen Eskalations- und Prüfprozesse.";
+ $("finalScore").textContent=state.score+" Punkte";$("finalTeam").textContent=state.team;
+ state.elapsed=Math.round((Date.now()-state.startAt)/1000);
+ window.phantomeResult={team:state.team,score:state.score,completed:state.completed.filter(Boolean).length,mistakes:state.mistakes,hints:state.hints,timeSeconds:state.elapsed,timeout};
+}
+function restart(){clearInterval(state.timerId);Object.assign(state,{team:"",started:false,station:0,completed:[false,false,false],score:0,mistakes:0,hints:0,startAt:0,deadline:0,timerId:null,elapsed:0,ended:false});$("teamName").value="";$("timer").textContent="50:00";$("final").classList.add("hidden");$("game").classList.add("hidden");$("start").classList.remove("hidden");}
+$("startBtn").addEventListener("click",start);
+$("hintBtn").addEventListener("click",useHint);
+$("restartBtn").addEventListener("click",restart);
+$("copyBtn").addEventListener("click",async()=>{
+ const r=window.phantomeResult;if(!r)return;
+ const txt=`Projekt Phantome – Ergebnis\nTeam: ${r.team}\nPunkte: ${r.score}\nAbgeschlossene Stationen: ${r.completed}/3\nFehlversuche: ${r.mistakes}\nHinweise: ${r.hints}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.\nZeit abgelaufen: ${r.timeout?"Ja":"Nein"}`;
+ try{await navigator.clipboard.writeText(txt);$("copyFeedback").textContent="Ergebnis wurde in die Zwischenablage kopiert.";}
+ catch(e){$("copyFeedback").textContent=txt;}
+ $("copyFeedback").classList.remove("hidden");
+});
+})();
+</script>
+</body>
+</html>
