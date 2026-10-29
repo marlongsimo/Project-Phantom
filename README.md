@@ -1,16 +1,16 @@
 # Projekt Phantome – Compliance Escape Room
 
-Ein Escape Room im Browser mit Story, der fast vollständig auf einem nachgebauten PC spielt. Freitag, 15:40 Uhr: Senior-Analyst Matthias Weber war an etwas Großem dran und ist verschwunden. Um 16:30 Uhr startet der Buchungslauf – und mit ihm eine Zahlung über 3,8 Mio. Euro, hinter der Geldwäsche und ein Embargoverstoß stecken. Die Teams setzen sich an Webers PC (Mail, Chat, Dokumente, verschlüsselte Notizen, Papierkorb) und arbeiten mit der Prüfsoftware: EmbargoCheck, AML-Monitor, FraudDesk und ZV-Cockpit.
+Ein Escape Room im Browser mit Story, der fast vollständig auf einem nachgebauten PC spielt. Freitag, 15:40 Uhr: Senior-Analyst Matthias Weber war an etwas Großem dran und ist verschwunden. Um 16:30 Uhr startet der Buchungslauf – und mit ihm eine Zahlung über 3,8 Mio. Euro an eine Firma auf der Sanktionsliste.
+
+Der rote Faden sind Webers Notizen: Notiz 1 ist offen und nennt den ersten Schritt. Jede richtig abgeschlossene Prüfung (EmbargoCheck, AML-Monitor, FraudDesk) erzeugt eine Vorgangsnummer, die die nächste Notiz entsperrt. Notiz 4 enthält den Freigabecode für den Compliance-Stopp im ZV-Cockpit.
 
 <details><summary>Lösung für Spielleitung</summary>
 
-1. Chat: Weber schreibt, das Notizen-Passwort sei „das, was die vertuschen wollen“.
-2. Dokumente → Konnossement: Schiff AURORA STAR, IMO 9387421, Baujahr 2006.
-3. EmbargoCheck: Namenssuche ergibt keinen Treffer, die IMO-Nummer 9387421 trifft EMB-4417 „KESTREL“ (Post-it: „Namen kann man ändern. Nummern nicht.“). Bewertung: echter Treffer, eskalieren.
-4. Notizen-Passwort: `KESTREL`. Die Notizen erklären, wie man den Freigabecode herleitet.
-5. AML-Monitor, Alert A-2291: alle Bareinzahlungen und Überweisungen an Nova Trade Ltd. markieren (6 Buchungen).
-6. FraudDesk: Nordlicht IT und Stadtwerke West weiterbearbeiten, Überweisung 2 (Mira Energie) ablehnen.
-7. ZV-Cockpit → PHANTOME → Freigabecode **762** (EMB-441**7**, **6** Buchungen, Überweisung **2**), dann „Compliance-Stopp bestätigen, dokumentieren, eskalieren, verifizieren“.
+1. Notizen → Notiz 1 lesen.
+2. EmbargoCheck: SAN-4417 Northbridge S.A. (Name, Adresse und Land passen) → Vorgang **3108** → öffnet Notiz 2.
+3. AML-Monitor, Alert A-2291: alle Bareinzahlungen und Überweisungen an Nova Trade Ltd. markieren (6 Buchungen) → Vorgang **2604** → öffnet Notiz 3.
+4. FraudDesk: Nordlicht IT und Stadtwerke West weiterbearbeiten, Mira Energie ablehnen → Vorgang **7190** → öffnet Notiz 4.
+5. ZV-Cockpit → PHANTOME → Freigabecode **762**, dann „Compliance-Stopp bestätigen, dokumentieren, eskalieren, prüfen“.
 </details>
 
 ## Lokal testen
