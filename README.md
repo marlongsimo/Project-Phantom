@@ -7,10 +7,11 @@ Der rote Faden sind Webers Notizen: Notiz 1 ist offen und nennt den ersten Schri
 <details><summary>Lösung für Spielleitung</summary>
 
 1. Notizen → Notiz 1 lesen.
-2. EmbargoCheck: SAN-4417 Northbridge S.A. (Name, Adresse und Land passen) → Vorgang **3108** → öffnet Notiz 2.
-3. AML-Monitor, Alert A-2291: alle Bareinzahlungen und Überweisungen an Nova Trade Ltd. markieren (6 Buchungen) → Vorgang **2604** → öffnet Notiz 3.
-4. FraudDesk: Nordlicht IT und Stadtwerke West weiterbearbeiten, Mira Energie ablehnen → Vorgang **7190** → öffnet Notiz 4.
-5. ZV-Cockpit → PHANTOME → Freigabecode **762**, dann „Compliance-Stopp bestätigen, dokumentieren, eskalieren, prüfen“.
+2. ZV-Cockpit → Zeile PHANTOME anklicken: Empfänger Northbridge S.A., Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt, Panama.
+3. EmbargoCheck: „Northbridge“ suchen, Treffer öffnen und vergleichen. SAN-4417 als echten Treffer bewerten (SAN-3871 hat das gleiche Land, aber eine andere Adresse) → Vorgang **3108** → öffnet Notiz 2.
+4. AML-Monitor, Alert A-2291: Kundenprofil ansehen (kein Bargeld erwartet), unter „Umsätze“ alle Bareinzahlungen und Überweisungen an Nova Trade markieren (6 Buchungen). Unter „Gegenpartei“: Nova Trade teilt die Adresse mit Northbridge S.A.; Abschluss „Vertiefte Prüfung und Meldung an den Geldwäschebeauftragten“ → Vorgang **2604** → öffnet Notiz 3.
+5. FraudDesk: bei jeder Zahlung VoP-Abfrage starten und Lieferantenakte öffnen. Nordlicht IT und Stadtwerke West weiterbearbeiten, Mira Energie ablehnen → Vorgang **7190** → öffnet Notiz 4.
+6. ZV-Cockpit → PHANTOME → „Compliance-Stopp setzen“: Freigabecode **762**, Vorgangsnummern 3108, 2604, 7190, Gründe „Sanktionstreffer“ und „Geldwäsche über Nova Trade“. Danach „eskalieren und über -1200 prüfen“.
 </details>
 
 ## Lokal testen
