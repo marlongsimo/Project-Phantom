@@ -90,6 +90,13 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .decide label:has(input:checked).clarify{border-color:#c98a00;background:#fff4d6}
 .ftable{width:100%;max-width:620px;border-collapse:collapse;margin:14px 0 4px;font-size:.92rem}.ftable th,.ftable td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}.ftable th{color:var(--muted);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
 .traces{list-style:none;padding:0;margin:10px 0}.traces li{padding:8px 12px;border:1px solid #dccbca;border-radius:8px;margin:6px 0;background:#fff;color:#6f5f62}.traces li.ok{border-color:#2f8f5a;background:#e3f6ea;color:#14532d;font-weight:600}
+.ktowrap{overflow:auto;border:1px solid #e0d3d1;border-radius:6px;background:#fff}
+.kto{width:100%;min-width:600px;border-collapse:collapse;font-size:.86rem}
+.kto th{position:sticky;top:0;background:#f3ecea;text-align:left;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#6f5f62;padding:8px}
+.kto td{padding:7px 8px;border-bottom:1px solid #efe6e4;white-space:nowrap}
+.kto tbody tr:nth-child(even) td{background:#fbf7f6}
+.kto td.cr{color:#1d6b40}
+.kto td:nth-child(2),.kto td:nth-child(4){white-space:normal;min-width:120px}.kto td.mono{font-size:.8rem}
 .histwrap{width:0;min-width:100%;max-height:230px;overflow:auto;border:1px solid #e6dfcc;border-radius:6px;background:#fff}
 .hist td,.hist th{white-space:nowrap;overflow-wrap:normal!important}
 .hist{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:2px}.hist th,.hist td{padding:3px 6px;border-bottom:1px solid #e6dfcc;text-align:left}.hist th{font-size:.68rem}
@@ -297,7 +304,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 3.5</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 3.6</footer>
 </div>
 
 <script>
@@ -489,9 +496,10 @@ const APPS = {
   fraud:{label:"FraudDesk", icon:"🛡️", title:"FraudDesk – Zahlungsprüfung", w:800, h:540},
   zv:{label:"ZV-Cockpit", icon:"💶", title:"ZV-Cockpit – Zahlungsverkehr", w:780, h:520},
   intranet:{label:"Intranet", icon:"🏢", title:"Intranet – Mitarbeiterverzeichnis", w:680, h:440},
-  whistle:{label:"Hinweisgeber", icon:"📣", title:"Hinweisgebersystem", w:720, h:540}};
+  whistle:{label:"Hinweisgeber", icon:"📣", title:"Hinweisgebersystem", w:720, h:540},
+  konto:{label:"Kontoumsätze", icon:"📊", title:"Kontoumsätze", w:760, h:500, hidden:true, right:true}};
 const PHASE2_APPS = ["intranet","whistle"];
-const visibleApps = () => Object.entries(APPS).filter(([id]) => S.f.stopped || !PHASE2_APPS.includes(id));
+const visibleApps = () => Object.entries(APPS).filter(([id, a]) => !a.hidden && (S.f.stopped || !PHASE2_APPS.includes(id)));
 function renderIcons(){
   $("icons").innerHTML = "";
   visibleApps().forEach(([id, a]) => {
@@ -528,7 +536,7 @@ function openApp(id){
     const k = Math.min(1.35, Math.max(1, sw / 1000)), w = Math.min(Math.round(a.w * k), sw - 20), h = Math.min(Math.round(a.h * k), sh - 16), n = winCount++ % 5;
     const el = document.createElement("div"); el.className = "win"; el.setAttribute("role","dialog"); el.setAttribute("aria-label", a.title);
     el.style.width = w + "px"; el.style.height = h + "px";
-    el.style.left = Math.max(4, Math.min(sw - w - 4, 110 + n*30)) + "px"; el.style.top = Math.max(4, Math.min(sh - h - 4, 12 + n*26)) + "px";
+    el.style.left = (a.right ? Math.max(4, sw - w - 8) : Math.max(4, Math.min(sw - w - 4, 110 + n*30))) + "px"; el.style.top = Math.max(4, Math.min(sh - h - 4, 12 + n*26)) + "px";
     el.innerHTML = `<div class="wtitle"><span>${a.icon}</span><span class="t">${a.title}</span><div class="wb"><button class="m" aria-label="Minimieren">—</button><button class="x" aria-label="Schließen">✕</button></div></div><div class="wbody"></div><div class="wfb hidden" role="status" aria-live="polite"></div>`;
     $("windows").appendChild(el);
     WIN[id] = {id, el, body: el.querySelector(".wbody"), fb: el.querySelector(".wfb"), min:false};
@@ -1018,9 +1026,9 @@ RENDER.fraud = b => {
       <tr><th>Betrag</th><td><b>${p.amount}</b></td></tr><tr><th>Verwendungszweck</th><td>${p.purpose}</td></tr>
       <tr class="vopRow ${done || c.vop ? "" : "hidden"}"><th>Verification of Payee</th><td><span class="tag ${VOP_TAG[p.vop][0]}">${VOP_TAG[p.vop][1]} ${p.vopText}</span></td></tr>
       <tr class="fileRow ${done || c.file ? "" : "hidden"}"><th>Akte</th><td><ul class="ctx">${p.context.map(x => `<li>${x}</li>`).join("")}</ul></td></tr>
-      <tr class="histRow ${done || c.hist ? "" : "hidden"}"><th>Kontoumsätze</th><td><p class="mini" style="margin:0 0 4px">Konto ${p.payer} · letzte drei Monate</p>
-        <div class="histwrap"><table class="hist"><tr><th>Datum</th><th>Gegenpartei</th><th>IBAN / Referenz</th><th>Verwendungszweck</th><th>Betrag</th></tr>${p.history.map(h => `<tr><td>${h[0]}</td><td>${h[1]}</td><td class="mono">${h[2]}</td><td>${h[3]}</td><td style="text-align:right;white-space:nowrap">${h[4]}</td></tr>`).join("")}</table></div></td></tr></table>
-      ${done ? "" : `<div class="row"><button class="doVop" ${c.vop ? "disabled" : ""}>🔎 VoP-Abfrage starten</button><button class="doFile" ${c.file ? "disabled" : ""}>📂 Akte öffnen</button><button class="doHist" ${c.hist ? "disabled" : ""}>📊 Kontoumsätze</button></div>`}
+      </table>
+      ${done ? "" : `<div class="row"><button class="doVop" ${c.vop ? "disabled" : ""}>🔎 VoP-Abfrage starten</button><button class="doFile" ${c.file ? "disabled" : ""}>📂 Akte öffnen</button><button class="doHist">📊 Kontoumsätze${c.hist ? " ↗" : ""}</button></div>`}
+      ${done ? `<div class="row"><button class="doHist">📊 Kontoumsätze ansehen ↗</button></div>` : ""}
       <div class="decide">${FRAUD_DEC.map(([v,t]) => `<label class="${v}"><input type="radio" name="pay-${p.id}" value="${v}" ${done ? (v === p.ok ? "checked disabled" : "disabled") : (ready(p.id) ? "" : "disabled") + (S.v.fraudDec[p.id] === v ? " checked" : "")}><span>${t}</span></label>`).join("")}</div>
       ${done ? `<p class="mini" style="margin:10px 0 0"><b>Begründung:</b> ${p.why}</p>` : ""}</div>`; }).join("")}
     ${done ? vorgangBox("fraud", "Notiz 4") : `<div class="row"><button class="primary" id="fraudBtn">Entscheidungen buchen</button></div>`}`;
@@ -1030,7 +1038,9 @@ RENDER.fraud = b => {
   on(b, ".doVop", "click", async e => { const btn = e.currentTarget, card = btn.closest("[data-p]"), id = card.dataset.p;
     btn.disabled = true; btn.textContent = "⏳ Abfrage läuft …"; await sleep(700); btn.textContent = "🔎 VoP-Abfrage abgeschlossen";
     (fx[id] = fx[id] || {}).vop = true; card.querySelector(".vopRow").classList.remove("hidden"); unlock(card, id); });
-  reveal(".doFile", "file"); reveal(".doHist", "hist");
+  reveal(".doFile", "file");
+  on(b, ".doHist", "click", e => { const btn = e.currentTarget, card = btn.closest("[data-p]"), id = card.dataset.p;
+    (fx[id] = fx[id] || {}).hist = true; if (!done) btn.textContent = "📊 Kontoumsätze ↗"; unlock(card, id); openKonto(id); });
   on(b, ".decide input", "change", e => { S.v.fraudDec[e.target.name.slice(4)] = e.target.value; });
   if ($("fraudBtn")) $("fraudBtn").addEventListener("click", () => {
     const dec = S.v.fraudDec;
@@ -1045,6 +1055,22 @@ RENDER.fraud = b => {
     if (dec.stadtwerke === "go") return wrong("fraud", "Bei einer Zahlung meldet VoP eine Abweichung, die weder Akte noch Kontoumsätze erklären. Ohne Klärung auszuführen ist zu früh.");
     wrong("fraud", "Eine Zahlung ist vollständig belegt. Sie zurückzuhalten verzögert sie ohne Grund.");
   });
+};
+
+/* ---------- Kontoumsätze ---------- */
+// Eigenes Fenster neben dem FraudDesk, damit Zahlung und Umsätze nebeneinander sichtbar sind.
+function openKonto(id){ S.v.kontoP = id; if (WIN.konto) render("konto"); openApp("konto"); }
+RENDER.konto = b => {
+  const p = PAYMENTS.find(x => x.id === S.v.kontoP) || PAYMENTS[0], fx = S.v.fx || {};
+  b.closest(".win").querySelector(".t").textContent = "Kontoumsätze – " + p.payer;
+  const opened = PAYMENTS.filter(x => S.f.fraud || (fx[x.id] && fx[x.id].hist));
+  b.className = "wbody";
+  b.innerHTML = `<div class="appbar">📊 Kontoumsätze <small>Kreisbank Hohenbrück · Kontoinformation</small></div>
+    ${opened.length > 1 ? `<div class="tabs" style="margin-top:0">${opened.map(x => `<button data-k="${x.id}" class="${x.id === p.id ? "on" : ""}">${x.payer}</button>`).join("")}</div>` : ""}
+    <p style="margin:0 0 8px"><b>${p.payer}</b> · Girokonto<br><span class="mini muted">Umsätze 01.07.–28.10. · ${p.history.length} Buchungen</span></p>
+    <div class="ktowrap"><table class="kto"><thead><tr><th>Datum</th><th>Gegenpartei</th><th>IBAN / Referenz</th><th>Verwendungszweck</th><th style="text-align:right">Betrag</th></tr></thead>
+    <tbody>${p.history.map(h => `<tr><td>${h[0]}</td><td>${h[1]}</td><td class="mono">${h[2]}</td><td>${h[3]}</td><td class="${h[4].startsWith("+") ? "cr" : ""}" style="text-align:right">${h[4]}</td></tr>`).join("")}</tbody></table></div>`;
+  on(b, "[data-k]", "click", e => { S.v.kontoP = e.currentTarget.dataset.k; render("konto"); });
 };
 
 /* ---------- ZV-Cockpit ---------- */
