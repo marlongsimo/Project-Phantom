@@ -88,6 +88,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .suspect.out{opacity:.4;text-decoration:line-through;cursor:not-allowed}
 .decide label:has(input:checked).clarify{border-color:#c98a00;background:#fff4d6}
 .ftable{width:100%;max-width:620px;border-collapse:collapse;margin:14px 0 4px;font-size:.92rem}.ftable th,.ftable td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}.ftable th{color:var(--muted);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
+.traces{list-style:none;padding:0;margin:10px 0}.traces li{padding:8px 12px;border:1px solid #c6d0dd;border-radius:8px;margin:6px 0;background:#fff;color:#5d6b80}.traces li.ok{border-color:#2f8f5a;background:#e3f6ea;color:#14532d;font-weight:600}
 .badge.new{background:#ffca70;color:#3a2f00}
 .badge{position:absolute;top:-5px;right:-12px;background:#e81123;color:#fff;border-radius:9px;font-size:.66rem;font-weight:700;padding:1px 5px;text-shadow:none}
 .taskbar{position:absolute;left:0;right:0;bottom:0;height:46px;background:rgba(12,20,32,.94);display:flex;align-items:center;gap:3px;padding:0 6px;color:#fff;z-index:900;overflow:hidden}
@@ -291,7 +292,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Keine echten Kundendaten verwenden · Version 3.2</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Keine echten Kundendaten verwenden · Version 3.3</footer>
 </div>
 
 <script>
@@ -419,7 +420,7 @@ function hintFor(){
     "Weiterbearbeiten = 1, Klären = 2, Nicht ausführen = 0 – für Überweisung 1, 2 und 3 hintereinander."]};
   return {key:"stop", steps:[
     "Webers drei Fragen in Notiz 4 beziehen sich auf eure drei Prüfungen.",
-    "Fehlalarme im EmbargoCheck, Anzahl der Muster-Buchungen, Nummer der nicht ausgeführten Überweisung. Als Gründe nur die konkreten Prüfergebnisse wählen."]};
+    "Fehlalarme im EmbargoCheck, Anzahl der Muster-Buchungen, Nummer der nicht ausgeführten Überweisung. Als Grund trägt der Sanktionstreffer; die Nova-Trade-Verbindung könnt ihr ergänzend dokumentieren."]};
 }
 const HINT_COST = [25, 50];
 function hintLabel(){
@@ -593,7 +594,7 @@ SCHRITT 2 → AML-Monitor
 Öffnet Alert A-2291. Schaut euch zuerst das Kundenprofil an, dann die Umsätze.
 Markiert alle Buchungen, die zum Muster gehören.
 Und dann prüft, wohin das Geld fließt. Kommt euch die Adresse bekannt vor?`},
-  n3:{title:"3 · Die Falle", gate:"aml", code:"2135pxw35o8", riddle:"Wie viel Geld hat Jonas K. insgesamt an Nova Trade überwiesen? Betrag in Euro – ohne Cent und ohne Punkt.", text:`Das Muster ist eindeutig: Der Student ist ein Strohmann. Und das Geld landet bei Leuten, die wir schon kennen.
+  n3:{title:"3 · Die Falle", gate:"aml", code:"2135pxw35o8", riddle:"Wie viel Geld hat Jonas K. insgesamt an Nova Trade überwiesen? Betrag in Euro – ohne Cent und ohne Punkt.", text:`Das Muster und die Verbindung zu Nova Trade begründen einen ernsten Verdacht. Ob Jonas K. bewusst als Strohmann eingesetzt wird – oder selbst ausgenutzt wird –, muss die vertiefte Prüfung klären. Sicher ist nur: Das Geld landet bei Leuten, die wir schon kennen.
 
 Heute versuchen dieselben Leute noch etwas anderes: Im FraudDesk hängen drei zurückgehaltene Zahlungen. Eine davon ist eine Falle – die anderen beiden sind echte Rechnungen.
 
@@ -675,9 +676,14 @@ RENDER.mail = b => {
   on(b, "[data-f]", "click", e => { S.v.folder = e.currentTarget.dataset.f; S.v.mail = 0; render("mail"); });
   on(b, ".li", "click", e => { S.v.mail = +e.currentTarget.dataset.i; render("mail"); });
   $("hdrBtn").addEventListener("click", () => { S.v.hdrOpen = !S.v.hdrOpen; render("mail"); });
-  if (m.fake && !S.v.fakeSeen){ S.v.fakeSeen = true; narrate("Mail 15:24: Eine „Assistenz des Vorstands“ bestellt Weber sofort und vertraulich in Raum 12.04 – von der fremden Domain hausbank-vorstand.example. Deshalb ist er weg."); }
-  if (m.fake && S.v.hdrOpen && !S.v.hdrSeen){ S.v.hdrSeen = true; narrate("Kopfzeilen: Die „Vorstandsmails“ kamen gar nicht von außen – sie wurden im Haus vom Rechner PC-ZV-114 verschickt."); updateHud(); }
-  if (m.sentByOther && !S.v.sentSeen){ S.v.sentSeen = true; narrate("Gesendet 15:31: Von Webers Konto ging eine Mail an s.kranz – „Vermerk kann ignoriert werden“. Laut Chat war Weber da schon seit 15:26 weg. Jemand hat seinen entsperrten PC benutzt."); updateHud(); }
+  const MAIL_LOG = {
+    "DRINGEND: Gespräch mit dem Vorstand – sofort": "Mail 15:24: Eine „Assistenz des Vorstands“ bestellt Weber sofort und vertraulich in Raum 12.04 – von der fremden Domain hausbank-vorstand.example. Deshalb ist er weg.",
+    "PHANTOME – Ausführung im Lauf 16:30 sicherstellen": "Mail 15:36: Dieselbe „Assistenz des Vorstands“ drängt darauf, PHANTOME um 16:30 auszuführen – ohne telefonische Rückfrage.",
+    "LETZTE ERINNERUNG: PHANTOME": "Mail: Die „Assistenz des Vorstands“ erhöht den Druck – „Jede weitere Verzögerung wird Konsequenzen haben.“"};
+  const logged = S.v.mailLogged || (S.v.mailLogged = {});
+  if (MAIL_LOG[m.subj] && !logged[m.subj]){ logged[m.subj] = true; narrate(MAIL_LOG[m.subj]); }
+  if (m.fake && S.v.hdrOpen && !S.v.hdrSeen){ S.v.hdrSeen = true; narrate("Kopfzeilen: Die „Vorstandsmails“ kamen gar nicht von außen – sie wurden im Haus vom Rechner PC-ZV-114 verschickt."); updateHud(); render("whistle"); }
+  if (m.sentByOther && !S.v.sentSeen){ S.v.sentSeen = true; render("whistle"); narrate("Gesendet 15:31: Von Webers Konto ging eine Mail an s.kranz – „Vermerk kann ignoriert werden“. Laut Chat war Weber da schon seit 15:26 weg. Jemand hat seinen entsperrten PC benutzt."); updateHud(); }
 };
 
 /* ---------- Intranet ---------- */
@@ -699,8 +705,8 @@ RENDER.intranet = b => {
     ${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td class="mono">${r[2]}</td><td class="mono">${r[3]}</td></tr>`).join("") || `<tr><td colspan="4" class="muted">Keine Einträge gefunden.</td></tr>`}</table>
     <p class="mini muted">Raum 12.04 (12. OG): Lagerraum – kein Besprechungsraum.</p>`;
   $("staffQ").value = S.v.staffQ || "";
-  const go = () => { S.v.staffQ = $("staffQ").value; render("intranet");
-    if (S.v.staffQ.toUpperCase().includes("114") && !S.v.pcSeen){ S.v.pcSeen = true; narrate("Intranet: Der Rechner PC-ZV-114 gehört Sven Kranz aus dem Zahlungsverkehr."); updateHud(); } };
+  if (rows.some(r => r[3] === "PC-ZV-114") && q.length >= 3 && !S.v.pcSeen){ S.v.pcSeen = true; narrate("Intranet: Der Rechner PC-ZV-114 gehört Sven Kranz aus dem Zahlungsverkehr."); updateHud(); render("whistle"); }
+  const go = () => { S.v.staffQ = $("staffQ").value; render("intranet"); };
   $("staffBtn").addEventListener("click", go); $("staffQ").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
 };
 
@@ -716,6 +722,12 @@ RENDER.whistle = b => {
   const head = `<div class="appbar" style="background:#5b3f8c">📣 Hinweisgebersystem <small>vertraulich · geschützt</small></div>`;
   if (S.f.insider){ b.innerHTML = head + `<p><span class="tag ok">✓ Hinweis übermittelt</span></p><p>Eingangsnummer <b class="mono">HG-2026-0417</b>. Compliance und Interne Revision übernehmen.</p>`; return; }
   const left = 2 - (S.v.accuseFails || 0);
+  const traces = [[S.v.hdrSeen, "Herkunft der gefälschten Vorstandsmail geprüft (Kopfzeilen)"], [S.v.pcSeen, "Absender-Arbeitsplatz im Intranet zugeordnet"], [S.v.sentSeen, "Verdächtige Mail in „Gesendet“ untersucht"]];
+  if (traces.some(t => !t[0])){
+    b.innerHTML = head + `<h3>Bevor ihr einen Hinweis abgebt</h3><p class="mini">Ein Hinweis braucht Belege. Das System nimmt ihn erst an, wenn ihr diese Spuren ausgewertet habt:</p>
+      <ul class="traces">${traces.map(([ok, t]) => `<li class="${ok ? "ok" : ""}">${ok ? "✓" : "○"} ${t}</li>`).join("")}</ul>`;
+    return;
+  }
   b.innerHTML = head + `<h3>Wer hat Weber weggelockt und seinen PC benutzt?</h3>
     <p class="mini">Wählt die Person, gegen die sich der Hinweis richtet. Die Interne Revision prüft jeden Hinweis – ein falscher Verdacht trifft einen unschuldigen Menschen.</p>
     <p><span class="tag ${left === 2 ? "info" : "warn"}">${left === 2 ? "2 Versuche" : "Letzter Versuch!"}</span></p>
@@ -731,7 +743,7 @@ RENDER.whistle = b => {
     }
     S.v.accuseFails = (S.v.accuseFails || 0) + 1; (S.v.ruledOut = S.v.ruledOut || []).push(who);
     const name = SUSPECTS.find(p => p.id === who).name;
-    if (S.v.accuseFails >= 2){ S.f.wrongAccused = name; narrate("Hinweisgebersystem: Auch der zweite Hinweis (" + name + ") war falsch."); finish(false); return; }
+    if (S.v.accuseFails >= 2){ S.err.whistle = (S.err.whistle || 0) + 1; S.mistakes++; S.score = Math.max(0, S.score - 20); S.f.wrongAccused = name; narrate("Hinweisgebersystem: Auch der zweite Hinweis (" + name + ") war falsch."); finish(false); return; }
     narrate("Hinweisgebersystem: Die Revision findet keine Belege gegen " + name + ". Noch ein Versuch.");
     render("whistle"); wrong("whistle", "Die Revision findet keine Belege gegen " + name + ". Prüft die Spuren noch einmal – ihr habt nur noch einen Versuch.");
   });
@@ -902,7 +914,7 @@ RENDER.aml = b => {
     if (link !== "north") return wrong("aml", "Die Adresse passt nicht. Vergleicht sie mit den Listeneinträgen aus dem EmbargoCheck.");
     if (d !== "mlro") return wrong("aml", AML_DEC.find(x => x[0] === d)[2]);
     solved("aml", "aml", "Notiz 3",
-      "AML-Monitor: Der Student ist ein Strohmann. Sein Bargeld fließt an Nova Trade – unter derselben Adresse wie Northbridge S.A. Gemeldet. Vorgang " + VORGANG.aml + ".",
+      "AML-Monitor: Das Bargeld von Jonas K. fließt an Nova Trade – unter derselben Adresse wie Northbridge S.A. Verdacht auf Strohmann-Konto, vertiefte Prüfung eingeleitet. Vorgang " + VORGANG.aml + ".",
       "Richtig: Nova Trade sitzt unter derselben Adresse wie Northbridge. Vertiefte Prüfung und Meldung an den Geldwäschebeauftragten.");
   });
 };
@@ -1004,7 +1016,7 @@ RENDER.zv = b => {
       ${canStop ? "" : `<p class="tag warn">Ihr braucht Webers Freigabecode.</p>`}
       <p style="margin:10px 0 4px"><b>1. Freigabecode</b> von m.weber (3 Ziffern)</p>
       <input id="zvCode" inputmode="numeric" maxlength="3" placeholder="_ _ _" aria-label="Freigabecode" class="mono" style="max-width:140px;font-size:1.15rem;letter-spacing:.3em">
-      <p style="margin:12px 0 4px"><b>2. Begründung</b> – nur belegbare Gründe ankreuzen</p>
+      <p style="margin:12px 0 4px"><b>2. Begründung</b> – den tragenden Grund und ergänzende Befunde ankreuzen, aber nur Belegbares</p>
       ${ZV_REASONS.map(([v,t]) => `<label class="choice"><input type="checkbox" name="zvr" value="${v}"><span>${t}</span></label>`).join("")}
       <div class="row"><button class="primary" id="zvStop">Stopp eintragen</button></div></div>`}`;
   if ($("zvRelease")) $("zvRelease").addEventListener("click", () => wrong("zv", "Mit offenem Compliance-Vermerk darf die Zahlung nicht freigegeben werden."));
@@ -1016,9 +1028,11 @@ RENDER.zv = b => {
     if (!rs.length) return fb("zv", "Kreuzt mindestens einen Grund an.");
     const okR = ZV_REASONS.filter(r => r[2]).map(r => r[0]);
     if (rs.some(r => !okR.includes(r))) return wrong("zv", "Ein hoher Betrag oder ein Auslandsbezug allein sind kein Stoppgrund. Nennt nur, was ihr in den Prüfungen belegt habt.");
-    if (!okR.every(r => rs.includes(r))) return wrong("zv", "Die Begründung ist unvollständig. Welche zwei Prüfungen betreffen PHANTOME direkt?");
-    S.f.code = true; S.score += 150; narrate("ZV-Cockpit: Compliance-Stopp für PHANTOME eingetragen – mit Freigabecode und Begründung.");
-    fb("zv", "Stopp eingetragen und dokumentiert. +150 Punkte.", "good"); updateHud(); render("zv");
+    // Der bestätigte Sanktionstreffer trägt den Stopp allein; die Nova-Trade-Verbindung ist ein ergänzender Befund.
+    if (!rs.includes("san")) return wrong("zv", "Der tragende Grund fehlt: Welche Prüfung hat ergeben, dass diese Zahlung auf keinen Fall ausgeführt werden darf?");
+    const full = rs.includes("aml");
+    S.f.code = true; S.score += full ? 150 : 100; narrate("ZV-Cockpit: Compliance-Stopp für PHANTOME eingetragen – Grund: bestätigter Sanktionstreffer" + (full ? ", ergänzend die Geldflüsse über Nova Trade." : "."));
+    fb("zv", full ? "Stopp eingetragen: tragender Grund und ergänzender Befund dokumentiert. +150 Punkte." : "Stopp eingetragen – der Sanktionstreffer trägt ihn allein. Die Verbindung zu Nova Trade hättet ihr ergänzend dokumentieren können. +100 Punkte.", "good"); updateHud(); render("zv");
   });
   if ($("zvDecBtn")) $("zvDecBtn").addEventListener("click", () => {
     const v = (b.querySelector("input[name=zvdec]:checked") || {}).value;
@@ -1088,7 +1102,7 @@ function finish(timeout){
   const remaining = Math.max(0, S.deadline - Date.now()), mins = Math.floor(remaining/60000);
   const bonus = timeout || S.f.wrongAccused ? 0 : Math.min(100, mins*2); S.score += bonus;
   const elapsed = Math.min(3000, Math.round((Date.now() - S.startAt)/1000)), t = storyTime();
-  const parts = solvedCount() + (S.f.insider ? 1 : 0);
+  const parts = solvedCount() + (S.f.stopped ? 1 : 0);
   window.phantomeResult = {topics:topicResults(), team:S.team, score:S.score, completed:parts, mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout, stopped:!!S.f.stopped, insider:!!S.f.insider};
   const weber = ["Um 16:34 kommt Weber zurück, außer Atem. „Raum 12.04 ist ein Lager. Ich stand vor verschlossener Tür, und mein Ausweis ging plötzlich nicht mehr.“",
     "Er sieht auf seinen Bildschirm und wird blass. „Ich habe in der Eile meinen PC nicht gesperrt. Genau darauf hat er gesetzt.“"];
@@ -1124,7 +1138,7 @@ function finish(timeout){
     $("final").classList.remove("hidden");
     $("finalEyebrow").textContent = eyebrow; $("finalTitle").textContent = head; $("finalText").textContent = text;
     $("finalScore").textContent = S.score + " Punkte"; $("finalTeam").textContent = S.team;
-    $("finalStats").textContent = `${parts}/4 Aufgaben · ${S.mistakes} ${S.mistakes === 1 ? "Fehlversuch" : "Fehlversuche"} · ${S.hints} ${S.hints === 1 ? "Hinweis" : "Hinweise"} · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min.`;
+    $("finalStats").textContent = `${parts}/4 Kernaufgaben · Täter ${S.f.insider ? "gemeldet" : "nicht gemeldet"} · ${S.mistakes} ${S.mistakes === 1 ? "Fehlversuch" : "Fehlversuche"} · ${S.hints} ${S.hints === 1 ? "Hinweis" : "Hinweise"} · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min.`;
     $("finalTopics").innerHTML = `<table class="ftable"><tr><th>Thema</th><th>Ergebnis</th><th>Fehlversuche</th></tr>${topicResults().map(t => `<tr><td>${t.name}</td><td>${t.ok ? "✓ gelöst" : "✗ offen"}</td><td>${t.err}</td></tr>`).join("")}</table>`;
   }});
 }
@@ -1147,7 +1161,7 @@ if (saved){
 }
 $("copyBtn").addEventListener("click", async () => {
   const r = window.phantomeResult; if (!r) return;
-  const txt = `Projekt Phantome – Ergebnis\nTeam: ${r.team}\nPunkte: ${r.score}\nAufgaben gelöst: ${r.completed}/4\nFehlversuche: ${r.mistakes}\nHinweise: ${r.hints}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.\nZeit abgelaufen: ${r.timeout ? "Ja" : "Nein"}\n\nNach Thema:\n${r.topics.map(t => `${t.ok ? "✓" : "✗"} ${t.name} (Fehlversuche: ${t.err})`).join("\n")}`;
+  const txt = `Projekt Phantome – Ergebnis\nTeam: ${r.team}\nPunkte: ${r.score}\nKernaufgaben gelöst: ${r.completed}/4 (Embargo, Geldwäsche, Betrug, Zahlungsstopp)\nInterner Täter: ${r.insider ? "gemeldet" : "nicht gemeldet"}\nFehlversuche: ${r.mistakes}\nHinweise: ${r.hints}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.\nZeit abgelaufen: ${r.timeout ? "Ja" : "Nein"}\n\nNach Thema:\n${r.topics.map(t => `${t.ok ? "✓" : "✗"} ${t.name} (Fehlversuche: ${t.err})`).join("\n")}`;
   try { await navigator.clipboard.writeText(txt); $("copyFeedback").textContent = "Ergebnis wurde in die Zwischenablage kopiert."; }
   catch(e){ $("copyFeedback").textContent = txt; }
   $("copyFeedback").classList.remove("hidden");
