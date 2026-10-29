@@ -182,6 +182,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .steps li.done{color:var(--green)}.steps li.done::marker{content:"✓  "}
 .steps li.cur{color:var(--text);font-weight:700}
 .steps .code{font-family:ui-monospace,Consolas,monospace;color:var(--amber);font-weight:700;margin-left:4px}
+.riddle{background:#fff6c9;border:1px dashed #c9a400;border-radius:8px;padding:10px 12px;margin:0 auto 12px;font-size:1rem;color:#3a2f00;text-align:left}
 .vorgang{display:flex;gap:16px;align-items:center;margin-top:12px;padding:12px 14px;border:2px dashed #0f6cbd;border-radius:10px;background:#e8f1fc}
 .vorgang b{font-family:ui-monospace,Consolas,monospace;font-size:1.9rem;letter-spacing:.12em;color:#0f3e6e}
 .tabs{display:flex;gap:4px;border-bottom:2px solid #cfd8e3;margin:10px 0 12px}
@@ -284,7 +285,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
 const $ = id => document.getElementById(id);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const pad = n => String(n).padStart(2, "0");
-const CODE = "762";
+const CODE = "362";
 const VORGANG = {embargo:"3108", aml:"2604", fraud:"7190"};
 const S = {team:"", startAt:0, deadline:0, timerId:null, ended:false, score:0, mistakes:0, hints:0, log:[], firedEvents:{},
   f:{embargo:false, aml:false, fraud:false, code:false},
@@ -355,11 +356,11 @@ function objective(){
   if (!S.v.notesSeen) return "Öffnet Webers Notizen auf dem Desktop und lest Notiz 1.";
   if (!S.v.zvSel) return "Holt euch im ZV-Cockpit die Empfängerdaten der Zahlung PHANTOME.";
   if (!S.f.embargo) return "Prüft den Empfänger selbst im EmbargoCheck: suchen, Treffer vergleichen, bewerten.";
-  if (!S.notes.n2) return "Öffnet Notiz 2 mit der Vorgangsnummer aus dem EmbargoCheck.";
+  if (!S.notes.n2) return "Öffnet Notiz 2 und löst Webers Rätsel – die Antwort steckt im EmbargoCheck.";
   if (!S.f.aml) return "Bearbeitet im AML-Monitor den Alert A-2291 – Kundenprofil, Umsätze und Gegenpartei.";
-  if (!S.notes.n3) return "Öffnet Notiz 3 mit der Vorgangsnummer aus dem AML-Monitor.";
+  if (!S.notes.n3) return "Öffnet Notiz 3 und löst Webers Rätsel – die Antwort steckt im AML-Monitor.";
   if (!S.f.fraud) return "Prüft im FraudDesk alle drei Zahlungen und entscheidet jede einzeln.";
-  if (!S.notes.n4) return "Öffnet Notiz 4 mit der Vorgangsnummer aus dem FraudDesk.";
+  if (!S.notes.n4) return "Öffnet Notiz 4 und löst Webers Rätsel – die Antwort steckt im FraudDesk.";
   return "Setzt im ZV-Cockpit den Compliance-Stopp für PHANTOME – mit Freigabecode, Vorgangsnummern und Begründung.";
 }
 function hintText(){
@@ -376,13 +377,15 @@ function hintText(){
     if (!S.v.embSearched) return "Gebt im EmbargoCheck den Namen des Empfängers ein (z. B. „Northbridge“) und startet die Suche.";
     return "Öffnet jeden Treffer und vergleicht Name, Adresse und Land mit den Daten aus dem ZV-Cockpit. Nur ein Eintrag passt in allen drei Punkten.";
   }
-  if (!S.notes.n2 || (S.f.aml && !S.notes.n3) || (S.f.fraud && !S.notes.n4)) return "Die Vorgangsnummer steht im blauen Kasten des zuletzt gelösten Programms. Wählt in den Notizen die gesperrte Notiz aus und gebt sie ein.";
+  if (!S.notes.n2) return "Notiz 2: Gesucht ist die Nummer aus der Listen-ID des echten Treffers – nur die vier Ziffern, ohne „SAN-“.";
+  if (S.f.aml && !S.notes.n3) return "Notiz 3: Addiert im AML-Monitor alle Überweisungen an Nova Trade Ltd. und gebt den Betrag ohne Cent und Punkt ein.";
+  if (S.f.fraud && !S.notes.n4) return "Notiz 4: Überweisung 1 weiterbearbeitet → 1, abgelehnt → 0. Genauso für 2 und 3 – drei Ziffern hintereinander.";
   if (!S.f.aml){
     if (!S.v.amlPattern) return "Schaut zuerst ins Kundenprofil: Bargeld ist dort nicht vorgesehen. Markiert dann jede Bareinzahlung und die Überweisung an Nova Trade vom selben Tag.";
     return "Die Adresse von Nova Trade kennt ihr schon – aus dem EmbargoCheck.";
   }
   if (!S.f.fraud) return "Startet bei jeder Zahlung die VoP-Abfrage und öffnet die Lieferantenakte. Abgelehnt wird nur die Zahlung, bei der VoP nicht passt UND die Kontoverbindung gerade geändert wurde UND der Kontext nicht stimmt.";
-  return "Der Freigabecode steht in Notiz 4. Tragt alle drei Vorgangsnummern ein und wählt als Gründe nur die konkreten Prüfergebnisse.";
+  return "Den Freigabecode bildet ihr aus Webers drei Fragen in Notiz 4: Fehlalarme im EmbargoCheck, Anzahl der Muster-Buchungen, Nummer der abgelehnten Überweisung.";
 }
 $("hintBtn").addEventListener("click", () => {
   if (S.ended || !S.startAt) return;
@@ -503,12 +506,12 @@ function notify(title, text, app){
 }
 const on = (root, sel, ev, fn) => root.querySelectorAll(sel).forEach(el => el.addEventListener(ev, fn));
 function vorgangBox(key, next){
-  return `<div class="vorgang"><div><div class="mini muted">Vorgangsnummer</div><b>${VORGANG[key]}</b></div><div class="mini">Prüfung abgeschlossen und dokumentiert.<br>Diese Nummer öffnet <b>${next}</b> in Webers Notizen.</div></div>`;
+  return `<div class="vorgang"><div><div class="mini muted">Vorgangsnummer</div><b>${VORGANG[key]}</b></div><div class="mini">Prüfung abgeschlossen und dokumentiert.<br>Notiert die Nummer – ihr braucht sie für die Dokumentation des Stopps. Weiter geht es mit <b>${next}</b>.</div></div>`;
 }
 function solved(app, key, nextNote, narr, msg){
   S.f[key] = true; S.score += 250; narrate(narr);
   render(app); fb(app, msg + " +250 Punkte.", "good"); updateHud(); render("zv"); render("notes");
-  notify("Vorgang " + VORGANG[key] + " angelegt", "Damit lässt sich " + nextNote + " öffnen.", "notes");
+  notify("Vorgang " + VORGANG[key] + " angelegt", "Weiter mit " + nextNote + " – das Rätsel dazu könnt ihr jetzt lösen.", "notes");
 }
 
 /* ---------- Notizen ---------- */
@@ -518,12 +521,13 @@ const NOTES = {
 Die Zahlung PHANTOME – 3,8 Mio. € – darf um 16:30 NICHT rausgehen. Ich bin sicher, dahinter steckt mehr.
 
 Ich habe meine Spur auf vier Notizen verteilt. Ab Notiz 2 sind sie gesperrt – man weiß ja nie, wer mitliest.
-So kommt ihr weiter: Jede Prüfung, die ihr richtig abschließt, bekommt im System eine Vorgangsnummer. Diese Nummer öffnet die nächste Notiz. Schreibt sie euch auf – ihr braucht sie am Ende noch einmal!
+So kommt ihr weiter: Jede Notiz ist mit einem Rätsel gesperrt. Die Antwort findet ihr nur, wenn ihr die Prüfung davor wirklich gelöst habt.
+Jede abgeschlossene Prüfung bekommt außerdem eine Vorgangsnummer. Schreibt sie euch auf – ihr braucht sie am Ende für die Dokumentation!
 
 SCHRITT 1 → ZV-Cockpit + EmbargoCheck
 Holt euch im ZV-Cockpit die Daten des Empfängers von PHANTOME.
 Dann prüft ihn selbst im EmbargoCheck. Vorsicht: Es gibt mehrere Firmen mit fast gleichem Namen.`},
-  n2:{title:"2 · Das Geld", lock:"embargo", hint:"Vorgangsnummer aus dem EmbargoCheck", text:`Gut gemacht. Der Empfänger steht wirklich auf der Sanktionsliste.
+  n2:{title:"2 · Das Geld", code:"4417", riddle:"Die vierstellige Nummer des Listeneintrags, der wirklich zum Empfänger von PHANTOME gehört.", text:`Gut gemacht. Der Empfänger steht wirklich auf der Sanktionsliste.
 
 Aber woher kommt das Geld für PHANTOME? Ich glaube, es wird über viele kleine Konten gesammelt.
 
@@ -531,18 +535,22 @@ SCHRITT 2 → AML-Monitor
 Öffnet Alert A-2291. Schaut euch zuerst das Kundenprofil an, dann die Umsätze.
 Markiert alle Buchungen, die zum Muster gehören.
 Und dann prüft, wohin das Geld fließt. Kommt euch die Adresse bekannt vor?`},
-  n3:{title:"3 · Die Falle", lock:"aml", hint:"Vorgangsnummer aus dem AML-Monitor", text:`Das Muster ist eindeutig: Der Student ist ein Strohmann. Und das Geld landet bei Leuten, die wir schon kennen.
+  n3:{title:"3 · Die Falle", code:"24050", riddle:"Wie viel Geld hat Jonas K. insgesamt an Nova Trade überwiesen? Betrag in Euro – ohne Cent und ohne Punkt.", text:`Das Muster ist eindeutig: Der Student ist ein Strohmann. Und das Geld landet bei Leuten, die wir schon kennen.
 
 Heute versuchen dieselben Leute noch etwas anderes: Im FraudDesk hängen drei zurückgehaltene Zahlungen. Eine davon ist eine Falle – die anderen beiden sind echte Rechnungen.
 
 SCHRITT 3 → FraudDesk
 Startet bei jeder Zahlung die VoP-Abfrage und schaut in die Lieferantenakte. Erst dann entscheiden: weiterbearbeiten oder ablehnen.
 Achtung: Nicht alles stoppen, was komisch aussieht!`},
-  n4:{title:"4 · Der Stopp", lock:"fraud", hint:"Vorgangsnummer aus dem FraudDesk", text:`Ihr habt alle drei Spuren. Jetzt muss PHANTOME gestoppt werden.
+  n4:{title:"4 · Der Stopp", code:"103", riddle:"Geht die drei Überweisungen im FraudDesk der Reihe nach durch. Wird sie weiterbearbeitet, schreibt ihre Nummer. Wird sie abgelehnt, schreibt eine 0.", text:`Ihr habt alle drei Spuren. Jetzt muss PHANTOME gestoppt werden.
 
 SCHRITT 4 → ZV-Cockpit
 PHANTOME anklicken und den Compliance-Stopp setzen.
-Mein Freigabecode:   7 6 2
+
+Meinen Freigabecode schreibe ich nirgends hin. Aber wer meine drei Fälle wirklich gelöst hat, kennt ihn:
+  1. Ziffer: Wie viele der Treffer im EmbargoCheck waren Fehlalarme?
+  2. Ziffer: Wie viele Buchungen bilden bei Jonas K. das Muster?
+  3. Ziffer: Welche Nummer hatte die Überweisung, die ihr im FraudDesk abgelehnt habt?
 
 Ohne Dokumentation nimmt das System den Stopp nicht an:
 • alle drei Vorgangsnummern eintragen
@@ -555,18 +563,18 @@ Wenn ihr rausfindet, wer: über das Hinweisgebersystem melden. Nicht selbst ermi
 RENDER.notes = b => {
   b.className = "wbody flush";
   const id = S.v.note, n = NOTES[id], open = S.notes[id];
-  b.innerHTML = `<div class="split"><div class="list">${Object.entries(NOTES).map(([k,x]) => `<button class="li ${k === id ? "sel" : ""}" data-k="${k}">${S.notes[k] ? "📄" : "🔒"} ${x.title}<small>${S.notes[k] ? "geöffnet" : "gesperrt · " + x.hint}</small></button>`).join("")}</div>
+  b.innerHTML = `<div class="split"><div class="list">${Object.entries(NOTES).map(([k,x]) => `<button class="li ${k === id ? "sel" : ""}" data-k="${k}">${S.notes[k] ? "📄" : "🔒"} ${x.title}<small>${S.notes[k] ? "geöffnet" : "gesperrt · Rätsel lösen"}</small></button>`).join("")}</div>
     <div class="pane notesbg">${open ? `<h3>${n.title}</h3><div class="notetext"></div>` :
-    `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="muted mini">Diese Notiz ist gesperrt.<br>Code: <b>${n.hint}</b></p>
-      <div class="row"><input id="noteCode" inputmode="numeric" maxlength="4" placeholder="4-stelliger Code" aria-label="Code" class="mono" style="letter-spacing:.25em"><button class="primary" id="noteBtn">Öffnen</button></div></div>`}</div></div>`;
+    `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini" style="margin-bottom:4px">Diese Notiz ist gesperrt. Webers Rätsel:</p><div class="riddle hand">${n.riddle}</div>
+      <div class="row"><input id="noteCode" inputmode="numeric" maxlength="6" placeholder="Code" aria-label="Code" class="mono" style="letter-spacing:.25em"><button class="primary" id="noteBtn">Öffnen</button></div></div>`}</div></div>`;
   if (open) b.querySelector(".notetext").textContent = n.text;
   on(b, ".li", "click", e => { S.v.note = e.currentTarget.dataset.k; render("notes"); });
-  if (id === "n1" && !S.v.notesSeen){ S.v.notesSeen = true; narrate("Notiz 1: Weber hat seine Spur auf vier Notizen verteilt. Jede gelöste Prüfung liefert den Code für die nächste. Start: EmbargoCheck."); updateHud(); }
+  if (id === "n1" && !S.v.notesSeen){ S.v.notesSeen = true; narrate("Notiz 1: Weber hat seine Spur auf vier Notizen verteilt. Jede ist mit einem Rätsel gesperrt, das man nur nach der vorherigen Prüfung lösen kann. Start: ZV-Cockpit und EmbargoCheck."); updateHud(); }
   if (!open){
     const go = () => {
       const c = $("noteCode").value.replace(/\D/g, "");
-      if (c.length !== 4){ fb("notes", "Der Code hat vier Ziffern."); return; }
-      if (c === VORGANG[n.lock]){ S.notes[id] = true; fb("notes", n.title + " ist geöffnet.", "good"); narrate(n.title + " geöffnet."); render("notes"); updateHud(); }
+      if (!c){ fb("notes", "Gebt einen Zahlencode ein."); return; }
+      if (c === n.code){ S.notes[id] = true; fb("notes", n.title + " ist geöffnet.", "good"); narrate(n.title + " geöffnet."); render("notes"); updateHud(); }
       else { wrong("notes", "Falscher Code. Die Notiz bleibt gesperrt."); $("noteCode").value = ""; }
     };
     $("noteBtn").addEventListener("click", go); $("noteCode").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
@@ -795,7 +803,7 @@ RENDER.aml = b => {
     `<p><b>Aufgabe 1:</b> Markiert alle Buchungen, die zusammen das auffällige Muster bilden. Unauffälliges bleibt frei.</p><div class="row"><button class="primary" id="amlBtn">Muster bestätigen</button></div>`}`;
   if (tab === "gegen") content = !S.v.amlPattern ? `<p class="muted">Bestätigt zuerst im Reiter „Umsätze“ das Muster.</p>` :
     `<div class="doc"><h3>Gegenpartei: Nova Trade Ltd.</h3><table>
-      <tr><th>Empfangene Beträge</th><td>3 Überweisungen, zusammen 24.050,00 €</td></tr>
+      <tr><th>Zahlungen von Jonas K.</th><td>siehe Reiter „Umsätze“</td></tr>
       <tr><th>Adresse</th><td>Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt</td></tr><tr><th>Land</th><td>Panama</td></tr>
       <tr><th>Gegründet</th><td>2025 · keine Website, keine Mitarbeitenden bekannt</td></tr></table></div>
     ${done ? `<p><span class="tag no">Fall an den Geldwäschebeauftragten gemeldet</span></p>` + vorgangBox("aml", "Notiz 3") : `
