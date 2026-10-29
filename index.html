@@ -6,50 +6,311 @@
 <meta name="theme-color" content="#08111f">
 <title>Projekt Phantome – Compliance Escape Room</title>
 <style>
-:root{--bg:#08111f;--panel:#101d30;--panel2:#14243a;--line:#2b405b;--text:#e8f0fa;--muted:#9eb0c7;--cyan:#52e0d0;--amber:#ffca70;--red:#ff6b78;--green:#7ee0a3}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#142a42 0,transparent 45%),var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-button,input{font:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:11px 15px;color:var(--text);background:#1b3049;font-weight:650}button:hover{border-color:var(--cyan);transform:translateY(-1px)}button:disabled{opacity:.4;cursor:not-allowed;transform:none}.primary{background:var(--cyan);color:#06151b;border-color:var(--cyan)}.danger{border-color:#743b4b;background:#381d2b}.subtle{background:transparent}.wrap{max-width:1120px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:24px}.brand{display:flex;align-items:center;gap:12px}.mark{width:42px;height:42px;border:1px solid var(--cyan);border-radius:12px;display:grid;place-items:center;color:var(--cyan);font-weight:900;letter-spacing:-2px}.eyebrow{color:var(--cyan);font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800}.muted{color:var(--muted)}.timer{border:1px solid var(--line);border-radius:12px;padding:9px 14px;text-align:right;min-width:115px}.timer strong{display:block;font-size:1.35rem;font-variant-numeric:tabular-nums}.timer small{color:var(--muted)}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.06;letter-spacing:-.04em;margin-bottom:16px}h2{font-size:1.5rem;letter-spacing:-.02em}h3{font-size:1.05rem}.hero{padding:clamp(22px,5vw,52px);border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,rgba(22,43,66,.95),rgba(11,23,39,.92));position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:260px;height:260px;border:1px solid #24465b;border-radius:50%;right:-100px;top:-110px;box-shadow:0 0 0 30px #10233a,0 0 0 60px #0e1d30}.hero>*{position:relative;z-index:1}.pill{display:inline-block;padding:5px 9px;border-radius:999px;border:1px solid var(--line);font-size:.78rem;color:var(--muted);margin:0 6px 8px 0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}.card p:last-child{margin-bottom:0}.num{color:var(--cyan);font-size:.78rem;letter-spacing:.12em;font-weight:800}.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(250px,.8fr);gap:18px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px}.sectionhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.progress{height:6px;background:#22334a;border-radius:99px;overflow:hidden;margin:14px 0 22px}.progress span{display:block;height:100%;background:var(--cyan);width:0;transition:width .25s}.field{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.field input{flex:1;min-width:160px;background:#07111e;border:1px solid var(--line);border-radius:10px;color:var(--text);padding:11px 13px}.feedback{margin-top:12px;padding:12px;border-radius:10px;background:#0b1828;border:1px solid var(--line)}.feedback.good{border-color:#327b5b;color:var(--green)}.feedback.bad{border-color:#8b4651;color:#ff9ca5}.doc{background:#f3f0e8;color:#17202a;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 8px 24px #0002}.doc .stamp{display:inline-block;border:2px solid #9e3d49;color:#9e3d49;padding:3px 8px;font-size:.75rem;font-weight:900;transform:rotate(-3deg)}.doc table{width:100%;border-collapse:collapse;font-size:.9rem}.doc td,.doc th{padding:8px;border-bottom:1px solid #d4d1c9;text-align:left}.doc th{font-size:.78rem;text-transform:uppercase}.choice{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:10px;margin:8px 0;background:#0b1727}.choice input{margin-top:5px;accent-color:var(--cyan)}.choice:has(input:checked){border-color:var(--cyan)}.notice{border-left:3px solid var(--amber);padding:10px 13px;background:#292719;color:#f7dfad;border-radius:0 8px 8px 0}.side-stat{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line)}.side-stat:last-child{border:0}.bigscore{font-size:2.6rem;font-weight:850;letter-spacing:-.05em;color:var(--cyan)}.hidden{display:none!important}.footer{padding:20px 0;color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);margin-top:28px}.rowbuttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.mini{font-size:.85rem}.emailhead{font-family:ui-monospace,monospace;font-size:.83rem;overflow-wrap:anywhere}.resultlist li{margin:8px 0}@media(max-width:780px){.grid,.layout{grid-template-columns:1fr}.top{align-items:flex-start}.wrap{padding:15px}.timer{min-width:98px}.hero:after{opacity:.4}}
+:root{--bg:#08111f;--panel:#101d30;--panel2:#14243a;--line:#2b405b;--text:#e8f0fa;--muted:#9eb0c7;--cyan:#52e0d0;--amber:#ffca70;--red:#ff6b78;--green:#7ee0a3;--paper:#f3efe4;--ink:#1d2533}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:radial-gradient(ellipse at 15% 0%,#142a42 0,transparent 45%),var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:10px 15px;color:var(--text);background:#1b3049;font-weight:650}
+button:hover{border-color:var(--cyan)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.primary{background:var(--cyan);color:#06151b;border-color:var(--cyan)}
+.subtle{background:transparent}
+input[type=text],input:not([type]),input[type=password]{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:#0b1626;color:var(--text)}
+input:focus{outline:2px solid var(--cyan);outline-offset:1px}
+.wrap{max-width:1180px;margin:auto;padding:20px 16px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:20px}
+.brand{display:flex;align-items:center;gap:12px}
+.mark{width:42px;height:42px;border:1px solid var(--cyan);border-radius:12px;display:grid;place-items:center;color:var(--cyan);font-weight:900;letter-spacing:-2px;flex:none}
+.eyebrow{color:var(--cyan);font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800}
+.muted{color:var(--muted)}.mini{font-size:.88rem}
+.timer{border:1px solid var(--line);border-radius:12px;padding:8px 14px;text-align:right;min-width:130px}
+.timer strong{display:block;font-size:1.35rem;font-variant-numeric:tabular-nums}
+.timer small{color:var(--muted);font-size:.72rem;letter-spacing:.08em}
+.timer.urgent strong{color:var(--red)}
+h1,h2,h3,p{margin-top:0}
+h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.06;letter-spacing:-.04em;margin-bottom:16px}
+h2{font-size:1.4rem;letter-spacing:-.02em;margin-bottom:6px}
+h3{font-size:1.05rem;margin-bottom:6px}
+.hidden{display:none!important}
+.hero{padding:clamp(22px,5vw,52px);border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,rgba(22,43,66,.95),rgba(11,23,39,.92));position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:260px;height:260px;border:1px solid #24465b;border-radius:50%;right:-100px;top:-110px;box-shadow:0 0 0 30px #10233a,0 0 0 60px #0e1d30}
+.hero>*{position:relative;z-index:1}
+.pill{display:inline-block;padding:4px 9px;border-radius:999px;border:1px solid var(--line);font-size:.78rem;color:var(--muted);margin:0 6px 8px 0}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+.card p:last-child{margin-bottom:0}
+.num{color:var(--cyan);font-size:.78rem;letter-spacing:.12em;font-weight:800}
+.field{display:flex;gap:10px;margin:18px 0 10px;flex-wrap:wrap}.field input{flex:1;min-width:180px}
+.notice{border-left:3px solid var(--amber);background:rgba(255,202,112,.08);padding:12px 14px;border-radius:0 10px 10px 0;margin:16px 0}
+
+/* Cutscene */
+.cutscene{max-width:760px;margin:6vh auto;padding:clamp(22px,5vw,44px);border:1px solid var(--line);border-radius:22px;background:#0a1525;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.cutscene .story{font-size:1.12rem;min-height:220px;cursor:pointer}
+.cutscene .story p{margin-bottom:14px}
+.cutscene .story p:last-child:after{content:"▌";color:var(--cyan);animation:blink 1s steps(1) infinite;margin-left:2px}
+@keyframes blink{50%{opacity:0}}
+
+/* Game */
+.layout{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(260px,.8fr);gap:18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+.scenebox{background:#060e1a;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:12px}
+#scene{display:block;width:100%;height:auto}
+.hot{cursor:pointer;transition:filter .2s}
+.hot:hover,.hot:focus{filter:drop-shadow(0 0 7px rgba(82,224,208,.95));outline:none}
+.blinkled{animation:blink 1s steps(1) infinite}
+.steam{animation:steam 3s ease-in-out infinite;opacity:0}
+.steam:nth-of-type(2){animation-delay:1.4s}
+@keyframes steam{0%{opacity:0;transform:translateY(4px)}40%{opacity:.6}100%{opacity:0;transform:translateY(-10px)}}
+.objects{display:flex;flex-wrap:wrap;gap:8px}
+.objects button{padding:7px 11px;font-size:.88rem;font-weight:600}
+.objects button.done{border-color:#2f6b55;color:var(--green)}
+.objective{font-size:1.02rem}
+.side-stat{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:7px 0}
+.side-stat:last-child{border-bottom:0}
+.inv{display:flex;flex-wrap:wrap;gap:8px}
+.item{border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:6px 10px;font-size:.85rem}
+.item.frag{border-color:var(--amber);color:var(--amber);font-weight:800;font-variant-numeric:tabular-nums}
+.log{max-height:260px;overflow:auto;font-size:.88rem;display:flex;flex-direction:column;gap:9px}
+.log div{border-left:2px solid var(--line);padding-left:10px}
+.log time{color:var(--cyan);font-weight:700;margin-right:6px;font-variant-numeric:tabular-nums}
+
+/* Modal */
+dialog{width:min(860px,calc(100vw - 24px));max-height:calc(100vh - 32px);border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);padding:0}
+dialog::backdrop{background:rgba(3,8,15,.78)}
+.mhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel);z-index:2}
+.mbody{padding:18px 20px}
+.mactions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.close{padding:6px 11px}
+.doc{background:var(--paper);color:var(--ink);border-radius:8px;padding:16px 18px;margin:12px 0;position:relative;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.doc h3{color:#0e1726}
+.doc table{width:100%;border-collapse:collapse;font-size:.92rem}
+.doc th,.doc td{text-align:left;padding:7px 8px;border-bottom:1px solid #d6cfbd;vertical-align:top}
+.doc th{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:#5a6272}
+.doc small{color:#5a6272}
+.stamp{position:absolute;right:14px;top:12px;border:2px solid #b5303f;color:#b5303f;font-weight:900;font-size:.7rem;letter-spacing:.1em;padding:2px 7px;border-radius:4px;transform:rotate(4deg)}
+.handwriting{font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive;color:#9cc0ff}
+.doc .handwriting{color:#1c3f8a}
+.postit{background:#ffe37a;color:#3a2f00;padding:14px 16px;border-radius:3px;display:inline-block;transform:rotate(-2deg);box-shadow:0 6px 16px rgba(0,0,0,.3);margin:8px 8px 8px 0}
+.postit.handwriting{color:#3a2f00}
+.docs2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.feedback{margin-top:14px;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel2)}
+.feedback.good{border-color:#2f6b55;background:rgba(126,224,163,.1)}
+.feedback.bad{border-color:#743b4b;background:rgba(255,107,120,.1)}
+.choice{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;cursor:pointer;background:var(--panel2)}
+.choice input{margin-top:5px;accent-color:var(--cyan)}
+.txrow{cursor:pointer}
+.txrow.sel td{background:#ffe7a8}
+.txrow input{accent-color:#b5303f}
+.frag-reveal{display:flex;align-items:center;gap:14px;margin-top:14px;padding:14px;border:1px dashed var(--amber);border-radius:12px;background:rgba(255,202,112,.07)}
+.frag-reveal b{font-size:2.2rem;color:var(--amber);font-variant-numeric:tabular-nums;line-height:1}
+.voicemail{background:#0b1626;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0}
+.voicemail .vtext{font-style:italic;margin-top:8px}
+.voicemail .vtext p{margin:6px 0 0}
+.laptop{background:#0b1626;border:6px solid #33465f;border-radius:12px;padding:16px}
+.apps{display:flex;gap:12px;flex-wrap:wrap}
+.app{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:200px;text-align:left}
+.mail{border:1px solid #d6cfbd;border-radius:8px;margin:8px 0;background:#fffdf7}
+.mail summary{padding:9px 12px;cursor:pointer;font-size:.92rem;word-break:break-word}
+.mail .mb{padding:4px 14px 12px;border-top:1px solid #e6dfcc;font-size:.94rem}
+.keypad{display:grid;grid-template-columns:repeat(3,64px);gap:8px;margin:12px 0}
+.keypad button{height:52px;font-size:1.2rem}
+.codedisplay{font-family:ui-monospace,Consolas,monospace;font-size:2rem;letter-spacing:.4em;background:#050b14;border:1px solid #743b4b;color:var(--red);border-radius:10px;padding:8px 16px;display:inline-block;min-width:180px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);width:max-content;max-width:min(620px,calc(100vw - 32px));background:#0f2034;border:1px solid var(--cyan);border-radius:12px;padding:12px 16px;z-index:50;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.bigscore{font-size:clamp(2.4rem,7vw,4.4rem);font-weight:900;letter-spacing:-.05em;color:var(--cyan);margin:6px 0}
+.rowbuttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.footer{text-align:center;color:var(--muted);font-size:.78rem;padding:28px 0 8px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.docs2{grid-template-columns:1fr}}
+@media(max-width:520px){.top{flex-wrap:wrap}.timer{min-width:0}.doc{padding:12px}.doc th,.doc td{padding:6px 4px;font-size:.84rem}.mbody,.mhead{padding:14px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header class="top">
-  <div class="brand"><div class="mark">P.</div><div><div class="eyebrow">Financial Crime Lab</div><strong>PROJEKT PHANTOME</strong></div></div>
-  <div class="timer"><small>VERBLEIBENDE ZEIT</small><strong id="timer">50:00</strong></div>
+  <div class="brand"><div class="mark">PP</div><div><div class="eyebrow">Financial Crime Unit · 4. OG</div><strong>PROJEKT PHANTOME</strong></div></div>
+  <div class="timer" id="timerBox"><small>ZAHLUNG IN</small><strong id="timer">50:00</strong><small id="clock">Uhrzeit 17:00</small></div>
 </header>
-
 <main>
+
 <section id="start">
   <div class="hero">
-    <span class="pill">SIMULATION · TRAINING</span><span class="pill">3 PRÜFMODULE</span><span class="pill">50 MINUTEN</span>
-    <h1>Die unvollständige Akte.</h1>
-    <p class="muted" style="max-width:650px;font-size:1.08rem">17:00 Uhr. Senior-Compliance-Analyst Herr Weber ist nicht erreichbar. Auf seinem Desktop liegt eine unvollständige Akte: Eine Auslandsüberweisung über 3,8 Millionen Euro soll in Kürze freigegeben werden. Drei Prüfungen fehlen.</p>
-    <div class="notice"><strong>Auftrag:</strong> Prüft die Hinweise, dokumentiert eure Einschätzung und stoppt die simulierte Transaktion, wenn die Risiken ausreichend erkannt wurden.</div>
-    <div class="field" style="max-width:440px"><input id="teamName" maxlength="40" placeholder="Teamname eingeben" aria-label="Teamname"><button class="primary" id="startBtn">Fallakte öffnen →</button></div>
-    <p class="mini muted">Alle Personen, Unternehmen, Adressen und Listeneinträge sind fiktiv. Dieses Lernspiel ersetzt keine internen Arbeitsanweisungen.</p>
+    <span class="pill">ESCAPE ROOM · TRAINING</span><span class="pill">3 PHANTOME</span><span class="pill">50 MINUTEN</span>
+    <h1>Eine Zahlung.<br>Drei Phantome.<br>Eine verschlossene Tür.</h1>
+    <p class="muted" style="max-width:660px;font-size:1.08rem">Freitag, kurz vor fünf. Senior-Analyst Weber hat euch in sein Büro bestellt – „wegen Phantome“. Doch Weber ist verschwunden, und um 17:50 Uhr verlassen 3,8 Millionen Euro automatisch die Bank. Ihr seid seine letzte Sicherung.</p>
+    <div class="field" style="max-width:460px">
+      <input id="teamName" maxlength="40" placeholder="Teamname eingeben" aria-label="Teamname">
+      <button class="primary" id="startBtn">Büro betreten →</button>
+    </div>
+    <p class="mini muted">Alle Personen, Unternehmen, Adressen, Domains und Listeneinträge sind fiktiv. Dieses Lernspiel ersetzt keine internen Arbeitsanweisungen.</p>
   </div>
   <div class="grid">
-    <div class="card"><div class="num">MODUL 01</div><h3>Sanktionen & Embargos</h3><p class="muted">Eigentümerstruktur nachvollziehen und einen möglichen Listentreffer beurteilen.</p></div>
-    <div class="card"><div class="num">MODUL 02</div><h3>Geldwäscheprävention</h3><p class="muted">Auffällige Kontobewegungen von plausiblen Zahlungen unterscheiden.</p></div>
-    <div class="card"><div class="num">MODUL 03</div><h3>Fraud & Social Engineering</h3><p class="muted">Manipulationsmerkmale erkennen und das Vier-Augen-Prinzip schützen.</p></div>
+    <div class="card"><div class="num">SO WIRD GESPIELT</div><h3>Untersucht den Raum</h3><p class="muted">Klickt auf Gegenstände in Webers Büro. Manche sind verschlossen – den Schlüssel findet ihr woanders.</p></div>
+    <div class="card"><div class="num">EUER ZIEL</div><h3>Drei Fragmente, ein Code</h3><p class="muted">Jeder gelöste Fall liefert eine Ziffer. Zusammen öffnen sie das Not-Stopp-Terminal – und die Tür.</p></div>
+    <div class="card"><div class="num">PUNKTE</div><h3>Jede Minute zählt</h3><p class="muted">+250 pro Fall, −20 pro Fehlversuch, −50 pro Hinweis. Restzeit bringt einen Bonus.</p></div>
+  </div>
+</section>
+
+<section id="cutscene" class="hidden">
+  <div class="cutscene">
+    <div class="eyebrow" id="csEyebrow"></div>
+    <h2 id="csTitle" style="margin-bottom:18px"></h2>
+    <div class="story" id="csText" title="Klicken zum Überspringen"></div>
+    <div class="rowbuttons"><button class="primary" id="csBtn">Weiter →</button></div>
   </div>
 </section>
 
 <section id="game" class="hidden">
   <div class="layout">
     <div>
-      <div class="panel">
-        <div class="sectionhead"><div><div class="eyebrow" id="stationLabel">PRÜFMODUL 01 / 03</div><h2 id="stationTitle">Sanktionen & Embargos</h2></div><span class="pill" id="statusPill">IN BEARBEITUNG</span></div>
-        <div class="progress"><span id="progressBar"></span></div>
-        <div id="stationContent"></div>
-        <div id="feedback" class="feedback hidden" role="status" aria-live="polite"></div>
-        <div class="rowbuttons" id="actionButtons"></div>
+      <div class="scenebox">
+<svg id="scene" viewBox="0 0 1000 560" role="group" aria-label="Webers Büro">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b2350"/><stop offset=".62" stop-color="#b8546a"/><stop offset="1" stop-color="#ffb070"/></linearGradient>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#162a43"/><stop offset="1" stop-color="#0f1e31"/></linearGradient>
+    <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ff9a62" stop-opacity=".22"/><stop offset="1" stop-color="#ff9a62" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1000" height="430" fill="url(#wall)"/>
+  <ellipse cx="430" cy="250" rx="320" ry="190" fill="url(#glow)"/>
+  <rect y="430" width="1000" height="130" fill="#0b1625"/>
+  <line x1="0" y1="430" x2="1000" y2="430" stroke="#22374f" stroke-width="3"/>
+  <ellipse cx="490" cy="440" rx="240" ry="14" fill="#060d18"/>
+
+  <!-- Uhr -->
+  <g aria-hidden="true">
+    <circle cx="135" cy="88" r="34" fill="#e8f0fa" stroke="#3a5373" stroke-width="5"/>
+    <g stroke="#1d2533" stroke-width="2"><line x1="135" y1="58" x2="135" y2="64"/><line x1="165" y1="88" x2="159" y2="88"/><line x1="135" y1="118" x2="135" y2="112"/><line x1="105" y1="88" x2="111" y2="88"/></g>
+    <line id="hourHand" x1="135" y1="88" x2="135" y2="70" stroke="#1d2533" stroke-width="4" stroke-linecap="round" transform="rotate(150 135 88)"/>
+    <line id="minHand" x1="135" y1="88" x2="135" y2="62" stroke="#b5303f" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="135" cy="88" r="3" fill="#1d2533"/>
+  </g>
+
+  <!-- Fenster -->
+  <g class="hot" data-obj="window" tabindex="0" role="button" aria-label="Fenster"><title>Fenster</title>
+    <rect x="300" y="50" width="260" height="190" fill="url(#sky)"/>
+    <path d="M300 240 V190 h30 v-30 h25 v40 h20 v-60 h35 v60 h15 v-25 h30 v45 h25 v-70 h30 v70 h20 v-30 h30 V240 Z" fill="#0b1424"/>
+    <g fill="#ffca70" opacity=".75"><rect x="383" y="145" width="5" height="6"/><rect x="396" y="160" width="5" height="6"/><rect x="383" y="178" width="5" height="6"/><rect x="488" y="135" width="5" height="6"/><rect x="498" y="158" width="5" height="6"/><rect x="488" y="190" width="5" height="6"/><rect x="338" y="172" width="5" height="6"/><rect x="438" y="190" width="5" height="6"/><rect x="540" y="205" width="5" height="6"/></g>
+    <rect x="300" y="50" width="260" height="190" fill="none" stroke="#3a5373" stroke-width="8"/>
+    <line x1="430" y1="50" x2="430" y2="240" stroke="#3a5373" stroke-width="5"/>
+    <rect x="290" y="238" width="280" height="10" rx="2" fill="#2c4260"/>
+  </g>
+
+  <!-- Aktenschrank -->
+  <g class="hot" data-obj="cabinet" tabindex="0" role="button" aria-label="Aktenschrank"><title>Aktenschrank</title>
+    <rect x="60" y="150" width="150" height="280" rx="4" fill="#26384f" stroke="#344b68" stroke-width="3"/>
+    <g fill="#2d425c"><rect x="72" y="162" width="126" height="80" rx="3"/><rect x="72" y="252" width="126" height="80" rx="3"/><rect x="72" y="342" width="126" height="80" rx="3"/></g>
+    <g fill="#e8f0fa" opacity=".7"><rect x="118" y="172" width="34" height="12"/><rect x="118" y="262" width="34" height="12"/><rect x="118" y="352" width="34" height="12"/></g>
+    <g fill="#8ea3bd"><rect x="115" y="196" width="40" height="6" rx="3"/><rect x="115" y="286" width="40" height="6" rx="3"/><rect x="115" y="376" width="40" height="6" rx="3"/></g>
+    <g id="padlock"><path d="M128 214 v-7 a7 7 0 0 1 14 0 v7" stroke="#ffca70" stroke-width="3" fill="none"/><rect x="124" y="213" width="22" height="17" rx="3" fill="#ffca70"/><circle cx="135" cy="221" r="2.5" fill="#5a4300"/></g>
+  </g>
+
+  <!-- Pflanze -->
+  <g aria-hidden="true"><ellipse cx="248" cy="352" rx="14" ry="30" fill="#2f6b55" transform="rotate(-25 248 352)"/><ellipse cx="262" cy="345" rx="12" ry="34" fill="#37795f"/><ellipse cx="276" cy="356" rx="13" ry="28" fill="#2f6b55" transform="rotate(28 276 356)"/><rect x="242" y="380" width="40" height="50" rx="4" fill="#3d2f28"/></g>
+
+  <!-- Schreibtisch -->
+  <g aria-hidden="true">
+    <rect x="280" y="335" width="420" height="16" rx="3" fill="#5a4332"/>
+    <rect x="295" y="351" width="18" height="79" fill="#3f2f24"/>
+    <rect x="570" y="351" width="115" height="79" fill="#4a3829"/>
+    <line x1="576" y1="390" x2="679" y2="390" stroke="#3a2c20" stroke-width="2"/>
+    <rect x="615" y="367" width="24" height="5" rx="2" fill="#8a7460"/><rect x="615" y="405" width="24" height="5" rx="2" fill="#8a7460"/>
+  </g>
+
+  <!-- Telefon -->
+  <g class="hot" data-obj="phone" tabindex="0" role="button" aria-label="Telefon mit Anrufbeantworter"><title>Telefon</title>
+    <rect x="310" y="294" width="88" height="44" fill="transparent"/>
+    <rect x="315" y="310" width="78" height="25" rx="5" fill="#1e2d42" stroke="#31455f" stroke-width="2"/>
+    <rect x="320" y="299" width="62" height="13" rx="6" fill="#2a3d55"/>
+    <g fill="#5d7391"><circle cx="330" cy="322" r="2.2"/><circle cx="339" cy="322" r="2.2"/><circle cx="348" cy="322" r="2.2"/><circle cx="357" cy="322" r="2.2"/></g>
+    <circle id="phoneLed" class="blinkled" cx="381" cy="322" r="4.5" fill="#ff6b78"/>
+  </g>
+
+  <!-- Laptop -->
+  <g class="hot" data-obj="laptop" tabindex="0" role="button" aria-label="Webers Laptop"><title>Laptop</title>
+    <rect id="laptopScreen" x="420" y="245" width="120" height="82" rx="4" fill="#0a1220" stroke="#3a4f6a" stroke-width="4"/>
+    <g id="laptopLock"><path d="M474 283 v-6 a6 6 0 0 1 12 0 v6" stroke="#9eb0c7" stroke-width="2.5" fill="none"/><rect x="471" y="282" width="18" height="14" rx="2" fill="#9eb0c7"/></g>
+    <g id="laptopOpen" class="hidden" fill="#52e0d0" opacity=".8"><rect x="432" y="258" width="60" height="5" rx="2"/><rect x="432" y="270" width="90" height="4" rx="2"/><rect x="432" y="280" width="75" height="4" rx="2"/><rect x="432" y="290" width="84" height="4" rx="2"/><rect x="432" y="300" width="50" height="4" rx="2"/></g>
+    <path d="M405 327 h150 l10 8 h-170 z" fill="#8193ab"/>
+  </g>
+
+  <!-- Tasse -->
+  <g class="hot" data-obj="mug" tabindex="0" role="button" aria-label="Kaffeetasse"><title>Kaffeetasse</title>
+    <rect x="584" y="262" width="52" height="76" fill="transparent"/>
+    <path class="steam" d="M597 292 q-5 -8 0 -16 q5 -8 0 -16" stroke="#cfd8e3" stroke-width="2" fill="none"/>
+    <path class="steam" d="M609 292 q-5 -8 0 -16 q5 -8 0 -16" stroke="#cfd8e3" stroke-width="2" fill="none"/>
+    <rect x="590" y="302" width="28" height="33" rx="4" fill="#dfe5ee"/>
+    <path d="M618 309 q12 0 12 10 q0 10 -12 10" stroke="#dfe5ee" stroke-width="4" fill="none"/>
+    <rect x="596" y="312" width="16" height="10" rx="2" fill="#52e0d0" opacity=".6"/>
+  </g>
+
+  <!-- Pinnwand -->
+  <g class="hot" data-obj="pinboard" tabindex="0" role="button" aria-label="Pinnwand"><title>Pinnwand</title>
+    <rect x="590" y="60" width="180" height="150" rx="4" fill="#8b6b47" stroke="#5c4630" stroke-width="6"/>
+    <rect x="604" y="74" width="58" height="76" fill="#eef1f5" transform="rotate(-3 633 112)"/>
+    <g stroke="#9aa6b6" stroke-width="2"><line x1="610" y1="88" x2="652" y2="86"/><line x1="610" y1="98" x2="655" y2="96"/><line x1="611" y1="108" x2="650" y2="106"/><line x1="611" y1="118" x2="654" y2="116"/></g>
+    <rect x="676" y="72" width="76" height="52" fill="#dfe7f0" transform="rotate(2 714 98)"/>
+    <g stroke="#9aa6b6" stroke-width="2"><line x1="684" y1="86" x2="742" y2="88"/><line x1="684" y1="96" x2="736" y2="98"/><line x1="684" y1="106" x2="744" y2="108"/></g>
+    <rect x="700" y="140" width="50" height="50" fill="#ffe37a" transform="rotate(5 725 165)"/>
+    <g stroke="#7a6500" stroke-width="2"><line x1="707" y1="158" x2="742" y2="161"/><line x1="706" y1="170" x2="736" y2="173"/></g>
+    <g fill="#ff4757"><circle cx="633" cy="76" r="4"/><circle cx="714" cy="74" r="4"/><circle cx="725" cy="142" r="4"/></g>
+    <rect x="612" y="160" width="62" height="38" fill="#cfe6ff" transform="rotate(-4 643 179)"/>
+  </g>
+
+  <!-- Not-Stopp-Terminal -->
+  <g class="hot" data-obj="terminal" tabindex="0" role="button" aria-label="Not-Stopp-Terminal"><title>Not-Stopp-Terminal</title>
+    <rect x="786" y="205" width="80" height="136" fill="transparent"/>
+    <text x="826" y="218" font-size="11" font-weight="800" fill="#ff6b78" text-anchor="middle" letter-spacing="1.5">NOT-STOPP</text>
+    <rect id="termFrame" x="790" y="225" width="72" height="112" rx="6" fill="#1a2638" stroke="#ff6b78" stroke-width="2"/>
+    <rect x="799" y="234" width="54" height="24" rx="2" fill="#07101c"/>
+    <text id="termText" x="826" y="250" font-size="9" font-weight="700" fill="#ff6b78" text-anchor="middle" font-family="monospace">GESPERRT</text>
+    <g fill="#33465f"><rect x="801" y="266" width="12" height="9" rx="2"/><rect x="820" y="266" width="12" height="9" rx="2"/><rect x="839" y="266" width="12" height="9" rx="2"/><rect x="801" y="280" width="12" height="9" rx="2"/><rect x="820" y="280" width="12" height="9" rx="2"/><rect x="839" y="280" width="12" height="9" rx="2"/><rect x="801" y="294" width="12" height="9" rx="2"/><rect x="820" y="294" width="12" height="9" rx="2"/><rect x="839" y="294" width="12" height="9" rx="2"/></g>
+    <circle cx="826" cy="320" r="10" fill="#ff4757" stroke="#7a1c27" stroke-width="2"/>
+  </g>
+
+  <!-- Papierkorb -->
+  <g class="hot" data-obj="trash" tabindex="0" role="button" aria-label="Papierkorb"><title>Papierkorb</title>
+    <rect x="710" y="366" width="66" height="66" fill="transparent"/>
+    <circle cx="737" cy="380" r="9" fill="#e8e2cf"/><circle cx="751" cy="383" r="7" fill="#ffe37a"/>
+    <path d="M715 384 h56 l-6 46 h-44 z" fill="#2a3b52" stroke="#3d5372" stroke-width="2"/>
+  </g>
+
+  <!-- Tür -->
+  <g class="hot" data-obj="door" tabindex="0" role="button" aria-label="Bürotür"><title>Tür</title>
+    <rect x="903" y="86" width="54" height="16" rx="3" fill="#07101c"/>
+    <circle id="doorLed" cx="930" cy="94" r="4.5" fill="#ff6b78"/>
+    <rect x="880" y="110" width="100" height="320" fill="#1b2c44" stroke="#2f4664" stroke-width="4"/>
+    <rect x="894" y="128" width="72" height="120" rx="3" fill="none" stroke="#2a405d" stroke-width="3"/>
+    <rect x="894" y="268" width="72" height="140" rx="3" fill="none" stroke="#2a405d" stroke-width="3"/>
+    <rect x="889" y="262" width="16" height="6" rx="3" fill="#8ea3bd"/>
+  </g>
+</svg>
       </div>
-      <div class="panel"><h3>Arbeitsprinzip</h3><p class="muted mini">Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Prüft Identität, Kontext, wirtschaftlichen Zweck und die geltenden internen Verfahren. Bei Unsicherheit: nicht eigenmächtig freigeben, sondern eskalieren.</p></div>
+      <div class="panel">
+        <div class="eyebrow" style="margin-bottom:8px">Gegenstände im Raum</div>
+        <div class="objects" id="objectList"></div>
+      </div>
     </div>
     <aside>
-      <div class="panel"><div class="eyebrow">EINSATZSTATUS</div><h3 id="teamLabel">Team</h3><div class="side-stat"><span class="muted">Punkte</span><strong id="score">0</strong></div><div class="side-stat"><span class="muted">Stationen</span><strong id="stationCount">0 / 3</strong></div><div class="side-stat"><span class="muted">Fehlversuche</span><strong id="mistakes">0</strong></div><div class="side-stat"><span class="muted">Hinweise</span><strong id="hints">0</strong></div></div>
-      <div class="panel"><div class="eyebrow">FALLZIEL</div><h3>Transaktion sichern</h3><p class="muted mini">Findet die relevanten Warnsignale. Der finale Not-Stopp wird nach erfolgreichem Abschluss aller drei Prüfmodule freigeschaltet.</p><div id="moduleList" class="mini"></div></div>
+      <div class="panel">
+        <div class="eyebrow">Aktuelles Ziel</div>
+        <p class="objective" id="objective" style="margin:6px 0 0"></p>
+      </div>
+      <div class="panel">
+        <div class="eyebrow" style="margin-bottom:8px">Inventar</div>
+        <div class="inv" id="inventory"></div>
+      </div>
+      <div class="panel">
+        <div class="eyebrow" style="margin-bottom:8px">Notizbuch</div>
+        <div class="log" id="log" aria-live="polite"></div>
+      </div>
+      <div class="panel">
+        <div class="eyebrow">Team <span id="teamLabel" style="color:var(--text)"></span></div>
+        <div class="side-stat"><span class="muted">Punkte</span><strong id="score">0</strong></div>
+        <div class="side-stat"><span class="muted">Phantome gefunden</span><strong id="stationCount">0 / 3</strong></div>
+        <div class="side-stat"><span class="muted">Fehlversuche</span><strong id="mistakes">0</strong></div>
+        <div class="side-stat"><span class="muted">Hinweise</span><strong id="hints">0</strong></div>
+      </div>
       <button class="subtle" id="hintBtn" style="width:100%">Hinweis verwenden (−50 P.)</button>
     </aside>
   </div>
@@ -57,162 +318,467 @@ button,input{font:inherit}button{cursor:pointer;border:1px solid var(--line);bor
 
 <section id="final" class="hidden">
   <div class="hero">
-    <div class="eyebrow">MISSION AUSGEWERTET</div><h1 id="finalTitle">Fall abgeschlossen</h1>
-    <p class="muted" id="finalText"></p>
+    <div class="eyebrow" id="finalEyebrow">FALL ABGESCHLOSSEN</div>
+    <h1 id="finalTitle"></h1>
+    <p class="muted" id="finalText" style="max-width:680px"></p>
     <div class="bigscore" id="finalScore">0 Punkte</div>
-    <p class="muted">Team: <strong id="finalTeam"></strong></p>
+    <p class="muted">Team <strong id="finalTeam" style="color:var(--text)"></strong> · <span id="finalStats"></span></p>
     <div class="rowbuttons"><button class="primary" id="copyBtn">Ergebnis kopieren</button><button id="restartBtn">Neue Runde starten</button></div>
     <div id="copyFeedback" class="feedback hidden"></div>
   </div>
+  <h2 style="margin-top:28px">Nachbesprechung: die drei Phantome</h2>
   <div class="grid">
-    <div class="card"><div class="num">01 · SANKTIONEN</div><h3>Treffer prüfen und eskalieren</h3><p class="muted mini">Eigentums- und Kontrollverhältnisse, Identität und einschlägige Listung prüfen. Ein möglicher Treffer darf nicht allein anhand des Namens abschließend bewertet werden.</p></div>
-    <div class="card"><div class="num">02 · GELDWÄSCHE</div><h3>Gesamtbild bewerten</h3><p class="muted mini">Auffällige Transaktionen sind Indikatoren, keine automatische Verdachtsfeststellung. Kundenprofil, wirtschaftlicher Zweck und interne Eskalationswege sind relevant.</p></div>
-    <div class="card"><div class="num">03 · FRAUD</div><h3>Freigabeprozess schützen</h3><p class="muted mini">Abweichende Absenderadresse, künstlicher Zeitdruck und Auffälligkeiten im Dokument sind Warnsignale. Unabhängig über einen bekannten Kanal verifizieren und Vier-Augen-Prinzip einhalten.</p></div>
+    <div class="card"><div class="num">PHANTOM 1 · SANKTIONEN</div><h3>Northbridge S.A.</h3><p class="muted mini">Eigentums- und Kontrollverhältnisse bis zur natürlichen Person verfolgen. Ein möglicher Treffer wird anhand von Identitätsmerkmalen (z. B. Geburtsdatum) geprüft, nicht allein am Namen – und dann dokumentiert eskaliert.</p></div>
+    <div class="card"><div class="num">PHANTOM 2 · GELDWÄSCHE</div><h3>Nova Trade Ltd.</h3><p class="muted mini">Bareinzahlungen knapp unter Schwellen mit zeitnaher Weiterleitung passen nicht zum Profil eines Studenten. Das ist ein Indikator für eine vertiefte Prüfung, keine automatische Verdachtsfeststellung – Gesamtbild und interne Meldewege zählen.</p></div>
+    <div class="card"><div class="num">PHANTOM 3 · FRAUD</div><h3>Die falsche Vorstandsmail</h3><p class="muted mini">Abweichende Domain, Zeitdruck, Geheimhaltung, Umgehung des Vier-Augen-Prinzips und ein unstimmiges Dokument. Immer über einen unabhängig bekannten Kanal verifizieren – nie per Antwort auf die verdächtige Nachricht.</p></div>
   </div>
+  <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Identität, Kontext, wirtschaftlichen Zweck und interne Verfahren prüfen. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren – und den Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Keine echten Kundendaten verwenden · Version 1.0</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Keine echten Kundendaten verwenden · Version 2.0</footer>
 </div>
+
+<dialog id="modal" aria-labelledby="mTitle">
+  <div class="mhead"><div><div class="eyebrow" id="mEyebrow"></div><h2 id="mTitle"></h2></div><button class="close subtle" id="mClose" aria-label="Schließen">✕</button></div>
+  <div class="mbody"><div id="mBody"></div><div id="mFeedback" class="feedback hidden" role="status" aria-live="polite"></div><div class="mactions" id="mActions"></div></div>
+</dialog>
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
 <script>
 (() => {
 const $ = id => document.getElementById(id);
-const state = {team:"", started:false, station:0, completed:[false,false,false], score:0, mistakes:0, hints:0, startAt:0, deadline:0, timerId:null, elapsed:0, ended:false};
-const names = ["Sanktionen & Embargos","Geldwäsche-Erkennung","Betrugsprävention / Fraud"];
-const hintText = [
-"Verfolge die Eigentumsstruktur bis zur natürlichen Person. Vergleiche danach nicht nur den Namen, sondern auch Identitätsmerkmale und den Kontext des Listeneintrags.",
-"Prüfe die Kombination aus ungewöhnlichen Bareinzahlungen, schneller Weiterleitung und fehlender wirtschaftlicher Plausibilität. Reguläre Gehalts- und Mietzahlungen sind hier Distraktoren.",
-"Prüfe die tatsächliche Absenderdomain, die Sprache mit künstlichem Zeitdruck und die Dokumentenprüfung. Wähle alle drei Warnsignale aus."
-];
-const correctFraud = ["domain","pressure","mrz"];
-function updateStats(){
-  $("score").textContent=state.score;
-  $("stationCount").textContent=state.completed.filter(Boolean).length+" / 3";
-  $("mistakes").textContent=state.mistakes;
-  $("hints").textContent=state.hints;
-  $("teamLabel").textContent=state.team;
-  $("moduleList").innerHTML=names.map((n,i)=>`<div class="side-stat"><span>${i+1}. ${n}</span><strong style="color:${state.completed[i]?'var(--green)':'var(--muted)'}">${state.completed[i]?'✓':'—'}</strong></div>`).join("");
-}
-function showFeedback(text,kind=""){ $("feedback").className="feedback "+kind; $("feedback").textContent=text; }
-function clearFeedback(){ $("feedback").className="feedback hidden"; $("feedback").textContent=""; }
-function buttons(items){ $("actionButtons").innerHTML=""; items.forEach(({text,fn,primary=false})=>{const b=document.createElement("button");b.textContent=text;if(primary)b.className="primary";b.addEventListener("click",fn);$("actionButtons").appendChild(b);});}
-function start(){
- state.team=$("teamName").value.trim()||"Team Phantome"; state.started=true;state.startAt=Date.now();state.deadline=state.startAt+50*60*1000;
- $("start").classList.add("hidden");$("final").classList.add("hidden");$("game").classList.remove("hidden");
- state.timerId=setInterval(tick,1000); renderStation(); updateStats();
-}
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const CODE = "763";
+const S = {team:"", startAt:0, deadline:0, timerId:null, ended:false, score:0, mistakes:0, hints:0, log:[], entry:"",
+  f:{voicemail:false, key:false, opened:false, pinboard:false, trash:false, laptop:false, sanctions:false, aml:false, fraud:false, code:false},
+  frag:{A:null, B:null, C:null}};
+const OBJECTS = [
+  ["phone","Telefon"],["mug","Kaffeetasse"],["cabinet","Aktenschrank"],["pinboard","Pinnwand"],["trash","Papierkorb"],
+  ["laptop","Laptop"],["terminal","Not-Stopp-Terminal"],["door","Tür"],["window","Fenster"]];
+
+/* ---------- Zeit & Story-Uhr ---------- */
+const storyMin = () => S.startAt ? Math.min(50, Math.floor((Date.now() - S.startAt)/60000)) : 0;
+const storyTime = () => "17:" + String(storyMin()).padStart(2,"0");
 function tick(){
- const remaining=Math.max(0,state.deadline-Date.now());const sec=Math.ceil(remaining/1000);
- $("timer").textContent=String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0");
- if(remaining<=0){clearInterval(state.timerId);finish(true);}
+  const remaining = Math.max(0, S.deadline - Date.now()), sec = Math.ceil(remaining/1000);
+  $("timer").textContent = String(Math.floor(sec/60)).padStart(2,"0") + ":" + String(sec%60).padStart(2,"0");
+  $("clock").textContent = "Uhrzeit " + storyTime();
+  $("timerBox").classList.toggle("urgent", sec <= 300);
+  const m = storyMin();
+  $("minHand").setAttribute("transform", `rotate(${m*6} 135 88)`);
+  $("hourHand").setAttribute("transform", `rotate(${150 + m*0.5} 135 88)`);
+  if (remaining <= 0) finish(true);
 }
-function renderStation(){
- clearFeedback();const i=state.station;
- $("stationLabel").textContent=`PRÜFMODUL 0${i+1} / 03`;
- $("stationTitle").textContent=names[i];
- $("statusPill").textContent=state.completed[i]?"ABGESCHLOSSEN":"IN BEARBEITUNG";
- $("progressBar").style.width=(state.completed.filter(Boolean).length/3*100)+"%";
- if(i===0) renderSanctions(); else if(i===1) renderAML(); else renderFraud();
- updateStats();
+
+/* ---------- Typewriter & Cutscenes ---------- */
+let typing = false, skipType = false;
+async function typeLines(el, lines, speed = 18){
+  el.innerHTML = ""; typing = true; skipType = false;
+  for (const line of lines){
+    const p = document.createElement("p"); el.appendChild(p);
+    if (skipType){ p.textContent = line; continue; }
+    for (let i = 1; i <= line.length; i++){
+      if (skipType){ p.textContent = line; break; }
+      p.textContent = line.slice(0, i); await sleep(speed);
+    }
+    if (!skipType) await sleep(380);
+  }
+  typing = false;
 }
-function renderSanctions(){
- $("stationContent").innerHTML=`
- <p>Die AeroTrans GmbH beantragt die Freigabe eines Akkreditivs für Ersatzteillieferungen. In der Akte findet sich eine verschachtelte Eigentümerstruktur.</p>
- <div class="doc"><span class="stamp">FIKTIVE FALLAKTE</span><h3>Auszug: Eigentümerstruktur</h3><table><tr><th>Ebene</th><th>Gesellschaft / Person</th><th>Anteil</th></tr><tr><td>1</td><td>AeroTrans GmbH</td><td>100 % gehalten durch</td></tr><tr><td>2</td><td>Northbridge S.A. (Panama)</td><td>100 % gehalten durch</td></tr><tr><td>3</td><td>Viktor Marin</td><td>Natürliche Person</td></tr></table><p><strong>Fiktiver Listenhinweis:</strong> Viktor Marin · Eintrag SAN-8839 · Geburtsjahr 1974 · Status: möglicher Treffer, weitere Prüfung erforderlich.</p></div>
- <p><strong>Aufgabe:</strong> Wer ist die natürliche Person am Ende der angegebenen Eigentumskette und welcher Listeneintrag muss geprüft werden?</p>
- <div class="field"><input id="ubo" placeholder="Name der natürlichen Person" aria-label="Wirtschaftlich Berechtigter"><input id="sanCode" placeholder="Listen-ID" aria-label="Listen-ID"></div>
- <div class="notice mini">Achtung: Das ist ein didaktisch vereinfachter Fall. Eigentum, Kontrolle und ein möglicher Sanktionsbezug müssen nach den geltenden Verfahren geprüft werden.</div>`;
- buttons([{text:"Prüfung einreichen",primary:true,fn:checkSanctions}]);
+let csDone = null;
+function cutscene({eyebrow, title, lines, button = "Weiter →", onDone}){
+  ["start","game","final"].forEach(id => $(id).classList.add("hidden"));
+  $("cutscene").classList.remove("hidden");
+  $("csEyebrow").textContent = eyebrow; $("csTitle").textContent = title; $("csBtn").textContent = button;
+  csDone = onDone; window.scrollTo(0,0);
+  typeLines($("csText"), lines);
+}
+$("csText").addEventListener("click", () => { skipType = true; });
+$("csBtn").addEventListener("click", () => {
+  if (typing){ skipType = true; return; }
+  $("cutscene").classList.add("hidden"); const fn = csDone; csDone = null; fn && fn();
+});
+
+/* ---------- UI-Helfer ---------- */
+function narrate(text){ S.log.unshift({t: storyTime(), text}); renderLog(); }
+function renderLog(){
+  $("log").innerHTML = "";
+  S.log.forEach(e => { const d = document.createElement("div"), t = document.createElement("time");
+    t.textContent = e.t; d.appendChild(t); d.appendChild(document.createTextNode(e.text)); $("log").appendChild(d); });
+}
+let toastTimer;
+function toast(text){ $("toast").textContent = text; $("toast").classList.remove("hidden");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => $("toast").classList.add("hidden"), 8000); }
+function feedback(text, kind = ""){
+  if ($("modal").open){ $("mFeedback").className = "feedback " + kind; $("mFeedback").textContent = text; }
+  else toast(text);
+}
+function openModal({eyebrow, title, html, actions = []}){
+  $("mEyebrow").textContent = eyebrow; $("mTitle").textContent = title; $("mBody").innerHTML = html;
+  $("mFeedback").className = "feedback hidden"; $("mFeedback").textContent = "";
+  $("mActions").innerHTML = "";
+  actions.forEach(({text, fn, primary}) => { const b = document.createElement("button"); b.textContent = text;
+    if (primary) b.className = "primary"; b.addEventListener("click", fn); $("mActions").appendChild(b); });
+  if (!$("modal").open) $("modal").showModal();
+  $("modal").scrollTop = 0;
+}
+function closeModal(){ if ($("modal").open) $("modal").close(); }
+$("mClose").addEventListener("click", closeModal);
+$("modal").addEventListener("close", updateAll);
+
+function wrong(msg){ S.mistakes++; S.score = Math.max(0, S.score - 20); feedback(msg + " (−20 Punkte)", "bad"); updateStats(); }
+function fragReveal(letter, digit, text){
+  return `<div class="frag-reveal"><b>${digit}</b><div><div class="eyebrow">Codefragment ${letter}</div><span class="mini">${text}</span></div></div>`;
+}
+const solvedCount = () => [S.f.sanctions, S.f.aml, S.f.fraud].filter(Boolean).length;
+
+/* ---------- Ziel, Hinweise, Status ---------- */
+function objective(){
+  const f = S.f;
+  if (!f.voicemail) return "Das rote Licht am Telefon blinkt. Hört den Anrufbeantworter ab.";
+  if (!f.key) return "Findet den Schlüssel für den Aktenschrank.";
+  if (f.code) return "Der Code ist korrekt. Trefft am Terminal die richtige Entscheidung.";
+  const open = [];
+  if (!f.sanctions) open.push("die Akte im Aktenschrank prüfen");
+  if (!f.laptop) open.push("Webers Laptop entsperren");
+  else { if (!f.aml) open.push("die Kontoanalyse auf dem Laptop"); if (!f.fraud) open.push("den Posteingang auf dem Laptop"); }
+  if (open.length) return "Offen: " + open.join(" · ");
+  return "Alle drei Fragmente gefunden. Gebt den Code am Not-Stopp-Terminal ein – in der richtigen Reihenfolge.";
+}
+function hintText(){
+  const f = S.f;
+  if (!f.voicemail) return "Auf dem Schreibtisch blinkt das Telefon. Dort wartet eine Nachricht von Weber.";
+  if (!f.key) return "Weber sagt, der Schlüssel liegt da, wo sein Kaffee steht. Schaut euch die Tasse genauer an.";
+  if (f.code) return "Freigeben ist keine Option. Denkt an Dokumentation, Eskalation und Verifizierung über einen bekannten Kanal.";
+  if (!f.sanctions) return "Verfolgt die Kette AeroTrans → Calder → Northbridge bis zur natürlichen Person. Auf der Liste stehen ähnliche Namen – vergleicht das Geburtsdatum mit der Passkopie.";
+  if (!f.laptop) return "Das Laptop-Passwort kombiniert zwei Hinweise: einen Zettel im Papierkorb und den Dienstplan an der Pinnwand.";
+  if (!f.aml) return "Achtet auf das Muster: Bargeld rein, am selben Tag Überweisung an denselben Empfänger raus. Gehalt, Miete und Kleinbeträge sind Ablenkung.";
+  if (!f.fraud) return "Vergleicht die Absenderadresse mit der Telefonliste an der Pinnwand. Achtet auf Druck, Geheimhaltung und das Prüfergebnis des Anhangs.";
+  return "Die Reihenfolge steht auf dem gelben Zettel an der Pinnwand: WER → WIE → WOMIT. Wer steckt dahinter? Wie fließt das Geld? Womit wird getäuscht?";
+}
+$("hintBtn").addEventListener("click", () => {
+  if (S.ended || !S.startAt) return;
+  if (S.hints >= 6){ feedback("Alle sechs verfügbaren Hinweise wurden verwendet."); return; }
+  S.hints++; S.score = Math.max(0, S.score - 50);
+  const h = hintText(); feedback("HINWEIS: " + h + " (−50 Punkte)"); narrate("Hinweis: " + h); updateStats();
+});
+function updateStats(){
+  $("score").textContent = S.score; $("mistakes").textContent = S.mistakes; $("hints").textContent = S.hints;
+  $("stationCount").textContent = solvedCount() + " / 3"; $("teamLabel").textContent = S.team;
+}
+function updateAll(){
+  updateStats();
+  $("objective").textContent = objective();
+  const inv = [];
+  if (S.f.key && !S.f.opened) inv.push(`<span class="item">🔑 Kleiner Schlüssel</span>`);
+  if (S.f.trash) inv.push(`<span class="item">📝 „Nachname + Personalnummer“</span>`);
+  ["A","B","C"].forEach(k => inv.push(S.frag[k] !== null ? `<span class="item frag">${k} = ${S.frag[k]}</span>` : `<span class="item muted">${k} = ?</span>`));
+  $("inventory").innerHTML = inv.join("");
+  const done = {phone:S.f.voicemail, mug:S.f.key, cabinet:S.f.sanctions, pinboard:S.f.pinboard, trash:S.f.trash, laptop:S.f.aml && S.f.fraud, terminal:S.ended};
+  $("objectList").innerHTML = "";
+  OBJECTS.forEach(([id, name]) => { const b = document.createElement("button"); b.textContent = (done[id] ? "✓ " : "") + name;
+    if (done[id]) b.className = "done"; b.addEventListener("click", () => interact(id)); $("objectList").appendChild(b); });
+  $("padlock").classList.toggle("hidden", S.f.opened);
+  $("phoneLed").classList.toggle("blinkled", !S.f.voicemail);
+  $("phoneLed").setAttribute("fill", S.f.voicemail ? "#2f6b55" : "#ff6b78");
+  $("laptopLock").classList.toggle("hidden", S.f.laptop); $("laptopOpen").classList.toggle("hidden", !S.f.laptop);
+  $("laptopScreen").setAttribute("fill", S.f.laptop ? "#123447" : "#0a1220");
+  $("termText").textContent = S.ended ? "GESTOPPT" : `${solvedCount()}/3 · CODE`;
+}
+
+/* ---------- Objekte ---------- */
+document.querySelectorAll("#scene .hot").forEach(g => {
+  g.addEventListener("click", () => interact(g.dataset.obj));
+  g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); interact(g.dataset.obj); } });
+});
+function interact(id){
+  if (S.ended || !S.startAt) return;
+  ({phone, mug, cabinet, pinboard, trash, laptop:() => laptop(), terminal, door, window: windowView})[id]();
+}
+
+const VOICEMAILS = [
+  {from:"Unbekannte Nummer", time:"16:38", lines:["„Guten Tag Herr Weber, hier das Büro des Vorstands. Der Vorstand möchte Sie sofort sprechen – Raum 12.04, zwölfter Stock. Es ist dringend und vertraulich. Bitte kommen Sie gleich hoch.“"]},
+  {from:"Weber (Mobil)", time:"16:44", lines:["„Hier Weber. Ich bin auf dem Weg in den Zwölften – angeblich will mich der Vorstand sprechen. Merkwürdig, die Nummer kannte ich nicht.",
+    "Falls ich nicht rechtzeitig zurück bin: Phantome darf um zehn vor sechs auf keinen Fall raus. Ich habe den Code für den Not-Stopp aufgeteilt – drei Fälle, drei Ziffern.",
+    "Den Schlüssel für den Aktenschrank findet ihr da, wo mein Kaffee steht. Und traut keiner Mail, die es eilig hat.“"]}];
+function phone(){
+  openModal({eyebrow:"Anrufbeantworter", title: S.f.voicemail ? "2 Nachrichten" : "2 neue Nachrichten",
+    html: VOICEMAILS.map((m,i) => `<div class="voicemail"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><span><strong>Nachricht ${i+1}</strong> · ${m.time} Uhr · <span class="muted">${m.from}</span></span><button data-vm="${i}">▶ Abspielen</button></div><div class="vtext" id="vm${i}"></div></div>`).join("")});
+  document.querySelectorAll("[data-vm]").forEach(b => b.addEventListener("click", async () => {
+    const i = +b.dataset.vm;
+    document.querySelectorAll("[data-vm]").forEach(x => x.disabled = true); b.textContent = "♪ läuft …";
+    await typeLines($("vm"+i), VOICEMAILS[i].lines, 14);
+    document.querySelectorAll("[data-vm]").forEach(x => x.disabled = false); b.textContent = "↻ Nochmal";
+    if (i === 0 && !S.f.vm0){ S.f.vm0 = true; narrate("Nachricht von 16:38: Ein angebliches Vorstandsbüro bestellt Weber „dringend und vertraulich“ in Raum 12.04 – von einer unbekannten Nummer."); }
+    if (i === 1 && !S.f.voicemail){ S.f.voicemail = true; narrate("Weber hat den Not-Stopp-Code auf drei Fälle verteilt. Der Schrankschlüssel liegt „da, wo mein Kaffee steht“."); updateAll(); }
+  }));
+}
+
+function mug(){
+  if (!S.f.key){
+    S.f.key = true; narrate("Unter Webers Kaffeetasse klebt ein kleiner Schlüssel – er passt zum Vorhängeschloss am Aktenschrank.");
+    openModal({eyebrow:"Schreibtisch", title:"Kaffeetasse", html:`<p>Der Kaffee ist noch lauwarm. Aufdruck: <em>„Erst prüfen, dann zahlen.“</em></p><p>Als ihr die Tasse anhebt, klebt etwas am Boden: <strong>ein kleiner Messingschlüssel</strong>. 🔑</p>`});
+    updateAll();
+  } else openModal({eyebrow:"Schreibtisch", title:"Kaffeetasse", html:`<p>Nur noch ein Kaffeerand. Den Schlüssel habt ihr bereits.</p>`});
+}
+
+function cabinet(){
+  if (!S.f.key){ openModal({eyebrow:"Aktenschrank", title:"Verschlossen", html:`<p>Die oberste Schublade ist mit einem kleinen Vorhängeschloss gesichert. Auf dem Etikett steht in Webers Schrift: <span class="handwriting">„Phantome – nur für mich“</span>.</p><p class="muted">Ihr braucht einen Schlüssel.</p>`}); return; }
+  if (!S.f.opened){ S.f.opened = true; narrate("Der Schlüssel passt. In der Schublade: die Akte AeroTrans GmbH."); updateAll(); }
+  openModal({eyebrow:"Aktenschrank · Fall 1", title:"Akte AeroTrans GmbH",
+    html:`<p>In der Schublade liegt nur eine Akte. Auf dem Deckel hat Weber mit Rotstift notiert: <span class="handwriting">„Wem gehört das eigentlich wirklich?“</span></p>
+    <div class="doc"><span class="stamp">IN FREIGABE</span><h3>Zahlungsauftrag</h3>
+      <table><tr><th>Auftraggeber</th><td>AeroTrans GmbH, Hamburg</td></tr><tr><th>Empfänger</th><td>Northbridge S.A., Panama-Stadt</td></tr><tr><th>Betrag</th><td><strong>3.800.000,00 EUR</strong></td></tr><tr><th>Zweck</th><td>„Beratungsleistungen Projekt PHANTOME“</td></tr><tr><th>Ausführung</th><td>heute, 17:50 Uhr (automatisch)</td></tr></table></div>
+    <div class="docs2">
+      <div class="doc"><h3>Eigentümerstruktur</h3><table>
+        <tr><th>Gesellschaft</th><th>Gesellschafter</th></tr>
+        <tr><td>AeroTrans GmbH</td><td>Calder Holdings Ltd., Limassol – 100 %</td></tr>
+        <tr><td>Calder Holdings Ltd.</td><td>Northbridge S.A., Panama – 80 %<br>Streubesitz – 20 %</td></tr>
+        <tr><td>Northbridge S.A.<br><small>Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt</small></td><td>eine natürliche Person – 100 %<br><small>siehe Passkopie</small></td></tr></table></div>
+      <div class="doc"><h3>Passkopie (Auszug)</h3><table><tr><th>Name</th><td>MARIN</td></tr><tr><th>Vorname</th><td>VIKTOR</td></tr><tr><th>Geburtsdatum</th><td>14.03.1974</td></tr><tr><th>Funktion</th><td>Director, Northbridge S.A.</td></tr></table></div>
+    </div>
+    <div class="doc"><span class="stamp">FIKTIV</span><h3>Abgleich Sanktionsliste – mögliche Treffer</h3><table>
+      <tr><th>Listen-ID</th><th>Name</th><th>Geburtsdatum</th><th>Typ</th></tr>
+      <tr><td class="mono">SAN-2207</td><td>Viktor MARINOV</td><td>02.11.1981</td><td>Person</td></tr>
+      <tr><td class="mono">SAN-5150</td><td>Victor MARIN</td><td>14.03.1962</td><td>Person</td></tr>
+      <tr><td class="mono">SAN-8839</td><td>Viktor MARIN</td><td>14.03.1974</td><td>Person</td></tr>
+      <tr><td class="mono">SAN-9311</td><td>MARIN TRADING LTD</td><td>–</td><td>Gesellschaft</td></tr></table></div>
+    ${S.f.sanctions ? `<p class="handwriting">Hinten in der Akte klebt ein Zettel von Weber: „Phantom Nr. 1 = Northbridge. Erste Ziffer: ${S.frag.A}“</p>` + fragReveal("A", S.frag.A, "Phantom Nr. 1: Northbridge S.A.") : `
+    <p><strong>Aufgabe:</strong> Wer ist die natürliche Person am Ende der Eigentumskette – und welcher Listeneintrag passt wirklich zu ihr?</p>
+    <div class="field"><input id="ubo" placeholder="Name der natürlichen Person" aria-label="Wirtschaftlich Berechtigter"><input id="sanCode" placeholder="Listen-ID, z. B. SAN-0000" aria-label="Listen-ID"></div>`}`,
+    actions: S.f.sanctions ? [] : [{text:"Prüfung einreichen", primary:true, fn:checkSanctions}]});
 }
 function checkSanctions(){
- const u=$("ubo").value.trim().toLowerCase(), c=$("sanCode").value.trim().toUpperCase();
- if(u==="viktor marin" && c==="san-8839"){completeStation("Möglicher Treffer erkannt. Der korrekte nächste Schritt ist eine dokumentierte Prüfung und Eskalation – nicht die automatische Freigabe.");}
- else {wrong("Noch nicht korrekt. Verfolge die Struktur bis zur natürlichen Person und prüfe die Kennung des Listeneintrags.");}
+  const u = $("ubo").value.trim().toLowerCase().replace(/,/g," ").replace(/\s+/g," ");
+  const c = $("sanCode").value.toUpperCase().replace(/[^A-Z0-9]/g,"");
+  const nameOk = u === "viktor marin" || u === "marin viktor";
+  const codeOk = c === "SAN8839" || c === "8839";
+  if (nameOk && codeOk){
+    S.f.sanctions = true; S.frag.A = CODE[0]; S.score += 250;
+    narrate("Phantom Nr. 1: Hinter AeroTrans steht über Calder und Northbridge Viktor Marin – möglicher Treffer SAN-8839. Fragment A = " + CODE[0] + ".");
+    cabinet();
+    feedback("Möglicher Treffer korrekt identifiziert. In der Praxis: nicht freigeben, Prüfung dokumentieren und eskalieren. +250 Punkte.", "good");
+    updateAll();
+  } else if (nameOk) wrong("Die Person stimmt – aber ein ähnlicher Name reicht nicht. Vergleicht die Identitätsmerkmale mit der Passkopie.");
+  else wrong("Noch nicht korrekt. Verfolgt die Struktur Ebene für Ebene bis zur natürlichen Person.");
 }
-const tx=[
-["01.10.","Gehalt Muster GmbH","+ 1.850,00 €","Regelmäßiger Gehaltseingang"],
-["02.10.","Bareinzahlung Filiale","+ 9.800,00 €","Hohe Bareinzahlung; Herkunft zu prüfen"],
-["02.10.","Überweisung an Nova Trade Ltd.","− 9.600,00 €","Weiterleitung kurz nach Bareinzahlung"],
-["04.10.","Miete Hausverwaltung","− 620,00 €","Regelmäßige Mietzahlung"],
-["05.10.","Bareinzahlung Filiale","+ 9.950,00 €","Weitere hohe Bareinzahlung"],
-["05.10.","Überweisung an Nova Trade Ltd.","− 9.700,00 €","Erneute zeitnahe Weiterleitung"],
-["07.10.","Streamingdienst","− 12,99 €","Reguläre Kleinabbuchung"],
-["08.10.","Privatüberweisung: Geschenk","+ 75,00 €","Kleiner Zahlungseingang; Kontext unbekannt"],
-["09.10.","Bareinzahlung Filiale","+ 4.900,00 €","Zusätzliche Bareinzahlung; Zusammenhang prüfen"],
-["09.10.","Überweisung an Nova Trade Ltd.","− 4.750,00 €","Weiterleitung am selben Tag"],
-["12.10.","Stromversorger","− 84,00 €","Reguläre Versorgerzahlung"],
-["13.10.","Gehalt Muster GmbH","+ 1.850,00 €","Regelmäßiger Gehaltseingang"]
-];
-function renderAML(){
- $("stationContent").innerHTML=`<p>Das Konto eines 20-jährigen Studenten zeigt in zwei Wochen mehrere ungewöhnliche Bewegungen. Wähle die Buchungszeilen, die im Kontext eine vertiefte Prüfung auslösen sollten.</p>
- <div class="doc"><span class="stamp">FIKTIVER KONTOAUSZUG</span><h3>Kontobewegungen · 01.–13. Oktober</h3><table><thead><tr><th>Datum</th><th>Buchungstext</th><th>Betrag</th></tr></thead><tbody>${tx.map((t,i)=>`<tr><td>${t[0]}</td><td>${t[1]}<br><small>${t[3]}</small></td><td>${t[2]}</td></tr>`).join("")}</tbody></table></div>
- <p><strong>Wähle alle relevanten Buchungen.</strong> In diesem Lernfall sind die Zeilen 2, 3, 5, 6, 9 und 10 (gezählt von oben) die vorgesehenen Auffälligkeiten. Die Auswahl ist ein Trainingssignal, keine automatische Verdachtsfeststellung.</p>
- <div id="txChoices">${tx.map((t,i)=>`<label class="choice"><input type="checkbox" value="${i}" aria-label="Buchung ${i+1}"><span><strong>${i+1}. ${t[1]}</strong><br><span class="muted mini">${t[0]} · ${t[2]}</span></span></label>`).join("")}</div>`;
- buttons([{text:"Auswahl prüfen",primary:true,fn:checkAML}]);
+
+function pinboard(){
+  if (!S.f.pinboard){ S.f.pinboard = true; narrate("Pinnwand: Dienstplan mit Personalnummern, interne Telefonliste und ein gelber Zettel „WER → WIE → WOMIT“."); updateAll(); }
+  openModal({eyebrow:"Wand", title:"Pinnwand",
+    html:`<div class="docs2">
+      <div class="doc"><h3>Dienstplan KW 44 · FCU</h3><table><tr><th>Name</th><th>PNr.</th><th>Fr</th></tr>
+        <tr><td>Albers, K.</td><td class="mono">1188</td><td>Früh</td></tr><tr><td>Weber, M.</td><td class="mono">2604</td><td>Spät</td></tr><tr><td>Yilmaz, D.</td><td class="mono">3051</td><td>frei</td></tr></table></div>
+      <div class="doc"><h3>Interne Telefonliste</h3><table>
+        <tr><td>Vorstandsbüro</td><td class="mono">-1200</td></tr><tr><td colspan="2"><small class="mono">vorstand@hausbank.example</small></td></tr>
+        <tr><td>Compliance-Hotline</td><td class="mono">-4400</td></tr>
+        <tr><td>IT-Sicherheit</td><td class="mono">-4911</td></tr><tr><td colspan="2"><small class="mono">it-sicherheit@hausbank.example</small></td></tr></table>
+        <p class="mini" style="margin:8px 0 0">Alle internen Adressen enden auf <strong class="mono">@hausbank.example</strong>.</p></div></div>
+    <div class="postit handwriting" style="font-size:1.25rem">Not-Stopp:<br>WER → WIE → WOMIT</div>
+    <div class="postit" style="background:#cfe6ff;color:#14304f;transform:rotate(1.5deg)">Foto vom Betriebsausflug: Weber mit einer Kappe „Vier Augen sehen mehr“.</div>`});
+}
+
+function trash(){
+  if (!S.f.trash){ S.f.trash = true; narrate("Im Papierkorb: ein zerknüllter Zettel mit dem Aufbau von Webers Laptop-Passwort."); updateAll(); }
+  openModal({eyebrow:"Unter dem Schreibtisch", title:"Papierkorb",
+    html:`<p>Kaffeefilter, ein Werbeprospekt – und ein zerknüllter gelber Zettel. Ihr streicht ihn glatt:</p>
+    <div class="postit handwriting" style="font-size:1.15rem">Neues Laptop-PW:<br>Nachname + Personalnummer<br><small>(klein, ohne Leerzeichen)</small><br>NICHT aufschreiben!!</div>
+    <p class="muted mini">Typisch Weber.</p>`});
+}
+
+function laptop(view){
+  if (!S.f.laptop){
+    openModal({eyebrow:"Schreibtisch", title:"Webers Laptop",
+      html:`<div class="laptop"><p class="mono">Bildschirm gesperrt · Benutzer: m.weber</p><input id="pw" type="password" placeholder="Passwort" aria-label="Passwort" autocomplete="off"></div>`,
+      actions:[{text:"Entsperren", primary:true, fn:checkPw}]});
+    $("pw").addEventListener("keydown", e => { if (e.key === "Enter") checkPw(); });
+    return;
+  }
+  if (view === "aml") return amlView();
+  if (view === "mail") return mailView();
+  openModal({eyebrow:"Webers Laptop", title:"Desktop",
+    html:`<div class="laptop"><p class="muted mini" style="margin-bottom:12px">Zwei Fenster sind noch geöffnet:</p><div class="apps">
+      <button class="app" id="appAml"><span>📊 Kontoanalyse – Fall K.</span><small class="muted">${S.f.aml ? "✓ abgeschlossen" : "Weber hat hier zuletzt gearbeitet"}</small></button>
+      <button class="app" id="appMail"><span>✉️ Posteingang (3)</span><small class="muted">${S.f.fraud ? "✓ abgeschlossen" : "1 Nachricht als „dringend“ markiert"}</small></button></div></div>`});
+  $("appAml").addEventListener("click", () => laptop("aml"));
+  $("appMail").addEventListener("click", () => laptop("mail"));
+}
+function checkPw(){
+  const pw = $("pw").value.toLowerCase().replace(/\s+/g,"");
+  if (pw === "weber2604"){ S.f.laptop = true; narrate("Webers Laptop ist entsperrt. Geöffnet: eine Kontoanalyse und der Posteingang."); updateAll(); laptop(); }
+  else { wrong("Falsches Passwort. Der Bildschirm wackelt kurz."); $("pw").value = ""; }
+}
+
+const TX = [
+  ["01.10.","Gehalt Muster GmbH","+ 1.850,00 €"],
+  ["02.10.","Bareinzahlung Filiale Altona","+ 9.800,00 €"],
+  ["02.10.","Überweisung an Nova Trade Ltd.","− 9.600,00 €"],
+  ["04.10.","Miete Hausverwaltung","− 620,00 €"],
+  ["05.10.","Bareinzahlung Filiale Eimsbüttel","+ 9.950,00 €"],
+  ["05.10.","Überweisung an Nova Trade Ltd.","− 9.700,00 €"],
+  ["07.10.","Streamingdienst","− 12,99 €"],
+  ["08.10.","Privatüberweisung „Geburtstag“","+ 75,00 €"],
+  ["09.10.","Bareinzahlung Filiale Altona","+ 4.900,00 €"],
+  ["09.10.","Überweisung an Nova Trade Ltd.","− 4.750,00 €"],
+  ["12.10.","Stromversorger","− 84,00 €"],
+  ["13.10.","Gehalt Muster GmbH","+ 1.850,00 €"]];
+const TX_OK = [1,2,4,5,8,9];
+function amlView(){
+  openModal({eyebrow:"Webers Laptop · Fall 2", title:"Kontoanalyse – Fall K.",
+    html:`<p>Weber hat das Konto markiert, weil ihm ein Empfängername bekannt vorkam. Seine Notiz am Rand: <span class="handwriting">„Passt das zum Kunden?“</span></p>
+    <div class="doc"><span class="stamp">FIKTIV</span><h3>Kontoinhaber: Jonas K., 20, Student</h3><p class="mini" style="margin-bottom:8px">Kundenprofil: Minijob, erwartete Umsätze bis ca. 2.500 € / Monat · Kontoauszug 01.–13. Oktober</p>
+      <table><thead><tr><th></th><th>Datum</th><th>Buchungstext</th><th style="text-align:right">Betrag</th></tr></thead><tbody>
+      ${TX.map((t,i) => `<tr class="txrow"><td><input type="checkbox" value="${i}" aria-label="Buchung ${i+1} markieren" ${S.f.aml ? (TX_OK.includes(i) ? "checked disabled" : "disabled") : ""}></td><td>${t[0]}</td><td>${t[1]}</td><td style="text-align:right;white-space:nowrap">${t[2]}</td></tr>`).join("")}
+      </tbody></table></div>
+    ${S.f.aml ? `<div class="doc"><h3>Empfängerdaten Nova Trade Ltd.</h3><p style="margin:0">Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt</p><p class="handwriting" style="margin:6px 0 0">Dieselbe Adresse wie Northbridge?! → zweite Ziffer: ${S.frag.B}</p></div>` + fragReveal("B", S.frag.B, "Phantom Nr. 2: Nova Trade Ltd.") :
+    `<p><strong>Aufgabe:</strong> Markiert alle Buchungen, die zusammen das auffällige Muster bilden. Unauffälliges bleibt frei.</p>`}`,
+    actions:[...(S.f.aml ? [] : [{text:"Muster prüfen", primary:true, fn:checkAML}]), {text:"← Desktop", fn:() => laptop()}]});
+  document.querySelectorAll(".txrow input").forEach(cb => { const sync = () => cb.closest("tr").classList.toggle("sel", cb.checked); sync(); cb.addEventListener("change", sync); });
+  document.querySelectorAll(".txrow").forEach(r => r.addEventListener("click", e => { const cb = r.querySelector("input");
+    if (e.target !== cb && !cb.disabled){ cb.checked = !cb.checked; cb.dispatchEvent(new Event("change")); } }));
 }
 function checkAML(){
- const selected=[...document.querySelectorAll('#txChoices input:checked')].map(x=>Number(x.value));
- const correct=[1,2,4,5,8,9];
- if(selected.length===correct.length && correct.every(x=>selected.includes(x))){
-   completeStation("Muster erkannt: mehrere Bareinzahlungen und zeitnahe Weiterleitungen verdienen eine risikobasierte Prüfung. Ein Schwellenwert allein entscheidet nicht über eine Verdachtsmeldung.");
- } else wrong("Die Auswahl stimmt noch nicht. Beurteile die Transaktionen im Zusammenhang: wiederholte hohe Bareinzahlungen und anschließende Weiterleitungen sind hier die vorgesehenen Warnsignale.");
+  const sel = [...document.querySelectorAll(".txrow input:checked")].map(x => +x.value);
+  const falsePos = sel.some(i => !TX_OK.includes(i)), missing = TX_OK.some(i => !sel.includes(i));
+  if (!falsePos && !missing){
+    S.f.aml = true; S.frag.B = CODE[1]; S.score += 250;
+    narrate("Phantom Nr. 2: Drei Bareinzahlungen, jeweils am selben Tag an Nova Trade Ltd. weitergeleitet – an dieselbe Adresse wie Northbridge. Fragment B = " + CODE[1] + ".");
+    amlView();
+    feedback("Muster erkannt: Bareinzahlungen mit zeitnaher Weiterleitung passen nicht zum Profil. Das löst eine vertiefte Prüfung aus – keine automatische Verdachtsmeldung. +250 Punkte.", "good");
+    updateAll();
+  } else if (falsePos) wrong("Mindestens eine markierte Buchung ist für sich unauffällig. Was passt nicht zum Kundenprofil?");
+  else wrong("Das Muster ist noch unvollständig – es fehlen zusammengehörige Buchungen.");
 }
-function renderFraud(){
- $("stationContent").innerHTML=`
- <p>Eine E-Mail der vermeintlichen Vorstandsassistenz verlangt, die Zahlung über 3,8 Mio. Euro sofort freizugeben. Die reguläre Freigabekette solle „ausnahmsweise“ übersprungen werden.</p>
- <div class="doc"><div class="emailhead"><strong>Von:</strong> assistenz.vorstand@bank-vorstand-direct.com<br><strong>An:</strong> Zahlungsverkehr / Freigabe<br><strong>Betreff:</strong> DRINGEND – Auslandszahlung sofort ausführen</div><hr><p>Guten Tag,</p><p>die Zahlung muss innerhalb der nächsten Minuten ausgeführt werden. Absolute Vertraulichkeit ist erforderlich. Bitte umgehen Sie heute das Vier-Augen-Prinzip; ich bestätige die Anweisung im Namen des Vorstands.</p><p>Keine Rückfragen per Telefon. Bestätigen Sie nach Ausführung kurz per E-Mail.</p><p>Mit Nachdruck<br>Assistenz des Vorstands</p><hr><p><strong>Dokumentenhinweis:</strong> In der beigefügten simulierten Passkopie stimmt die MRZ-Prüfsumme nicht mit den angegebenen Zeichen überein.</p><span class="stamp">NICHT VERIFIZIERT</span></div>
- <p><strong>Aufgabe:</strong> Wähle genau die drei Warnsignale.</p>
- <label class="choice"><input type="checkbox" value="domain"><span><strong>Abweichende Absenderdomain</strong><br><span class="muted mini">Die Domain entspricht nicht der angenommenen Bankdomain.</span></span></label>
- <label class="choice"><input type="checkbox" value="pressure"><span><strong>Druckmittel und Geheimhaltungsforderung</strong><br><span class="muted mini">Zeitdruck, Stillschweigen und Umgehung des Vier-Augen-Prinzips.</span></span></label>
- <label class="choice"><input type="checkbox" value="mrz"><span><strong>Unstimmige MRZ-Prüfsumme</strong><br><span class="muted mini">Das Dokument weist laut Fallbeschreibung eine technische Unstimmigkeit auf.</span></span></label>
- <label class="choice"><input type="checkbox" value="logo"><span><strong>Das Firmenlogo ist blau</strong><br><span class="muted mini">Allein kein belastbarer Hinweis auf Betrug.</span></span></label>
- <label class="choice"><input type="checkbox" value="length"><span><strong>Die E-Mail ist kurz</strong><br><span class="muted mini">Die Länge allein ist kein belastbares Betrugsmerkmal.</span></span></label>`;
- buttons([{text:"Warnsignale prüfen",primary:true,fn:checkFraud}]);
+
+const FRAUD_OPTS = [
+  ["domain","Die Absenderdomain weicht von der offiziellen Bankdomain ab"],
+  ["logo","Die E-Mail enthält das Logo der Bank"],
+  ["pressure","Zeitdruck, Geheimhaltung und die Aufforderung, das Vier-Augen-Prinzip zu umgehen"],
+  ["time","Die E-Mail wurde nach 16 Uhr verschickt"],
+  ["mrz","Die beigefügte Passkopie besteht die automatische Dokumentenprüfung nicht"],
+  ["formal","Die E-Mail ist in förmlichem Ton geschrieben"]];
+const FRAUD_OK = ["domain","pressure","mrz"];
+function mailView(){
+  openModal({eyebrow:"Webers Laptop · Fall 3", title:"Posteingang",
+    html:`<div class="doc" style="padding:10px 12px">
+      <details class="mail"><summary><strong>16:12</strong> · IT-Sicherheit &lt;it-sicherheit@hausbank.example&gt; · Erinnerung: Phishing-Awareness-Woche</summary><div class="mb">Liebe Kolleginnen und Kollegen, achtet diese Woche besonders auf ungewöhnliche Zahlungsaufforderungen. Im Zweifel: Rückruf über die bekannte Durchwahl. Eure IT-Sicherheit</div></details>
+      <details class="mail" open><summary><strong>16:36</strong> · Assistenz des Vorstands &lt;assistenz.vorstand@hausbank-vorstand.example&gt; · <strong style="color:#b5303f">DRINGEND – Zahlung PHANTOME sofort freigeben</strong></summary><div class="mb">
+        <p>Sehr geehrter Herr Weber,</p><p>die Zahlung PHANTOME (3,8 Mio. EUR, Northbridge S.A.) muss heute ohne Verzögerung ausgeführt werden. Der Vorstand erwartet absolute Vertraulichkeit. Bitte umgehen Sie ausnahmsweise das Vier-Augen-Prinzip; ich bestätige die Anweisung im Namen des Vorstands.</p><p>Bitte keine Rückfragen per Telefon. Bestätigen Sie die Ausführung nur per Antwort auf diese E-Mail.</p><p>Mit Nachdruck<br>Assistenz des Vorstands</p>
+        <p class="mini" style="margin:0;border-top:1px dashed #d6cfbd;padding-top:8px">📎 Pass_Vorstandsmitglied.pdf · <span style="color:#b5303f;font-weight:700">Automatische Dokumentenprüfung: MRZ-Prüfziffer ungültig</span></p></div></details>
+      <details class="mail"><summary><strong>16:50</strong> · K. Albers &lt;k.albers@hausbank.example&gt; · Phantome-Akte?</summary><div class="mb">Hast du die Phantome-Akte noch bei dir im Schrank? Ich bin ab fünf weg, schönes Wochenende! – Katrin</div></details></div>
+    ${S.f.fraud ? `<p class="handwriting">16:36 die Mail, 16:38 der Anruf bei Weber. Jemand wollte ihn aus dem Büro haben.</p>` + fragReveal("C", S.frag.C, "Phantom Nr. 3: die falsche Vorstandsassistenz.") :
+    `<p><strong>Aufgabe:</strong> Weber hat notiert: <span class="handwriting">„3 echte Warnsignale – der Rest ist Rauschen.“</span> Wählt genau diese drei.</p>
+    <div id="fraudChoices">${FRAUD_OPTS.map(([v,t]) => `<label class="choice"><input type="checkbox" value="${v}"><span>${t}</span></label>`).join("")}</div>`}`,
+    actions:[...(S.f.fraud ? [] : [{text:"Warnsignale prüfen", primary:true, fn:checkFraud}]), {text:"← Desktop", fn:() => laptop()}]});
 }
 function checkFraud(){
- const selected=[...document.querySelectorAll('#stationContent input:checked')].map(x=>x.value);
- if(selected.length===3 && correctFraud.every(x=>selected.includes(x))){
-  completeStation("Drei Warnsignale erkannt. Sichere Reaktion: keine Freigabe, Verifizierung über einen unabhängig bekannten Kanal und Eskalation nach internem Verfahren.");
- }else wrong("Noch nicht korrekt. Wähle die drei konkreten Warnsignale und lasse dich nicht von bloßen Gestaltungselementen ablenken.");
+  const sel = [...document.querySelectorAll("#fraudChoices input:checked")].map(x => x.value);
+  if (sel.length === 3 && FRAUD_OK.every(x => sel.includes(x))){
+    S.f.fraud = true; S.frag.C = CODE[2]; S.score += 250;
+    narrate("Phantom Nr. 3: Die „Vorstandsmail“ kam von einer fremden Domain, mit Druck, Geheimhaltung und unstimmigem Pass – zwei Minuten vor dem Anruf, der Weber weggelockt hat. Fragment C = " + CODE[2] + ".");
+    mailView();
+    feedback("Drei Warnsignale erkannt. Sichere Reaktion: nicht freigeben, über die bekannte Durchwahl verifizieren, eskalieren. +250 Punkte.", "good");
+    updateAll();
+  } else if (sel.some(x => !FRAUD_OK.includes(x))) wrong("Mindestens ein gewählter Punkt ist kein belastbares Warnsignal.");
+  else wrong("Es fehlen noch Warnsignale – Weber spricht von genau drei.");
 }
-function wrong(msg){state.mistakes++;state.score=Math.max(0,state.score-20);showFeedback(msg+" (−20 Punkte)", "bad");updateStats();}
-function completeStation(msg){
- if(state.completed[state.station]){showFeedback("Diese Station ist bereits abgeschlossen.");return;}
- state.completed[state.station]=true;state.score+=250;showFeedback(msg+" +250 Punkte.", "good");updateStats();
- $("statusPill").textContent="ABGESCHLOSSEN";$("progressBar").style.width=(state.completed.filter(Boolean).length/3*100)+"%";
- if(state.completed.every(Boolean)){
-  buttons([{text:"Not-Stopp auslösen →",primary:true,fn:()=>finish(false)}]);
- }else{
-  buttons([{text:"Nächste Station →",primary:true,fn:()=>{state.station++;renderStation();}}]);
- }
+
+function terminal(){
+  if (S.f.code) return decisionView();
+  S.entry = "";
+  openModal({eyebrow:"Wand neben der Tür", title:"Not-Stopp-Terminal",
+    html:`<p>Ein rotes Display: <span class="mono">ZAHLUNG PHANTOME · AUSFÜHRUNG 17:50 · STOPP-CODE EINGEBEN (3 STELLEN)</span></p>
+    <div class="codedisplay" id="codeDisplay">_ _ _</div>
+    <div class="keypad" id="keypad">${[1,2,3,4,5,6,7,8,9].map(n => `<button data-k="${n}">${n}</button>`).join("")}<button data-k="del" aria-label="Löschen">⌫</button><button data-k="0">0</button><button data-k="ok" class="primary">OK</button></div>
+    <p class="muted mini">Gefundene Fragmente: ${["A","B","C"].map(k => `${k} = ${S.frag[k] ?? "?"}`).join(" · ")}</p>`});
+  $("keypad").addEventListener("click", e => { const k = e.target.dataset && e.target.dataset.k; if (!k) return;
+    if (k === "del") S.entry = S.entry.slice(0,-1);
+    else if (k === "ok") return checkCode();
+    else if (S.entry.length < 3) S.entry += k;
+    $("codeDisplay").textContent = (S.entry + "___").slice(0,3).split("").join(" ");
+  });
 }
-function useHint(){
- if(!state.started || state.ended)return;
- if(state.hints>=6){showFeedback("Alle sechs verfügbaren Hinweise wurden verwendet.");return;}
- state.hints++;state.score=Math.max(0,state.score-50);showFeedback("HINWEIS: "+hintText[state.station]+" (−50 Punkte)","");updateStats();
+function checkCode(){
+  if (S.entry.length < 3){ feedback("Der Code hat drei Stellen."); return; }
+  if (S.entry === CODE){ S.f.code = true; S.score += 100; narrate("Der Code " + CODE + " wird akzeptiert. Das Terminal verlangt eine letzte Bestätigung."); updateAll(); decisionView(); }
+  else { S.entry = ""; $("codeDisplay").textContent = "_ _ _"; wrong("FALSCHER CODE. Das Display blinkt rot. Stimmt die Reihenfolge?"); }
+}
+const DECISIONS = [
+  ["ok","Not-Stopp bestätigen, den Fall dokumentieren und an Compliance bzw. den Geldwäschebeauftragten eskalieren. Die angebliche Vorstandsanweisung über die bekannte Durchwahl -1200 verifizieren."],
+  ["release","Zahlung doch freigeben – die Anweisung kommt schließlich vom Vorstand. Die Prüfung kann am Montag nachgeholt werden.", "Eine ungeprüfte „Vorstandsanweisung“ ersetzt keine Prüfung. Genau darauf setzen die Täter."],
+  ["reply","Per Antwort auf die E-Mail bei der Vorstandsassistenz nachfragen, ob die Anweisung echt ist.", "Die Antwort landet direkt bei den Tätern. Verifiziert wird nur über einen unabhängig bekannten Kanal."],
+  ["warn","Die AeroTrans GmbH anrufen und vorwarnen, dass ihre Zahlung geprüft wird.", "Kunden dürfen nicht über laufende Prüfungen oder mögliche Meldungen informiert werden (Tipping-off-Verbot). Das könnte Ermittlungen gefährden."]];
+function decisionView(){
+  openModal({eyebrow:"Not-Stopp-Terminal", title:"Letzte Bestätigung",
+    html:`<p class="mono" style="color:var(--green)">CODE AKZEPTIERT.</p><p>Das Terminal fragt: <strong>Wie wird weiter verfahren?</strong></p>
+    ${DECISIONS.map(([v,t]) => `<label class="choice"><input type="radio" name="dec" value="${v}"><span>${t}</span></label>`).join("")}`,
+    actions:[{text:"Bestätigen", primary:true, fn:() => {
+      const v = (document.querySelector("input[name=dec]:checked") || {}).value;
+      if (!v){ feedback("Wählt eine Option."); return; }
+      if (v === "ok"){ S.score += 150; finish(false); }
+      else wrong(DECISIONS.find(d => d[0] === v)[2]);
+    }}]});
+}
+
+function door(){
+  openModal({eyebrow:"Ausgang", title:"Bürotür", html:`<p>Die Klinke gibt nicht nach. Über der Tür leuchtet ein rotes Licht. Auf dem kleinen Display: <span class="mono" style="color:var(--red)">SICHERHEITSSPERRE AKTIV · ENTRIEGELUNG NUR ÜBER NOT-STOPP</span></p><p class="muted">Wer hat die Sperre ausgelöst – und warum genau jetzt?</p>`});
+}
+function windowView(){
+  openModal({eyebrow:"Fenster", title:"Blick auf die Stadt", html:`<p>Die Sonne geht hinter der Skyline unter, in den Büros gehen die ersten Lichter an. Es ist ${storyTime()} Uhr.</p><p class="muted">Irgendwo auf der anderen Seite der Welt wartet ein Konto in Panama auf 3,8 Millionen Euro.</p>`});
+}
+
+/* ---------- Spielablauf ---------- */
+function start(){
+  S.team = $("teamName").value.trim() || "Team Phantome";
+  cutscene({eyebrow:"Prolog", title:"Freitag, 16:58 Uhr",
+    lines:["Financial Crime Unit, vierte Etage. Senior-Analyst Weber hat euch für fünf Uhr in sein Büro bestellt – „wegen Phantome“. Mehr stand nicht in seiner Nachricht.",
+      "Das Büro ist leer. Sein Kaffee ist noch warm. Auf seinem zweiten Bildschirm steht eine Zahlung über 3,8 Millionen Euro nach Panama. Ausführung: heute, 17:50 Uhr. Automatisch.",
+      "Hinter euch fällt die Tür ins Schloss. Ein rotes Licht. Eine Computerstimme: „Sicherheitssperre aktiv. Entriegelung nur über das Not-Stopp-Terminal.“",
+      "Auf dem Schreibtisch blinkt das Telefon.",
+      "Ihr habt 50 Minuten."],
+    button:"Spiel starten →", onDone: begin});
+}
+function begin(){
+  S.startAt = Date.now(); S.deadline = S.startAt + 50*60*1000;
+  $("game").classList.remove("hidden");
+  narrate("Ihr seid in Webers Büro eingeschlossen. Die Zahlung PHANTOME wird um 17:50 Uhr ausgeführt.");
+  S.timerId = setInterval(tick, 1000); tick(); updateAll();
 }
 function finish(timeout){
- if(state.ended)return;state.ended=true;clearInterval(state.timerId);
- const remaining=Math.max(0,state.deadline-Date.now());const mins=Math.floor(remaining/60000);
- const timeBonus=Math.min(250,mins*5);
- state.score+=timeBonus;
- $("game").classList.add("hidden");$("final").classList.remove("hidden");
- $("finalTitle").textContent=timeout?"Zeit abgelaufen":"Not-Stopp aktiviert";
- $("finalText").textContent=timeout?"Die verfügbare Zeit ist abgelaufen. Prüft in der Nachbesprechung, welche Warnsignale noch offen waren.":"Die simulierte Zahlung wurde gestoppt. Die Risiken wurden im Rahmen dieses Lernfalls erkannt. In der Praxis gelten stets die internen Eskalations- und Prüfprozesse.";
- $("finalScore").textContent=state.score+" Punkte";$("finalTeam").textContent=state.team;
- state.elapsed=Math.round((Date.now()-state.startAt)/1000);
- window.phantomeResult={team:state.team,score:state.score,completed:state.completed.filter(Boolean).length,mistakes:state.mistakes,hints:state.hints,timeSeconds:state.elapsed,timeout};
+  if (S.ended) return; S.ended = true; clearInterval(S.timerId); closeModal();
+  const remaining = Math.max(0, S.deadline - Date.now()), mins = Math.floor(remaining/60000);
+  const bonus = timeout ? 0 : Math.min(250, mins*5); S.score += bonus;
+  const elapsed = Math.round((Date.now() - S.startAt)/1000), t = storyTime();
+  window.phantomeResult = {team:S.team, score:S.score, completed:solvedCount(), mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout};
+  $("doorLed").setAttribute("fill", timeout ? "#ff6b78" : "#7ee0a3"); updateAll();
+  const lines = timeout ? [
+      "17:50 Uhr. Auf dem Terminal erscheint ein einziges Wort: AUSGEFÜHRT.",
+      "3,8 Millionen Euro sind auf dem Weg nach Panama-Stadt. Calle 50, Torre Ámbar, Büro 1207.",
+      "Um 18:05 Uhr öffnet der Sicherheitsdienst die Tür. Im Flur steht Weber, sein Ausweis baumelt nutzlos am Band. Er sagt nichts. Er muss nichts sagen.",
+      `Ihr habt ${solvedCount()} von 3 Phantomen gefunden. Zeit für die Nachbesprechung.`]
+    : [`${t} Uhr. Das Terminal piept dreimal. ZAHLUNG PHANTOME – GESTOPPT.`,
+      "Das rote Licht über der Tür springt auf Grün. Mit einem Klicken löst sich die Sperre.",
+      "Im Flur kommt euch Weber entgegen, außer Atem. „Im zwölften Stock war niemand. Kein Vorstand, kein Termin – und mein Ausweis war plötzlich gesperrt.“",
+      "Er sieht die Akte, den Laptop, das Terminal. „Northbridge. Nova Trade. Die falsche Vorstandsmail. Ihr habt alle drei Phantome gefunden.“",
+      "Wer die Sicherheitssperre ausgelöst hat, bleibt vorerst offen – ab Montag ermittelt die Interne Revision. Aber 3,8 Millionen Euro bleiben, wo sie hingehören."];
+  cutscene({eyebrow:"Epilog", title: timeout ? "Zu spät" : "Die Tür ist offen", lines, button:"Zur Auswertung →", onDone:() => {
+    $("final").classList.remove("hidden");
+    $("finalEyebrow").textContent = timeout ? "ZEIT ABGELAUFEN" : "MISSION ERFÜLLT";
+    $("finalTitle").textContent = timeout ? "Die Phantome sind entkommen." : "Zahlung gestoppt.";
+    $("finalText").textContent = timeout ? "Die Zeit ist abgelaufen. Geht in der Nachbesprechung durch, welche Warnsignale noch offen waren." : `Ihr habt den Raum um ${t} Uhr verlassen – ${mins} Minuten vor der Ausführung. Zeitbonus: +${bonus} Punkte. In der Praxis gelten stets die internen Eskalations- und Prüfprozesse.`;
+    $("finalScore").textContent = S.score + " Punkte"; $("finalTeam").textContent = S.team;
+    $("finalStats").textContent = `${solvedCount()}/3 Phantome · ${S.mistakes} Fehlversuche · ${S.hints} Hinweise · ${Math.floor(elapsed/60)}:${String(elapsed%60).padStart(2,"0")} Min.`;
+  }});
 }
-function restart(){clearInterval(state.timerId);Object.assign(state,{team:"",started:false,station:0,completed:[false,false,false],score:0,mistakes:0,hints:0,startAt:0,deadline:0,timerId:null,elapsed:0,ended:false});$("teamName").value="";$("timer").textContent="50:00";$("final").classList.add("hidden");$("game").classList.add("hidden");$("start").classList.remove("hidden");}
-$("startBtn").addEventListener("click",start);
-$("hintBtn").addEventListener("click",useHint);
-$("restartBtn").addEventListener("click",restart);
-$("copyBtn").addEventListener("click",async()=>{
- const r=window.phantomeResult;if(!r)return;
- const txt=`Projekt Phantome – Ergebnis\nTeam: ${r.team}\nPunkte: ${r.score}\nAbgeschlossene Stationen: ${r.completed}/3\nFehlversuche: ${r.mistakes}\nHinweise: ${r.hints}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.\nZeit abgelaufen: ${r.timeout?"Ja":"Nein"}`;
- try{await navigator.clipboard.writeText(txt);$("copyFeedback").textContent="Ergebnis wurde in die Zwischenablage kopiert.";}
- catch(e){$("copyFeedback").textContent=txt;}
- $("copyFeedback").classList.remove("hidden");
+$("startBtn").addEventListener("click", start);
+$("teamName").addEventListener("keydown", e => { if (e.key === "Enter") start(); });
+$("restartBtn").addEventListener("click", () => location.reload());
+$("copyBtn").addEventListener("click", async () => {
+  const r = window.phantomeResult; if (!r) return;
+  const txt = `Projekt Phantome – Ergebnis\nTeam: ${r.team}\nPunkte: ${r.score}\nPhantome gefunden: ${r.completed}/3\nFehlversuche: ${r.mistakes}\nHinweise: ${r.hints}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.\nZeit abgelaufen: ${r.timeout ? "Ja" : "Nein"}`;
+  try { await navigator.clipboard.writeText(txt); $("copyFeedback").textContent = "Ergebnis wurde in die Zwischenablage kopiert."; }
+  catch(e){ $("copyFeedback").textContent = txt; }
+  $("copyFeedback").classList.remove("hidden");
 });
 })();
 </script>
