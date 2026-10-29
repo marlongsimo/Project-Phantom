@@ -86,6 +86,8 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .suspect small{color:#5d6b80}
 .suspect:has(input:checked){border-color:#5b3f8c;background:#f1ebfb}
 .suspect.out{opacity:.4;text-decoration:line-through;cursor:not-allowed}
+.decide label:has(input:checked).clarify{border-color:#c98a00;background:#fff4d6}
+.ftable{width:100%;max-width:620px;border-collapse:collapse;margin:14px 0 4px;font-size:.92rem}.ftable th,.ftable td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}.ftable th{color:var(--muted);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
 .badge.new{background:#ffca70;color:#3a2f00}
 .badge{position:absolute;top:-5px;right:-12px;background:#e81123;color:#fff;border-radius:9px;font-size:.66rem;font-weight:700;padding:1px 5px;text-shadow:none}
 .taskbar{position:absolute;left:0;right:0;bottom:0;height:46px;background:rgba(12,20,32,.94);display:flex;align-items:center;gap:3px;padding:0 6px;color:#fff;z-index:900;overflow:hidden}
@@ -213,6 +215,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="hero">
     <span class="pill">ESCAPE ROOM · TRAINING</span><span class="pill">4 NOTIZEN · 4 AUFGABEN</span><span class="pill">50 MINUTEN</span>
     <h1>Weber ist weg.<br>Sein PC ist noch an.</h1>
+    <div id="resumeBox" class="notice hidden"></div>
     <p class="muted" style="max-width:680px;font-size:1.08rem">Freitag, 15:40 Uhr. Senior-Analyst Matthias Weber war an etwas Großem dran – dann ist er verschwunden. Um 16:30 Uhr startet der Buchungslauf, und mit ihm eine Zahlung über 3,8 Millionen Euro an eine Firma, die auf einer Sanktionsliste stehen könnte. Folgt Webers Notizen und stoppt die Zahlung rechtzeitig.</p>
     <div class="field" style="max-width:460px">
       <input id="teamName" maxlength="40" placeholder="Teamname eingeben" aria-label="Teamname">
@@ -223,7 +226,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="grid">
     <div class="card"><div class="num">SO WIRD GESPIELT</div><h3>Folgt Webers Notizen</h3><p class="muted">Notiz 1 ist offen und sagt euch, wo ihr anfangt. Die weiteren Notizen sind mit Zahlencodes gesperrt.</p></div>
     <div class="card"><div class="num">DER ROTE FADEN</div><h3>Prüfen → Code → nächste Notiz</h3><p class="muted">Jede Notiz ist mit einem Rätsel gesperrt, das nur lösen kann, wer die Prüfung davor geschafft hat. So geht es Notiz für Notiz weiter – bis zum Freigabecode für den Stopp.</p></div>
-    <div class="card"><div class="num">PUNKTE</div><h3>Jede Minute zählt</h3><p class="muted">+250 pro gelöster Prüfung, −20 pro Fehlversuch, −50 pro Hinweis. Restzeit bringt einen Bonus.</p></div>
+    <div class="card"><div class="num">PUNKTE</div><h3>Sorgfalt vor Tempo</h3><p class="muted">+250 pro gelöster Prüfung, −20 pro Fehlversuch, Hinweise −25 oder −50. Sorgfalt zählt mehr als Tempo: Restzeit bringt höchstens 100 Punkte.</p></div>
   </div>
 </section>
 
@@ -273,21 +276,22 @@ h3{font-size:1.05rem;margin-bottom:6px}
     <p class="muted" id="finalText" style="max-width:680px"></p>
     <div class="bigscore" id="finalScore">0 Punkte</div>
     <p class="muted">Team <strong id="finalTeam" style="color:var(--text)"></strong> · <span id="finalStats"></span></p>
+    <div id="finalTopics"></div>
     <div class="rowbuttons"><button class="primary" id="copyBtn">Ergebnis kopieren</button><button id="restartBtn">Neue Runde starten</button></div>
     <div id="copyFeedback" class="feedback hidden"></div>
   </div>
   <h2 style="margin-top:28px">Nachbesprechung: was hinter PHANTOME steckt</h2>
   <div class="grid">
-    <div class="card"><div class="num">EMBARGO · EMBARGOCHECK</div><h3>Den echten Treffer finden</h3><p class="muted mini">Ähnliche Namen gibt es viele. Ein Listentreffer wird erst bestätigt, wenn auch Adresse, Land oder andere Merkmale übereinstimmen. Ist der Treffer echt: nicht ausführen, dokumentieren, eskalieren.</p></div>
-    <div class="card"><div class="num">GELDWÄSCHE · AML-MONITOR</div><h3>Das Muster bei Fall K.</h3><p class="muted mini">Bareinzahlungen knapp unter 10.000 € und Weiterleitung am selben Tag passen nicht zu einem Studenten. Das ist ein Anlass für eine vertiefte Prüfung, keine automatische Verdachtsmeldung. Nicht jeder Alert ist Geldwäsche.</p></div>
-    <div class="card"><div class="num">BETRUG · FRAUDDESK</div><h3>Die umgeleitete Mira-Zahlung</h3><p class="muted mini">Verification of Payee ist ein Prüfbaustein, keine Entscheidung für sich. Abgelehnt wird erst, wenn mehrere Warnsignale zusammenkommen: VoP-Abweichung, neue Kontoverbindung, unpassender Zahlungskontext. Plausible Zahlungen werden nach den üblichen Kontrollen weiterbearbeitet.</p></div>
+    <div class="card"><div class="num">EMBARGO · EMBARGOCHECK</div><h3>Den echten Treffer finden</h3><p class="muted mini">Ähnliche Namen gibt es viele. Bestätigt ist ein Treffer erst, wenn Name, Adresse, Land und Registernummer zusammenpassen. Widerspricht ein Merkmal: Fehlalarm. Fehlen Merkmale: nicht eindeutig – weitere Angaben anfordern. Bei einem echten Treffer: nicht ausführen, dokumentieren, eskalieren.</p></div>
+    <div class="card"><div class="num">GELDWÄSCHE · AML-MONITOR</div><h3>Das Muster bei Fall K.</h3><p class="muted mini">Nicht ein Schwellenwert entscheidet, sondern das Gesamtbild: Bargeld, das nicht zum Kundenprofil passt, sofortige Weiterleitung, eine Gegenpartei ohne erkennbaren Geschäftszweck – und eine Erklärung („Geschenk der Oma“), die das Muster nicht erklärt. Ein Alert ist noch kein Verdacht: Er führt zur vertieften Prüfung, über eine Verdachtsmeldung entscheidet der Geldwäschebeauftragte.</p></div>
+    <div class="card"><div class="num">BETRUG · FRAUDDESK</div><h3>Drei Zahlungen, drei Antworten</h3><p class="muted mini">VoP ist ein Prüfbaustein, keine Entscheidung. Alles belegt → weiterbearbeiten. Namensabweichung ohne Erklärung, sonst plausibel → klären. Unbestätigte Kontoänderung plus weitere Warnsignale → nicht ausführen und eskalieren. Zusammenhängende Signale wie neue IBAN und VoP-Abweichung sind kein doppelter Beleg.</p></div>
     <div class="card"><div class="num">INTERNE DOLOSE HANDLUNG · HINWEISGEBERSYSTEM</div><h3>Der Helfer im Haus</h3><p class="muted mini">Ein Mitarbeiter mit Zugang zum Zahlungsverkehr hat Weber mit gefälschten Mails weggelockt und Kontrollen umgangen. Verdacht mit Belegen über das Hinweisgebersystem melden, Beweise sichern – und den Verdächtigen nicht selbst ansprechen.</p></div>
     <div class="card"><div class="num">INFORMATIONSSICHERHEIT · SOCIAL ENGINEERING</div><h3>Der entsperrte PC</h3><p class="muted mini">Zeitdruck und „Vertraulichkeit“ haben Weber aus dem Büro gelockt – ohne Bildschirmsperre. So konnte der Täter in seinem Namen mailen. Darum: Absender und Kopfzeilen prüfen, Termine über bekannte Kanäle bestätigen und beim Verlassen immer Windows + L.</p></div>
   </div>
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Keine echten Kundendaten verwenden · Version 3.1</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Keine echten Kundendaten verwenden · Version 3.2</footer>
 </div>
 
 <script>
@@ -305,7 +309,7 @@ const S = {team:"", startAt:0, deadline:0, timerId:null, ended:false, score:0, m
   f:{embargo:false, aml:false, fraud:false, code:false},
   notes:{n1:true, n2:false, n3:false, n4:false},
   v:{mail:0, chat:"albers", note:"n1", alert:null, amlSel:[], fraudDec:{}, zvSel:false, notesSeen:false},
-  unread:{mail:2, chat:1}};
+  unread:{mail:2, chat:1}, hintUsed:{}, err:{}};
 
 /* ---------- Zeit ---------- */
 const storyMin = () => S.startAt ? Math.min(50, Math.floor((Date.now() - S.startAt)/60000)) : 0;
@@ -318,6 +322,7 @@ function tick(){
   $("trayRun").textContent = (S.f.stopped ? "16:30 in " : "Lauf in ") + Math.ceil(sec/60) + " Min.";
   $("timerBox").classList.toggle("urgent", sec <= 300);
   EVENTS.forEach((e, i) => { if (!S.firedEvents[i] && storyMin() >= e.at){ S.firedEvents[i] = true; e.fn(); } });
+  if (sec % 5 === 0) saveGame();
   const el = $("zvCountdown"); if (el) el.textContent = pad(Math.floor(sec/60)) + ":" + pad(sec % 60);
   if (remaining <= 0) finish(true);
 }
@@ -377,37 +382,74 @@ function objective(){
   if (!S.notes.n4) return "Öffnet Notiz 4 und löst Webers Rätsel – die Antwort steckt im FraudDesk.";
   return "Setzt im ZV-Cockpit den Compliance-Stopp für PHANTOME – mit Webers Freigabecode und einer belegbaren Begründung.";
 }
-function hintText(){
-  if (S.f.stopped){
-    if (!S.v.hdrSeen) return "Öffnet in der Mail eine der „Vorstandsmails“ und klickt auf „Kopfzeilen anzeigen“. Von welchem Rechner kam sie?";
-    if (!S.v.pcSeen) return "Sucht im Intranet nach dem Rechnernamen aus den Kopfzeilen (PC-ZV-114).";
-    if (!S.v.sentSeen) return "Schaut in Webers Mail unter „Gesendet“. Passt die Uhrzeit zu Webers letzter Chatnachricht?";
-    return "Mehrere Spuren führen zum selben Rechner: die Kopfzeilen der Vorstandsmails, die Lieferantenakte von Mira im FraudDesk und die 1. Freigabe von PHANTOME im ZV-Cockpit. Wem gehört er?";
-  }
-  if (S.f.code) return "Freigeben ist keine Option. Denkt an Dokumentation, Eskalation und Prüfung über einen bekannten Kanal.";
-  if (!S.v.notesSeen) return "Klickt auf dem Desktop auf „Notizen“. Notiz 1 ist nicht gesperrt.";
-  if (!S.v.zvSel) return "Öffnet das ZV-Cockpit und klickt auf die Zeile PHANTOME. Dort stehen Name, Adresse und Land des Empfängers.";
-  if (!S.f.embargo){
-    if (!S.v.embSearched) return "Gebt im EmbargoCheck den Namen des Empfängers ein (z. B. „Northbridge“) und startet die Suche.";
-    return "Öffnet jeden Treffer und vergleicht Name, Adresse und Land mit den Daten aus dem ZV-Cockpit. Nur ein Eintrag passt in allen drei Punkten.";
-  }
-  if (!S.notes.n2) return "Notiz 2: Gesucht ist die Nummer aus der Listen-ID des echten Treffers – nur die vier Ziffern, ohne „SAN-“.";
-  if (S.f.aml && !S.notes.n3) return "Notiz 3: Addiert im AML-Monitor alle Überweisungen an Nova Trade Ltd. und gebt den Betrag ohne Cent und Punkt ein.";
-  if (S.f.fraud && !S.notes.n4) return "Notiz 4: Überweisung 1 weiterbearbeitet → 1, abgelehnt → 0. Genauso für 2 und 3 – drei Ziffern hintereinander.";
-  if (!S.f.aml){
-    if (!S.v.amlPattern) return "Schaut zuerst ins Kundenprofil: Bargeld ist dort nicht vorgesehen. Markiert dann jede Bareinzahlung und die Überweisung an Nova Trade vom selben Tag.";
-    return "Die Adresse von Nova Trade kennt ihr schon – aus dem EmbargoCheck.";
-  }
-  if (!S.f.fraud) return "Startet bei jeder Zahlung die VoP-Abfrage und öffnet die Lieferantenakte. Abgelehnt wird nur die Zahlung, bei der VoP nicht passt UND die Kontoverbindung gerade geändert wurde UND der Kontext nicht stimmt.";
-  return "Den Freigabecode bildet ihr aus Webers drei Fragen in Notiz 4: Fehlalarme im EmbargoCheck, Anzahl der Muster-Buchungen, Nummer der abgelehnten Überweisung.";
+// Jeder Schritt hat zwei Hinweisstufen: erst ein Denkanstoß, dann ein konkreter Hinweis.
+function hintFor(){
+  if (S.f.stopped) return {key:"insider", steps:[
+    "Die gefälschte Vorstandsmail verrät mehr, als in ihrem Text steht. Woher kam sie technisch?",
+    "Öffnet die Vorstandsmail, klickt auf „Kopfzeilen anzeigen“ und sucht den Rechnernamen im Intranet. Auch die Lieferantenakte von Mira (FraudDesk) und die 1. Freigabe von PHANTOME (ZV-Cockpit) führen zum selben Rechner."]};
+  if (S.f.code) return {key:"zvdec", steps:[
+    "Freigeben ist keine Option – und den Kunden vorwarnen auch nicht.",
+    "Richtig ist: eskalieren und die angebliche Vorstandsanweisung über einen unabhängig bekannten Kanal (-1200) prüfen."]};
+  if (!S.v.notesSeen) return {key:"start", steps:[
+    "Weber hat einen Zettel an den Monitor geklebt. Wo steht laut ihm alles?",
+    "Klickt auf dem Desktop auf „Notizen“. Notiz 1 ist nicht gesperrt."]};
+  if (!S.v.zvSel) return {key:"zv", steps:[
+    "Bevor ihr den Empfänger prüfen könnt, braucht ihr seine genauen Daten.",
+    "Öffnet das ZV-Cockpit und klickt auf die Zeile PHANTOME. Dort stehen Name, Adresse, Land und Registernummer."]};
+  if (!S.f.embargo) return {key:"embargo", steps:[
+    "Ein ähnlicher Name ist noch kein Treffer. Vergleicht jeden Eintrag Merkmal für Merkmal mit dem Empfänger.",
+    "Sucht nach „Northbridge“ und öffnet alle fünf Einträge. Alles stimmt überein → echter Treffer. Ein Merkmal widerspricht → Fehlalarm. Merkmale fehlen → nicht eindeutig. Danach: Zahlung nicht ausführen und eskalieren."]};
+  if (!S.notes.n2) return {key:"n2", steps:[
+    "Die Antwort steht im EmbargoCheck – beim Eintrag, den ihr als echten Treffer bewertet habt.",
+    "Gebt die vier Ziffern der Listen-ID des echten Treffers ein, ohne „SAN-“."]};
+  if (!S.f.aml) return S.v.amlPattern ? {key:"aml2", steps:[
+    "Die Adresse von Nova Trade habt ihr heute schon einmal gesehen. Und passt die Erklärung der Filiale wirklich zum Muster?",
+    "Vergleicht die Adresse von Nova Trade mit den Listeneinträgen im EmbargoCheck. Der Alert wird nicht geschlossen und der Kunde nicht informiert – er geht in die vertiefte Prüfung."]}
+    : {key:"aml1", steps:[
+    "Schaut zuerst ins Kundenprofil: Was wird bei diesem Kunden erwartet – und was nicht?",
+    "Markiert jede Bareinzahlung und die Überweisung an Nova Trade vom selben Tag. Gehalt, Miete und Kleinbeträge gehören nicht dazu."]};
+  if (!S.notes.n3) return {key:"n3", steps:[
+    "Ihr müsst rechnen: Welche Buchungen gingen an Nova Trade?",
+    "Addiert die drei Überweisungen an Nova Trade Ltd. und gebt den Betrag ohne Cent und ohne Punkt ein."]};
+  if (!S.f.fraud) return {key:"fraud", steps:[
+    "Nicht jede Auffälligkeit ist Betrug. Fragt bei jeder Zahlung: Ist die Abweichung erklärt – oder nicht?",
+    "Alles belegt → weiterbearbeiten. Abweichung ohne Erklärung, sonst plausibel → klären. Unbestätigte Kontoänderung plus weitere Warnsignale → nicht ausführen und eskalieren."]};
+  if (!S.notes.n4) return {key:"n4", steps:[
+    "Übersetzt eure drei FraudDesk-Entscheidungen in Ziffern.",
+    "Weiterbearbeiten = 1, Klären = 2, Nicht ausführen = 0 – für Überweisung 1, 2 und 3 hintereinander."]};
+  return {key:"stop", steps:[
+    "Webers drei Fragen in Notiz 4 beziehen sich auf eure drei Prüfungen.",
+    "Fehlalarme im EmbargoCheck, Anzahl der Muster-Buchungen, Nummer der nicht ausgeführten Überweisung. Als Gründe nur die konkreten Prüfergebnisse wählen."]};
+}
+const HINT_COST = [25, 50];
+function hintLabel(){
+  if (!S.startAt || S.ended) return ["Hinweis verwenden", false];
+  const h = hintFor(), used = S.hintUsed[h.key] || 0;
+  if (used >= h.steps.length) return ["Keine weiteren Hinweise für diesen Schritt", true];
+  return [(used ? "Konkreter Hinweis" : "Denkanstoß") + " (−" + HINT_COST[used] + " P.)", false];
 }
 $("hintBtn").addEventListener("click", () => {
   if (S.ended || !S.startAt) return;
-  if (S.hints >= 6){ showHint("Alle sechs verfügbaren Hinweise wurden verwendet."); return; }
-  S.hints++; S.score = Math.max(0, S.score - 50);
-  const h = hintText(); showHint("HINWEIS: " + h + " (−50 Punkte)"); narrate("Hinweis: " + h); updateHud();
+  const h = hintFor(), used = S.hintUsed[h.key] || 0;
+  if (used >= h.steps.length) return;
+  S.hintUsed[h.key] = used + 1; S.hints++; S.score = Math.max(0, S.score - HINT_COST[used]);
+  showHint((used ? "KONKRETER HINWEIS: " : "DENKANSTOSS: ") + h.steps[used] + " (−" + HINT_COST[used] + " Punkte)");
+  narrate((used ? "Hinweis: " : "Denkanstoß: ") + h.steps[used]); updateHud();
 });
 function showHint(t){ $("hintBox").textContent = t; $("hintBox").classList.remove("hidden"); }
+
+/* ---------- Spielstand ---------- */
+// Der Spielstand liegt im Browser, damit ein versehentliches Neuladen nicht alles löscht.
+const SAVE_KEY = "phantome-spielstand";
+function saveGame(){
+  if (!S.startAt || S.ended) return;
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify({S:{...S, timerId:null}, inbox:MAILS.inbox, chat:CHATS.albers.msgs})); } catch(e){}
+}
+function clearSave(){ try { localStorage.removeItem(SAVE_KEY); } catch(e){} }
+function loadSave(){
+  try { const d = JSON.parse(localStorage.getItem(SAVE_KEY)); return d && d.S && d.S.startAt && !d.S.ended ? d : null; } catch(e){ return null; }
+}
+addEventListener("beforeunload", e => { if (S.startAt && !S.ended){ saveGame(); e.preventDefault(); e.returnValue = ""; } });
 function narrate(text){ S.log.unshift({t: storyTime(), text}); renderLog(); }
 function renderLog(){
   $("log").innerHTML = "";
@@ -426,7 +468,8 @@ function updateHud(){
   // Nur erledigte Schritte und den aktuellen zeigen – der Rest bleibt eine Überraschung.
   const shown = cur === -1 ? STEPS : STEPS.slice(0, cur + 1);
   $("steps").innerHTML = shown.map((s,i) => `<li class="${s.done() ? "done" : i === cur ? "cur" : ""}">${s.label}</li>`).join("") + (cur !== -1 && cur < STEPS.length - 1 ? `<li class="more">… weitere Schritte folgen</li>` : "");
-  renderIcons(); renderTasks();
+  const [hl, hd] = hintLabel(); $("hintBtn").textContent = hl; $("hintBtn").disabled = hd;
+  renderIcons(); renderTasks(); saveGame();
 }
 
 /* ---------- Fenster-Manager ---------- */
@@ -513,7 +556,7 @@ function makeDraggable(w){
 const RENDER = {};
 function render(id){ if (WIN[id]) RENDER[id](WIN[id].body); }
 function fb(id, text, kind = ""){ const w = WIN[id]; if (!w) return; w.fb.className = "wfb " + kind; w.fb.textContent = text; }
-function wrong(id, msg){ S.mistakes++; S.score = Math.max(0, S.score - 20); fb(id, msg + " (−20 Punkte)", "bad"); updateHud(); }
+function wrong(id, msg){ S.err[id] = (S.err[id] || 0) + 1; S.mistakes++; S.score = Math.max(0, S.score - 20); fb(id, msg + " (−20 Punkte)", "bad"); updateHud(); }
 let notifTimer;
 function notify(title, text, app){
   const n = $("notif"); n.innerHTML = ""; const b = document.createElement("b"); b.textContent = title; n.appendChild(b); n.appendChild(document.createTextNode(text));
@@ -542,7 +585,7 @@ So kommt ihr weiter: Jede Notiz ist mit einem Rätsel gesperrt. Die Antwort find
 SCHRITT 1 → ZV-Cockpit + EmbargoCheck
 Holt euch im ZV-Cockpit die Daten des Empfängers von PHANTOME.
 Dann prüft ihn selbst im EmbargoCheck. Vorsicht: Es gibt mehrere Firmen mit fast gleichem Namen.`},
-  n2:{title:"2 · Das Geld", code:"1dp01qu7ixb", riddle:"Die vierstellige Nummer des Listeneintrags, der wirklich zum Empfänger von PHANTOME gehört.", text:`Gut gemacht. Der Empfänger steht wirklich auf der Sanktionsliste.
+  n2:{title:"2 · Das Geld", gate:"embargo", code:"1dp01qu7ixb", riddle:"Die vierstellige Nummer des Listeneintrags, der wirklich zum Empfänger von PHANTOME gehört.", text:`Gut gemacht. Der Empfänger steht wirklich auf der Sanktionsliste.
 
 Aber woher kommt das Geld für PHANTOME? Ich glaube, es wird über viele kleine Konten gesammelt.
 
@@ -550,14 +593,14 @@ SCHRITT 2 → AML-Monitor
 Öffnet Alert A-2291. Schaut euch zuerst das Kundenprofil an, dann die Umsätze.
 Markiert alle Buchungen, die zum Muster gehören.
 Und dann prüft, wohin das Geld fließt. Kommt euch die Adresse bekannt vor?`},
-  n3:{title:"3 · Die Falle", code:"2135pxw35o8", riddle:"Wie viel Geld hat Jonas K. insgesamt an Nova Trade überwiesen? Betrag in Euro – ohne Cent und ohne Punkt.", text:`Das Muster ist eindeutig: Der Student ist ein Strohmann. Und das Geld landet bei Leuten, die wir schon kennen.
+  n3:{title:"3 · Die Falle", gate:"aml", code:"2135pxw35o8", riddle:"Wie viel Geld hat Jonas K. insgesamt an Nova Trade überwiesen? Betrag in Euro – ohne Cent und ohne Punkt.", text:`Das Muster ist eindeutig: Der Student ist ein Strohmann. Und das Geld landet bei Leuten, die wir schon kennen.
 
 Heute versuchen dieselben Leute noch etwas anderes: Im FraudDesk hängen drei zurückgehaltene Zahlungen. Eine davon ist eine Falle – die anderen beiden sind echte Rechnungen.
 
 SCHRITT 3 → FraudDesk
-Startet bei jeder Zahlung die VoP-Abfrage und schaut in die Lieferantenakte. Erst dann entscheiden: weiterbearbeiten oder ablehnen.
+Startet bei jeder Zahlung die VoP-Abfrage und schaut in die Lieferantenakte. Erst dann entscheiden: weiterbearbeiten, klären oder nicht ausführen.
 Achtung: Nicht alles stoppen, was komisch aussieht!`},
-  n4:{title:"4 · Der Stopp", code:"qammigcr1f", riddle:"Geht die drei Überweisungen im FraudDesk der Reihe nach durch. Wird sie weiterbearbeitet, schreibt ihre Nummer. Wird sie abgelehnt, schreibt eine 0.", text:`Ihr habt alle drei Spuren. Jetzt muss PHANTOME gestoppt werden.
+  n4:{title:"4 · Der Stopp", gate:"fraud", code:"13c0jh5hp8o", riddle:"Übersetzt eure drei FraudDesk-Entscheidungen der Reihe nach in Ziffern: Weiterbearbeiten = 1, Klären = 2, Nicht ausführen = 0.", text:`Ihr habt alle drei Spuren. Jetzt muss PHANTOME gestoppt werden.
 
 SCHRITT 4 → ZV-Cockpit
 PHANTOME anklicken und den Compliance-Stopp setzen.
@@ -565,7 +608,7 @@ PHANTOME anklicken und den Compliance-Stopp setzen.
 Meinen Freigabecode schreibe ich nirgends hin. Aber wer meine drei Fälle wirklich gelöst hat, kennt ihn:
   1. Ziffer: Wie viele der Treffer im EmbargoCheck waren Fehlalarme?
   2. Ziffer: Wie viele Buchungen bilden bei Jonas K. das Muster?
-  3. Ziffer: Welche Nummer hatte die Überweisung, die ihr im FraudDesk abgelehnt habt?
+  3. Ziffer: Welche Nummer hatte die Überweisung, die ihr im FraudDesk nicht ausgeführt habt?
 
 Ohne Dokumentation nimmt das System den Stopp nicht an:
 • nur die Gründe ankreuzen, die ihr wirklich belegen könnt
@@ -577,14 +620,15 @@ Wenn ihr rausfindet, wer: über das Hinweisgebersystem melden. Nicht selbst ermi
 RENDER.notes = b => {
   b.className = "wbody flush";
   const id = S.v.note, n = NOTES[id], open = S.notes[id];
-  b.innerHTML = `<div class="split"><div class="list">${Object.entries(NOTES).map(([k,x]) => `<button class="li ${k === id ? "sel" : ""}" data-k="${k}">${S.notes[k] ? "📄" : "🔒"} ${x.title}<small>${S.notes[k] ? "geöffnet" : "gesperrt · Rätsel lösen"}</small></button>`).join("")}</div>
+  b.innerHTML = `<div class="split"><div class="list">${Object.entries(NOTES).map(([k,x]) => `<button class="li ${k === id ? "sel" : ""}" data-k="${k}">${S.notes[k] ? "📄" : "🔒"} ${x.title}<small>${S.notes[k] ? "geöffnet" : S.f[x.gate] ? "gesperrt · Rätsel lösen" : "gesperrt"}</small></button>`).join("")}</div>
     <div class="pane notesbg">${open ? `<h3>${n.title}</h3><div class="notetext"></div>` :
+    !S.f[n.gate] ? `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini">Diese Notiz lässt sich erst öffnen, wenn ihr die Prüfung im <b>${APPS[n.gate].label}</b> abgeschlossen habt.</p></div>` :
     `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini" style="margin-bottom:4px">Diese Notiz ist gesperrt. Webers Rätsel:</p><div class="riddle hand">${n.riddle}</div>
       <div class="row"><input id="noteCode" inputmode="numeric" maxlength="6" placeholder="Code" aria-label="Code" class="mono" style="letter-spacing:.25em"><button class="primary" id="noteBtn">Öffnen</button></div></div>`}</div></div>`;
   if (open) b.querySelector(".notetext").textContent = n.text;
   on(b, ".li", "click", e => { S.v.note = e.currentTarget.dataset.k; render("notes"); });
   if (id === "n1" && !S.v.notesSeen){ S.v.notesSeen = true; narrate("Notiz 1: Weber hat seine Spur auf vier Notizen verteilt. Jede ist mit einem Rätsel gesperrt, das man nur nach der vorherigen Prüfung lösen kann. Start: ZV-Cockpit und EmbargoCheck."); updateHud(); }
-  if (!open){
+  if (!open && $("noteCode")){
     const go = () => {
       const c = $("noteCode").value.replace(/\D/g, "");
       if (!c){ fb("notes", "Gebt einen Zahlencode ein."); return; }
@@ -717,50 +761,67 @@ RENDER.chat = b => {
 };
 
 /* ---------- EmbargoCheck ---------- */
-const RECIPIENT = {name:"Northbridge S.A.", addr:"Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt", country:"Panama"};
+const RECIPIENT = {name:"Northbridge S.A.", addr:"Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt", country:"Panama", reg:"155-690-1207"};
 const LIST = [
-  {id:"SAN-2207", name:"North Bridge Holding AG", addr:"Bahnhofstrasse 12, 6300 Zug", country:"Schweiz", score:84, since:"05/2023", reason:"Finanzierung von Embargoverstößen",
-    why:"Der Name ist nur ähnlich, und Adresse und Land passen nicht zum Empfänger."},
-  {id:"SAN-3871", name:"Northbridge Trading S.A.", addr:"Avenida Balboa 88, Panama-Stadt", country:"Panama", score:91, since:"08/2024", reason:"Handel mit embargierten Gütern",
-    why:"Das Land stimmt, aber Name und Adresse nicht – das ist ein anderes Unternehmen in derselben Stadt."},
-  {id:"SAN-4417", name:"Northbridge S.A.", addr:"Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt", country:"Panama", score:100, since:"02/2025", reason:"Tarnfirma eines sanktionierten Netzwerks"},
-  {id:"SAN-5150", name:"Northbridge Shipping Ltd.", addr:"Triq il-Port 4, Valletta", country:"Malta", score:88, since:"11/2024", reason:"Verschleierung von Warenlieferungen",
-    why:"Andere Rechtsform, andere Adresse, anderes Land – das ist ein anderes Unternehmen."}];
+  {id:"SAN-2207", name:"North Bridge Holding AG", addr:"Bahnhofstrasse 12, 6300 Zug", country:"Schweiz", reg:"CHE-401.338.207", score:84, since:"05/2023", reason:"Finanzierung von Embargoverstößen", ok:"fp"},
+  {id:"SAN-3871", name:"Northbridge Trading S.A.", addr:"Avenida Balboa 88, Panama-Stadt", country:"Panama", reg:"155-771-2024", score:91, since:"08/2024", reason:"Handel mit embargierten Gütern", ok:"fp"},
+  {id:"SAN-4417", name:"Northbridge S.A.", addr:"Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt", country:"Panama", reg:"155-690-1207", score:100, since:"02/2025", reason:"Tarnfirma eines sanktionierten Netzwerks", ok:"hit"},
+  {id:"SAN-4790", name:"Northbridge SA", addr:"– keine Angabe –", country:"Panama", reg:"– keine Angabe –", score:97, since:"06/2025", reason:"Beteiligung an Sanktionsumgehung", ok:"unclear"},
+  {id:"SAN-5150", name:"Northbridge Shipping Ltd.", addr:"Triq il-Port 4, Valletta", country:"Malta", reg:"C 88150", score:88, since:"11/2024", reason:"Verschleierung von Warenlieferungen", ok:"fp"}];
+const EMB_EVAL = [
+  ["hit", "Echter Treffer", "Alle verfügbaren Merkmale stimmen mit dem Empfänger überein.", "no"],
+  ["fp", "Fehlalarm", "Mindestens ein Merkmal widerspricht dem Empfänger.", "ok"],
+  ["unclear", "Nicht eindeutig", "Wichtige Merkmale fehlen – weitere Angaben anfordern, bevor entschieden wird.", "warn"]];
+const EMB_PROC = [
+  ["stop", "Zahlung nicht ausführen, Prüfung dokumentieren und an den Sanktionsbeauftragten eskalieren."],
+  ["run", "Zahlung ausführen – die meisten Treffer waren ja Fehlalarme.", "Ein einziger bestätigter Treffer reicht: Die Zahlung darf nicht ausgeführt werden."],
+  ["ask", "Bei der AeroTrans GmbH nachfragen, ob der Empfänger wirklich sanktioniert ist.", "Den Kunden über einen Sanktionstreffer zu informieren kann die Aufklärung gefährden. Eskaliert wird intern."]];
+const evalTag = v => { const e = EMB_EVAL.find(x => x[0] === v); return e ? `<span class="tag ${e[3]}">${e[1]}</span>` : `<span class="tag info">offen</span>`; };
 RENDER.embargo = b => {
   b.className = "wbody";
-  const done = S.f.embargo, sel = LIST.find(x => x.id === S.v.embSel);
+  const done = S.f.embargo, ev = S.v.embEval || (S.v.embEval = {}), sel = LIST.find(x => x.id === S.v.embSel);
   const Q = (S.v.embQ || "").toUpperCase().replace(/[^A-Z]/g, "");
-  const hits = S.v.embSearched ? (Q.length >= 4 && ("NORTHBRIDGE".includes(Q) || Q.includes("NORTH")) ? LIST : []) : null;
+  const hits = done ? LIST : S.v.embSearched ? (Q.length >= 4 && ("NORTHBRIDGE".includes(Q) || Q.includes("NORTH")) ? LIST : []) : null;
+  const allRated = hits && hits.length && hits.every(h => ev[h.id]);
   b.innerHTML = `<div class="appbar" style="background:#7a1c27">🌐 EmbargoCheck <small>Benutzer: m.weber</small></div>
     <h3>Neue Prüfung: Sanktionslisten-Screening</h3>
-    <p class="mini muted" style="margin:0">Name des Geschäftspartners eingeben. Die Treffer anschließend mit den Partnerdaten vergleichen.</p>
-    <div class="row" style="margin-top:6px"><input id="embQ" placeholder="Name, z. B. Firmenname" aria-label="Name"><button class="primary" id="embSearch">Suchen</button></div>
+    <p class="mini muted" style="margin:0">Namen des Geschäftspartners eingeben. Danach jeden Treffer öffnen, mit den Partnerdaten vergleichen und bewerten.</p>
+    ${done ? "" : `<div class="row" style="margin-top:6px"><input id="embQ" placeholder="Name, z. B. Firmenname" aria-label="Name"><button class="primary" id="embSearch">Suchen</button></div>`}
     ${hits === null ? "" : !hits.length ? `<p style="margin-top:12px"><span class="tag ok">✓ Kein Treffer</span> <span class="mini muted">Prüft die Schreibweise des Namens.</span></p>` :
     `<p class="mini" style="margin:12px 0 4px"><b>${hits.length} mögliche Treffer</b> auf der Sanktionsliste (fiktiv) – zum Öffnen anklicken:</p>
-    <table class="tbl"><tr><th>Listen-ID</th><th>Name</th><th>Land</th><th>Namens-Ähnlichkeit</th></tr>
-      ${hits.map(h => `<tr class="click ${h.id === S.v.embSel ? "sel" : ""}" data-id="${h.id}"><td class="mono">${h.id}</td><td>${h.name}</td><td>${h.country}</td><td>${h.score} %</td></tr>`).join("")}</table>`}
-    ${sel ? `<div class="doc"><span class="stamp">LISTENEINTRAG</span><h3>${sel.id} · ${sel.name}</h3><table>
-      <tr><th>Adresse</th><td>${sel.addr}</td></tr><tr><th>Land</th><td>${sel.country}</td></tr>
+    <table class="tbl"><tr><th>Listen-ID</th><th>Name</th><th>Land</th><th>Ähnlichkeit</th><th>Bewertung</th></tr>
+      ${hits.map(h => `<tr class="click ${h.id === S.v.embSel ? "sel" : ""}" data-id="${h.id}"><td class="mono">${h.id}</td><td>${h.name}</td><td>${h.country}</td><td>${h.score} %</td><td>${evalTag(ev[h.id])}</td></tr>`).join("")}</table>`}
+    ${sel && !done ? `<div class="doc"><span class="stamp">LISTENEINTRAG</span><h3>${sel.id} · ${sel.name}</h3><table>
+      <tr><th>Adresse</th><td>${sel.addr}</td></tr><tr><th>Land</th><td>${sel.country}</td></tr><tr><th>Registernummer</th><td class="mono">${sel.reg}</td></tr>
       <tr><th>Gelistet seit</th><td>${sel.since}</td></tr><tr><th>Grund</th><td>${sel.reason}</td></tr></table></div>
-      ${done ? "" : `<p style="margin:12px 0 4px"><b>Bewertung für ${sel.id}:</b> Ist das der Empfänger der Zahlung PHANTOME?</p>
-      <label class="choice"><input type="radio" name="embDec" value="hit"><span><b>Echter Treffer</b> – Name, Adresse und Land stimmen mit dem Empfänger überein. Zahlung nicht ausführen, dokumentieren, eskalieren.</span></label>
-      <label class="choice"><input type="radio" name="embDec" value="fp"><span><b>Falsch-positiv</b> – nur ein ähnlicher Name, der Eintrag gehört nicht zum Empfänger.</span></label>
-      <div class="row"><button class="primary" id="embBtn">Bewertung speichern</button></div>`}` : ""}
+      <p style="margin:10px 0 4px"><b>Bewertung für ${sel.id}:</b></p>
+      ${EMB_EVAL.map(([v,t,d]) => `<label class="choice"><input type="radio" name="embEv" value="${v}" ${ev[sel.id] === v ? "checked" : ""}><span><b>${t}</b> – ${d}</span></label>`).join("")}
+      <div class="row"><button class="primary" id="embRate">Bewertung übernehmen</button></div>` : ""}
+    ${allRated && !done ? `<div class="doc" style="margin-top:14px"><h3>Prüfung abschließen</h3><p class="mini" style="margin-top:0">Alle Treffer sind bewertet. Was passiert jetzt mit der Zahlung PHANTOME?</p>
+      ${EMB_PROC.map(([v,t]) => `<label class="choice"><input type="radio" name="embProc" value="${v}"><span>${t}</span></label>`).join("")}
+      <div class="row"><button class="primary" id="embDone">Prüfung abschließen</button></div></div>` : ""}
     ${done ? `<p><span class="tag no">✕ Treffer bestätigt: SAN-4417 · Zahlung nicht ausführen · eskaliert</span></p>` + vorgangBox("embargo", "Notiz 2") : ""}`;
-  $("embQ").value = S.v.embQ || "";
-  const search = () => { S.v.embQ = $("embQ").value; S.v.embSearched = true; S.v.embSel = null; render("embargo"); updateHud(); };
-  $("embSearch").addEventListener("click", search); $("embQ").addEventListener("keydown", e => { if (e.key === "Enter") search(); });
-  on(b, "tr.click", "click", e => { S.v.embSel = e.currentTarget.dataset.id; render("embargo"); b.querySelector(".doc").scrollIntoView({block:"nearest"}); });
-  if ($("embBtn")) $("embBtn").addEventListener("click", () => {
-    const d = (b.querySelector("input[name=embDec]:checked") || {}).value;
-    if (!d){ fb("embargo", "Wählt eine Bewertung."); return; }
-    const isRecipient = sel.id === "SAN-4417";
-    if (isRecipient && d === "hit") solved("embargo", "embargo", "Notiz 2",
-      "EmbargoCheck: Der Empfänger Northbridge S.A. ist der Listeneintrag SAN-4417 – Name, Adresse und Land stimmen überein. Vorgang " + VORGANG.embargo + ".",
-      "Richtig: Name, Adresse und Land stimmen überein – ein echter Treffer. Die Zahlung darf nicht ausgeführt werden.");
-    else if (isRecipient) wrong("embargo", "Vergleicht noch einmal mit den Empfängerdaten im ZV-Cockpit: Name, Adresse und Land stimmen hier alle überein.");
-    else if (d === "hit") wrong("embargo", sel.why);
-    else fb("embargo", "Richtig erkannt: " + sel.id + " ist ein Fehlalarm. Aber einer der anderen Einträge passt – prüft weiter.", "");
+  if ($("embQ")){
+    $("embQ").value = S.v.embQ || "";
+    const search = () => { S.v.embQ = $("embQ").value; S.v.embSearched = true; S.v.embSel = null; render("embargo"); updateHud(); };
+    $("embSearch").addEventListener("click", search); $("embQ").addEventListener("keydown", e => { if (e.key === "Enter") search(); });
+  }
+  if (!done) on(b, "tr.click", "click", e => { S.v.embSel = e.currentTarget.dataset.id; render("embargo"); b.querySelector(".doc").scrollIntoView({block:"nearest"}); });
+  if ($("embRate")) $("embRate").addEventListener("click", () => {
+    const v = (b.querySelector("input[name=embEv]:checked") || {}).value;
+    if (!v){ fb("embargo", "Wählt eine Bewertung."); return; }
+    ev[sel.id] = v; const next = LIST.find(h => !ev[h.id]); S.v.embSel = next ? next.id : null;
+    render("embargo"); fb("embargo", sel.id + " bewertet: " + EMB_EVAL.find(x => x[0] === v)[1] + "." + (next ? " Weiter mit " + next.id + "." : " Alle Treffer bewertet – jetzt die Prüfung abschließen."));
+  });
+  if ($("embDone")) $("embDone").addEventListener("click", () => {
+    const p = (b.querySelector("input[name=embProc]:checked") || {}).value;
+    if (!p){ fb("embargo", "Wählt, was mit der Zahlung passiert."); return; }
+    const bad = LIST.filter(h => ev[h.id] !== h.ok).length;
+    if (bad) return wrong("embargo", (bad === 1 ? "Eine Bewertung stimmt" : bad + " Bewertungen stimmen") + " nicht. Vergleicht Name, Adresse, Land und Registernummer noch einmal mit den Empfängerdaten im ZV-Cockpit.");
+    if (p !== "stop") return wrong("embargo", EMB_PROC.find(x => x[0] === p)[2]);
+    solved("embargo", "embargo", "Notiz 2",
+      "EmbargoCheck: SAN-4417 ist der Empfänger – Name, Adresse, Land und Registernummer stimmen. Drei Fehlalarme, ein nicht eindeutiger Eintrag. Zahlung nicht ausführen, eskaliert. Vorgang " + VORGANG.embargo + ".",
+      "Richtig: ein echter Treffer, drei Fehlalarme, ein nicht eindeutiger Eintrag. Die Zahlung darf nicht ausgeführt werden.");
   });
 };
 
@@ -776,8 +837,8 @@ const ALERTS = [
   {id:"A-2288", who:"Bäckerei Sommer e.K.", rule:"Bargeld über Schwelle", note:"Tägliche Bareinzahlungen der Tageslosung, branchenüblich und zum Umsatzprofil passend. Kein Anfangsverdacht."},
   {id:"A-2285", who:"R. Hansen", rule:"Auslandseingang ungewöhnlich", note:"Mieteinnahmen einer Ferienwohnung in Dänemark, Mietvertrag liegt vor. Plausibel."}];
 const AML_DEC = [
-  ["close","Alert schließen – das Geld stammt vermutlich aus einem Nebenjob.", "Für Bargeld in dieser Höhe gibt es im Kundenprofil keine Erklärung. Schließen wäre nicht begründbar."],
-  ["mlro","Vertiefte Prüfung einleiten und den Fall an den Geldwäschebeauftragten melden."],
+  ["close","Alert schließen – laut Filiale ist das Bargeld ein Geschenk der Großmutter.", "Drei Bareinzahlungen in einer Woche, jede am selben Tag an eine Firma in Panama weitergeleitet: Die Erklärung passt nicht zum Muster. Sie gehört in die Prüfung, beendet sie aber nicht."],
+  ["mlro","Vertiefte Prüfung einleiten: Herkunft der Mittel und Zweck der Weiterleitung klären, Fall an den Geldwäschebeauftragten geben – er entscheidet über eine Verdachtsmeldung."],
   ["tell","Konto sofort kündigen und dem Kunden den Grund nennen.", "Kunden dürfen nicht über eine Prüfung oder mögliche Meldung informiert werden (Tipping-off-Verbot)."]];
 RENDER.aml = b => {
   b.className = "wbody";
@@ -802,7 +863,8 @@ RENDER.aml = b => {
     <tr><th>Kunde</th><td>Jonas K., 20 Jahre</td></tr><tr><th>Beruf</th><td>Student (Maschinenbau), Werkstudent bei der Muster GmbH</td></tr>
     <tr><th>Einkommen</th><td>ca. 1.850 € netto im Monat</td></tr><tr><th>Erwartete Umsätze</th><td>bis ca. 2.500 € im Monat</td></tr>
     <tr><th>Bargeld</th><td><b>keine regelmäßigen Bargeldeinzahlungen erwartet</b></td></tr><tr><th>Auslandsbezug</th><td>keiner angegeben</td></tr>
-    <tr><th>Kunde seit</th><td>2024</td></tr></table></div>`;
+    <tr><th>Kunde seit</th><td>2024</td></tr>
+    <tr><th>Vermerk Filiale</th><td>09.10.: Kunde gibt an, das Bargeld sei ein Geschenk seiner Großmutter.</td></tr></table></div>`;
   if (tab === "umsatz") content = `<p class="mini" style="margin:0 0 6px">Kontoauszug 01.–13. Oktober</p>
     <table class="tbl"><tr><th></th><th>Datum</th><th>Buchungstext</th><th style="text-align:right">Betrag</th></tr>
     ${TX.map((t,i) => `<tr class="click ${S.v.amlSel.includes(i) ? "sel" : ""}" data-i="${i}"><td><input type="checkbox" ${S.v.amlSel.includes(i) ? "checked" : ""} ${S.v.amlPattern ? "disabled" : ""} aria-label="Buchung ${i+1}"></td><td>${t[0]}</td><td>${t[1]}</td><td style="text-align:right;white-space:nowrap">${t[2]}</td></tr>`).join("")}</table>
@@ -846,36 +908,39 @@ RENDER.aml = b => {
 };
 
 /* ---------- FraudDesk ---------- */
+const FRAUD_DEC = [["go","Weiterbearbeiten"],["clarify","Klären / Rückfrage"],["stop","Nicht ausführen + eskalieren"]];
 const PAYMENTS = [
   {id:"nordlicht", name:"Nordlicht IT GmbH", iban:"DE21 2005 0000 0041 7733 18", amount:"4.860,00 €",
-    purpose:"RE-2026-1187 · Wartung Serverraum Oktober", vop:true, vopText:"Übereinstimmung – Name passt zum Konto",
+    purpose:"RE-2026-1187 · Wartung Serverraum Oktober", vop:"ok", vopText:"Übereinstimmung – Name passt zum Konto",
     hold:"Betrag über der Einzelfreigabegrenze von 4.500 €",
     context:["Lieferant seit 2021, monatliche Wartungspauschale 4.860 €","Rechnung RE-2026-1187 liegt vor, Betrag und Leistungszeitraum stimmen","IBAN in der Lieferantenakte seit 2021 unverändert"],
     ok:"go", why:"VoP stimmt, Rechnung und Lieferantenakte passen zusammen. Zurückgehalten wurde sie nur wegen der Betragsgrenze – nach der üblichen Zweitfreigabe wird sie weiterbearbeitet."},
   {id:"mira", name:"Mira Energie GmbH", iban:"LT59 3250 0612 9944 0187", amount:"48.750,00 €",
-    purpose:"Vorauszahlung Q4 – sofort fällig", vop:false, vopText:"Keine Übereinstimmung – Name passt nicht zum Konto",
+    purpose:"Vorauszahlung Q4 – sofort fällig", vop:"no", vopText:"Keine Übereinstimmung – Name passt nicht zum Konto",
     hold:"Neue Empfänger-IBAN",
     context:["Bisher monatliche Abschläge von ca. 3.900 € auf die IBAN DE88 3006 0601 0005 5521 40","Kontoänderung heute um 15:02 per E-Mail von buchhaltung@mira-energie-gmbh.example – hinterlegte Domain: @mira-energie.example","Änderung erfasst um 15:05 von Benutzer s.kranz (Zahlungsverkehr) – ohne Rückrufbestätigung über die hinterlegte Telefonnummer","Vorauszahlungen sind im Liefervertrag nicht vorgesehen"],
-    ok:"stop", why:"VoP-Abweichung, kurzfristig geänderte Kontoverbindung über eine fremde Domain, ein Betrag weit über dem üblichen Abschlag und eine im Vertrag nicht vorgesehene Vorauszahlung. Erst die Kombination macht die Entscheidung eindeutig: ablehnen, Lieferanten über die bekannte Nummer kontaktieren, Fall melden."},
-  {id:"stadtwerke", name:"Stadtwerke West GmbH", iban:"DE47 3705 0198 0012 6688 02", amount:"1.284,30 €",
-    purpose:"Vertragskonto 7004 5512 · Nachzahlung Jahresabrechnung 2026", vop:true, vopText:"Übereinstimmung – Name passt zum Konto",
-    hold:"Betrag weicht stark vom üblichen Abschlag (210 €) ab",
-    context:["Vertragskonto 7004 5512 ist in den Stammdaten hinterlegt","Jahresabrechnung liegt vor und weist eine Nachzahlung von 1.284,30 € aus","IBAN seit Vertragsbeginn bekannt"],
-    ok:"go", why:"VoP stimmt, Verwendungszweck und Vertragsdaten sind plausibel. Die Abweichung vom Abschlag erklärt die Jahresabrechnung – die Zahlung wird nach den üblichen Kontrollen weiterbearbeitet."}];
+    ok:"stop", why:"Die Kontoänderung kam über eine fremde Domain und wurde nie bestätigt; dazu ein Betrag weit über dem üblichen Abschlag und eine Vorauszahlung, die der Vertrag nicht vorsieht. VoP-Abweichung und neue IBAN hängen zusammen – sie sind kein doppelter Beleg, aber zusammen mit dem Rest eindeutig: nicht ausführen, Lieferanten über die bekannte Nummer kontaktieren, eskalieren."},
+  {id:"stadtwerke", name:"Stadtwerke West", iban:"DE47 3705 0198 0012 6688 02", amount:"1.284,30 €",
+    purpose:"Vertragskonto 7004 5512 · Nachzahlung Jahresabrechnung 2026", vop:"close", vopText:"Ähnliche Übereinstimmung – Kontoinhaber laut Empfängerbank: „Stadtwerke West Energie GmbH“",
+    hold:"VoP: nur ähnliche Übereinstimmung",
+    context:["Vertragskonto 7004 5512 ist in den Stammdaten hinterlegt – Vertragspartner laut Akte: „Stadtwerke West GmbH“","Jahresabrechnung liegt vor und weist eine Nachzahlung von 1.284,30 € aus","IBAN seit Vertragsbeginn unverändert","Kein Hinweis auf eine Umfirmierung in der Akte"],
+    ok:"clarify", why:"Der Name ist nur ähnlich, aber IBAN und Rechnung passen. Das spricht nicht für Betrug – geklärt ist die Abweichung aber auch nicht. Vor der Ausführung prüfen, ob der Versorger umfirmiert hat (Rückfrage über die bekannte Nummer, Handelsregister)."}];
+const VOP_TAG = {ok:["ok","✓"], no:["no","✕"], close:["warn","≈"]};
 RENDER.fraud = b => {
   b.className = "wbody";
   const done = S.f.fraud, fx = S.v.fx || (S.v.fx = {});
   const ready = id => done || (fx[id] && fx[id].vop && fx[id].file);
   b.innerHTML = `<div class="appbar" style="background:#2f6b55">🛡️ FraudDesk <small>3 Zahlungen zurückgehalten</small></div>
     <h3>Drei Zahlungen, eine Falle</h3><p class="mini">Das Zahlungsverkehrssystem hat heute drei Überweisungen zur manuellen Prüfung zurückgehalten. Entscheiden könnt ihr erst, wenn ihr die VoP-Abfrage gestartet und die Lieferantenakte geöffnet habt.</p>
+    <p class="mini muted" style="margin-top:-4px"><b>Weiterbearbeiten:</b> alles belegt · <b>Klären:</b> Abweichung ohne Erklärung, sonst plausibel · <b>Nicht ausführen + eskalieren:</b> konkreter Verdacht</p>
     ${PAYMENTS.map((p,i) => { const c = fx[p.id] || {}; return `<div class="doc" data-p="${p.id}"><span class="stamp">ZURÜCKGEHALTEN</span><h3>Überweisung ${i+1} – ${p.name}</h3>
-      <table><tr><th>Empfänger</th><td>${p.name}<br><small class="mono">${p.iban}</small></td></tr>
+      <table><tr><th>Empfänger (laut Auftrag)</th><td>${p.name}<br><small class="mono">${p.iban}</small></td></tr>
       <tr><th>Betrag</th><td><b>${p.amount}</b></td></tr><tr><th>Verwendungszweck</th><td>${p.purpose}</td></tr>
       <tr><th>Grund der Zurückhaltung</th><td>${p.hold}</td></tr>
-      <tr class="vopRow ${done || c.vop ? "" : "hidden"}"><th>Verification of Payee</th><td><span class="tag ${p.vop ? "ok" : "no"}">${p.vop ? "✓" : "✕"} ${p.vopText}</span></td></tr>
+      <tr class="vopRow ${done || c.vop ? "" : "hidden"}"><th>Verification of Payee</th><td><span class="tag ${VOP_TAG[p.vop][0]}">${VOP_TAG[p.vop][1]} ${p.vopText}</span></td></tr>
       <tr class="fileRow ${done || c.file ? "" : "hidden"}"><th>Lieferantenakte</th><td><ul class="ctx">${p.context.map(x => `<li>${x}</li>`).join("")}</ul></td></tr></table>
       ${done ? "" : `<div class="row"><button class="doVop" ${c.vop ? "disabled" : ""}>🔎 VoP-Abfrage starten</button><button class="doFile" ${c.file ? "disabled" : ""}>📂 Lieferantenakte öffnen</button></div>`}
-      <div class="decide">${[["go","Weiterbearbeiten"],["stop","Ablehnen"]].map(([v,t]) => `<label class="${v}"><input type="radio" name="pay-${p.id}" value="${v}" ${done ? (v === p.ok ? "checked disabled" : "disabled") : (ready(p.id) ? "" : "disabled") + (S.v.fraudDec[p.id] === v ? " checked" : "")}><span>${t}</span></label>`).join("")}</div>
+      <div class="decide">${FRAUD_DEC.map(([v,t]) => `<label class="${v}"><input type="radio" name="pay-${p.id}" value="${v}" ${done ? (v === p.ok ? "checked disabled" : "disabled") : (ready(p.id) ? "" : "disabled") + (S.v.fraudDec[p.id] === v ? " checked" : "")}><span>${t}</span></label>`).join("")}</div>
       ${done ? `<p class="mini" style="margin:10px 0 0"><b>Begründung:</b> ${p.why}</p>` : ""}</div>`; }).join("")}
     ${done ? vorgangBox("fraud", "Notiz 4") : `<div class="row"><button class="primary" id="fraudBtn">Entscheidungen buchen</button></div>`}`;
   const unlock = (card, id) => { if (fx[id].vop && fx[id].file) card.querySelectorAll(".decide input").forEach(x => x.disabled = false); };
@@ -889,11 +954,13 @@ RENDER.fraud = b => {
     const dec = S.v.fraudDec;
     if (PAYMENTS.some(p => !ready(p.id))){ fb("fraud", "Prüft zuerst jede Zahlung: VoP-Abfrage starten und Lieferantenakte öffnen."); return; }
     if (PAYMENTS.some(p => !dec[p.id])){ fb("fraud", "Trefft für jede der drei Zahlungen eine Entscheidung."); return; }
-    if (PAYMENTS.every(p => dec[p.id] === p.ok)) solved("fraud", "fraud", "Notiz 4",
-      "FraudDesk: Die Zahlung an „Mira Energie“ sollte auf ein fremdes Konto umgeleitet werden – abgelehnt. Die beiden anderen Zahlungen laufen weiter. Vorgang " + VORGANG.fraud + ".",
+    if (PAYMENTS.every(p => dec[p.id] === p.ok)) return solved("fraud", "fraud", "Notiz 4",
+      "FraudDesk: Die Zahlung an „Mira Energie“ sollte auf ein fremdes Konto umgeleitet werden – nicht ausgeführt und eskaliert. Nordlicht IT läuft weiter, bei den Stadtwerken wird die Namensabweichung geklärt. Vorgang " + VORGANG.fraud + ".",
       "Alle drei Entscheidungen sind richtig. VoP ist ein Prüfbaustein, keine Entscheidung für sich.");
-    else if (dec.mira !== "stop") wrong("fraud", "Eine Zahlung zeigt mehrere Warnsignale gleichzeitig. Einzeln wären sie vielleicht erklärbar, in Kombination nicht.");
-    else wrong("fraud", "Ihr lehnt eine Zahlung ab, die sich vollständig belegen lässt. Eine Zurückhaltung allein ist noch kein Betrugsverdacht.");
+    if (dec.mira !== "stop") return wrong("fraud", "Bei einer Zahlung reagiert ihr zu schwach: Mehrere Warnsignale und eine Kontoänderung, die nie bestätigt wurde – da reicht weder Weiterbearbeiten noch eine Rückfrage.");
+    if (dec.stadtwerke === "stop") return wrong("fraud", "Bei einer Zahlung reagiert ihr zu hart: Eine Namensabweichung allein ist kein Betrugsverdacht – vor allem, wenn IBAN und Rechnung passen.");
+    if (dec.stadtwerke === "go") return wrong("fraud", "Bei einer Zahlung meldet VoP eine Abweichung, die in der Akte nicht erklärt ist. Ohne Klärung auszuführen ist zu früh.");
+    wrong("fraud", "Eine Zahlung ist vollständig belegt. Sie zurückzuhalten verzögert sie ohne Grund.");
   });
 };
 
@@ -910,7 +977,7 @@ const ZV_DEC = [
   ["warn","Die AeroTrans GmbH anrufen und vorwarnen, dass ihre Zahlung gestoppt wurde.", "Kunden dürfen nicht über laufende Prüfungen oder mögliche Meldungen informiert werden (Tipping-off-Verbot)."]];
 RENDER.zv = b => {
   b.className = "wbody";
-  const fs = id => !S.f.fraud ? `<span class="tag warn">zurückgehalten</span>` : id === "mira" ? `<span class="tag no">abgelehnt</span>` : `<span class="tag info">Zweitfreigabe</span>`;
+  const fs = id => !S.f.fraud ? `<span class="tag warn">zurückgehalten</span>` : id === "mira" ? `<span class="tag no">nicht ausgeführt · eskaliert</span>` : id === "stadtwerke" ? `<span class="tag warn">in Klärung</span>` : `<span class="tag info">Zweitfreigabe</span>`;
   const sec = Math.ceil(Math.max(0, S.deadline - Date.now())/1000);
   b.innerHTML = `<div class="appbar" style="background:#0f3e6e">💶 ZV-Cockpit <small>Buchungslauf 16:30 · noch <b id="zvCountdown">${pad(Math.floor(sec/60))}:${pad(sec%60)}</b></small></div>
     <h3>Buchungslauf 16:30 – Auszug</h3>
@@ -918,7 +985,7 @@ RENDER.zv = b => {
       <tr><td>Sammelauftrag Gehälter Oktober</td><td style="text-align:right">1.214.880,00 €</td><td><span class="tag ok">freigegeben</span></td></tr>
       <tr><td>Nordlicht IT GmbH</td><td style="text-align:right">4.860,00 €</td><td>${fs("nordlicht")}</td></tr>
       <tr><td>Mira Energie GmbH</td><td style="text-align:right">48.750,00 €</td><td>${fs("mira")}</td></tr>
-      <tr><td>Stadtwerke West GmbH</td><td style="text-align:right">1.284,30 €</td><td>${fs("stadtwerke")}</td></tr>
+      <tr><td>Stadtwerke West</td><td style="text-align:right">1.284,30 €</td><td>${fs("stadtwerke")}</td></tr>
       <tr class="click warn" id="zvPh"><td><b>PHANTOME</b> <small class="muted">← für Details anklicken</small></td><td style="text-align:right"><b>3.800.000,00 €</b></td><td><span class="tag warn">⚠ Compliance-Vermerk offen</span></td></tr></table>
     <p class="mini muted">+ 209 weitere Zahlungen ohne Auffälligkeiten</p><div id="zvDetail"></div>`;
   $("zvPh").addEventListener("click", () => { if (!S.v.zvSel){ S.v.zvSel = true; narrate("ZV-Cockpit: PHANTOME geht an die Northbridge S.A., Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt (Panama)."); updateHud(); } render("zv"); });
@@ -926,7 +993,7 @@ RENDER.zv = b => {
   const canStop = S.notes.n4;
   $("zvDetail").innerHTML = `<div class="doc"><h3>Zahlung PHANTOME</h3><table>
     <tr><th>Auftraggeber</th><td>AeroTrans GmbH, Hamburg</td></tr>
-    <tr><th>Empfänger</th><td><b>${RECIPIENT.name}</b></td></tr><tr><th>Adresse</th><td><b>${RECIPIENT.addr}</b></td></tr><tr><th>Land</th><td><b>${RECIPIENT.country}</b></td></tr>
+    <tr><th>Empfänger</th><td><b>${RECIPIENT.name}</b></td></tr><tr><th>Adresse</th><td><b>${RECIPIENT.addr}</b></td></tr><tr><th>Land</th><td><b>${RECIPIENT.country}</b></td></tr><tr><th>Registernummer</th><td class="mono"><b>${RECIPIENT.reg}</b></td></tr>
     <tr><th>Betrag · Zweck</th><td>3.800.000,00 EUR · „Beratungsleistungen“</td></tr>
     <tr><th>Sanktionsscreening</th><td>${S.f.embargo ? `<span class="tag no">Treffer bestätigt</span>` : `<span class="tag warn">mögliche Treffer – manuelle Prüfung offen</span>`}</td></tr>
     <tr><th>1. Freigabe</th><td>heute 15:12 · Sammelkennung <span class="mono">zv.batch07</span> · Arbeitsplatz <span class="mono">PC-ZV-114</span></td></tr>
@@ -990,6 +1057,7 @@ function phaseTwo(){
 
 /* ---------- Ablauf ---------- */
 function start(){
+  clearSave();
   S.team = $("teamName").value.trim() || "Phantome";
   cutscene({eyebrow:"Prolog", title:"Freitag, 15:40 Uhr",
     lines:["Financial Crime Unit, vierte Etage. Ihr seid das Abendteam und kommt zur Übergabe in das Büro von Senior-Analyst Matthias Weber.",
@@ -1007,13 +1075,21 @@ function begin(){
   updateHud();
   S.timerId = setInterval(tick, 1000); tick();
 }
+const TOPICS = [
+  ["Embargo / Sanktionen", "embargo", () => S.f.embargo],
+  ["Geldwäsche", "aml", () => S.f.aml],
+  ["Betrugsprävention", "fraud", () => S.f.fraud],
+  ["Zahlungsstopp und Eskalation", "zv", () => S.f.stopped],
+  ["Interner Täter / Hinweisgebersystem", "whistle", () => S.f.insider],
+  ["Webers Rätsel (Notizen)", "notes", () => S.notes.n4]];
+const topicResults = () => TOPICS.map(([name, id, ok]) => ({name, ok:!!ok(), err:S.err[id] || 0}));
 function finish(timeout){
-  if (S.ended) return; S.ended = true; S.timeout = timeout; clearInterval(S.timerId);
+  if (S.ended) return; S.ended = true; S.timeout = timeout; clearInterval(S.timerId); clearSave();
   const remaining = Math.max(0, S.deadline - Date.now()), mins = Math.floor(remaining/60000);
-  const bonus = timeout || S.f.wrongAccused ? 0 : Math.min(250, mins*5); S.score += bonus;
+  const bonus = timeout || S.f.wrongAccused ? 0 : Math.min(100, mins*2); S.score += bonus;
   const elapsed = Math.min(3000, Math.round((Date.now() - S.startAt)/1000)), t = storyTime();
   const parts = solvedCount() + (S.f.insider ? 1 : 0);
-  window.phantomeResult = {team:S.team, score:S.score, completed:parts, mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout, stopped:!!S.f.stopped, insider:!!S.f.insider};
+  window.phantomeResult = {topics:topicResults(), team:S.team, score:S.score, completed:parts, mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout, stopped:!!S.f.stopped, insider:!!S.f.insider};
   const weber = ["Um 16:34 kommt Weber zurück, außer Atem. „Raum 12.04 ist ein Lager. Ich stand vor verschlossener Tür, und mein Ausweis ging plötzlich nicht mehr.“",
     "Er sieht auf seinen Bildschirm und wird blass. „Ich habe in der Eile meinen PC nicht gesperrt. Genau darauf hat er gesetzt.“"];
   let lines, title, eyebrow, head, text;
@@ -1048,15 +1124,30 @@ function finish(timeout){
     $("final").classList.remove("hidden");
     $("finalEyebrow").textContent = eyebrow; $("finalTitle").textContent = head; $("finalText").textContent = text;
     $("finalScore").textContent = S.score + " Punkte"; $("finalTeam").textContent = S.team;
-    $("finalStats").textContent = `${parts}/4 Aufgaben · ${S.mistakes} Fehlversuche · ${S.hints} Hinweise · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min.`;
+    $("finalStats").textContent = `${parts}/4 Aufgaben · ${S.mistakes} ${S.mistakes === 1 ? "Fehlversuch" : "Fehlversuche"} · ${S.hints} ${S.hints === 1 ? "Hinweis" : "Hinweise"} · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min.`;
+    $("finalTopics").innerHTML = `<table class="ftable"><tr><th>Thema</th><th>Ergebnis</th><th>Fehlversuche</th></tr>${topicResults().map(t => `<tr><td>${t.name}</td><td>${t.ok ? "✓ gelöst" : "✗ offen"}</td><td>${t.err}</td></tr>`).join("")}</table>`;
   }});
 }
 $("startBtn").addEventListener("click", start);
 $("teamName").addEventListener("keydown", e => { if (e.key === "Enter") start(); });
-$("restartBtn").addEventListener("click", () => location.reload());
+$("restartBtn").addEventListener("click", () => { clearSave(); location.reload(); });
+function resume(d){
+  Object.assign(S, d.S); MAILS.inbox = d.inbox; CHATS.albers.msgs = d.chat;
+  ["start","cutscene","final"].forEach(id => $(id).classList.add("hidden")); $("game").classList.remove("hidden");
+  renderLog(); narrate("Spielstand wiederhergestellt – der Timer ist weitergelaufen."); updateHud();
+  S.timerId = setInterval(tick, 1000); tick();
+}
+const saved = loadSave();
+if (saved){
+  const left = Math.max(0, Math.ceil((saved.S.deadline - Date.now())/60000));
+  $("resumeBox").innerHTML = `<b>Laufendes Spiel gefunden:</b> Team <span id="resumeTeam"></span> · noch ${left} Min. bis 16:30<div class="rowbuttons"><button class="primary" id="resumeBtn">Spiel fortsetzen →</button><button id="discardBtn">Verwerfen und neu beginnen</button></div>`;
+  $("resumeTeam").textContent = saved.S.team; $("resumeBox").classList.remove("hidden");
+  $("resumeBtn").addEventListener("click", () => resume(saved));
+  $("discardBtn").addEventListener("click", () => { clearSave(); $("resumeBox").classList.add("hidden"); });
+}
 $("copyBtn").addEventListener("click", async () => {
   const r = window.phantomeResult; if (!r) return;
-  const txt = `Projekt Phantome – Ergebnis\nTeam: ${r.team}\nPunkte: ${r.score}\nAufgaben gelöst: ${r.completed}/4\nFehlversuche: ${r.mistakes}\nHinweise: ${r.hints}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.\nZeit abgelaufen: ${r.timeout ? "Ja" : "Nein"}`;
+  const txt = `Projekt Phantome – Ergebnis\nTeam: ${r.team}\nPunkte: ${r.score}\nAufgaben gelöst: ${r.completed}/4\nFehlversuche: ${r.mistakes}\nHinweise: ${r.hints}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.\nZeit abgelaufen: ${r.timeout ? "Ja" : "Nein"}\n\nNach Thema:\n${r.topics.map(t => `${t.ok ? "✓" : "✗"} ${t.name} (Fehlversuche: ${t.err})`).join("\n")}`;
   try { await navigator.clipboard.writeText(txt); $("copyFeedback").textContent = "Ergebnis wurde in die Zwischenablage kopiert."; }
   catch(e){ $("copyFeedback").textContent = txt; }
   $("copyFeedback").classList.remove("hidden");

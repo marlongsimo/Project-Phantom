@@ -7,13 +7,15 @@ Der rote Faden sind Webers Notizen: Notiz 1 ist offen und nennt den ersten Schri
 <details><summary>Lösung für Spielleitung</summary>
 
 1. Notizen → Notiz 1 lesen.
-2. ZV-Cockpit → Zeile PHANTOME anklicken: Empfänger Northbridge S.A., Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt, Panama.
-3. EmbargoCheck: „Northbridge“ suchen, Treffer öffnen und vergleichen. SAN-4417 als echten Treffer bewerten (SAN-3871 hat das gleiche Land, aber eine andere Adresse) → Notiz 2 öffnet mit der Listennummer **4417**.
-4. AML-Monitor, Alert A-2291: Kundenprofil ansehen (kein Bargeld erwartet), unter „Umsätze“ alle Bareinzahlungen und Überweisungen an Nova Trade markieren (6 Buchungen). Unter „Gegenpartei“: Nova Trade teilt die Adresse mit Northbridge S.A.; Abschluss „Vertiefte Prüfung und Meldung an den Geldwäschebeauftragten“ → Notiz 3 öffnet mit der Summe an Nova Trade: 9.600 + 9.700 + 4.750 = **24050**.
-5. FraudDesk: bei jeder Zahlung VoP-Abfrage starten und Lieferantenakte öffnen. Nordlicht IT und Stadtwerke West weiterbearbeiten, Mira Energie ablehnen → Notiz 4 öffnet mit **103** (1 weiter, 2 abgelehnt = 0, 3 weiter).
-6. ZV-Cockpit → PHANTOME → „Compliance-Stopp setzen“: Freigabecode **362** (3 Fehlalarme im EmbargoCheck, 6 Muster-Buchungen, Überweisung 2 abgelehnt), Gründe „Sanktionstreffer“ und „Geldwäsche über Nova Trade“. Danach „eskalieren und über -1200 prüfen“.
-7. Interner Täter: Mail → „Vorstandsmail“ → Kopfzeilen: gesendet von PC-ZV-114. Intranet: PC-ZV-114 gehört Sven Kranz (Zahlungsverkehr). Mail → Gesendet: 15:31 ging von Webers entsperrtem PC eine Mail an s.kranz, obwohl Weber laut Chat seit 15:26 weg war. Weitere Belege: Mira-Kontoänderung durch s.kranz (FraudDesk), 1. Freigabe von PHANTOME von PC-ZV-114 (ZV-Cockpit).
-8. Hinweisgebersystem: Sven Kranz auswählen. Es gibt zwei Versuche; nach dem zweiten falschen Verdacht ist das Spiel verloren.
+2. ZV-Cockpit → Zeile PHANTOME anklicken: Northbridge S.A., Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt, Panama, Registernummer 155-690-1207.
+3. EmbargoCheck: „Northbridge“ suchen und alle fünf Treffer bewerten: SAN-4417 = echter Treffer; SAN-2207, SAN-3871, SAN-5150 = Fehlalarm; SAN-4790 (keine Adresse/Registernummer) = nicht eindeutig. Abschluss: „Zahlung nicht ausführen, dokumentieren, eskalieren“. Notiz 2 öffnet erst danach, Code **4417**.
+4. AML-Monitor, Alert A-2291: Kundenprofil ansehen (kein Bargeld erwartet, Filialvermerk „Geschenk der Großmutter“), alle Bareinzahlungen und Überweisungen an Nova Trade markieren (6 Buchungen). Gegenpartei: gleiche Adresse wie Northbridge S.A.; Abschluss „Vertiefte Prüfung, an den Geldwäschebeauftragten“. Notiz 3: 9.600 + 9.700 + 4.750 = **24050**.
+5. FraudDesk: bei jeder Zahlung VoP-Abfrage und Lieferantenakte. Nordlicht IT = Weiterbearbeiten, Mira Energie = Nicht ausführen + eskalieren, Stadtwerke West (ähnliche Übereinstimmung, keine Erklärung in der Akte) = Klären. Notiz 4: **102**.
+6. ZV-Cockpit → PHANTOME → „Compliance-Stopp setzen“: Freigabecode **362** (3 Fehlalarme, 6 Muster-Buchungen, Überweisung 2 nicht ausgeführt), Gründe „Sanktionstreffer“ und „Geldwäsche über Nova Trade“. Danach „eskalieren und über -1200 prüfen“.
+7. Interner Täter: Kopfzeilen der Vorstandsmails → PC-ZV-114 → Intranet: Sven Kranz. Weitere Spuren: „Gesendet“ 15:31, Mira-Kontoänderung durch s.kranz, 1. Freigabe von PC-ZV-114.
+8. Hinweisgebersystem: Sven Kranz auswählen. Zwei Versuche; nach dem zweiten falschen Verdacht ist das Spiel verloren.
+
+Punkte: +250 pro Prüfung, −20 pro Fehlversuch, Hinweise −25 (Denkanstoß) / −50 (konkret), Zeitbonus höchstens 100. Der Spielstand wird im Browser gespeichert; nach versehentlichem Neuladen kann das Team fortsetzen.
 </details>
 
 ## Lokal testen
