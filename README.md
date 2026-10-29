@@ -2,7 +2,7 @@
 
 Ein Escape Room im Browser mit Story, der fast vollständig auf einem nachgebauten PC spielt. Freitag, 15:40 Uhr: Senior-Analyst Matthias Weber war an etwas Großem dran und ist verschwunden. Um 16:30 Uhr startet der Buchungslauf – und mit ihm eine Zahlung über 3,8 Mio. Euro an eine Firma auf der Sanktionsliste.
 
-Der rote Faden sind Webers Notizen: Notiz 1 ist offen und nennt den ersten Schritt. Jede richtig abgeschlossene Prüfung (EmbargoCheck, AML-Monitor, FraudDesk) erzeugt eine Vorgangsnummer, die die nächste Notiz entsperrt. Notiz 4 enthält den Freigabecode für den Compliance-Stopp im ZV-Cockpit.
+Der rote Faden sind Webers Notizen: Notiz 1 ist offen und nennt den ersten Schritt. Jede richtig abgeschlossene Prüfung (EmbargoCheck, AML-Monitor, FraudDesk) erzeugt eine Vorgangsnummer, die die nächste Notiz entsperrt. Notiz 4 enthält den Freigabecode für den Compliance-Stopp im ZV-Cockpit. Zum Schluss deckt das Team auf, wer im Haus geholfen hat: ein Mitarbeiter des Zahlungsverkehrs, der Weber mit einer gefälschten Vorstandsmail weggelockt und dessen entsperrten PC benutzt hat.
 
 <details><summary>Lösung für Spielleitung</summary>
 
@@ -12,6 +12,8 @@ Der rote Faden sind Webers Notizen: Notiz 1 ist offen und nennt den ersten Schri
 4. AML-Monitor, Alert A-2291: Kundenprofil ansehen (kein Bargeld erwartet), unter „Umsätze“ alle Bareinzahlungen und Überweisungen an Nova Trade markieren (6 Buchungen). Unter „Gegenpartei“: Nova Trade teilt die Adresse mit Northbridge S.A.; Abschluss „Vertiefte Prüfung und Meldung an den Geldwäschebeauftragten“ → Vorgang **2604** → öffnet Notiz 3.
 5. FraudDesk: bei jeder Zahlung VoP-Abfrage starten und Lieferantenakte öffnen. Nordlicht IT und Stadtwerke West weiterbearbeiten, Mira Energie ablehnen → Vorgang **7190** → öffnet Notiz 4.
 6. ZV-Cockpit → PHANTOME → „Compliance-Stopp setzen“: Freigabecode **762**, Vorgangsnummern 3108, 2604, 7190, Gründe „Sanktionstreffer“ und „Geldwäsche über Nova Trade“. Danach „eskalieren und über -1200 prüfen“.
+7. Interner Täter: Mail → „Vorstandsmail“ → Kopfzeilen: gesendet von PC-ZV-114. Intranet: PC-ZV-114 gehört Sven Kranz (Zahlungsverkehr). Mail → Gesendet: 15:31 ging von Webers entsperrtem PC eine Mail an s.kranz, obwohl Weber laut Chat seit 15:26 weg war. Weitere Belege: Mira-Kontoänderung durch s.kranz (FraudDesk), 1. Freigabe von PHANTOME von PC-ZV-114 (ZV-Cockpit).
+8. Hinweisgebersystem: Sven Kranz, die vier Belege (nicht Albers/Kuchen), „Meldung an Compliance und Revision, Beweise sichern, PC sperren, Person nicht ansprechen“.
 </details>
 
 ## Lokal testen

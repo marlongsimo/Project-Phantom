@@ -171,7 +171,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   .tbtn{padding:0 7px;font-size:.76rem}
   .doc{padding:10px}.doc th,.doc td,.tbl th,.tbl td{padding:5px 4px;font-size:.8rem}
   .stamp{position:static;display:inline-block;margin-bottom:6px}
-  .doc table{table-layout:fixed}.doc th{width:36%;letter-spacing:.02em;overflow-wrap:anywhere}.tag{white-space:normal}
+  .tbl{table-layout:fixed}.tbl th{overflow-wrap:anywhere;letter-spacing:0}.doc table{table-layout:fixed}.doc th{width:36%;letter-spacing:.02em;overflow-wrap:anywhere}.tag{white-space:normal}
   .wbody{padding:12px}.appbar{margin:-12px -12px 12px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -197,7 +197,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
 
 <section id="start">
   <div class="hero">
-    <span class="pill">ESCAPE ROOM · TRAINING</span><span class="pill">4 NOTIZEN · 3 PRÜFUNGEN</span><span class="pill">50 MINUTEN</span>
+    <span class="pill">ESCAPE ROOM · TRAINING</span><span class="pill">4 NOTIZEN · 4 AUFGABEN</span><span class="pill">50 MINUTEN</span>
     <h1>Weber ist weg.<br>Sein PC ist noch an.</h1>
     <p class="muted" style="max-width:680px;font-size:1.08rem">Freitag, 15:40 Uhr. Senior-Analyst Matthias Weber war an etwas Großem dran – dann ist er verschwunden. Um 16:30 Uhr startet der Buchungslauf, und mit ihm eine Zahlung über 3,8 Millionen Euro an eine Firma, die auf einer Sanktionsliste stehen könnte. Folgt Webers Notizen und stoppt die Zahlung rechtzeitig.</p>
     <div class="field" style="max-width:460px">
@@ -266,6 +266,8 @@ h3{font-size:1.05rem;margin-bottom:6px}
     <div class="card"><div class="num">EMBARGO · EMBARGOCHECK</div><h3>Den echten Treffer finden</h3><p class="muted mini">Ähnliche Namen gibt es viele. Ein Listentreffer wird erst bestätigt, wenn auch Adresse, Land oder andere Merkmale übereinstimmen. Ist der Treffer echt: nicht ausführen, dokumentieren, eskalieren.</p></div>
     <div class="card"><div class="num">GELDWÄSCHE · AML-MONITOR</div><h3>Das Muster bei Fall K.</h3><p class="muted mini">Bareinzahlungen knapp unter 10.000 € und Weiterleitung am selben Tag passen nicht zu einem Studenten. Das ist ein Anlass für eine vertiefte Prüfung, keine automatische Verdachtsmeldung. Nicht jeder Alert ist Geldwäsche.</p></div>
     <div class="card"><div class="num">BETRUG · FRAUDDESK</div><h3>Die umgeleitete Mira-Zahlung</h3><p class="muted mini">Verification of Payee ist ein Prüfbaustein, keine Entscheidung für sich. Abgelehnt wird erst, wenn mehrere Warnsignale zusammenkommen: VoP-Abweichung, neue Kontoverbindung, unpassender Zahlungskontext. Plausible Zahlungen werden nach den üblichen Kontrollen weiterbearbeitet.</p></div>
+    <div class="card"><div class="num">INTERNE DOLOSE HANDLUNG · HINWEISGEBERSYSTEM</div><h3>Der Helfer im Haus</h3><p class="muted mini">Ein Mitarbeiter mit Zugang zum Zahlungsverkehr hat Weber mit gefälschten Mails weggelockt und Kontrollen umgangen. Verdacht mit Belegen über das Hinweisgebersystem melden, Beweise sichern – und den Verdächtigen nicht selbst ansprechen.</p></div>
+    <div class="card"><div class="num">INFORMATIONSSICHERHEIT · SOCIAL ENGINEERING</div><h3>Der entsperrte PC</h3><p class="muted mini">Zeitdruck und „Vertraulichkeit“ haben Weber aus dem Büro gelockt – ohne Bildschirmsperre. So konnte der Täter in seinem Namen mailen. Darum: Absender und Kopfzeilen prüfen, Termine über bekannte Kanäle bestätigen und beim Verlassen immer Windows + L.</p></div>
   </div>
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
@@ -341,8 +343,10 @@ const STEPS = [
   {label:"Notiz 3 öffnen", done:() => S.notes.n3},
   {label:"FraudDesk: drei Zahlungen prüfen", done:() => S.f.fraud},
   {label:"Notiz 4 öffnen", done:() => S.notes.n4},
-  {label:"ZV-Cockpit: Stopp setzen und dokumentieren", done:() => S.ended && !S.timeout}];
+  {label:"ZV-Cockpit: Stopp setzen und dokumentieren", done:() => S.f.stopped},
+  {label:"Den internen Helfer finden und melden", done:() => S.f.insider}];
 function objective(){
+  if (S.f.stopped) return "PHANTOME ist gestoppt. Jetzt der interne Helfer: Wer hat Weber weggelockt und seinen PC benutzt? Sammelt Belege und meldet sie im Hinweisgebersystem.";
   if (S.f.code) return "Compliance-Stopp ist eingetragen. Wählt im ZV-Cockpit das richtige weitere Vorgehen.";
   if (!S.v.notesSeen) return "Öffnet Webers Notizen auf dem Desktop und lest Notiz 1.";
   if (!S.v.zvSel) return "Holt euch im ZV-Cockpit die Empfängerdaten der Zahlung PHANTOME.";
@@ -355,6 +359,12 @@ function objective(){
   return "Setzt im ZV-Cockpit den Compliance-Stopp für PHANTOME – mit Freigabecode, Vorgangsnummern und Begründung.";
 }
 function hintText(){
+  if (S.f.stopped){
+    if (!S.v.hdrSeen) return "Öffnet in der Mail eine der „Vorstandsmails“ und klickt auf „Kopfzeilen anzeigen“. Von welchem Rechner kam sie?";
+    if (!S.v.pcSeen) return "Sucht im Intranet nach dem Rechnernamen aus den Kopfzeilen (PC-ZV-114).";
+    if (!S.v.sentSeen) return "Schaut in Webers Mail unter „Gesendet“. Passt die Uhrzeit zu Webers letzter Chatnachricht?";
+    return "Die vier Belege stehen in Mail (Kopfzeilen, Gesendet), FraudDesk (Lieferantenakte Mira) und ZV-Cockpit (1. Freigabe). Und: den Verdächtigen nicht warnen.";
+  }
   if (S.f.code) return "Freigeben ist keine Option. Denkt an Dokumentation, Eskalation und Prüfung über einen bekannten Kanal.";
   if (!S.v.notesSeen) return "Klickt auf dem Desktop auf „Notizen“. Notiz 1 ist nicht gesperrt.";
   if (!S.v.zvSel) return "Öffnet das ZV-Cockpit und klickt auf die Zeile PHANTOME. Dort stehen Name, Adresse und Land des Empfängers.";
@@ -400,7 +410,9 @@ const APPS = {
   embargo:{label:"EmbargoCheck", icon:"🌐", title:"EmbargoCheck – Sanktionslisten-Screening", w:780, h:520},
   aml:{label:"AML-Monitor", icon:"📈", title:"AML-Monitor – Transaktionsüberwachung", w:780, h:520},
   fraud:{label:"FraudDesk", icon:"🛡️", title:"FraudDesk – Zahlungsprüfung", w:800, h:540},
-  zv:{label:"ZV-Cockpit", icon:"💶", title:"ZV-Cockpit – Zahlungsverkehr", w:780, h:520}};
+  zv:{label:"ZV-Cockpit", icon:"💶", title:"ZV-Cockpit – Zahlungsverkehr", w:780, h:520},
+  intranet:{label:"Intranet", icon:"🏢", title:"Intranet – Mitarbeiterverzeichnis", w:680, h:440},
+  whistle:{label:"Hinweisgeber", icon:"📣", title:"Hinweisgebersystem", w:720, h:540}};
 function renderIcons(){
   $("icons").innerHTML = "";
   Object.entries(APPS).forEach(([id, a]) => {
@@ -523,7 +535,10 @@ Ohne Dokumentation nimmt das System den Stopp nicht an:
 • alle drei Vorgangsnummern eintragen
 • nur die Gründe ankreuzen, die ihr wirklich belegen könnt
 
-Danach eskalieren. Und die „Vorstandsanweisung“ in meinem Postfach nur über die bekannte Durchwahl -1200 prüfen – nie per Antwort auf die Mail.`}};
+Danach eskalieren. Und die „Vorstandsanweisung“ in meinem Postfach nur über die bekannte Durchwahl -1200 prüfen – nie per Antwort auf die Mail.
+
+P.S. Die 1. Freigabe von PHANTOME kam über die Sammelkennung zv.batch07 – das kann nur jemand aus dem Zahlungsverkehr gewesen sein. Jemand bei uns hilft denen.
+Wenn ihr rausfindet, wer: über das Hinweisgebersystem melden. Nicht selbst ermitteln, niemanden ansprechen!`}};
 RENDER.notes = b => {
   b.className = "wbody flush";
   const id = S.v.note, n = NOTES[id], open = S.notes[id];
@@ -546,22 +561,108 @@ RENDER.notes = b => {
 };
 
 /* ---------- Mail ---------- */
-const MAILS = [
-  {time:"15:36", from:"Assistenz des Vorstands", addr:"assistenz.vorstand@hausbank-vorstand.example", subj:"PHANTOME – Ausführung im Lauf 16:30 sicherstellen", read:false,
-    body:`<p>Sehr geehrter Herr Weber,</p><p>der Vorstand erwartet, dass die Zahlung PHANTOME (3,8 Mio. EUR, Northbridge S.A.) im Buchungslauf um 16:30 Uhr ausgeführt wird. Ihr Compliance-Vermerk verzögert ein strategisch wichtiges Geschäft.</p><p>Bitte behandeln Sie die Angelegenheit streng vertraulich und verzichten Sie auf Rückfragen per Telefon. Eine kurze Bestätigung per Antwort auf diese E-Mail genügt.</p><p>Mit freundlichen Grüßen<br>Assistenz des Vorstands</p>`},
-  {time:"15:10", from:"ZV-Batch", addr:"zv-batch@hausbank.example", subj:"Buchungslauf 16:30 – 1 Zahlung mit offenem Compliance-Vermerk", read:false,
-    body:`<p>Automatische Nachricht.</p><p>Im Buchungslauf heute 16:30 Uhr ist 1 Zahlung mit offenem Compliance-Vermerk enthalten:</p><p class="mono">PHANTOME · Northbridge S.A. · 3.800.000,00 EUR · Fallverantwortlich: m.weber</p><p>Ohne Compliance-Stopp wird die Zahlung im Buchungslauf automatisch ausgeführt.</p>`},
-  {time:"14:55", from:"IT-Sicherheit", addr:"it-sicherheit@hausbank.example", subj:"Erinnerung: Phishing-Awareness-Woche", read:true,
-    body:`<p>Liebe Kolleginnen und Kollegen,</p><p>achtet diese Woche besonders auf ungewöhnliche Zahlungsaufforderungen und Kontoänderungen. Interne Adressen enden immer auf <b class="mono">@hausbank.example</b>. Im Zweifel: Rückruf über die bekannte Durchwahl – nie über Kontaktdaten aus der verdächtigen Nachricht.</p><p>Eure IT-Sicherheit</p>`},
-  {time:"13:47", from:"Katrin Albers", addr:"k.albers@hausbank.example", subj:"Übergabe ans Abendteam 15:45", read:true,
-    body:`<p>Hi Matthias,</p><p>denk bitte an die Übergabe ans Abendteam um 15:45 bei dir. Du wolltest ihnen ja noch „was zeigen“ 😉</p><p>Katrin</p>`}];
+const FAKE_HDR = `Return-Path: &lt;assistenz.vorstand@hausbank-vorstand.example&gt;<br>Received: from <b>PC-ZV-114.hausbank.intern</b> (10.4.3.114)<br>&nbsp;&nbsp;by mail-gw01.hausbank.intern<br>X-Mailer: Microsoft Outlook 16.0`;
+const MAILS = {
+  inbox:[
+    {time:"15:36", from:"Assistenz des Vorstands", addr:"assistenz.vorstand@hausbank-vorstand.example", subj:"PHANTOME – Ausführung im Lauf 16:30 sicherstellen", read:false, fake:true, hdr:FAKE_HDR,
+      body:`<p>Sehr geehrter Herr Weber,</p><p>der Vorstand erwartet, dass die Zahlung PHANTOME (3,8 Mio. EUR, Northbridge S.A.) im Buchungslauf um 16:30 Uhr ausgeführt wird. Ihr Compliance-Vermerk verzögert ein strategisch wichtiges Geschäft.</p><p>Bitte behandeln Sie die Angelegenheit streng vertraulich und verzichten Sie auf Rückfragen per Telefon.</p><p>Mit freundlichen Grüßen<br>Assistenz des Vorstands</p>`},
+    {time:"15:24", from:"Assistenz des Vorstands", addr:"assistenz.vorstand@hausbank-vorstand.example", subj:"DRINGEND: Gespräch mit dem Vorstand – sofort", read:true, fake:true, hdr:FAKE_HDR,
+      body:`<p>Sehr geehrter Herr Weber,</p><p>der Vorstand bittet Sie <b>umgehend</b> zu einem vertraulichen Gespräch in <b>Raum 12.04</b> (12. OG).</p><p>Bitte kommen Sie sofort, nehmen Sie keine Unterlagen mit und informieren Sie niemanden über diesen Termin.</p><p>Mit freundlichen Grüßen<br>Assistenz des Vorstands</p>`},
+    {time:"15:10", from:"ZV-Batch", addr:"zv-batch@hausbank.example", subj:"Buchungslauf 16:30 – 1 Zahlung mit offenem Compliance-Vermerk", read:false,
+      hdr:`Received: from zv-batch01.hausbank.intern (10.4.1.20)`,
+      body:`<p>Automatische Nachricht.</p><p>Im Buchungslauf heute 16:30 Uhr ist 1 Zahlung mit offenem Compliance-Vermerk enthalten:</p><p class="mono">PHANTOME · Northbridge S.A. · 3.800.000,00 EUR · Fallverantwortlich: m.weber</p><p>Ohne Compliance-Stopp wird die Zahlung im Buchungslauf automatisch ausgeführt.</p>`},
+    {time:"14:55", from:"IT-Sicherheit", addr:"it-sicherheit@hausbank.example", subj:"Erinnerung: Phishing-Awareness-Woche", read:true,
+      hdr:`Received: from PC-IT-002.hausbank.intern (10.4.9.2)`,
+      body:`<p>Liebe Kolleginnen und Kollegen,</p><p>drei Regeln für diese Woche:</p><ul><li>Interne Adressen enden immer auf <b class="mono">@hausbank.example</b>.</li><li>Im Zweifel: Rückruf über die bekannte Durchwahl – nie über Kontaktdaten aus der verdächtigen Nachricht.</li><li>Beim Verlassen des Arbeitsplatzes <b>immer den Bildschirm sperren</b> (Windows + L) – auch wenn es nur „kurz“ ist.</li></ul><p>Eure IT-Sicherheit</p>`},
+    {time:"13:47", from:"Katrin Albers", addr:"k.albers@hausbank.example", subj:"Übergabe ans Abendteam 15:45", read:true,
+      hdr:`Received: from PC-FCU-421.hausbank.intern (10.4.4.21)`,
+      body:`<p>Hi Matthias,</p><p>denk bitte an die Übergabe ans Abendteam um 15:45 bei dir. Du wolltest ihnen ja noch „was zeigen“ 😉</p><p>Katrin</p>`}],
+  sent:[
+    {time:"15:31", from:"Matthias Weber", addr:"m.weber@hausbank.example", to:"s.kranz@hausbank.example", subj:"PHANTOME – Vermerk kann ignoriert werden", read:true, sentByOther:true,
+      hdr:`Received: from <b>PC-FCU-417.hausbank.intern</b> (10.4.4.17)<br>&nbsp;&nbsp;angemeldeter Benutzer: m.weber`,
+      body:`<p>Hallo Sven,</p><p>nach Rücksprache ist PHANTOME unkritisch. Den Compliance-Vermerk beim Lauf bitte ignorieren.</p><p>Gruß<br>Matthias</p>`},
+    {time:"12:41", from:"Matthias Weber", addr:"m.weber@hausbank.example", to:"fcu-team@hausbank.example", subj:"Re: Kuchen in der Küche", read:true,
+      hdr:`Received: from PC-FCU-417.hausbank.intern (10.4.4.17)`, body:`<p>Danke Deniz, sehr lecker! 🎂</p><p>Matthias</p>`}]};
 RENDER.mail = b => {
-  const m = MAILS[S.v.mail]; m.read = true;
+  const folder = S.v.folder || "inbox", list = MAILS[folder], m = list[S.v.mail] || list[0]; m.read = true;
   b.className = "wbody flush";
-  b.innerHTML = `<div class="split"><div class="list">${MAILS.map((x,i) => `<button class="li ${i === S.v.mail ? "sel" : ""} ${x.read ? "" : "unread"}" data-i="${i}">${x.from}<small>${x.time} · ${x.subj}</small></button>`).join("")}</div>
-    <div class="pane"><h3>${m.subj}</h3><p class="mini muted" style="margin-bottom:12px">Von: <b>${m.from}</b> &lt;<span class="mono">${m.addr}</span>&gt; · heute ${m.time}<br>An: m.weber@hausbank.example</p>${m.body}</div></div>`;
+  b.innerHTML = `<div class="split"><div class="list">
+      <div class="tabs" style="margin:0;padding:6px 6px 0">${[["inbox","Posteingang"],["sent","Gesendet"]].map(([k,t]) => `<button data-f="${k}" class="${k === folder ? "on" : ""}">${t}</button>`).join("")}</div>
+      ${list.map((x,i) => `<button class="li ${x === m ? "sel" : ""} ${x.read ? "" : "unread"}" data-i="${i}">${folder === "sent" ? "An: " + x.to : x.from}<small>${x.time} · ${x.subj}</small></button>`).join("")}</div>
+    <div class="pane"><h3>${m.subj}</h3><p class="mini muted" style="margin-bottom:8px">Von: <b>${m.from}</b> &lt;<span class="mono">${m.addr}</span>&gt; · heute ${m.time}<br>An: ${m.to || "m.weber@hausbank.example"}</p>
+      <button id="hdrBtn" style="font-size:.8rem;padding:4px 10px">${S.v.hdrOpen ? "Kopfzeilen ausblenden" : "⋯ Kopfzeilen anzeigen"}</button>
+      ${S.v.hdrOpen ? `<div class="doc mono" style="font-size:.78rem;margin-top:8px">${m.hdr}</div>` : ""}
+      <div style="margin-top:10px">${m.body}</div></div></div>`;
+  on(b, "[data-f]", "click", e => { S.v.folder = e.currentTarget.dataset.f; S.v.mail = 0; render("mail"); });
   on(b, ".li", "click", e => { S.v.mail = +e.currentTarget.dataset.i; render("mail"); });
-  if (m.from === "Assistenz des Vorstands" && !S.v.fakeSeen){ S.v.fakeSeen = true; narrate("Mail: Eine „Assistenz des Vorstands“ drängt von einer fremden Domain (hausbank-vorstand.example) darauf, PHANTOME auszuführen – ohne telefonische Rückfrage."); }
+  $("hdrBtn").addEventListener("click", () => { S.v.hdrOpen = !S.v.hdrOpen; render("mail"); });
+  if (m.fake && !S.v.fakeSeen){ S.v.fakeSeen = true; narrate("Mail 15:24: Eine „Assistenz des Vorstands“ bestellt Weber sofort und vertraulich in Raum 12.04 – von der fremden Domain hausbank-vorstand.example. Deshalb ist er weg."); }
+  if (m.fake && S.v.hdrOpen && !S.v.hdrSeen){ S.v.hdrSeen = true; narrate("Kopfzeilen: Die „Vorstandsmails“ kamen gar nicht von außen – sie wurden im Haus vom Rechner PC-ZV-114 verschickt."); updateHud(); }
+  if (m.sentByOther && !S.v.sentSeen){ S.v.sentSeen = true; narrate("Gesendet 15:31: Von Webers Konto ging eine Mail an s.kranz – „Vermerk kann ignoriert werden“. Laut Chat war Weber da schon seit 15:26 weg. Jemand hat seinen entsperrten PC benutzt."); updateHud(); }
+};
+
+/* ---------- Intranet ---------- */
+const STAFF = [
+  ["Matthias Weber","Financial Crime Unit","-4417","PC-FCU-417"],
+  ["Katrin Albers","Financial Crime Unit","-4421","PC-FCU-421"],
+  ["Deniz Yilmaz","Financial Crime Unit","-4425","PC-FCU-425"],
+  ["Sven Kranz","Zahlungsverkehr","-3114","PC-ZV-114"],
+  ["Lena Brandt","Zahlungsverkehr","-3118","PC-ZV-118"],
+  ["Vorstandsbüro","Vorstand","-1200","PC-VS-001"],
+  ["IT-Sicherheit","IT","-4911","PC-IT-002"]];
+RENDER.intranet = b => {
+  b.className = "wbody";
+  const q = (S.v.staffQ || "").toLowerCase().trim();
+  const rows = STAFF.filter(r => !q || r.join(" ").toLowerCase().includes(q));
+  b.innerHTML = `<div class="appbar" style="background:#44515f">🏢 Intranet <small>Mitarbeiterverzeichnis</small></div>
+    <div class="row" style="margin-top:0"><input id="staffQ" placeholder="Name, Abteilung, Durchwahl oder Arbeitsplatz" aria-label="Suche"><button class="primary" id="staffBtn">Suchen</button></div>
+    <table class="tbl" style="margin-top:10px"><tr><th>Name</th><th>Abteilung</th><th>Durchwahl</th><th>Arbeitsplatz</th></tr>
+    ${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td class="mono">${r[2]}</td><td class="mono">${r[3]}</td></tr>`).join("") || `<tr><td colspan="4" class="muted">Keine Einträge gefunden.</td></tr>`}</table>
+    <p class="mini muted">Raum 12.04 (12. OG): Lagerraum – kein Besprechungsraum.</p>`;
+  $("staffQ").value = S.v.staffQ || "";
+  const go = () => { S.v.staffQ = $("staffQ").value; render("intranet");
+    if (S.v.staffQ.toUpperCase().includes("114") && !S.v.pcSeen){ S.v.pcSeen = true; narrate("Intranet: Der Rechner PC-ZV-114 gehört Sven Kranz aus dem Zahlungsverkehr."); updateHud(); } };
+  $("staffBtn").addEventListener("click", go); $("staffQ").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
+};
+
+/* ---------- Hinweisgebersystem ---------- */
+const WB_PEOPLE = [["", "– bitte wählen –"], ["albers","Katrin Albers (FCU)"], ["yilmaz","Deniz Yilmaz (FCU)"], ["kranz","Sven Kranz (Zahlungsverkehr)"], ["brandt","Lena Brandt (Zahlungsverkehr)"]];
+const WB_EVIDENCE = [
+  ["hdr", "Die beiden „Vorstandsmails“ wurden laut Kopfzeilen vom Rechner PC-ZV-114 verschickt.", true],
+  ["sent", "Um 15:31 ging von Webers entsperrtem PC eine Mail an s.kranz – Weber war da schon weg.", true],
+  ["mira", "Die Kontoänderung bei Mira Energie hat s.kranz ohne Rückruf erfasst.", true],
+  ["release", "Die 1. Freigabe von PHANTOME kam vom Arbeitsplatz PC-ZV-114.", true],
+  ["albers", "Katrin Albers hat Weber um 15:39 im Chat gesucht.", false],
+  ["cake", "Im Team-Chat wurde heute Kuchen angeboten.", false]];
+const WB_DEC = [
+  ["ok", "Meldung über das Hinweisgebersystem an Compliance und Interne Revision. Beweise sichern: Webers PC sofort sperren, nichts löschen. Die verdächtige Person nicht ansprechen."],
+  ["confront", "Die verdächtige Person direkt zur Rede stellen, bevor sie Feierabend macht.", "Damit wird der Verdächtige gewarnt – Beweise könnten verschwinden. Ermitteln ist Aufgabe von Compliance und Revision."],
+  ["chat", "Das ganze Team im Chat warnen, damit niemand mehr mit ihm spricht.", "Das verletzt Vertraulichkeit und Persönlichkeitsrechte und verurteilt vor. Hinweise gehören in den geschützten Meldeweg."],
+  ["delete", "Die gefälschten Mails löschen, damit niemand mehr darauf hereinfällt.", "Das wäre Beweisvernichtung. Verdächtige Mails werden gesichert und gemeldet, nicht gelöscht."]];
+RENDER.whistle = b => {
+  b.className = "wbody";
+  if (S.f.insider){ b.innerHTML = `<div class="appbar" style="background:#5b3f8c">📣 Hinweisgebersystem <small>vertraulich</small></div><p><span class="tag ok">✓ Hinweis übermittelt</span></p><p>Eingangsnummer <b class="mono">HG-2026-0417</b>. Compliance und Interne Revision übernehmen.</p>`; return; }
+  b.innerHTML = `<div class="appbar" style="background:#5b3f8c">📣 Hinweisgebersystem <small>vertraulich · geschützt</small></div>
+    <p class="mini">Hier können Beschäftigte vertraulich Hinweise auf Regelverstöße melden. Hinweisgebende sind geschützt.</p>
+    <p style="margin:10px 0 4px"><b>1. Um wen geht es?</b></p>
+    <select id="wbWho" aria-label="Person">${WB_PEOPLE.map(([v,t]) => `<option value="${v}">${t}</option>`).join("")}</select>
+    <p style="margin:14px 0 4px"><b>2. Welche belegbaren Hinweise habt ihr?</b> <span class="mini muted">(alle zutreffenden ankreuzen)</span></p>
+    ${WB_EVIDENCE.map(([v,t]) => `<label class="choice"><input type="checkbox" name="wbE" value="${v}"><span>${t}</span></label>`).join("")}
+    <p style="margin:14px 0 4px"><b>3. Was tut ihr jetzt?</b></p>
+    ${WB_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="wbD" value="${v}"><span>${t}</span></label>`).join("")}
+    <div class="row"><button class="primary" id="wbBtn">Hinweis absenden</button></div>`;
+  $("wbBtn").addEventListener("click", () => {
+    const who = $("wbWho").value, ev = [...b.querySelectorAll("input[name=wbE]:checked")].map(x => x.value), d = (b.querySelector("input[name=wbD]:checked") || {}).value;
+    if (!who || !ev.length || !d){ fb("whistle", "Füllt alle drei Punkte aus."); return; }
+    if (who !== "kranz") return wrong("whistle", "Die Beweise zeigen auf eine andere Person. Wem gehört der Rechner PC-ZV-114?");
+    const okE = WB_EVIDENCE.filter(e => e[2]).map(e => e[0]);
+    if (ev.some(e => !okE.includes(e))) return wrong("whistle", "Mindestens ein angekreuzter Punkt ist kein Beleg gegen die Person. Meldet nur, was ihr belegen könnt.");
+    if (!okE.every(e => ev.includes(e))) return wrong("whistle", "Es fehlen belegbare Hinweise. Schaut in Mail (Kopfzeilen und „Gesendet“), FraudDesk und ZV-Cockpit.");
+    if (d !== "ok") return wrong("whistle", WB_DEC.find(x => x[0] === d)[2]);
+    S.f.insider = true; S.score += 250; narrate("Hinweisgebersystem: Hinweis gegen Sven Kranz mit vier Belegen übermittelt. Webers PC wird gesperrt und gesichert.");
+    render("whistle"); fb("whistle", "Hinweis übermittelt. +250 Punkte.", "good"); updateHud();
+    setTimeout(() => finish(false), 1200);
+  });
 };
 
 /* ---------- Chat ---------- */
@@ -572,7 +673,7 @@ const CHATS = {
     {me:true, t:"15:18", text:"Katrin, ich bin an was Großem dran. PHANTOME ist nicht sauber."},
     {me:false, t:"15:19", text:"Wie meinst du das?"},
     {me:true, t:"15:21", text:"Erklär ich später. Hab alles in meine Notizen geschrieben. Die erste ist offen, der Rest gesperrt – man weiß ja nie, wer mitliest."},
-    {me:true, t:"15:26", text:"Muss kurz runter. Da will mich jemand sprechen, angeblich vom Vorstand. Bin gleich zurück."},
+    {me:true, t:"15:26", text:"Muss sofort hoch in den 12. – der Vorstand will mich sprechen, kam grad per Mail. Vertraulich. Bin gleich zurück."},
     {me:false, t:"15:39", text:"Matthias? Das Abendteam steht vor deinem Büro."}]},
   team:{name:"FCU-Team", msgs:[
     {me:false, t:"12:02", who:"D. Yilmaz", text:"Kuchen in der Küche 🎂"},
@@ -726,7 +827,7 @@ const PAYMENTS = [
   {id:"mira", name:"Mira Energie GmbH", iban:"LT59 3250 0612 9944 0187", amount:"48.750,00 €",
     purpose:"Vorauszahlung Q4 – sofort fällig", vop:false, vopText:"Keine Übereinstimmung – Name passt nicht zum Konto",
     hold:"Neue Empfänger-IBAN",
-    context:["Bisher monatliche Abschläge von ca. 3.900 € auf die IBAN DE88 3006 0601 0005 5521 40","Kontoänderung heute um 15:02 per E-Mail von buchhaltung@mira-energie-gmbh.example – hinterlegte Domain: @mira-energie.example","Keine Rückrufbestätigung über die hinterlegte Telefonnummer","Vorauszahlungen sind im Liefervertrag nicht vorgesehen"],
+    context:["Bisher monatliche Abschläge von ca. 3.900 € auf die IBAN DE88 3006 0601 0005 5521 40","Kontoänderung heute um 15:02 per E-Mail von buchhaltung@mira-energie-gmbh.example – hinterlegte Domain: @mira-energie.example","Änderung erfasst um 15:05 von Benutzer s.kranz (Zahlungsverkehr) – ohne Rückrufbestätigung über die hinterlegte Telefonnummer","Vorauszahlungen sind im Liefervertrag nicht vorgesehen"],
     ok:"stop", why:"VoP-Abweichung, kurzfristig geänderte Kontoverbindung über eine fremde Domain, ein Betrag weit über dem üblichen Abschlag und eine im Vertrag nicht vorgesehene Vorauszahlung. Erst die Kombination macht die Entscheidung eindeutig: ablehnen, Lieferanten über die bekannte Nummer kontaktieren, Fall melden."},
   {id:"stadtwerke", name:"Stadtwerke West GmbH", iban:"DE47 3705 0198 0012 6688 02", amount:"1.284,30 €",
     purpose:"Vertragskonto 7004 5512 · Nachzahlung Jahresabrechnung 2026", vop:true, vopText:"Übereinstimmung – Name passt zum Konto",
@@ -800,8 +901,9 @@ RENDER.zv = b => {
     <tr><th>Empfänger</th><td><b>${RECIPIENT.name}</b></td></tr><tr><th>Adresse</th><td><b>${RECIPIENT.addr}</b></td></tr><tr><th>Land</th><td><b>${RECIPIENT.country}</b></td></tr>
     <tr><th>Betrag · Zweck</th><td>3.800.000,00 EUR · „Beratungsleistungen“</td></tr>
     <tr><th>Sanktionsscreening</th><td>${S.f.embargo ? `<span class="tag no">Treffer bestätigt</span>` : `<span class="tag warn">mögliche Treffer – manuelle Prüfung offen</span>`}</td></tr>
+    <tr><th>1. Freigabe</th><td>heute 15:12 · Sammelkennung <span class="mono">zv.batch07</span> · Arbeitsplatz <span class="mono">PC-ZV-114</span></td></tr>
     <tr><th>Ausführung</th><td>automatisch im Buchungslauf 16:30 · fallverantwortlich: m.weber</td></tr></table></div>
-    ${S.f.code ? `<p><span class="tag ok">Compliance-Stopp eingetragen</span> Wie geht es jetzt weiter?</p>${ZV_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="zvdec" value="${v}"><span>${t}</span></label>`).join("")}<div class="row"><button class="primary" id="zvDecBtn">Bestätigen</button></div>` :
+    ${S.f.stopped ? `<p><span class="tag no">COMPLIANCE-STOPP · ESKALIERT</span></p>` : S.f.code ? `<p><span class="tag ok">Compliance-Stopp eingetragen</span> Wie geht es jetzt weiter?</p>${ZV_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="zvdec" value="${v}"><span>${t}</span></label>`).join("")}<div class="row"><button class="primary" id="zvDecBtn">Bestätigen</button></div>` :
     `<div class="row"><button id="zvRelease">Jetzt freigeben</button><button id="zvOpenStop" class="primary">Compliance-Stopp setzen …</button></div>
     <div id="zvForm" class="${S.v.zvForm ? "" : "hidden"}" style="margin-top:12px">
       ${canStop ? "" : `<p class="tag warn">Ihr braucht Webers Freigabecode und alle drei Vorgangsnummern.</p>`}
@@ -831,18 +933,19 @@ RENDER.zv = b => {
   if ($("zvDecBtn")) $("zvDecBtn").addEventListener("click", () => {
     const v = (b.querySelector("input[name=zvdec]:checked") || {}).value;
     if (!v){ fb("zv", "Wählt eine Option."); return; }
-    if (v === "ok"){ S.score += 100; finish(false); } else wrong("zv", ZV_DEC.find(x => x[0] === v)[2]);
+    if (v === "ok"){ S.score += 100; S.f.stopped = true; narrate("PHANTOME ist gestoppt und eskaliert. Offen bleibt: Wer im Haus hilft Northbridge – und hat Weber weggelockt?"); fb("zv", "Gestoppt und eskaliert. +100 Punkte. Jetzt: Wer ist der interne Helfer?", "good"); updateHud(); render("zv"); notify("Neue Aufgabe", "Findet heraus, wer Weber weggelockt hat, und meldet es im Hinweisgebersystem.", "whistle"); } else wrong("zv", ZV_DEC.find(x => x[0] === v)[2]);
   });
 };
 
 /* ---------- Zeitgesteuerte Ereignisse ---------- */
 function chatIn(text){ CHATS.albers.msgs.push({me:false, t:storyTime(), text}); if (!WIN.chat || WIN.chat.min){ S.unread.chat++; renderIcons(); } render("chat"); notify("Katrin Albers", text, "chat"); }
-function mailIn(m){ MAILS.unshift({...m, time:storyTime(), read:false}); S.v.mail++; if (!WIN.mail || WIN.mail.min){ S.unread.mail++; renderIcons(); } render("mail"); notify(m.from, m.subj, "mail"); }
+function mailIn(m){ MAILS.inbox.unshift({...m, time:storyTime(), read:false}); if ((S.v.folder || "inbox") === "inbox") S.v.mail++; if (!WIN.mail || WIN.mail.min){ S.unread.mail++; renderIcons(); } render("mail"); notify(m.from, m.subj, "mail"); }
 const EVENTS = [
   {at:6, fn:() => chatIn("Seid ihr in Webers Büro? Er geht nicht ans Handy. Das ist nicht seine Art.")},
-  {at:18, fn:() => mailIn({from:"ZV-Batch", addr:"zv-batch@hausbank.example", subj:"Erinnerung: Buchungslauf in 30 Minuten", body:`<p>Automatische Nachricht. Der Buchungslauf startet um 16:30 Uhr. 1 Zahlung mit offenem Compliance-Vermerk (PHANTOME).</p>`})},
-  {at:28, fn:() => chatIn("Der Empfang sagt, Weber ist um 15:27 mit einem Mann im Anzug zum Aufzug gegangen. Keiner kennt ihn. Im 12. Stock war heute gar keine Vorstandssitzung …")},
-  {at:38, fn:() => mailIn({from:"Assistenz des Vorstands", addr:"assistenz.vorstand@hausbank-vorstand.example", subj:"LETZTE ERINNERUNG: PHANTOME", body:`<p>Herr Weber,</p><p>wir erwarten die Ausführung von PHANTOME im Lauf um 16:30 Uhr. Jede weitere Verzögerung wird Konsequenzen haben.</p><p>Assistenz des Vorstands</p>`})},
+  {at:18, fn:() => mailIn({from:"ZV-Batch", addr:"zv-batch@hausbank.example", subj:"Erinnerung: Buchungslauf in 30 Minuten", hdr:`Received: from zv-batch01.hausbank.intern (10.4.1.20)`, body:`<p>Automatische Nachricht. Der Buchungslauf startet um 16:30 Uhr. 1 Zahlung mit offenem Compliance-Vermerk (PHANTOME).</p>`})},
+  {at:24, fn:() => chatIn("Komisch: Sven Kranz aus dem Zahlungsverkehr ist um halb vier aus Webers Büro gekommen. Was wollte der denn da, wenn Weber gar nicht da war?")},
+  {at:31, fn:() => chatIn("Der Empfang sagt: Raum 12.04 ist ein Lagerraum. Da findet nie ein Vorstandsgespräch statt. Wer schickt Weber denn dahin?")},
+  {at:38, fn:() => mailIn({from:"Assistenz des Vorstands", addr:"assistenz.vorstand@hausbank-vorstand.example", subj:"LETZTE ERINNERUNG: PHANTOME", fake:true, hdr:FAKE_HDR, body:`<p>Herr Weber,</p><p>wir erwarten die Ausführung von PHANTOME im Lauf um 16:30 Uhr. Jede weitere Verzögerung wird Konsequenzen haben.</p><p>Assistenz des Vorstands</p>`})},
   {at:45, fn:() => notify("ZV-Cockpit", "Buchungslauf startet in 5 Minuten.", "zv")}];
 
 /* ---------- Ablauf ---------- */
@@ -851,7 +954,7 @@ function start(){
   cutscene({eyebrow:"Prolog", title:"Freitag, 15:40 Uhr",
     lines:["Financial Crime Unit, vierte Etage. Ihr seid das Abendteam und kommt zur Übergabe in das Büro von Senior-Analyst Matthias Weber.",
       "Das Büro ist leer. Seine Jacke hängt über dem Stuhl, der Kaffee ist noch warm. Sein Handy geht direkt auf die Mailbox.",
-      "Webers PC ist nicht gesperrt. Das macht Weber nie. Am Monitor klebt ein Zettel: „Alles steht in meinen Notizen!“",
+      "Webers PC ist nicht gesperrt. Das macht Weber nie. Er muss es sehr eilig gehabt haben. Am Monitor klebt ein Zettel: „Alles steht in meinen Notizen!“",
       "Im Zahlungsverkehr wartet eine Zahlung über 3,8 Millionen Euro an eine Firma in Panama. Projektname: PHANTOME. Buchungslauf: 16:30 Uhr.",
       "Steckt dahinter Geldwäsche oder ein Sanktionsverstoß, drohen Bußgelder in Millionenhöhe, Ermittlungen und Schlagzeilen. Der Schaden für die Bank wäre enorm.",
       "Weber war an etwas Großem dran. Jetzt müsst ihr weitermachen. Ihr habt 50 Minuten."],
@@ -868,26 +971,37 @@ function finish(timeout){
   if (S.ended) return; S.ended = true; S.timeout = timeout; clearInterval(S.timerId);
   const remaining = Math.max(0, S.deadline - Date.now()), mins = Math.floor(remaining/60000);
   const bonus = timeout ? 0 : Math.min(250, mins*5); S.score += bonus;
-  const elapsed = Math.round((Date.now() - S.startAt)/1000), t = storyTime();
-  window.phantomeResult = {team:S.team, score:S.score, completed:solvedCount(), mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout};
-  const lines = timeout ? [
-      "16:30 Uhr. Der Buchungslauf startet. 214 Zahlungen gehen raus – auch PHANTOME.",
+  const elapsed = Math.min(3000, Math.round((Date.now() - S.startAt)/1000)), t = storyTime();
+  const parts = solvedCount() + (S.f.insider ? 1 : 0);
+  window.phantomeResult = {team:S.team, score:S.score, completed:parts, mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout, stopped:!!S.f.stopped, insider:!!S.f.insider};
+  const weber = ["Um 16:34 kommt Weber zurück, außer Atem. „Raum 12.04 ist ein Lager. Ich stand vor verschlossener Tür, und mein Ausweis ging plötzlich nicht mehr.“",
+    "Er sieht auf seinen Bildschirm und wird blass. „Ich habe in der Eile meinen PC nicht gesperrt. Genau darauf hat er gesetzt.“"];
+  let lines, title, eyebrow, head, text;
+  if (!S.f.stopped){
+    lines = ["16:30 Uhr. Der Buchungslauf startet. 214 Zahlungen gehen raus – auch PHANTOME.",
       "3,8 Millionen Euro an Northbridge S.A. – eine Firma, die auf der Sanktionsliste steht.",
       "Am Montag: Meldung an die Aufsicht, interne Sonderprüfung, Anfragen der Presse. Ein Bußgeld in Millionenhöhe steht im Raum – der Reputationsschaden ist kaum zu beziffern.",
-      "Webers Platz bleibt leer.",
-      `Ihr habt ${solvedCount()} von 3 Prüfungen abgeschlossen. Zeit für die Nachbesprechung.`]
-    : [`${t} Uhr. Im ZV-Cockpit springt der Status um: PHANTOME – COMPLIANCE-STOPP · ESKALIERT.`,
-      "Um 16:30 Uhr startet der Buchungslauf. 213 Zahlungen gehen raus. PHANTOME nicht.",
-      "Der Fall geht an den Geldwäschebeauftragten: der Sanktionstreffer, das Geld über Nova Trade, die umgeleitete Mira-Zahlung. Das Vorstandsbüro bestätigt über die -1200: Es gab nie eine Anweisung.",
-      "Webers Platz bleibt leer. Sein Handy ist aus.",
-      "Da klingelt auf seinem Schreibtisch das Telefon. Unbekannte Nummer."];
-  cutscene({eyebrow:"Epilog", title: timeout ? "16:30 Uhr – zu spät" : "Gestoppt.", lines, button:"Zur Auswertung →", onDone:() => {
+      "Und Sven Kranz aus dem Zahlungsverkehr geht pünktlich in den Feierabend."];
+    title = "16:30 Uhr – zu spät"; eyebrow = "ZEIT ABGELAUFEN"; head = "PHANTOME ist durchgelaufen.";
+    text = "Die Zeit ist abgelaufen. Geht in der Nachbesprechung durch, welche Hinweise noch offen waren.";
+  } else if (!S.f.insider){
+    lines = ["16:30 Uhr. Der Buchungslauf startet. 213 Zahlungen gehen raus. PHANTOME nicht – der Compliance-Stopp hält.", ...weber,
+      "Aber wer hat ihn weggelockt? Bis Montag hat Sven Kranz seine Spuren beseitigt. Der interne Helfer bleibt unentdeckt."];
+    title = "Gestoppt – aber nicht aufgeklärt"; eyebrow = "TEILERFOLG"; head = "Zahlung gestoppt, Täter unbekannt.";
+    text = "Die Zahlung ist sicher. Den internen Täter habt ihr aber nicht rechtzeitig gemeldet.";
+  } else {
+    lines = [`${t} Uhr. PHANTOME ist gestoppt, der Hinweis ist bei Compliance und Interner Revision.`, ...weber,
+      "Die Revision sichert seinen PC. Die Spur ist eindeutig: Die gefälschten Vorstandsmails kamen von Sven Kranz’ Rechner. Er hat Weber weggelockt, in dessen Namen eine Mail geschickt und die Mira-Kontoänderung ohne Rückruf erfasst.",
+      "Northbridge, Nova Trade, Mira Energie – und mittendrin ein Mitarbeiter, der dafür bezahlt wurde. Kranz wird noch am Abend freigestellt.",
+      "Um 16:30 Uhr startet der Buchungslauf. 213 Zahlungen gehen raus. PHANTOME nicht."];
+    title = "Fall gelöst."; eyebrow = "MISSION ERFÜLLT"; head = "Zahlung gestoppt. Täter gemeldet.";
+    text = `Ihr habt den Fall um ${t} Uhr abgeschlossen – ${mins} Minuten vor dem Buchungslauf. Zeitbonus: +${bonus} Punkte. In der Praxis gelten stets die internen Eskalations- und Meldeprozesse.`;
+  }
+  cutscene({eyebrow:"Epilog", title, lines, button:"Zur Auswertung →", onDone:() => {
     $("final").classList.remove("hidden");
-    $("finalEyebrow").textContent = timeout ? "ZEIT ABGELAUFEN" : "MISSION ERFÜLLT · FORTSETZUNG FOLGT";
-    $("finalTitle").textContent = timeout ? "PHANTOME ist durchgelaufen." : "Zahlung gestoppt.";
-    $("finalText").textContent = timeout ? "Die Zeit ist abgelaufen. Geht in der Nachbesprechung durch, welche Hinweise noch offen waren." : `Ihr habt den Compliance-Stopp um ${t} Uhr gesetzt – ${mins} Minuten vor dem Buchungslauf. Zeitbonus: +${bonus} Punkte. In der Praxis gelten stets die internen Eskalations- und Prüfprozesse.`;
+    $("finalEyebrow").textContent = eyebrow; $("finalTitle").textContent = head; $("finalText").textContent = text;
     $("finalScore").textContent = S.score + " Punkte"; $("finalTeam").textContent = S.team;
-    $("finalStats").textContent = `${solvedCount()}/3 Prüfungen · ${S.mistakes} Fehlversuche · ${S.hints} Hinweise · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min.`;
+    $("finalStats").textContent = `${parts}/4 Aufgaben · ${S.mistakes} Fehlversuche · ${S.hints} Hinweise · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min.`;
   }});
 }
 $("startBtn").addEventListener("click", start);
@@ -895,7 +1009,7 @@ $("teamName").addEventListener("keydown", e => { if (e.key === "Enter") start();
 $("restartBtn").addEventListener("click", () => location.reload());
 $("copyBtn").addEventListener("click", async () => {
   const r = window.phantomeResult; if (!r) return;
-  const txt = `Projekt Phantome – Ergebnis\nTeam: ${r.team}\nPunkte: ${r.score}\nPrüfungen abgeschlossen: ${r.completed}/3\nFehlversuche: ${r.mistakes}\nHinweise: ${r.hints}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.\nZeit abgelaufen: ${r.timeout ? "Ja" : "Nein"}`;
+  const txt = `Projekt Phantome – Ergebnis\nTeam: ${r.team}\nPunkte: ${r.score}\nAufgaben gelöst: ${r.completed}/4\nFehlversuche: ${r.mistakes}\nHinweise: ${r.hints}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.\nZeit abgelaufen: ${r.timeout ? "Ja" : "Nein"}`;
   try { await navigator.clipboard.writeText(txt); $("copyFeedback").textContent = "Ergebnis wurde in die Zwischenablage kopiert."; }
   catch(e){ $("copyFeedback").textContent = txt; }
   $("copyFeedback").classList.remove("hidden");
