@@ -3,20 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#08111f">
+<meta name="theme-color" content="#181316">
 <title>Projekt Phantome – Compliance Escape Room</title>
 <style>
-:root{--bg:#08111f;--panel:#101d30;--panel2:#14243a;--line:#2b405b;--text:#e8f0fa;--muted:#9eb0c7;--cyan:#52e0d0;--amber:#ffca70;--red:#ff6b78;--green:#7ee0a3;--paper:#fbf8f0;--ink:#1d2533;--os:#0f6cbd}
+:root{--bg:#181316;--panel:#221a1d;--panel2:#2b2125;--line:#43343a;--text:#f4eeeb;--muted:#bba9a8;--cyan:#e27a88;--amber:#ffca70;--red:#ff6b78;--green:#7ee0a3;--paper:#fbf8f0;--ink:#1d2533;--os:#a82538}
 *{box-sizing:border-box}
 html{background:var(--bg)}
-body{margin:0;background:radial-gradient(ellipse at 15% 0%,#142a42 0,transparent 45%),var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+body{margin:0;background:radial-gradient(ellipse at 15% 0%,#3a1d25 0,transparent 45%),var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
 button,input{font:inherit}
-button{cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:10px 15px;color:var(--text);background:#1b3049;font-weight:650}
+button{cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:10px 15px;color:var(--text);background:#2e2226;font-weight:650}
 button:hover{border-color:var(--cyan)}
 button:disabled{opacity:.45;cursor:not-allowed}
-.primary{background:var(--cyan);color:#06151b;border-color:var(--cyan)}
+.primary{background:#a82538;color:#fff;border-color:#a82538}
+.primary:hover{background:#bd2d42;border-color:#e27a88}
 .subtle{background:transparent}
-input{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:#0b1626;color:var(--text)}
+input{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:#1d1619;color:var(--text)}
 input[type=radio],input[type=checkbox]{width:auto}
 input:focus{outline:2px solid var(--cyan);outline-offset:1px}
 .wrap{max-width:1900px;margin:auto;padding:20px 16px}
@@ -35,8 +36,8 @@ h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.06;letter-spacing:-.04em;margi
 h2{font-size:1.4rem;letter-spacing:-.02em;margin-bottom:6px}
 h3{font-size:1.05rem;margin-bottom:6px}
 .hidden{display:none!important}
-.hero{padding:clamp(22px,5vw,52px);border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,rgba(22,43,66,.95),rgba(11,23,39,.92));position:relative;overflow:hidden}
-.hero:after{content:"";position:absolute;width:260px;height:260px;border:1px solid #24465b;border-radius:50%;right:-100px;top:-110px;box-shadow:0 0 0 30px #10233a,0 0 0 60px #0e1d30}
+.hero{padding:clamp(22px,5vw,52px);border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,rgba(58,29,37,.95),rgba(24,19,22,.94));position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:260px;height:260px;border:1px solid #4a2a32;border-radius:50%;right:-100px;top:-110px;box-shadow:0 0 0 30px #2a1a1f,0 0 0 60px #221619}
 .hero>*{position:relative;z-index:1}
 .pill{display:inline-block;padding:4px 9px;border-radius:999px;border:1px solid var(--line);font-size:.78rem;color:var(--muted);margin:0 6px 8px 0}
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0}
@@ -48,7 +49,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .hand{font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive}
 
 /* Cutscene */
-.cutscene{max-width:760px;margin:6vh auto;padding:clamp(22px,5vw,44px);border:1px solid var(--line);border-radius:22px;background:#0a1525;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.cutscene{max-width:760px;margin:6vh auto;padding:clamp(22px,5vw,44px);border:1px solid var(--line);border-radius:22px;background:#1c1417;box-shadow:0 30px 80px rgba(0,0,0,.4)}
 .cutscene .story{font-size:1.12rem;min-height:240px;cursor:pointer}
 .cutscene .story p{margin-bottom:14px}
 .cutscene .story p:last-child:after{content:"▌";color:var(--cyan);animation:blink 1s steps(1) infinite;margin-left:2px}
@@ -66,49 +67,51 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .log time{color:var(--cyan);font-weight:700;margin-right:6px;font-variant-numeric:tabular-nums}
 
 /* Monitor & Desktop */
-.monitor{position:relative;background:linear-gradient(#1a2433,#121a26);border-radius:18px;padding:14px 14px 30px;box-shadow:0 30px 70px rgba(0,0,0,.45),inset 0 0 0 1px #2a3850}
-.monitor:after{content:"hausbank";position:absolute;left:50%;bottom:8px;transform:translateX(-50%);font-size:.7rem;letter-spacing:.2em;color:#4c5d77;text-transform:uppercase}
+.monitor{position:relative;background:linear-gradient(#2a2427,#1c181a);border-radius:18px;padding:14px 14px 30px;box-shadow:0 30px 70px rgba(0,0,0,.45),inset 0 0 0 1px #3a3135}
+.monitor:after{content:"Kreisbank Hohenbrück";position:absolute;left:50%;bottom:8px;transform:translateX(-50%);font-size:.7rem;letter-spacing:.2em;color:#7a666b;text-transform:uppercase}
 .postit-m{position:absolute;z-index:3;background:#ffe37a;color:#3a2f00;padding:9px 11px;width:150px;font-size:.92rem;line-height:1.25;box-shadow:0 6px 14px rgba(0,0,0,.4)}
 .postit-m.a{top:-12px;right:28px;transform:rotate(4deg)}
 .postit-m.b{bottom:2px;left:18px;width:128px;transform:rotate(-4deg);background:#ffb3c1;color:#4a0d1a}
-.screen{position:relative;height:max(520px,calc(100vh - 215px));border-radius:5px;overflow:hidden;background:radial-gradient(ellipse at 70% 30%,#1d5a8a 0,#123b63 35%,#0b2240 75%);font-size:15px}
-.screen:before{content:"hausbank";position:absolute;right:6%;bottom:16%;font-size:clamp(2.5rem,7vw,5.5rem);font-weight:900;letter-spacing:-.05em;color:rgba(255,255,255,.06);pointer-events:none}
+.screen{position:relative;height:max(520px,calc(100vh - 215px));border-radius:5px;overflow:hidden;background:radial-gradient(ellipse at 70% 30%,#7a2a38 0,#4a1a24 38%,#22111a 78%);font-size:15px}
+.screen:before{content:"◆ Kreisbank";position:absolute;right:6%;bottom:16%;font-size:clamp(2.5rem,7vw,5.5rem);font-weight:900;letter-spacing:-.05em;color:rgba(255,255,255,.06);pointer-events:none}
 .icons{position:absolute;left:8px;top:8px;bottom:54px;display:grid;grid-auto-flow:column;grid-template-rows:repeat(auto-fill,86px);grid-auto-columns:88px;gap:2px}
 .dicon{width:86px;height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:transparent;border:1px solid transparent;border-radius:6px;color:#fff;font-size:.76rem;font-weight:500;text-shadow:0 1px 3px #000;padding:4px;line-height:1.15;text-align:center}
 .dicon:hover,.dicon:focus{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.28)}
 .dicon .ic{font-size:30px;position:relative;line-height:1}
-.phase{border-color:#2f6b8c;background:linear-gradient(135deg,#10283f,#101d30)}.phase b{display:block;margin-top:4px;font-size:1.05rem}
-.phase.p2{border-color:var(--amber);background:linear-gradient(135deg,#3a2c10,#101d30)}.phase.p2 .eyebrow{color:var(--amber)}
+.phase{border-color:#8a3a48;background:linear-gradient(135deg,#3a1d25,#221a1d)}.phase b{display:block;margin-top:4px;font-size:1.05rem}
+.phase.p2{border-color:var(--amber);background:linear-gradient(135deg,#3a2c10,#221a1d)}.phase.p2 .eyebrow{color:var(--amber)}
 .suspects{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0}
-.suspect{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;border:2px solid #c6d0dd;border-radius:10px;padding:14px 10px;background:#fff;cursor:pointer}
+.suspect{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;border:2px solid #dccbca;border-radius:10px;padding:14px 10px;background:#fff;cursor:pointer}
 .suspect input{position:absolute;opacity:0}
 .suspect .av{font-size:2.4rem;line-height:1.1}
-.suspect small{color:#5d6b80}
-.suspect:has(input:checked){border-color:#5b3f8c;background:#f1ebfb}
+.suspect small{color:#6f5f62}
+.suspect:has(input:checked){border-color:#a82538;background:#f8e9eb}
 .suspect.out{opacity:.4;text-decoration:line-through;cursor:not-allowed}
 .decide label:has(input:checked).clarify{border-color:#c98a00;background:#fff4d6}
 .ftable{width:100%;max-width:620px;border-collapse:collapse;margin:14px 0 4px;font-size:.92rem}.ftable th,.ftable td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}.ftable th{color:var(--muted);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
-.traces{list-style:none;padding:0;margin:10px 0}.traces li{padding:8px 12px;border:1px solid #c6d0dd;border-radius:8px;margin:6px 0;background:#fff;color:#5d6b80}.traces li.ok{border-color:#2f8f5a;background:#e3f6ea;color:#14532d;font-weight:600}
+.traces{list-style:none;padding:0;margin:10px 0}.traces li{padding:8px 12px;border:1px solid #dccbca;border-radius:8px;margin:6px 0;background:#fff;color:#6f5f62}.traces li.ok{border-color:#2f8f5a;background:#e3f6ea;color:#14532d;font-weight:600}
+.histwrap{width:0;min-width:100%;max-height:230px;overflow:auto;border:1px solid #e6dfcc;border-radius:6px;background:#fff}
+.hist td,.hist th{white-space:nowrap;overflow-wrap:normal!important}
 .hist{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:2px}.hist th,.hist td{padding:3px 6px;border-bottom:1px solid #e6dfcc;text-align:left}.hist th{font-size:.68rem}
 .badge.new{background:#ffca70;color:#3a2f00}
 .badge{position:absolute;top:-5px;right:-12px;background:#e81123;color:#fff;border-radius:9px;font-size:.66rem;font-weight:700;padding:1px 5px;text-shadow:none}
-.taskbar{position:absolute;left:0;right:0;bottom:0;height:46px;background:rgba(12,20,32,.94);display:flex;align-items:center;gap:3px;padding:0 6px;color:#fff;z-index:900;overflow:hidden}
-.taskbar .logo{width:38px;height:36px;display:grid;place-items:center;color:#52b6ff;font-size:1.3rem;flex:none;background:transparent;border:0;border-radius:4px;padding:0}
+.taskbar{position:absolute;left:0;right:0;bottom:0;height:46px;background:rgba(24,16,19,.95);display:flex;align-items:center;gap:3px;padding:0 6px;color:#fff;z-index:900;overflow:hidden}
+.taskbar .logo{width:38px;height:36px;display:grid;place-items:center;color:#e27a88;font-size:1.3rem;flex:none;background:transparent;border:0;border-radius:4px;padding:0}
 .taskbar .logo:hover{background:rgba(255,255,255,.1)}
-.showdesk{width:10px;height:46px;border:0;border-left:1px solid #3b4a60;border-radius:0;background:transparent;padding:0;flex:none}
+.showdesk{width:10px;height:46px;border:0;border-left:1px solid #4a3a3f;border-radius:0;background:transparent;padding:0;flex:none}
 .showdesk:hover{background:rgba(255,255,255,.15)}
-.startmenu{position:absolute;left:6px;bottom:52px;width:260px;background:rgba(22,32,48,.97);border:1px solid #33465f;border-radius:10px;padding:8px;z-index:960;box-shadow:0 16px 40px rgba(0,0,0,.5)}
-.startmenu .sm-head{color:#9eb0c7;font-size:.72rem;letter-spacing:.12em;padding:6px 10px;text-transform:uppercase}
+.startmenu{position:absolute;left:6px;bottom:52px;width:260px;background:rgba(34,24,28,.97);border:1px solid #4a3a3f;border-radius:10px;padding:8px;z-index:960;box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.startmenu .sm-head{color:#bba9a8;font-size:.72rem;letter-spacing:.12em;padding:6px 10px;text-transform:uppercase}
 .startmenu button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:transparent;border:0;border-radius:6px;color:#fff;padding:8px 10px;font-weight:500;font-size:.88rem}
 .startmenu button:hover{background:rgba(255,255,255,.1)}
-.tbtn{height:36px;padding:0 10px;background:transparent;border:0;border-bottom:2px solid transparent;border-radius:4px;color:#dfe8f3;font-weight:500;font-size:.82rem;white-space:nowrap;flex:none}
+.tbtn{height:36px;padding:0 10px;background:transparent;border:0;border-bottom:2px solid transparent;border-radius:4px;color:#f1e6e6;font-weight:500;font-size:.82rem;white-space:nowrap;flex:none}
 .tbtn:hover{background:rgba(255,255,255,.09)}
-.tbtn.active{background:rgba(255,255,255,.14);border-bottom-color:#52b6ff}
+.tbtn.active{background:rgba(255,255,255,.14);border-bottom-color:#e27a88}
 .tray{margin-left:auto;text-align:right;font-size:.76rem;line-height:1.25;padding:0 6px;flex:none;font-variant-numeric:tabular-nums}
 .tray b{color:#ffb3c1;font-weight:700}
-.win{position:absolute;background:#f3f5f8;color:#1d2533;border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.5);display:flex;flex-direction:column;overflow:hidden;border:1px solid #8aa0bc;font-size:.94rem}
-.wtitle{height:36px;display:flex;align-items:center;gap:8px;padding:0 0 0 12px;background:#dfe6ef;font-size:.84rem;font-weight:600;cursor:move;user-select:none;flex:none;touch-action:none}
-.win.focus .wtitle{background:#c9d8ea}
+.win{position:absolute;background:#f6f2f0;color:#1d2533;border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.5);display:flex;flex-direction:column;overflow:hidden;border:1px solid #b9a3a6;font-size:.94rem}
+.wtitle{height:36px;display:flex;align-items:center;gap:8px;padding:0 0 0 12px;background:#ece3e1;font-size:.84rem;font-weight:600;cursor:move;user-select:none;flex:none;touch-action:none}
+.win.focus .wtitle{background:#e3cfd2}
 .wtitle span.t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .wtitle .wb{margin-left:auto;display:flex;flex:none}
 .wtitle .wb button{width:42px;height:36px;border:0;border-radius:0;background:transparent;color:#1d2533;padding:0;font-weight:400}
@@ -116,42 +119,42 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .wtitle .wb button.x:hover{background:#e81123;color:#fff}
 .wbody{flex:1;overflow:auto;padding:14px 16px;min-height:0}
 .wbody.flush{padding:0;display:flex}
-.wfb{flex:none;margin:0;padding:10px 14px;border-top:1px solid #c9d3e0;background:#e8eef6;font-size:.9rem}
+.wfb{flex:none;margin:0;padding:10px 14px;border-top:1px solid #dccdcb;background:#f1e9e7;font-size:.9rem}
 .wfb.good{background:#e3f6ea;color:#14532d}
 .wfb.bad{background:#fde5e8;color:#7a1c27}
-.win button{background:#fff;color:#1d2533;border:1px solid #b5c1d1;border-radius:6px;padding:7px 13px;font-weight:600}
+.win button{background:#fff;color:#1d2533;border:1px solid #d2c0bf;border-radius:6px;padding:7px 13px;font-weight:600}
 .win button:hover{border-color:var(--os)}
 .win button.primary{background:var(--os);color:#fff;border-color:var(--os)}
-.win input{background:#fff;color:#1d2533;border:1px solid #b5c1d1;border-radius:6px;padding:8px 10px}
+.win input{background:#fff;color:#1d2533;border:1px solid #d2c0bf;border-radius:6px;padding:8px 10px}
 .win input:focus{outline:2px solid var(--os)}
 .win h3{color:#0e1726}
-.win .muted{color:#5d6b80}
+.win .muted{color:#6f5f62}
 .win .hand{color:#1c3f8a}
 .split{display:flex;flex:1;min-width:0}
-.split .list{width:250px;flex:none;border-right:1px solid #cfd8e3;overflow:auto;background:#eaeff5}
+.split .list{width:250px;flex:none;border-right:1px solid #e0d3d1;overflow:auto;background:#f3ecea}
 .split .pane{flex:1;overflow:auto;padding:14px 18px;min-width:0}
-.li{display:block;width:100%;text-align:left;border:0!important;border-bottom:1px solid #d5dde8!important;border-radius:0!important;background:transparent!important;padding:9px 12px!important;font-weight:400!important;font-size:.86rem}
-.li:hover{background:#dde6f1!important}
-.li.sel{background:#cfe0f5!important}
+.li{display:block;width:100%;text-align:left;border:0!important;border-bottom:1px solid #e5d9d7!important;border-radius:0!important;background:transparent!important;padding:9px 12px!important;font-weight:400!important;font-size:.86rem}
+.li:hover{background:#eedfe0!important}
+.li.sel{background:#f2d6da!important}
 .li.unread{font-weight:700!important}
-.li small{display:block;color:#5d6b80;font-weight:400}
+.li small{display:block;color:#6f5f62;font-weight:400}
 .appbar{display:flex;align-items:center;gap:10px;padding:10px 14px;margin:-14px -16px 14px;color:#fff;font-weight:700;font-size:.9rem}
 .appbar small{font-weight:400;opacity:.85;margin-left:auto}
 .doc{background:var(--paper);color:var(--ink);border:1px solid #d9d1bd;border-radius:6px;padding:14px 16px;margin:10px 0;position:relative}
 .doc table,.tbl{width:100%;border-collapse:collapse;font-size:.88rem}
 .doc th,.doc td,.tbl th,.tbl td{text-align:left;padding:6px 8px;border-bottom:1px solid #dcd5c4;vertical-align:top}
 .doc th,.tbl th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#5a6272}
-.tbl{background:#fff;border:1px solid #d3dbe6}
-.tbl td,.tbl th{border-bottom-color:#e3e8ef}
-.tbl tr.click{cursor:pointer}.tbl tr.click:hover td{background:#eef4fb}
+.tbl{background:#fff;border:1px solid #e0d3d1}
+.tbl td,.tbl th{border-bottom-color:#ece2e0}
+.tbl tr.click{cursor:pointer}.tbl tr.click:hover td{background:#f8eeee}
 .tbl tr.sel td{background:#fff1c7}
 .tbl tr.warn td{background:#fff6e0}
 .stamp{position:absolute;right:12px;top:10px;border:2px solid #b5303f;color:#b5303f;font-weight:900;font-size:.66rem;letter-spacing:.1em;padding:2px 7px;border-radius:4px;transform:rotate(4deg);background:rgba(255,255,255,.6)}
 .mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
 .doc td,.tbl td{overflow-wrap:anywhere}
 .tag{display:inline-block;padding:1px 8px;border-radius:5px;font-weight:700;font-size:.8rem;white-space:nowrap}
-.tag.ok{background:#d9f3e3;color:#1d6b40}.tag.no{background:#fbdde0;color:#a3202f}.tag.warn{background:#ffefc2;color:#7a5200}.tag.info{background:#dce8f7;color:#1f4f86}
-.choice{display:flex;gap:10px;align-items:flex-start;border:1px solid #c6d0dd;border-radius:8px;padding:9px 12px;margin:7px 0;cursor:pointer;background:#fff}
+.tag.ok{background:#d9f3e3;color:#1d6b40}.tag.no{background:#fbdde0;color:#a3202f}.tag.warn{background:#ffefc2;color:#7a5200}.tag.info{background:#ece4e6;color:#5a3a44}
+.choice{display:flex;gap:10px;align-items:flex-start;border:1px solid #dccbca;border-radius:8px;padding:9px 12px;margin:7px 0;cursor:pointer;background:#fff}
 .choice input{margin-top:5px;accent-color:var(--os)}
 .ctx{margin:0;padding-left:18px}.ctx li{margin:2px 0}
 .decide{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
@@ -162,10 +165,10 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .row input{flex:1;min-width:160px}
 .lock{max-width:380px;margin:30px auto;text-align:center}
 .lock .big{font-size:3rem}
-.chatmsg{max-width:78%;padding:8px 12px;border-radius:12px;margin:6px 0;font-size:.9rem;background:#fff;border:1px solid #d3dbe6}
-.chatmsg.me{margin-left:auto;background:#dbe8fb;border-color:#bcd2f1}
-.chatmsg small{display:block;color:#5d6b80;font-size:.72rem;margin-bottom:2px}
-.notif{position:absolute;right:10px;bottom:54px;width:min(320px,calc(100% - 20px));background:#1f2b3d;color:#fff;border-radius:8px;padding:11px 14px;z-index:950;box-shadow:0 10px 30px rgba(0,0,0,.5);cursor:pointer;font-size:.86rem;border-left:4px solid #52b6ff}
+.chatmsg{max-width:78%;padding:8px 12px;border-radius:12px;margin:6px 0;font-size:.9rem;background:#fff;border:1px solid #e0d3d1}
+.chatmsg.me{margin-left:auto;background:#f5dfe2;border-color:#e8c3c9}
+.chatmsg small{display:block;color:#6f5f62;font-size:.72rem;margin-bottom:2px}
+.notif{position:absolute;right:10px;bottom:54px;width:min(320px,calc(100% - 20px));background:#2a1e22;color:#fff;border-radius:8px;padding:11px 14px;z-index:950;box-shadow:0 10px 30px rgba(0,0,0,.5);cursor:pointer;font-size:.86rem;border-left:4px solid #e27a88}
 .notif b{display:block;margin-bottom:2px}
 .notesbg{background:#fffbe8}
 .notetext{white-space:pre-wrap;font-size:.95rem;line-height:1.6}
@@ -183,11 +186,11 @@ h3{font-size:1.05rem;margin-bottom:6px}
   .icons{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,84px);grid-template-rows:none;grid-auto-rows:84px;right:8px;top:56px}
   .win{left:0!important;top:0!important;width:100%!important;height:calc(100% - 46px)!important;border-radius:0}
   .wtitle{cursor:default}
-  .split{flex-direction:column}.split .list{width:100%;max-height:34%;border-right:0;border-bottom:1px solid #cfd8e3}
+  .split{flex-direction:column}.split .list{width:100%;max-height:34%;border-right:0;border-bottom:1px solid #e0d3d1}
   .tbtn{padding:0 7px;font-size:.76rem}
   .doc{padding:10px}.doc th,.doc td,.tbl th,.tbl td{padding:5px 4px;font-size:.8rem}
   .stamp{position:static;display:inline-block;margin-bottom:6px}
-  .tbl{table-layout:fixed}.tbl th{overflow-wrap:anywhere;letter-spacing:0}.doc table{table-layout:fixed}.doc th{width:36%;letter-spacing:.02em;overflow-wrap:anywhere}.tag{white-space:normal}
+  .tbl{table-layout:fixed}.tbl th{overflow-wrap:anywhere;letter-spacing:0}.doc table:not(.hist){table-layout:fixed}.doc th{width:36%;letter-spacing:.02em;overflow-wrap:anywhere}.tag{white-space:normal}
   .wbody{padding:12px}.appbar{margin:-12px -12px 12px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -197,18 +200,19 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .steps li.more{list-style:none;color:var(--muted);font-style:italic}
 .steps .code{font-family:ui-monospace,Consolas,monospace;color:var(--amber);font-weight:700;margin-left:4px}
 .riddle{background:#fff6c9;border:1px dashed #c9a400;border-radius:8px;padding:10px 12px;margin:0 auto 12px;font-size:1rem;color:#3a2f00;text-align:left}
-.vorgang{display:flex;gap:16px;align-items:center;margin-top:12px;padding:12px 14px;border:2px dashed #0f6cbd;border-radius:10px;background:#e8f1fc}
-.vorgang b{font-family:ui-monospace,Consolas,monospace;font-size:1.9rem;letter-spacing:.12em;color:#0f3e6e}
-.tabs{display:flex;gap:4px;border-bottom:2px solid #cfd8e3;margin:10px 0 12px}
-.tabs button{border:0!important;border-radius:6px 6px 0 0!important;background:transparent!important;padding:8px 14px!important;color:#5d6b80!important}
-.tabs button.on{background:#fff!important;color:#0f3e6e!important;box-shadow:0 -2px 0 #0f6cbd inset}
-.win select{padding:8px 10px;border:1px solid #b5c1d1;border-radius:6px;background:#fff;color:#1d2533;font:inherit;max-width:100%}
+.vorgang{display:flex;gap:16px;align-items:center;margin-top:12px;padding:12px 14px;border:2px dashed #a82538;border-radius:10px;background:#f8e9eb}
+.vorgang b{font-family:ui-monospace,Consolas,monospace;font-size:1.9rem;letter-spacing:.12em;color:#6e1d2b}
+.tabs{display:flex;gap:4px;border-bottom:2px solid #e0d3d1;margin:10px 0 12px}
+.tabs button{border:0!important;border-radius:6px 6px 0 0!important;background:transparent!important;padding:8px 14px!important;color:#6f5f62!important}
+.tabs button.on{background:#fff!important;color:#6e1d2b!important;box-shadow:0 -2px 0 #a82538 inset}
+.win select{padding:8px 10px;border:1px solid #d2c0bf;border-radius:6px;background:#fff;color:#1d2533;font:inherit;max-width:100%}
+.appbar{background:linear-gradient(90deg,#6e1d2b,#8f2a3b)!important}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header class="top">
-  <div class="brand"><div class="mark">PP</div><div><div class="eyebrow">Financial Crime Unit · 4. OG</div><strong>PROJEKT PHANTOME</strong></div></div>
+  <div class="brand"><div class="mark">PP</div><div><div class="eyebrow">Kreisbank Hohenbrück · Financial Crime Unit</div><strong>PROJEKT PHANTOME</strong></div></div>
   <div class="timer" id="timerBox"><small id="timerLbl">BUCHUNGSLAUF IN</small><strong id="timer">50:00</strong><small id="clock">Uhrzeit 15:40</small></div>
 </header>
 <main>
@@ -293,7 +297,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Keine echten Kundendaten verwenden · Version 3.4</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 3.5</footer>
 </div>
 
 <script>
@@ -415,7 +419,7 @@ function hintFor(){
     "Addiert die drei Überweisungen an Nova Trade Ltd. und gebt den Betrag ohne Cent und ohne Punkt ein."]};
   if (!S.f.fraud) return {key:"fraud", steps:[
     "Nicht jede Auffälligkeit ist Betrug. Fragt bei jeder Zahlung: Ist die Abweichung erklärt – oder nicht?",
-    "Alles belegt oder durch die Umsatzhistorie erklärt → weiterbearbeiten. Abweichung ohne Erklärung, sonst plausibel → klären. Unbestätigte Kontoänderung plus weitere Warnsignale → nicht ausführen und eskalieren. Vergleicht in der Historie Empfängername und IBAN."]};
+    "Sucht in den Kontoumsätzen nach früheren Zahlungen an denselben Empfänger: Stimmen Name und IBAN überein? Alles belegt oder erklärt → weiterbearbeiten. Abweichung ohne Erklärung → klären. Unbestätigte Kontoänderung plus weitere Warnsignale → nicht ausführen und eskalieren."]};
   if (!S.notes.n4) return {key:"n4", steps:[
     "Übersetzt eure vier FraudDesk-Entscheidungen in Ziffern.",
     "Weiterbearbeiten = 1, Klären = 2, Nicht ausführen = 0 – für Überweisung 1 bis 4 hintereinander."]};
@@ -478,7 +482,7 @@ function updateHud(){
 const WIN = {}; let zTop = 10, winCount = 0;
 const APPS = {
   notes:{label:"Notizen", icon:"📝", title:"Notizen – m.weber", w:680, h:470},
-  mail:{label:"Mail", icon:"✉️", title:"Mail – m.weber@hausbank.example", w:740, h:460},
+  mail:{label:"Mail", icon:"✉️", title:"Mail – m.weber@kreisbank-hohenbrueck.example", w:740, h:460},
   chat:{label:"Chat", icon:"💬", title:"Chat", w:620, h:440},
   embargo:{label:"EmbargoCheck", icon:"🌐", title:"EmbargoCheck – Sanktionslisten-Screening", w:780, h:520},
   aml:{label:"AML-Monitor", icon:"📈", title:"AML-Monitor – Transaktionsüberwachung", w:780, h:520},
@@ -600,7 +604,7 @@ Und dann prüft, wohin das Geld fließt. Kommt euch die Adresse bekannt vor?`},
 Heute versuchen dieselben Leute noch etwas anderes: Im FraudDesk hängen vier zurückgehaltene Zahlungen. Eine davon ist eine Falle – die anderen sind echt, auch wenn nicht alle auf den ersten Blick so aussehen.
 
 SCHRITT 3 → FraudDesk
-Startet bei jeder Zahlung die VoP-Abfrage, schaut in die Akte und in die Umsatzhistorie. Erst dann entscheiden: weiterbearbeiten, klären oder nicht ausführen.
+Startet bei jeder Zahlung die VoP-Abfrage, schaut in die Akte und sucht in den Kontoumsätzen nach früheren Zahlungen. Erst dann entscheiden: weiterbearbeiten, klären oder nicht ausführen.
 Achtung: Nicht alles stoppen, was komisch aussieht!`},
   n4:{title:"4 · Der Stopp", gate:"fraud", code:"1fnric9x17x", riddle:"Übersetzt eure vier FraudDesk-Entscheidungen der Reihe nach in Ziffern: Weiterbearbeiten = 1, Klären = 2, Nicht ausführen = 0.", text:`Ihr habt alle drei Spuren. Jetzt muss PHANTOME gestoppt werden.
 
@@ -642,35 +646,35 @@ RENDER.notes = b => {
 };
 
 /* ---------- Mail ---------- */
-const FAKE_HDR = `Return-Path: &lt;assistenz.vorstand@hausbank-vorstand.example&gt;<br>Received: from <b>PC-ZV-114.hausbank.intern</b> (10.4.3.114)<br>&nbsp;&nbsp;by mail-gw01.hausbank.intern<br>X-Mailer: Microsoft Outlook 16.0`;
+const FAKE_HDR = `Return-Path: &lt;assistenz.vorstand@kreisbank-hohenbrueck-vorstand.example&gt;<br>Received: from <b>PC-ZV-114.kreisbank.intern</b> (10.4.3.114)<br>&nbsp;&nbsp;by mail-gw01.kreisbank.intern<br>X-Mailer: Microsoft Outlook 16.0`;
 const MAILS = {
   inbox:[
-    {time:"15:36", from:"Assistenz des Vorstands", addr:"assistenz.vorstand@hausbank-vorstand.example", subj:"PHANTOME – Ausführung im Lauf 16:30 sicherstellen", read:false, fake:true, hdr:FAKE_HDR,
+    {time:"15:36", from:"Assistenz des Vorstands", addr:"assistenz.vorstand@kreisbank-hohenbrueck-vorstand.example", subj:"PHANTOME – Ausführung im Lauf 16:30 sicherstellen", read:false, fake:true, hdr:FAKE_HDR,
       body:`<p>Sehr geehrter Herr Weber,</p><p>der Vorstand erwartet, dass die Zahlung PHANTOME (3,8 Mio. EUR, Northbridge S.A.) im Buchungslauf um 16:30 Uhr ausgeführt wird. Ihr Compliance-Vermerk verzögert ein strategisch wichtiges Geschäft.</p><p>Bitte behandeln Sie die Angelegenheit streng vertraulich und verzichten Sie auf Rückfragen per Telefon.</p><p>Mit freundlichen Grüßen<br>Assistenz des Vorstands</p>`},
-    {time:"15:24", from:"Assistenz des Vorstands", addr:"assistenz.vorstand@hausbank-vorstand.example", subj:"DRINGEND: Gespräch mit dem Vorstand – sofort", read:true, fake:true, hdr:FAKE_HDR,
+    {time:"15:24", from:"Assistenz des Vorstands", addr:"assistenz.vorstand@kreisbank-hohenbrueck-vorstand.example", subj:"DRINGEND: Gespräch mit dem Vorstand – sofort", read:true, fake:true, hdr:FAKE_HDR,
       body:`<p>Sehr geehrter Herr Weber,</p><p>der Vorstand bittet Sie <b>umgehend</b> zu einem vertraulichen Gespräch in <b>Raum 12.04</b> (12. OG).</p><p>Bitte kommen Sie sofort, nehmen Sie keine Unterlagen mit und informieren Sie niemanden über diesen Termin.</p><p>Mit freundlichen Grüßen<br>Assistenz des Vorstands</p>`},
-    {time:"15:10", from:"ZV-Batch", addr:"zv-batch@hausbank.example", subj:"Buchungslauf 16:30 – 1 Zahlung mit offenem Compliance-Vermerk", read:false,
-      hdr:`Received: from zv-batch01.hausbank.intern (10.4.1.20)`,
+    {time:"15:10", from:"ZV-Batch", addr:"zv-batch@kreisbank-hohenbrueck.example", subj:"Buchungslauf 16:30 – 1 Zahlung mit offenem Compliance-Vermerk", read:false,
+      hdr:`Received: from zv-batch01.kreisbank.intern (10.4.1.20)`,
       body:`<p>Automatische Nachricht.</p><p>Im Buchungslauf heute 16:30 Uhr ist 1 Zahlung mit offenem Compliance-Vermerk enthalten:</p><p class="mono">PHANTOME · Northbridge S.A. · 3.800.000,00 EUR · Fallverantwortlich: m.weber</p><p>Ohne Compliance-Stopp wird die Zahlung im Buchungslauf automatisch ausgeführt.</p>`},
-    {time:"14:55", from:"IT-Sicherheit", addr:"it-sicherheit@hausbank.example", subj:"Erinnerung: Phishing-Awareness-Woche", read:true,
-      hdr:`Received: from PC-IT-002.hausbank.intern (10.4.9.2)`,
-      body:`<p>Liebe Kolleginnen und Kollegen,</p><p>drei Regeln für diese Woche:</p><ul><li>Interne Adressen enden immer auf <b class="mono">@hausbank.example</b>.</li><li>Im Zweifel: Rückruf über die bekannte Durchwahl – nie über Kontaktdaten aus der verdächtigen Nachricht.</li><li>Beim Verlassen des Arbeitsplatzes <b>immer den Bildschirm sperren</b> (Windows + L) – auch wenn es nur „kurz“ ist.</li></ul><p>Eure IT-Sicherheit</p>`},
-    {time:"13:47", from:"Katrin Albers", addr:"k.albers@hausbank.example", subj:"Übergabe ans Abendteam 15:45", read:true,
-      hdr:`Received: from PC-FCU-421.hausbank.intern (10.4.4.21)`,
+    {time:"14:55", from:"IT-Sicherheit", addr:"it-sicherheit@kreisbank-hohenbrueck.example", subj:"Erinnerung: Phishing-Awareness-Woche", read:true,
+      hdr:`Received: from PC-IT-002.kreisbank.intern (10.4.9.2)`,
+      body:`<p>Liebe Kolleginnen und Kollegen,</p><p>drei Regeln für diese Woche:</p><ul><li>Interne Adressen enden immer auf <b class="mono">@kreisbank-hohenbrueck.example</b>.</li><li>Im Zweifel: Rückruf über die bekannte Durchwahl – nie über Kontaktdaten aus der verdächtigen Nachricht.</li><li>Beim Verlassen des Arbeitsplatzes <b>immer den Bildschirm sperren</b> (Windows + L) – auch wenn es nur „kurz“ ist.</li></ul><p>Eure IT-Sicherheit</p>`},
+    {time:"13:47", from:"Katrin Albers", addr:"k.albers@kreisbank-hohenbrueck.example", subj:"Übergabe ans Abendteam 15:45", read:true,
+      hdr:`Received: from PC-FCU-421.kreisbank.intern (10.4.4.21)`,
       body:`<p>Hi Matthias,</p><p>denk bitte an die Übergabe ans Abendteam um 15:45 bei dir. Du wolltest ihnen ja noch „was zeigen“ 😉</p><p>Katrin</p>`}],
   sent:[
-    {time:"15:31", from:"Matthias Weber", addr:"m.weber@hausbank.example", to:"s.kranz@hausbank.example", subj:"PHANTOME – Vermerk kann ignoriert werden", read:true, sentByOther:true,
-      hdr:`Received: from <b>PC-FCU-417.hausbank.intern</b> (10.4.4.17)<br>&nbsp;&nbsp;angemeldeter Benutzer: m.weber`,
+    {time:"15:31", from:"Matthias Weber", addr:"m.weber@kreisbank-hohenbrueck.example", to:"s.kranz@kreisbank-hohenbrueck.example", subj:"PHANTOME – Vermerk kann ignoriert werden", read:true, sentByOther:true,
+      hdr:`Received: from <b>PC-FCU-417.kreisbank.intern</b> (10.4.4.17)<br>&nbsp;&nbsp;angemeldeter Benutzer: m.weber`,
       body:`<p>Hallo Sven,</p><p>nach Rücksprache ist PHANTOME unkritisch. Den Compliance-Vermerk beim Lauf bitte ignorieren.</p><p>Gruß<br>Matthias</p>`},
-    {time:"12:41", from:"Matthias Weber", addr:"m.weber@hausbank.example", to:"fcu-team@hausbank.example", subj:"Re: Kuchen in der Küche", read:true,
-      hdr:`Received: from PC-FCU-417.hausbank.intern (10.4.4.17)`, body:`<p>Danke Deniz, sehr lecker! 🎂</p><p>Matthias</p>`}]};
+    {time:"12:41", from:"Matthias Weber", addr:"m.weber@kreisbank-hohenbrueck.example", to:"fcu-team@kreisbank-hohenbrueck.example", subj:"Re: Kuchen in der Küche", read:true,
+      hdr:`Received: from PC-FCU-417.kreisbank.intern (10.4.4.17)`, body:`<p>Danke Deniz, sehr lecker! 🎂</p><p>Matthias</p>`}]};
 RENDER.mail = b => {
   const folder = S.v.folder || "inbox", list = MAILS[folder], m = list[S.v.mail] || list[0]; m.read = true;
   b.className = "wbody flush";
   b.innerHTML = `<div class="split"><div class="list">
       <div class="tabs" style="margin:0;padding:6px 6px 0">${[["inbox","Posteingang"],["sent","Gesendet"]].map(([k,t]) => `<button data-f="${k}" class="${k === folder ? "on" : ""}">${t}</button>`).join("")}</div>
       ${list.map((x,i) => `<button class="li ${x === m ? "sel" : ""} ${x.read ? "" : "unread"}" data-i="${i}">${folder === "sent" ? "An: " + x.to : x.from}<small>${x.time} · ${x.subj}</small></button>`).join("")}</div>
-    <div class="pane"><h3>${m.subj}</h3><p class="mini muted" style="margin-bottom:8px">Von: <b>${m.from}</b> &lt;<span class="mono">${m.addr}</span>&gt; · heute ${m.time}<br>An: ${m.to || "m.weber@hausbank.example"}</p>
+    <div class="pane"><h3>${m.subj}</h3><p class="mini muted" style="margin-bottom:8px">Von: <b>${m.from}</b> &lt;<span class="mono">${m.addr}</span>&gt; · heute ${m.time}<br>An: ${m.to || "m.weber@kreisbank-hohenbrueck.example"}</p>
       <button id="hdrBtn" style="font-size:.8rem;padding:4px 10px">${S.v.hdrOpen ? "Kopfzeilen ausblenden" : "⋯ Kopfzeilen anzeigen"}</button>
       ${S.v.hdrOpen ? `<div class="doc mono" style="font-size:.78rem;margin-top:8px">${m.hdr}</div>` : ""}
       <div style="margin-top:10px">${m.body}</div></div></div>`;
@@ -678,7 +682,7 @@ RENDER.mail = b => {
   on(b, ".li", "click", e => { S.v.mail = +e.currentTarget.dataset.i; render("mail"); });
   $("hdrBtn").addEventListener("click", () => { S.v.hdrOpen = !S.v.hdrOpen; render("mail"); });
   const MAIL_LOG = {
-    "DRINGEND: Gespräch mit dem Vorstand – sofort": "Mail 15:24: Eine „Assistenz des Vorstands“ bestellt Weber sofort und vertraulich in Raum 12.04 – von der fremden Domain hausbank-vorstand.example. Deshalb ist er weg.",
+    "DRINGEND: Gespräch mit dem Vorstand – sofort": "Mail 15:24: Eine „Assistenz des Vorstands“ bestellt Weber sofort und vertraulich in Raum 12.04 – von der fremden Domain kreisbank-hohenbrueck-vorstand.example. Deshalb ist er weg.",
     "PHANTOME – Ausführung im Lauf 16:30 sicherstellen": "Mail 15:36: Dieselbe „Assistenz des Vorstands“ drängt darauf, PHANTOME um 16:30 auszuführen – ohne telefonische Rückfrage.",
     "LETZTE ERINNERUNG: PHANTOME": "Mail: Die „Assistenz des Vorstands“ erhöht den Druck – „Jede weitere Verzögerung wird Konsequenzen haben.“"};
   const logged = S.v.mailLogged || (S.v.mailLogged = {});
@@ -767,7 +771,7 @@ RENDER.chat = b => {
   const c = CHATS[S.v.chat];
   b.className = "wbody flush";
   b.innerHTML = `<div class="split"><div class="list">${Object.entries(CHATS).map(([k,x]) => `<button class="li ${k === S.v.chat ? "sel" : ""}" data-k="${k}">${x.name}<small>${x.msgs[x.msgs.length-1].text.slice(0,38)}…</small></button>`).join("")}</div>
-    <div class="pane" style="background:#eef2f7">${c.msgs.map(m => `<div class="chatmsg ${m.me ? "me" : ""}"><small>${m.me ? "Matthias Weber" : (m.who || c.name)} · ${m.t}</small>${m.text}</div>`).join("")}</div></div>`;
+    <div class="pane" style="background:#f3ecea">${c.msgs.map(m => `<div class="chatmsg ${m.me ? "me" : ""}"><small>${m.me ? "Matthias Weber" : (m.who || c.name)} · ${m.t}</small>${m.text}</div>`).join("")}</div></div>`;
   on(b, ".li", "click", e => { S.v.chat = e.currentTarget.dataset.k; render("chat"); });
   const p = b.querySelector(".pane"); p.scrollTop = p.scrollHeight;
   if (S.v.chat === "albers" && !S.v.chatSeen){ S.v.chatSeen = true; narrate("Chat: Weber war „an was Großem dran“. Alles steht in seinen Notizen. Um 15:26 ging er zu einem angeblichen Vorstandstermin."); }
@@ -925,28 +929,80 @@ const FRAUD_DEC = [["go","Weiterbearbeiten"],["clarify","Klären / Rückfrage"],
 const PAYMENTS = [
   {id:"nordlicht", name:"Nordlicht IT GmbH", payer:"Autohaus Krämer GmbH", iban:"DE21 2005 0000 0041 7733 18", amount:"4.860,00 €",
     purpose:"RE-2026-1187 · Wartung Serverraum Oktober", vop:"ok", vopText:"Übereinstimmung – Name passt zum Konto",
-    hold:"Betrag über der Einzelfreigabegrenze von 4.500 €",
-    context:["Lieferant seit 2021, monatliche Wartungspauschale 4.860 €","Rechnung RE-2026-1187 liegt vor, Betrag und Leistungszeitraum stimmen","IBAN in der Lieferantenakte seit 2021 unverändert"],
-    history:[["01.10.","Nordlicht IT GmbH","DE21 2005 0000 0041 7733 18","4.860,00 €"],["01.09.","Nordlicht IT GmbH","DE21 2005 0000 0041 7733 18","4.860,00 €"],["01.08.","Nordlicht IT GmbH","DE21 2005 0000 0041 7733 18","4.860,00 €"]],
-    ok:"go", why:"VoP stimmt, Rechnung, Akte und Umsatzhistorie passen zusammen. Zurückgehalten wurde sie nur wegen der Betragsgrenze – nach der üblichen Zweitfreigabe wird sie weiterbearbeitet."},
+    context:["Lieferant seit 2021, monatliche Wartungspauschale 4.860 €","Rechnung RE-2026-1187 liegt vor, Betrag und Leistungszeitraum stimmen","IBAN in der Lieferantenakte seit 2021 unverändert","Einzelfreigabegrenze für diesen Kunden: 4.500 €"],
+    history:[
+      ["28.10.","Löhne und Gehälter (Sammler)","–","Gehälter Oktober","− 38.420,00 €"],
+      ["25.10.","Teile-Großhandel Weser GmbH","DE14 2501 0030 0099 8812 44","RE 77821 Ersatzteile","− 6.213,80 €"],
+      ["15.10.","Autobank Leasing AG","DE77 3702 0500 0001 2345 61","Leasingrate Vorführwagen","− 2.140,00 €"],
+      ["10.10.","Martin Fischer","DE39 5605 0180 0012 9934 70","Kaufpreis Gebrauchtwagen","+ 14.900,00 €"],
+      ["02.10.","Gewerbepark Süd GmbH","DE55 2004 1155 0400 1188 02","Miete Oktober Halle 3","− 5.800,00 €"],
+      ["01.10.","Nordlicht IT GmbH","DE21 2005 0000 0041 7733 18","RE-2026-1102 Wartung Serverraum September","− 4.860,00 €"],
+      ["29.09.","Löhne und Gehälter (Sammler)","–","Gehälter September","− 37.950,00 €"],
+      ["18.09.","Rheinische Versicherung AG","DE10 3705 0198 0021 4477 09","Kfz-Flottenversicherung Q4","− 3.912,00 €"],
+      ["10.09.","Teile-Großhandel Weser GmbH","DE14 2501 0030 0099 8812 44","RE 76990 Ersatzteile","− 4.087,15 €"],
+      ["02.09.","Gewerbepark Süd GmbH","DE55 2004 1155 0400 1188 02","Miete September Halle 3","− 5.800,00 €"],
+      ["01.09.","Nordlicht IT GmbH","DE21 2005 0000 0041 7733 18","RE-2026-1017 Wartung Serverraum August","− 4.860,00 €"],
+      ["28.08.","Löhne und Gehälter (Sammler)","–","Gehälter August","− 38.105,00 €"],
+      ["12.08.","Finanzamt Hohenbrück","DE86 7600 0000 0076 0015 03","USt-Vorauszahlung Juli","− 9.311,00 €"],
+      ["01.08.","Nordlicht IT GmbH","DE21 2005 0000 0041 7733 18","RE-2026-0934 Wartung Serverraum Juli","− 4.860,00 €"]],
+    ok:"go", why:"VoP stimmt, Rechnung und Akte passen, und die Kontoumsätze zeigen seit Monaten dieselbe Pauschale an dieselbe IBAN. Zurückgehalten wurde sie nur wegen der Betragsgrenze – nach der üblichen Zweitfreigabe wird sie weiterbearbeitet."},
   {id:"mira", name:"Mira Energie GmbH", payer:"Gartenbau Lindner GmbH", iban:"LT59 3250 0612 9944 0187", amount:"48.750,00 €",
     purpose:"Vorauszahlung Q4 – sofort fällig", vop:"no", vopText:"Keine Übereinstimmung – Name passt nicht zum Konto",
-    hold:"Neue Empfänger-IBAN",
     context:["Lieferant seit 2019, Liefervertrag mit monatlichen Abschlägen","Kontoänderung heute um 15:02 per E-Mail von buchhaltung@mira-energie-gmbh.example – hinterlegte Domain: @mira-energie.example","Änderung erfasst um 15:05 von Benutzer s.kranz (Zahlungsverkehr) – ohne Rückrufbestätigung über die hinterlegte Telefonnummer","Vorauszahlungen sind im Liefervertrag nicht vorgesehen"],
-    history:[["30.09.","Mira Energie GmbH","DE88 3006 0601 0005 5521 40","3.912,40 €"],["29.08.","Mira Energie GmbH","DE88 3006 0601 0005 5521 40","3.874,10 €"],["30.07.","Mira Energie GmbH","DE88 3006 0601 0005 5521 40","3.905,75 €"]],
-    ok:"stop", why:"Bisher gingen die Zahlungen an Mira Energie immer auf eine deutsche IBAN – jetzt plötzlich auf ein litauisches Konto. Die Kontoänderung kam über eine fremde Domain und wurde nie bestätigt; dazu ein Betrag weit über dem üblichen Abschlag und eine Vorauszahlung, die der Vertrag nicht vorsieht. VoP-Abweichung und neue IBAN hängen zusammen – sie sind kein doppelter Beleg, aber zusammen mit dem Rest eindeutig: nicht ausführen, Lieferanten über die bekannte Nummer kontaktieren, eskalieren."},
+    history:[
+      ["27.10.","Löhne und Gehälter (Sammler)","–","Löhne Oktober","− 21.300,00 €"],
+      ["22.10.","Baumschule Ammerland KG","DE47 2806 2165 0004 8812 30","Pflanzen Lieferung KW 42","− 3.450,00 €"],
+      ["20.10.","Stadt Hohenbrück","DE31 7605 0101 0001 1772 08","Grünpflege Parkanlagen RE 2026-311","+ 18.600,00 €"],
+      ["14.10.","Tankstelle Nordring","–","Kartenzahlung Diesel","− 412,60 €"],
+      ["06.10.","Landtechnik Brandes","DE02 2805 0100 0081 2233 90","Reparatur Aufsitzmäher","− 1.890,00 €"],
+      ["30.09.","Mira Energie GmbH","DE88 3006 0601 0005 5521 40","Abschlag Strom/Gas September","− 3.912,40 €"],
+      ["26.09.","Löhne und Gehälter (Sammler)","–","Löhne September","− 20.980,00 €"],
+      ["15.09.","Rheinische Versicherung AG","DE10 3705 0198 0021 4477 09","Kfz-Versicherung Betriebsfahrzeuge","− 1.245,00 €"],
+      ["29.08.","Mira Energie GmbH","DE88 3006 0601 0005 5521 40","Abschlag Strom/Gas August","− 3.874,10 €"],
+      ["21.08.","Helga Wolf","DE73 2004 1144 0612 3388 01","Gartengestaltung Rechnung 2026-188","+ 7.240,00 €"],
+      ["30.07.","Mira Energie GmbH","DE88 3006 0601 0005 5521 40","Abschlag Strom/Gas Juli","− 3.905,75 €"],
+      ["28.07.","Löhne und Gehälter (Sammler)","–","Löhne Juli","− 21.110,00 €"],
+      ["17.07.","Baumschule Ammerland KG","DE47 2806 2165 0004 8812 30","Pflanzen Lieferung KW 28","− 2.180,00 €"],
+      ["10.07.","Saatgut Hansen GmbH","DE19 2175 0000 0000 9911 52","Saatgut Rasenflächen","− 980,00 €"]],
+    ok:"stop", why:"In den Kontoumsätzen gingen alle Abschläge an Mira Energie auf eine deutsche IBAN (DE88 …) und lagen bei rund 3.900 € – jetzt soll ein Vielfaches auf ein litauisches Konto gehen. Die Kontoänderung kam über eine fremde Domain und wurde nie bestätigt, und Vorauszahlungen sieht der Vertrag nicht vor. VoP-Abweichung und neue IBAN hängen zusammen – sie sind kein doppelter Beleg, aber zusammen mit dem Rest eindeutig: nicht ausführen, Lieferanten über die bekannte Nummer kontaktieren, eskalieren."},
   {id:"stadtwerke", name:"Stadtwerke West", payer:"Petra Schulz (privat)", iban:"DE47 3705 0198 0012 6688 02", amount:"1.284,30 €",
     purpose:"Vertragskonto 7004 5512 · Nachzahlung Jahresabrechnung 2026", vop:"close", vopText:"Ähnliche Übereinstimmung – Kontoinhaber laut Empfängerbank: „Stadtwerke West Energie GmbH“",
-    hold:"VoP: nur ähnliche Übereinstimmung",
     context:["Vertragskonto 7004 5512 ist in den Kundendaten hinterlegt – Vertragspartner laut Unterlagen: „Stadtwerke West GmbH“","Jahresabrechnung liegt vor und weist eine Nachzahlung von 1.284,30 € aus","Kein Hinweis auf eine Umfirmierung"],
-    history:[], historyNote:"Keine Überweisungen an diesen Empfänger in den letzten 12 Monaten. Die monatlichen Abschläge (210 €) werden per Lastschrift eingezogen – Gläubiger laut Lastschrift: „Stadtwerke West GmbH“.",
-    ok:"clarify", why:"Der Name ist nur ähnlich, und die Historie hilft nicht weiter: Bisher lief alles per Lastschrift unter „Stadtwerke West GmbH“. Das spricht nicht für Betrug – geklärt ist die Abweichung aber auch nicht. Vor der Ausführung prüfen, ob der Versorger umfirmiert hat (Rückfrage über die bekannte Nummer, Handelsregister)."},
+    history:[
+      ["28.10.","Kreisklinikum Hohenbrück","DE64 7605 0101 0000 8812 77","Gehalt Oktober","+ 2.940,00 €"],
+      ["27.10.","Supermarkt Frischeck","–","Kartenzahlung","− 86,40 €"],
+      ["15.10.","Stadtwerke West GmbH","Gläubiger-ID DE98ZZZ00000456123","Lastschrift Abschlag Oktober · VK 7004 5512","− 210,00 €"],
+      ["03.10.","Wohnbau Hohenbrück eG","DE12 7605 0101 0010 4455 61","Miete Oktober","− 780,00 €"],
+      ["02.10.","Funknetz Mobil GmbH","Gläubiger-ID DE44ZZZ00000312987","Lastschrift Mobilfunk","− 24,99 €"],
+      ["29.09.","Kreisklinikum Hohenbrück","DE64 7605 0101 0000 8812 77","Gehalt September","+ 2.940,00 €"],
+      ["18.09.","Online-Versand Orbit","–","Bestellung 44-2291","− 59,90 €"],
+      ["15.09.","Stadtwerke West GmbH","Gläubiger-ID DE98ZZZ00000456123","Lastschrift Abschlag September · VK 7004 5512","− 210,00 €"],
+      ["03.09.","Wohnbau Hohenbrück eG","DE12 7605 0101 0010 4455 61","Miete September","− 780,00 €"],
+      ["29.08.","Kreisklinikum Hohenbrück","DE64 7605 0101 0000 8812 77","Gehalt August","+ 2.940,00 €"],
+      ["20.08.","Apotheke am Markt","–","Kartenzahlung","− 18,75 €"],
+      ["15.08.","Stadtwerke West GmbH","Gläubiger-ID DE98ZZZ00000456123","Lastschrift Abschlag August · VK 7004 5512","− 210,00 €"],
+      ["03.08.","Wohnbau Hohenbrück eG","DE12 7605 0101 0010 4455 61","Miete August","− 780,00 €"],
+      ["01.08.","Streaming Plus","Gläubiger-ID DE71ZZZ00000998811","Lastschrift Abo","− 12,99 €"]],
+    ok:"clarify", why:"Der Name ist nur ähnlich, und die Kontoumsätze helfen nicht weiter: Bisher liefen die Abschläge per Lastschrift unter „Stadtwerke West GmbH“, eine Überweisung auf diese IBAN gab es nie. Das spricht nicht für Betrug – geklärt ist die Abweichung aber auch nicht. Vor der Ausführung prüfen, ob der Versorger umfirmiert hat (Rückfrage über die bekannte Nummer, Handelsregister)."},
   {id:"sparbank", name:"Sparbank", payer:"Thomas Berger (privat)", iban:"DE62 2905 0101 0080 3344 57", amount:"500,00 €",
     purpose:"Übertrag Sparkonto", vop:"no", vopText:"Keine Übereinstimmung – Name passt nicht zum Konto",
-    hold:"VoP: keine Übereinstimmung",
-    context:["Privatkunde, Girokonto seit 2015","Empfängerkonto bei der Sparbank, keine Änderung der Kundendaten","Kein Hinweis auf Zeitdruck oder ungewöhnliche Kontaktaufnahme"],
-    history:[["15.10.","Thomas Berger","DE62 2905 0101 0080 3344 57","500,00 €"],["15.09.","Thomas Berger","DE62 2905 0101 0080 3344 57","500,00 €"],["15.08.","Thomas Berger","DE62 2905 0101 0080 3344 57","500,00 €"]],
-    ok:"go", why:"„Sparbank“ ist der Name der Bank, nicht des Kontoinhabers – deshalb kein VoP-Match. Die Umsatzhistorie zeigt seit Monaten Überträge auf genau diese IBAN, mit dem eigenen Namen als Empfänger. Ein Eigenübertrag ohne Betrugsrisiko: weiterbearbeiten und den Kunden auf den korrekten Empfängernamen hinweisen."}];
+    context:["Privatkunde, Girokonto seit 2015","Keine Änderung der Kundendaten","Kein Hinweis auf Zeitdruck oder ungewöhnliche Kontaktaufnahme"],
+    history:[
+      ["28.10.","Logistik Hohenbrück GmbH","DE58 7605 0101 0003 3311 24","Gehalt Oktober","+ 3.150,00 €"],
+      ["26.10.","Tankstelle Nordring","–","Kartenzahlung","− 68,20 €"],
+      ["21.10.","Fitness Point","Gläubiger-ID DE33ZZZ00000771200","Lastschrift Mitgliedsbeitrag","− 34,90 €"],
+      ["15.10.","Thomas Berger","DE62 2905 0101 0080 3344 57","Übertrag Sparkonto","− 500,00 €"],
+      ["03.10.","Hausverwaltung Lenz","DE90 2004 1155 0777 8899 10","Miete Oktober","− 920,00 €"],
+      ["29.09.","Logistik Hohenbrück GmbH","DE58 7605 0101 0003 3311 24","Gehalt September","+ 3.150,00 €"],
+      ["19.09.","Online-Versand Orbit","–","Bestellung 77-1043","− 149,00 €"],
+      ["15.09.","Thomas Berger","DE62 2905 0101 0080 3344 57","Übertrag Sparkonto","− 500,00 €"],
+      ["03.09.","Hausverwaltung Lenz","DE90 2004 1155 0777 8899 10","Miete September","− 920,00 €"],
+      ["29.08.","Logistik Hohenbrück GmbH","DE58 7605 0101 0003 3311 24","Gehalt August","+ 3.150,00 €"],
+      ["22.08.","Reisebüro Sonnenweg","DE24 2905 0101 0011 2244 66","Anzahlung Urlaub","− 600,00 €"],
+      ["15.08.","Thomas Berger","DE62 2905 0101 0080 3344 57","Übertrag Sparkonto","− 500,00 €"],
+      ["03.08.","Hausverwaltung Lenz","DE90 2004 1155 0777 8899 10","Miete August","− 920,00 €"],
+      ["01.08.","Streaming Plus","Gläubiger-ID DE71ZZZ00000998811","Lastschrift Abo","− 12,99 €"]],
+    ok:"go", why:"„Sparbank“ ist der Name der Bank, nicht des Kontoinhabers – deshalb kein VoP-Match. In den Kontoumsätzen gehen seit Monaten 500 € auf genau diese IBAN, mit dem eigenen Namen als Empfänger. Ein Eigenübertrag ohne Betrugsrisiko: weiterbearbeiten und den Kunden auf den korrekten Empfängernamen hinweisen."}];
 const VOP_TAG = {ok:["ok","✓"], no:["no","✕"], close:["warn","≈"]};
 const FRAUD_CHECKS = ["vop","file","hist"];
 RENDER.fraud = b => {
@@ -954,18 +1010,17 @@ RENDER.fraud = b => {
   const done = S.f.fraud, fx = S.v.fx || (S.v.fx = {});
   const ready = id => done || (fx[id] && FRAUD_CHECKS.every(k => fx[id][k]));
   b.innerHTML = `<div class="appbar" style="background:#2f6b55">🛡️ FraudDesk <small>${PAYMENTS.length} Zahlungen zurückgehalten</small></div>
-    <h3>${PAYMENTS.length} Zahlungen, eine Falle</h3><p class="mini">Das Zahlungsverkehrssystem hat heute ${PAYMENTS.length} Überweisungen zur manuellen Prüfung zurückgehalten. Entscheiden könnt ihr erst, wenn ihr VoP-Abfrage, Akte und Umsatzhistorie geprüft habt.</p>
+    <h3>${PAYMENTS.length} Zahlungen, eine Falle</h3><p class="mini">Das Zahlungsverkehrssystem hat heute ${PAYMENTS.length} Überweisungen zur manuellen Prüfung zurückgehalten. Entscheiden könnt ihr erst, wenn ihr VoP-Abfrage, Akte und Kontoumsätze des Auftraggebers geprüft habt.</p>
     <p class="mini muted" style="margin-top:-4px"><b>Weiterbearbeiten:</b> alles belegt oder erklärt · <b>Klären:</b> Abweichung ohne Erklärung, sonst plausibel · <b>Nicht ausführen + eskalieren:</b> konkreter Verdacht</p>
     ${PAYMENTS.map((p,i) => { const c = fx[p.id] || {}; return `<div class="doc" data-p="${p.id}"><span class="stamp">ZURÜCKGEHALTEN</span><h3>Überweisung ${i+1} – ${p.name}</h3>
       <table><tr><th>Auftraggeber</th><td>${p.payer}</td></tr>
       <tr><th>Empfänger (laut Auftrag)</th><td>${p.name}<br><small class="mono">${p.iban}</small></td></tr>
       <tr><th>Betrag</th><td><b>${p.amount}</b></td></tr><tr><th>Verwendungszweck</th><td>${p.purpose}</td></tr>
-      <tr><th>Grund der Zurückhaltung</th><td>${p.hold}</td></tr>
       <tr class="vopRow ${done || c.vop ? "" : "hidden"}"><th>Verification of Payee</th><td><span class="tag ${VOP_TAG[p.vop][0]}">${VOP_TAG[p.vop][1]} ${p.vopText}</span></td></tr>
       <tr class="fileRow ${done || c.file ? "" : "hidden"}"><th>Akte</th><td><ul class="ctx">${p.context.map(x => `<li>${x}</li>`).join("")}</ul></td></tr>
-      <tr class="histRow ${done || c.hist ? "" : "hidden"}"><th>Umsatzhistorie</th><td>${p.history.length ? `<p class="mini" style="margin:0 0 4px">Letzte Überweisungen von ${p.payer} an diesen Empfänger:</p>
-        <table class="hist"><tr><th>Datum</th><th>Empfänger</th><th>IBAN</th><th>Betrag</th></tr>${p.history.map(h => `<tr><td>${h[0]}</td><td>${h[1]}</td><td class="mono">${h[2]}</td><td style="text-align:right">${h[3]}</td></tr>`).join("")}</table>` : `<span class="mini">${p.historyNote}</span>`}</td></tr></table>
-      ${done ? "" : `<div class="row"><button class="doVop" ${c.vop ? "disabled" : ""}>🔎 VoP-Abfrage starten</button><button class="doFile" ${c.file ? "disabled" : ""}>📂 Akte öffnen</button><button class="doHist" ${c.hist ? "disabled" : ""}>📊 Umsatzhistorie</button></div>`}
+      <tr class="histRow ${done || c.hist ? "" : "hidden"}"><th>Kontoumsätze</th><td><p class="mini" style="margin:0 0 4px">Konto ${p.payer} · letzte drei Monate</p>
+        <div class="histwrap"><table class="hist"><tr><th>Datum</th><th>Gegenpartei</th><th>IBAN / Referenz</th><th>Verwendungszweck</th><th>Betrag</th></tr>${p.history.map(h => `<tr><td>${h[0]}</td><td>${h[1]}</td><td class="mono">${h[2]}</td><td>${h[3]}</td><td style="text-align:right;white-space:nowrap">${h[4]}</td></tr>`).join("")}</table></div></td></tr></table>
+      ${done ? "" : `<div class="row"><button class="doVop" ${c.vop ? "disabled" : ""}>🔎 VoP-Abfrage starten</button><button class="doFile" ${c.file ? "disabled" : ""}>📂 Akte öffnen</button><button class="doHist" ${c.hist ? "disabled" : ""}>📊 Kontoumsätze</button></div>`}
       <div class="decide">${FRAUD_DEC.map(([v,t]) => `<label class="${v}"><input type="radio" name="pay-${p.id}" value="${v}" ${done ? (v === p.ok ? "checked disabled" : "disabled") : (ready(p.id) ? "" : "disabled") + (S.v.fraudDec[p.id] === v ? " checked" : "")}><span>${t}</span></label>`).join("")}</div>
       ${done ? `<p class="mini" style="margin:10px 0 0"><b>Begründung:</b> ${p.why}</p>` : ""}</div>`; }).join("")}
     ${done ? vorgangBox("fraud", "Notiz 4") : `<div class="row"><button class="primary" id="fraudBtn">Entscheidungen buchen</button></div>`}`;
@@ -979,15 +1034,15 @@ RENDER.fraud = b => {
   on(b, ".decide input", "change", e => { S.v.fraudDec[e.target.name.slice(4)] = e.target.value; });
   if ($("fraudBtn")) $("fraudBtn").addEventListener("click", () => {
     const dec = S.v.fraudDec;
-    if (PAYMENTS.some(p => !ready(p.id))){ fb("fraud", "Prüft zuerst jede Zahlung: VoP-Abfrage, Akte und Umsatzhistorie."); return; }
+    if (PAYMENTS.some(p => !ready(p.id))){ fb("fraud", "Prüft zuerst jede Zahlung: VoP-Abfrage, Akte und Kontoumsätze."); return; }
     if (PAYMENTS.some(p => !dec[p.id])){ fb("fraud", "Trefft für jede Zahlung eine Entscheidung."); return; }
     if (PAYMENTS.every(p => dec[p.id] === p.ok)) return solved("fraud", "fraud", "Notiz 4",
       "FraudDesk: Die Zahlung an „Mira Energie“ sollte auf ein fremdes Konto umgeleitet werden – nicht ausgeführt und eskaliert. Nordlicht IT und der Sparkonto-Übertrag laufen weiter, bei den Stadtwerken wird die Namensabweichung geklärt. Vorgang " + VORGANG.fraud + ".",
       "Alle Entscheidungen sind richtig. VoP ist ein Prüfbaustein, keine Entscheidung für sich.");
     if (dec.mira !== "stop") return wrong("fraud", "Bei einer Zahlung reagiert ihr zu schwach: Mehrere Warnsignale und eine Kontoänderung, die nie bestätigt wurde – da reicht weder Weiterbearbeiten noch eine Rückfrage.");
-    if (dec.sparbank !== "go") return wrong("fraud", "Bei einer Zahlung erklärt die Umsatzhistorie die VoP-Abweichung bereits. Weder Rückfrage noch Eskalation sind nötig.");
+    if (dec.sparbank !== "go") return wrong("fraud", "Bei einer Zahlung erklären die Kontoumsätze die VoP-Abweichung bereits. Weder Rückfrage noch Eskalation sind nötig.");
     if (dec.stadtwerke === "stop") return wrong("fraud", "Bei einer Zahlung reagiert ihr zu hart: Eine Namensabweichung allein ist kein Betrugsverdacht – vor allem, wenn IBAN und Rechnung passen.");
-    if (dec.stadtwerke === "go") return wrong("fraud", "Bei einer Zahlung meldet VoP eine Abweichung, die weder Akte noch Umsatzhistorie erklären. Ohne Klärung auszuführen ist zu früh.");
+    if (dec.stadtwerke === "go") return wrong("fraud", "Bei einer Zahlung meldet VoP eine Abweichung, die weder Akte noch Kontoumsätze erklären. Ohne Klärung auszuführen ist zu früh.");
     wrong("fraud", "Eine Zahlung ist vollständig belegt. Sie zurückzuhalten verzögert sie ohne Grund.");
   });
 };
@@ -1063,9 +1118,9 @@ function chatIn(text){ CHATS.albers.msgs.push({me:false, t:storyTime(), text}); 
 function mailIn(m){ MAILS.inbox.unshift({...m, time:storyTime(), read:false}); if ((S.v.folder || "inbox") === "inbox") S.v.mail++; if (!WIN.mail || WIN.mail.min){ S.unread.mail++; renderIcons(); } render("mail"); notify(m.from, m.subj, "mail"); }
 const EVENTS = [
   {at:6, fn:() => chatIn("Seid ihr in Webers Büro? Er geht nicht ans Handy. Das ist nicht seine Art.")},
-  {at:18, fn:() => mailIn({from:"ZV-Batch", addr:"zv-batch@hausbank.example", subj:"Erinnerung: Buchungslauf in 30 Minuten", hdr:`Received: from zv-batch01.hausbank.intern (10.4.1.20)`, body:`<p>Automatische Nachricht. Der Buchungslauf startet um 16:30 Uhr. 1 Zahlung mit offenem Compliance-Vermerk (PHANTOME).</p>`})},
+  {at:18, fn:() => mailIn({from:"ZV-Batch", addr:"zv-batch@kreisbank-hohenbrueck.example", subj:"Erinnerung: Buchungslauf in 30 Minuten", hdr:`Received: from zv-batch01.kreisbank.intern (10.4.1.20)`, body:`<p>Automatische Nachricht. Der Buchungslauf startet um 16:30 Uhr. 1 Zahlung mit offenem Compliance-Vermerk (PHANTOME).</p>`})},
   {at:31, fn:() => chatIn("Der Empfang sagt: Raum 12.04 ist ein Lagerraum. Da findet nie ein Vorstandsgespräch statt. Wer schickt Weber denn dahin?")},
-  {at:38, fn:() => mailIn({from:"Assistenz des Vorstands", addr:"assistenz.vorstand@hausbank-vorstand.example", subj:"LETZTE ERINNERUNG: PHANTOME", fake:true, hdr:FAKE_HDR, body:`<p>Herr Weber,</p><p>wir erwarten die Ausführung von PHANTOME im Lauf um 16:30 Uhr. Jede weitere Verzögerung wird Konsequenzen haben.</p><p>Assistenz des Vorstands</p>`})},
+  {at:38, fn:() => mailIn({from:"Assistenz des Vorstands", addr:"assistenz.vorstand@kreisbank-hohenbrueck-vorstand.example", subj:"LETZTE ERINNERUNG: PHANTOME", fake:true, hdr:FAKE_HDR, body:`<p>Herr Weber,</p><p>wir erwarten die Ausführung von PHANTOME im Lauf um 16:30 Uhr. Jede weitere Verzögerung wird Konsequenzen haben.</p><p>Assistenz des Vorstands</p>`})},
   {at:45, fn:() => notify("ZV-Cockpit", "Buchungslauf startet in 5 Minuten.", "zv")}];
 
 /* ---------- Phase 2 ---------- */
