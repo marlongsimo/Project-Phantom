@@ -316,7 +316,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.0</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.1</footer>
 </div>
 
 <script>
@@ -1149,33 +1149,28 @@ RENDER.konto = b => {
 
 /* ---------- Ermittlungsjournal ---------- */
 // Freie Notizen des Teams – kein Rätsel, nur ein Werkzeug. Wird mit dem Spielstand gespeichert.
-const REFS = ["Northbridge","Nova Trade","Jonas K.","Mira Energie","Sven Kranz","Sonstiges"];
 const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 RENDER.journal = b => {
-  const list = S.journal || (S.journal = []), filter = S.v.jFilter || "", edit = list.find(e => e.id === S.v.jEdit);
-  const shown = list.filter(e => !filter || e.ref === filter);
+  const list = S.journal || (S.journal = []), edit = list.find(e => e.id === S.v.jEdit);
   b.className = "wbody flush";
   b.innerHTML = `<div class="split"><div class="list">
-      <div style="padding:8px 10px;border-bottom:1px solid #e0d3d1"><button id="jNew" class="primary" style="width:100%">＋ Neue Notiz</button>
-      <select id="jFilter" style="width:100%;margin-top:8px" aria-label="Filter"><option value="">Alle Bezüge (${list.length})</option>${REFS.map(r => `<option ${r === filter ? "selected" : ""}>${r}</option>`).join("")}</select></div>
-      ${shown.map(e => `<button class="li ${e.id === S.v.jEdit ? "sel" : ""}" data-id="${e.id}">${esc(e.title || "Ohne Titel")}<small>${e.t}${e.ref ? " · " + esc(e.ref) : ""}</small></button>`).join("") || `<p class="mini muted" style="padding:10px">Noch keine Notizen${filter ? " zu „" + esc(filter) + "“" : ""}.</p>`}
+      <div style="padding:8px 10px;border-bottom:1px solid #e0d3d1"><button id="jNew" class="primary" style="width:100%">＋ Neue Notiz</button></div>
+      ${list.map(e => `<button class="li ${e.id === S.v.jEdit ? "sel" : ""}" data-id="${e.id}">${esc(e.title || "Ohne Titel")}<small>${e.t}</small></button>`).join("") || `<p class="mini muted" style="padding:10px">Noch keine Notizen.</p>`}
     </div><div class="pane notesbg">
       <h3>${edit ? "Notiz bearbeiten" : "Neue Notiz"}</h3>
-      <p class="mini muted" style="margin-top:-4px">Haltet fest, was ihr findet – und wie sicher ihr euch seid. Eine gemeinsame Adresse ist ein Hinweis, noch kein Beweis.</p>
-      <label class="mini">Titel</label><input id="jTitle" maxlength="80" placeholder="z. B. Verbindung Northbridge / Nova Trade">
-      <label class="mini" style="display:block;margin-top:8px">Bezug</label><select id="jRef" style="width:100%"><option value="">– kein Bezug –</option>${REFS.map(r => `<option>${r}</option>`).join("")}</select>
-      <label class="mini" style="display:block;margin-top:8px">Beobachtung / Erkenntnis</label><textarea id="jText" rows="7" placeholder="Was habt ihr herausgefunden?"></textarea>
+      <p class="mini muted" style="margin-top:-4px">Haltet fest, was ihr findet – und wie sicher ihr euch seid.</p>
+      <label class="mini">Titel</label><input id="jTitle" maxlength="80" placeholder="Worum geht es?">
+      <label class="mini" style="display:block;margin-top:8px">Beobachtung / Erkenntnis</label><textarea id="jText" rows="9" placeholder="Was habt ihr herausgefunden?"></textarea>
       <div class="row"><button class="primary" id="jSave">Speichern</button>${edit ? `<button id="jDel">Löschen</button>` : ""}</div>
     </div></div>`;
-  if (edit){ $("jTitle").value = edit.title; $("jRef").value = edit.ref; $("jText").value = edit.text; }
+  if (edit){ $("jTitle").value = edit.title; $("jText").value = edit.text; }
   $("jNew").addEventListener("click", () => { S.v.jEdit = null; render("journal"); });
-  $("jFilter").addEventListener("change", e => { S.v.jFilter = e.target.value; render("journal"); });
   on(b, ".li", "click", e => { S.v.jEdit = +e.currentTarget.dataset.id; render("journal"); });
   $("jSave").addEventListener("click", () => {
-    const title = $("jTitle").value.trim(), text = $("jText").value.trim(), ref = $("jRef").value;
+    const title = $("jTitle").value.trim(), text = $("jText").value.trim();
     if (!title && !text){ fb("journal", "Schreibt zuerst etwas auf."); return; }
-    if (edit) Object.assign(edit, {title, text, ref});
-    else { const e = {id: Date.now(), t: storyTime(), title, text, ref}; list.unshift(e); S.v.jEdit = e.id; }
+    if (edit) Object.assign(edit, {title, text});
+    else { const e = {id: Date.now(), t: storyTime(), title, text}; list.unshift(e); S.v.jEdit = e.id; }
     fb("journal", "Gespeichert.", "good"); render("journal"); saveGame();
   });
   if ($("jDel")) $("jDel").addEventListener("click", () => { S.journal = list.filter(e => e.id !== edit.id); S.v.jEdit = null; fb("journal", "Notiz gelöscht."); render("journal"); saveGame(); });

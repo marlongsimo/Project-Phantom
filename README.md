@@ -4,7 +4,7 @@ Ein Escape Room im Browser mit Story, angesiedelt bei der fiktiven **Kreisbank H
 
 Der rote Faden sind Webers Notizen: Notiz 1 ist offen und nennt den ersten Schritt. Jede weitere Notiz ist mit einem Rätsel gesperrt, dessen Antwort nur kennt, wer die vorherige Prüfung (EmbargoCheck, AML-Monitor, FraudDesk) wirklich gelöst hat. Auch Webers Freigabecode für den Compliance-Stopp im ZV-Cockpit muss aus den drei Fällen hergeleitet werden. Zum Schluss deckt das Team auf, wer im Haus geholfen hat: ein Mitarbeiter des Zahlungsverkehrs, der Weber mit einer gefälschten Vorstandsmail weggelockt und dessen entsperrten PC benutzt hat.
 
-**Zwei Schwierigkeitsstufen:** *Azubi* – Webers Notizen führen Schritt für Schritt, die Seitenleiste zeigt den nächsten Schritt und den Fortschritt. *Ermittler* – Webers Notizen sind persönliche Beobachtungen, ohne Schrittanzeige und automatisches Protokoll; das Team führt ein eigenes Ermittlungsjournal, Hinweise kosten mehr. Die Fachrätsel sind in beiden Stufen identisch.
+**Zwei Schwierigkeitsstufen:** *Azubi* – Webers Notizen führen Schritt für Schritt, die Seitenleiste zeigt den nächsten Schritt und den Fortschritt. *Ermittler* – Webers Notizen sind persönliche Beobachtungen, ohne Schrittanzeige und automatisches Protokoll; das Team führt ein eigenes Ermittlungsjournal (freie Notizen ohne Vorgaben), Hinweise kosten mehr. Die Fachrätsel sind in beiden Stufen identisch.
 
 <details><summary>Lösung für Spielleitung</summary>
 
