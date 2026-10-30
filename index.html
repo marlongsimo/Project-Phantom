@@ -186,6 +186,9 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .chatmsg small{display:block;color:#6f5f62;font-size:.72rem;margin-bottom:2px}
 .notif{position:absolute;right:10px;bottom:54px;width:min(320px,calc(100% - 20px));background:#2a1e22;color:#fff;border-radius:8px;padding:11px 14px;z-index:950;box-shadow:0 10px 30px rgba(0,0,0,.5);cursor:pointer;font-size:.86rem;border-left:4px solid #e27a88}
 .notif b{display:block;margin-bottom:2px}
+.mailenv{position:absolute;left:10px;bottom:54px;z-index:950;display:flex;align-items:center;gap:8px;background:#2a1e22;color:#fff;border-radius:8px;padding:8px 14px 8px 10px;font-size:.86rem;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.5);border-left:4px solid #e27a88;pointer-events:none;animation:envin .4s ease-out}
+.mailenv .env{font-size:1.5rem;line-height:1}
+@keyframes envin{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
 .notesbg{background:#fffbe8}
 .notetext{white-space:pre-wrap;font-size:.95rem;line-height:1.6}
 .bigscore{font-size:clamp(2.4rem,7vw,4.4rem);font-weight:900;letter-spacing:-.05em;color:var(--cyan);margin:6px 0}
@@ -273,6 +276,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
         <div class="icons" id="icons"></div>
         <div id="windows"></div>
         <div id="notif" class="notif hidden" role="status" aria-live="polite"></div>
+        <div id="mailEnv" class="mailenv hidden" role="status" aria-live="polite"><span class="env">✉️</span>Neue Mail</div>
         <div class="startmenu hidden" id="startmenu" role="menu"></div>
         <div class="taskbar"><button class="logo" id="startBtnOs" aria-label="Startmenü">⊞</button><div id="tasks" style="display:flex;gap:3px;overflow:hidden"></div><div class="tray"><span id="trayTime">15:40</span><br><b id="trayRun">Lauf 16:30</b></div><button class="showdesk" id="showDesk" aria-label="Desktop anzeigen" title="Desktop anzeigen"></button></div>
       </div>
@@ -316,7 +320,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.9</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.10</footer>
 </div>
 
 <script>
@@ -479,9 +483,8 @@ function requestHelp(){
   S.hintUsed[h.key] = used + 1; S.hints++;
   S.startAt -= HELP_MIN * 60000; S.deadline -= HELP_MIN * 60000;
   const body = [c.hi, c.lead, h.steps[used]].map(t => `<p>${t}</p>`).join("") + `<p>${c.bye.replace("\n", "<br>")}</p>`;
-  mailIn({from:c.from, addr:c.addr, subj:"AW: Rückfrage – " + topic, body, hdr:`Received: from ${c.dept} · mail-gw01.kreisbank.intern`});
-  S.v.folder = "inbox"; S.v.mail = 0; openApp("mail"); render("mail");
-  showHint("Anfrage verschickt – " + c.from + " (" + c.dept + ") hat geantwortet. Die Antwort liegt im Postfach. Die Uhr ist um " + HELP_MIN + " Minuten vorgerückt.");
+  mailIn({from:c.from, addr:c.addr, subj:"AW: Rückfrage – " + topic, body, hdr:`Received: from ${c.dept} · mail-gw01.kreisbank.intern`}, true);
+  showHint("Anfrage verschickt. Die Uhr ist um " + HELP_MIN + " Minuten vorgerückt – die Antwort kommt per Mail.");
   narrate("Hilfe angefordert: " + c.from + " (" + c.dept + "), " + topic + "."); tick(); updateHud();
 }
 function hintLabel(){
@@ -566,6 +569,7 @@ const APPS = {
 const PHASE2_APPS = ["intranet","whistle"];
 const visibleApps = () => Object.entries(APPS).filter(([id, a]) => !a.hidden && (S.f.stopped || !PHASE2_APPS.includes(id)));
 function renderIcons(){
+  $("mailEnv").classList.toggle("hidden", !(S.v.newMail && S.startAt && !S.ended));
   $("icons").innerHTML = "";
   visibleApps().forEach(([id, a]) => {
     const b = document.createElement("button"); b.className = "dicon"; b.setAttribute("aria-label", a.label);
@@ -613,12 +617,14 @@ function openApp(id){
   }
   focusWin(id);
   (S.v.opened = S.v.opened || {})[id] = true;
+  if (id === "mail") S.v.newMail = false;
   if (id === "mail" || id === "chat" || PHASE2_APPS.includes(id)){ S.unread[id] = 0; renderIcons(); }
 }
 function focusWin(id){
   const w = WIN[id]; if (!w) return;
   Object.values(WIN).forEach(o => o.el.classList.remove("focus"));
   w.min = false; w.el.classList.remove("hidden"); w.el.classList.add("focus"); w.el.style.zIndex = ++zTop; renderTasks();
+  if (id === "mail" && (S.v.newMail || S.unread.mail)){ S.v.newMail = false; S.unread.mail = 0; renderIcons(); }
 }
 function makeDraggable(w){
   w.el.querySelector(".wtitle").addEventListener("pointerdown", e => {
@@ -1307,7 +1313,11 @@ RENDER.zv = b => {
 
 /* ---------- Zeitgesteuerte Ereignisse ---------- */
 function chatIn(text){ CHATS.albers.msgs.push({me:false, t:storyTime(), text}); if (!WIN.chat || WIN.chat.min){ S.unread.chat++; renderIcons(); } render("chat"); notify("Katrin Albers", text, "chat"); }
-function mailIn(m){ MAILS.inbox.unshift({...m, time:storyTime(), read:false}); if ((S.v.folder || "inbox") === "inbox") S.v.mail++; if (!WIN.mail || WIN.mail.min){ S.unread.mail++; renderIcons(); } render("mail"); notify(m.from, m.subj, "mail"); }
+function mailIn(m, quiet){
+  MAILS.inbox.unshift({...m, time:storyTime(), read:false}); if ((S.v.folder || "inbox") === "inbox") S.v.mail++;
+  // Hilfe-Mails kommen still: Umschlag unten links und Zähler am Mail-Symbol – öffnen müssen die Spieler selbst.
+  if (quiet){ S.unread.mail++; S.v.newMail = true; renderIcons(); render("mail"); return; }
+  if (!WIN.mail || WIN.mail.min){ S.unread.mail++; renderIcons(); } render("mail"); notify(m.from, m.subj, "mail"); }
 const EVENTS = [
   {at:6, fn:() => chatIn("Seid ihr in Webers Büro? Er geht nicht ans Handy. Das ist nicht seine Art.")},
   {at:18, fn:() => mailIn({from:"ZV-Batch", addr:"zv-batch@kreisbank-hohenbrueck.example", subj:"Erinnerung: Buchungslauf in 30 Minuten", hdr:`Received: from zv-batch01.kreisbank.intern (10.4.1.20)`, body:`<p>Automatische Nachricht. Der Buchungslauf startet um 16:30 Uhr. 1 Zahlung mit offenem Compliance-Vermerk (PHANTOME).</p>`})},
