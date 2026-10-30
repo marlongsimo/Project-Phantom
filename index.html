@@ -188,6 +188,11 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .notif b{display:block;margin-bottom:2px}
 .mailenv{position:absolute;left:10px;bottom:54px;z-index:950;display:flex;align-items:center;gap:8px;background:#2a1e22;color:#fff;border-radius:8px;padding:8px 14px 8px 10px;font-size:.86rem;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.5);border-left:4px solid #e27a88;pointer-events:none;animation:envin .4s ease-out}
 .mailenv .env{font-size:1.5rem;line-height:1}
+.wbody.web{flex-direction:column}.wbody.web .pane{flex:1;overflow:auto;min-width:0}
+.bbar{flex:none;display:flex;gap:6px;align-items:center;background:#e4dbd9;padding:6px 8px;border-bottom:1px solid #cdbdbb}
+.bbar input{flex:1;min-width:0}.bbar .url{flex:1;min-width:0;font:.8rem ui-monospace,Consolas,monospace;background:#fff;border:1px solid #cdbdbb;border-radius:14px;padding:5px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sres{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #ece3e1;padding:10px 4px;cursor:pointer;color:inherit;font:inherit}
+.sres:hover{background:#f8f1ef}.sres b{color:#1a4d8f}.sres small{display:block;color:#3a7a3a;font-family:ui-monospace,Consolas,monospace;font-size:.74rem}.sres span{display:block;font-size:.86rem;color:#555}
 @keyframes envin{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
 .notesbg{background:#fffbe8}
 .notetext{white-space:pre-wrap;font-size:.95rem;line-height:1.6}
@@ -320,7 +325,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.14</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.0</footer>
 </div>
 
 <script>
@@ -337,7 +342,7 @@ const VORGANG = {embargo:"3108", aml:"2604", fraud:"7190"};
 const S = {team:"", startAt:0, deadline:0, timerId:null, ended:false, score:0, mistakes:0, hints:0, log:[], firedEvents:{},
   f:{embargo:false, aml:false, fraud:false, code:false},
   notes:{n1:true, n2:false, n3:false, n4:false},
-  v:{mail:0, chat:"albers", note:"n1", alert:null, amlSel:[], fraudDec:{}, zvSel:false, notesSeen:false},
+  v:{mail:0, chat:"albers", note:"n1", alert:null, amlSel:[], fraudDec:{}, zvSel:false, notesSeen:false, web:{}},
   unread:{mail:2, chat:1}, hintUsed:{}, err:{}, mode:"azubi", journal:[]};
 
 /* ---------- Zeit ---------- */
@@ -399,7 +404,7 @@ const STEPS = [
   {label:"ZV-Cockpit: Stopp setzen und dokumentieren", done:() => S.f.stopped},
   {label:"Den Verdacht im Haus prüfen und melden", done:() => S.f.insider}];
 function objective(){
-  if (S.mode === "ermittler" && !S.f.code) return S.f.stopped ? "Wer hat Weber weggelockt und seinen PC benutzt? Sammelt Belege und meldet die Person im Hinweisgebersystem – ihr habt zwei Versuche." : "Findet heraus, was hinter PHANTOME steckt, und stoppt die Zahlung vor 16:30. Webers Notizen und euer eigenes Journal helfen dabei.";
+  if (S.mode === "ermittler" && !S.f.code) return S.f.stopped ? "Wer hat Weber weggelockt und seinen PC benutzt? Sammelt Belege und meldet die Person im Hinweisgebersystem – ihr habt zwei Versuche." : "Findet heraus, was hinter PHANTOME und dem Empfänger Northbridge steckt – und entscheidet vor 16:30 über die Zahlung. Webers Notizen und euer eigenes Journal helfen dabei.";
   if (S.f.stopped) return "PHANTOME ist gestoppt. Jetzt der interne Helfer: Wer hat Weber weggelockt und seinen PC benutzt? Sammelt Spuren und meldet die Person im Hinweisgebersystem – ihr habt nur zwei Versuche.";
   if (S.f.code) return "Compliance-Stopp ist eingetragen. Wählt im ZV-Cockpit das richtige weitere Vorgehen.";
   if (!S.v.notesSeen) return "Öffnet Webers Notizen auf dem Desktop und lest den ersten Eintrag.";
@@ -411,6 +416,49 @@ function objective(){
   if (!S.f.fraud) return "Prüft im FraudDesk alle zurückgehaltenen Zahlungen und entscheidet jede einzeln.";
   if (!S.notes.n4) return "Öffnet Webers letzte Notiz (15:25) und löst das Rätsel – die Antwort steckt im FraudDesk.";
   return "Setzt im ZV-Cockpit den Compliance-Stopp für PHANTOME – mit Webers Freigabecode und einer belegbaren Begründung.";
+}
+// Ermittler: AML und FraudDesk führen zu Nova Trade, die Register zur gelisteten Muttergesellschaft, dann EmbargoCheck und Stopp.
+function hintErm(){
+  const web = S.v.web || {};
+  if (!S.v.zvSel) return {key:"zv", steps:[
+    "Bevor ihr irgendetwas prüft: Wer genau soll das Geld bekommen?",
+    "Öffnet das ZV-Cockpit und klickt auf die Zeile PHANTOME. Dort stehen Name, Adresse, Land und Registernummer des Empfängers."]};
+  if (!S.notes.n2) return {key:"n2", steps:[
+    "Das Kennwort der Notiz 15:03 steckt in den Daten des Zahlungsempfängers.",
+    "ZV-Cockpit → PHANTOME: Nehmt die letzten vier Ziffern der Registernummer von Northbridge S.A."]};
+  if (!S.f.aml && !S.v.amlSus) return {key:"aml0", steps:[
+    "Vergleicht bei jedem Alert die Umsätze mit dem Kundenprofil. Ist die Auffälligkeit erklärt – oder nicht?",
+    "Bäckerei, Ferienwohnung und Autokauf sind belegt und passen zum Profil. Nur bei einem Kunden passt nichts zusammen: dreimal Bargeld, jedes Mal am selben Tag an dieselbe Firma weitergeleitet."]};
+  if (!S.f.aml) return S.v.amlPattern ? {key:"aml2", steps:[
+    "Die Adresse der Gegenpartei habt ihr heute schon einmal gesehen. Und passt die Erklärung der Filiale wirklich zum Muster?",
+    "Vergleicht die Adresse von Nova Trade mit den Empfängerdaten von PHANTOME im ZV-Cockpit. Der Alert wird nicht geschlossen und der Kunde nicht informiert – er geht an den Geldwäschebeauftragten."]}
+    : {key:"aml1", steps:[
+    "Schaut zuerst ins Kundenprofil: Was wird bei diesem Kunden erwartet – und was nicht?",
+    "Markiert jede Bareinzahlung und die Überweisung an Nova Trade vom selben Tag. Gehalt, Miete und Kleinbeträge gehören nicht dazu."]};
+  if (!S.notes.n3) return {key:"n3", steps:[
+    "Ihr müsst rechnen – beim verdächtigen Alert. Welche Buchungen haben das Konto wieder verlassen?",
+    "Addiert die drei Überweisungen an Nova Trade Ltd. und gebt den Betrag ohne Cent und ohne Punkt ein."]};
+  if (!S.f.fraud) return {key:"fraud", steps:[
+    "Nicht jede Auffälligkeit ist Betrug. Fragt bei jeder Zahlung: Ist die Abweichung erklärt – oder nicht? Und wem gehört das Zielkonto?",
+    "Sucht in den Kontoumsätzen nach früheren Zahlungen an denselben Empfänger: Stimmen Name und IBAN überein? Alles belegt oder erklärt → weiterbearbeiten. Abweichung ohne Erklärung → klären. Unbestätigte Kontoänderung plus weitere Warnsignale → nicht ausführen und eskalieren."]};
+  if (!S.notes.n4) return {key:"n4", steps:[
+    "Gesucht ist ein Betrag aus dem FraudDesk – von der Zahlung, die umgeleitet werden sollte.",
+    "Nehmt die Zahlung, die ihr nicht ausgeführt und eskaliert habt, und gebt die ersten drei Ziffern ihres Betrags ein."]};
+  if (!web.nt_reg) return {key:"r1", steps:[
+    "Northbridge verrät im Register nicht, wem sie gehört. Gibt es eine Firma mit derselben Adresse, die weniger verschwiegen ist?",
+    "Sucht im Browser nach „Nova Trade“ und öffnet den Registerauszug. Achtet auf Geschäftsführer und Anteilseigner."]};
+  if (!web.agh) return {key:"r2", steps:[
+    "Nova Trade hat eine Eigentümerin. Wem gehört die – und woran ist sie sonst noch beteiligt?",
+    "Sucht im Browser nach „Aurelius Global Holdings“ und schaut euch Gesellschafter und Beteiligungen an."]};
+  if (!web.aig) return {key:"r3", steps:[
+    "Am Ende der Kette steht ein Konzern. Für einen Listenabgleich braucht ihr seine genauen Daten.",
+    "Öffnet im Browser das Profil der Aurelius Industrial Group PJSC: Adresse, Land, Registernummer."]};
+  if (!S.f.embargo) return {key:"embargo", steps:[
+    "Prüft nicht nur den Empfänger. Steht sein Eigentümer auf der Liste? Ein ähnlicher Name ist dabei noch kein Treffer.",
+    "Sucht im EmbargoCheck nach „Aurelius“ und vergleicht jeden Treffer mit den Registerdaten der Aurelius Industrial Group PJSC. Alles stimmt → echter Treffer; Adresse, Land oder Registernummer widersprechen → Fehlalarm; Merkmale fehlen → nicht eindeutig. Ergebnis: mittelbar sanktionsbetroffen."]};
+  return {key:"stop", steps:[
+    "Der Stopp braucht einen Vermerk: Was ist der tragende Grund, und womit belegt ihr ihn?",
+    "Tragender Grund: Northbridge gehört über Aurelius Global Holdings (100 %) der gelisteten Aurelius Industrial Group PJSC (SAN-4417). Ergänzend: Nova Trade im selben Netzwerk (AML-Alert, Mira-Umleitung)."]};
 }
 // Jeder Schritt hat zwei Hinweisstufen: erst ein Denkanstoß, dann ein konkreter Hinweis.
 function hintFor(){
@@ -426,7 +474,7 @@ function hintFor(){
       "Öffnet in der Mail-App den Ordner „Gesendet“. Achtet auf Uhrzeit und Empfänger der Mail von 15:31."]};
     return {key:"ins4", steps:[
       "Legt eure drei Spuren nebeneinander: Rechner der Vorstandsmails, Zuordnung im Intranet, Empfänger der Mail von 15:31. Wohin zeigen sie gemeinsam?",
-      "Auch die 1. Freigabe von PHANTOME (ZV-Cockpit) und die Mira-Kontoänderung (FraudDesk) führen zum selben Arbeitsplatz. Meldet die Person, der dieser Arbeitsplatz gehört."]};
+      "Auch die 1. Freigabe von PHANTOME (ZV-Cockpit) und die Mira-Umleitung zu Nova Trade (FraudDesk) führen zum selben Arbeitsplatz bzw. zur selben Kennung. Meldet die Person, der dieser Arbeitsplatz gehört."]};
   }
   if (S.f.code) return {key:"zvdec", steps:[
     "Freigeben ist keine Option – und den Kunden vorwarnen auch nicht.",
@@ -434,6 +482,7 @@ function hintFor(){
   if (!S.v.notesSeen) return {key:"start", steps:[
     "Matthias klebt sich gern Zettel an den Monitor. Wo steht laut ihm alles?",
     "Klickt auf dem Desktop auf „Notizen“. Der erste Eintrag (14:52) ist nicht gesperrt."]};
+  if (S.mode === "ermittler") return hintErm();
   if (!S.v.zvSel) return {key:"zv", steps:[
     "Bevor ihr den Empfänger prüfen könnt, braucht ihr seine genauen Daten.",
     "Öffnet das ZV-Cockpit und klickt auf die Zeile PHANTOME. Dort stehen Name, Adresse, Land und Registernummer."]};
@@ -475,7 +524,7 @@ const HELPERS = {
   rev:{from:"Ines Hartmann", addr:"i.hartmann@kreisbank-hohenbrueck.example", dept:"Interne Revision", hi:"Guten Tag,", lead:"vertraulich und nur zu eurer Orientierung:", bye:"Mit freundlichen Grüßen\nInes Hartmann · Interne Revision"}};
 const HELP_TOPIC = {start:["san","Wo anfangen?"], zv:["san","Empfänger von PHANTOME"], embargo:["san","Listenabgleich Northbridge"], n2:["san","Webers Notiz 15:03"],
   aml0:["aml","Offene AML-Alerts"], aml1:["aml","Auffälliges Kundenkonto"], aml2:["aml","Gegenpartei"], n3:["aml","Webers Notiz 15:17"],
-  fraud:["fraud","Zurückgehaltene Zahlungen"], n4:["fraud","Webers Notiz 15:25"], stop:["san","Compliance-Stopp PHANTOME"], zvdec:["san","Vorstandsanweisung PHANTOME"],
+  fraud:["fraud","Zurückgehaltene Zahlungen"], n4:["fraud","Webers Notiz 15:25"], stop:["san","Compliance-Stopp PHANTOME"], r1:["san","Eigentümer von Northbridge"], r2:["san","Eigentümer von Nova Trade"], r3:["san","Konzernstruktur Aurelius"], zvdec:["san","Vorstandsanweisung PHANTOME"],
   ins1:["rev","Vorstandsmail"], ins2:["rev","Arbeitsplatz-Zuordnung"], ins3:["rev","Webers Postausgang"], ins4:["rev","Hinweis an die Revision"]};
 const helpLeft = () => Math.max(0, S.deadline - Date.now()) > (HELP_MIN + 1) * 60000;
 function requestHelp(){
@@ -518,7 +567,7 @@ function showHint(t){ $("hintBox").textContent = t; $("hintBox").classList.remov
 
 /* ---------- Spielstand ---------- */
 // Der Spielstand liegt im Browser, damit ein versehentliches Neuladen nicht alles löscht.
-const SAVE_KEY = "phantome-spielstand";
+const SAVE_KEY = "phantome-spielstand-v5";
 function saveGame(){
   if (!S.startAt || S.ended) return;
   try { localStorage.setItem(SAVE_KEY, JSON.stringify({S:{...S, timerId:null}, inbox:MAILS.inbox, chat:CHATS.albers.msgs})); } catch(e){}
@@ -559,10 +608,11 @@ const APPS = {
   journal:{label:"Journal", icon:"📓", title:"Ermittlungsjournal – Team", w:720, h:500},
   mail:{label:"Mail", icon:"✉️", title:"Mail – m.weber@kreisbank-hohenbrueck.example", w:740, h:460},
   chat:{label:"Chat", icon:"💬", title:"Chat", w:620, h:440},
-  embargo:{label:"EmbargoCheck", icon:"🌐", title:"EmbargoCheck – Sanktionslisten-Screening", w:780, h:520},
+  embargo:{label:"EmbargoCheck", icon:"🛂", title:"EmbargoCheck – Sanktionslisten-Screening", w:780, h:520},
   aml:{label:"AML-Monitor", icon:"📈", title:"AML-Monitor – Transaktionsüberwachung", w:780, h:520},
   fraud:{label:"FraudDesk", icon:"🛡️", title:"FraudDesk – Zahlungsprüfung", w:800, h:540},
   zv:{label:"ZV-Cockpit", icon:"💶", title:"ZV-Cockpit – Zahlungsverkehr", w:780, h:520},
+  browser:{label:"Browser", icon:"🌐", title:"Browser – Internet", w:820, h:560},
   intranet:{label:"Intranet", icon:"🏢", title:"Intranet – Mitarbeiterverzeichnis", w:680, h:440},
   whistle:{label:"Hinweisgeber", icon:"📣", title:"Hinweisgebersystem", w:720, h:540},
   konto:{label:"Kontoumsätze", icon:"📊", title:"Kontoumsätze", w:760, h:500, hidden:true, right:true}};
@@ -674,9 +724,9 @@ function solved(app, key, nextNote, narr, msg){
 /* ---------- Notizen ---------- */
 // Gleiche Schlösser in beiden Stufen – nur der Ton unterscheidet sich: Azubi führt, Ermittler deutet an.
 const NOTE_LOCKS = {
-  n2:{gate:"embargo", code:"1dp01qu7ixb", pwHint:"Die Kennung des Listeneintrags, der wirklich zum Empfänger von PHANTOME gehört. Vergleicht dafür die Identitätsmerkmale – eingeben nur die vier Ziffern, ohne „SAN-“."},
+  n2:{gate:"embargo", code:"gsuns1emmu", pwHint:"Wer genau ist der Empfänger von PHANTOME? Die letzten vier Ziffern seiner Registernummer."},
   n3:{gate:"aml", code:"2135pxw35o8", pwHint:"Wohin ist das Geld geflossen – und wie viel war es insgesamt? Zählt nur die Weiterleitungen, nicht die Einzahlungen. Betrag in Euro, ohne Cent und ohne Punkt."},
-  n4:{gate:"fraud", code:"131g06wtogr", pwHint:"Die Zahlung, die auf keinen Fall ausgeführt werden darf: die ersten drei Ziffern ihres Betrags."}};
+  n4:{gate:"fraud", code:"131g06wtogr", pwHint:"Die umgeleitete Zahlung aus dem FraudDesk, die auf keinen Fall ausgeführt werden darf: die ersten drei Ziffern ihres Betrags."}};
 const NOTES_AZUBI = {
   n1:{title:"14:52 · Northbridge", text:`Falls ich nicht zurück bin – das hier ist für euch.
 
@@ -710,11 +760,13 @@ Als Grund nur angeben, was ihr belegen könnt. Danach eskalieren – und die „
 
 P.S. Die 1. Freigabe von PHANTOME kam über die Sammelkennung zv.batch07. Das kann nur jemand aus dem Zahlungsverkehr gewesen sein. Wenn ihr rausfindet, wer: Hinweisgebersystem. Niemanden ansprechen!`}};
 const NOTES_ERMITTLER = {
-  n1:{title:"14:52 · PHANTOME", text:`3,8 Mio. EUR. Ausführung heute um 16:30 Uhr. Empfänger: Northbridge S.A., Panama.
+  n1:{title:"14:52 · PHANTOME", text:`3,8 Mio. EUR an Northbridge S.A., Panama. Ausführung heute im Buchungslauf um 16:30 Uhr. Auftraggeber AeroTrans GmbH, Verwendungszweck „Beratungsleistungen“.
 
-Der Name taucht im EmbargoCheck gleich in mehreren Treffern auf. Einige sehen auf den ersten Blick verdächtig ähnlich aus. Aber eine Namensähnlichkeit allein ist kein Treffer.
+Das Screening im EmbargoCheck ist sauber: kein Treffer auf Northbridge. Eigentlich könnte ich den Vermerk im ZV-Cockpit schließen.
 
-Ich muss die Angaben aus dem Zahlungsauftrag im ZV-Cockpit danebenlegen. Adresse, Land, Registerdaten – die entscheidenden Merkmale müssen zusammenpassen.
+Trotzdem: Ein sauberer Namensabgleich sagt nur, dass dieser Name auf keiner Liste steht. Er sagt nichts darüber, wem die Firma gehört. Und 3,8 Millionen für „Beratung“ sind sehr viel Geld.
+
+In meiner AML-Queue und im FraudDesk liegen heute auch noch Fälle. Wahrscheinlich hat das nichts miteinander zu tun. Wahrscheinlich.
 
 (Die nächsten Einträge sperre ich. Wer sie lesen will, muss erst verstanden haben, was hier los ist.)`},
   n2:{title:"15:03 · Offene Fälle", text:`Vier Alerts liegen noch in meiner Queue im AML-Monitor. Unterschiedliche Auslöser, unterschiedliche Kunden.
@@ -723,24 +775,21 @@ Auslandseingänge, Bareinzahlungen und ungewöhnliche Folgebewegungen. Bei manch
 
 Ich möchte mich nicht allein auf die Regel verlassen, die den Alert ausgelöst hat. Ein ungewöhnlicher Umsatz ist nicht automatisch verdächtig.
 
-Entscheidend ist, ob die tatsächlichen Bewegungen zum Kundenprofil passen. Und ob sich die jeweilige Erklärung auch belegen lässt.`},
-  n3:{title:"15:17 · Vier zurückgehaltene Zahlungen", text:`Als wäre das nicht genug: Im FraudDesk warten auch noch vier zurückgehaltene Überweisungen auf eine Entscheidung.
+Entscheidend ist, ob die tatsächlichen Bewegungen zum Kundenprofil passen. Und wohin das Geld am Ende fließt.`},
+  n3:{title:"15:17 · Vier zurückgehaltene Zahlungen", text:`Einer der Alerts lässt mich nicht los: Bargeld rein, am selben Tag weiter an eine Firma in Panama – Nova Trade Ltd. Die Adresse kommt mir bekannt vor. Ob das mehr ist als ein Zufall, weiß ich nicht. Briefkastenfirmen teilen sich oft eine Adresse.
 
-Ich habe mir die Rückmeldungen der Empfängerprüfung und die bisherigen Vorgänge angesehen. Auf den ersten Blick sind die Fälle nicht miteinander vergleichbar.
+Als wäre das nicht genug: Im FraudDesk warten auch noch vier zurückgehaltene Überweisungen auf eine Entscheidung. Auf den ersten Blick sind die Fälle nicht miteinander vergleichbar.
 
-Bei einer Zahlung scheint sich gegenüber den bisherigen Buchungen etwas verändert zu haben. Eine neue Kontoverbindung ist zunächst nichts Ungewöhnliches. Allerdings sollte sich nachvollziehen lassen, wer diese Änderung veranlasst hat und ob sie tatsächlich bestätigt wurde.
-
-Ich will keine Zahlung unnötig blockieren. Aber eine ungeklärte Änderung darf auch nicht einfach durchgewunken werden.
+Bei einer Zahlung scheint sich gegenüber den bisherigen Buchungen etwas verändert zu haben. Eine neue Kontoverbindung ist zunächst nichts Ungewöhnliches. Allerdings sollte sich nachvollziehen lassen, wer diese Änderung veranlasst hat, ob sie bestätigt wurde – und wem das neue Konto gehört.
 
 Und dann lässt mir noch etwas keine Ruhe: PHANTOME ist seit ein paar Minuten zur Hälfte freigegeben – über eine Sammelkennung, die der Zahlungsverkehr eigentlich nur für Gehaltsläufe nutzt. Wer gibt damit eine Zahlung über 3,8 Millionen frei?`},
-  n4:{title:"15:25 · Eine merkwürdige Einladung", text:`Eine Nachricht aus dem Vorstand. Ich soll umgehend in den 12. Stock kommen. Vertraulich. Keine Unterlagen mitnehmen. Niemanden informieren.
+  n4:{title:"15:25 · Eine merkwürdige Einladung", text:`Die neue IBAN im Mira-Fall gehört laut Empfängerbank: Nova Trade Ltd. Schon wieder Nova Trade. Erfasst hat die Änderung die Kennung s.kranz – ohne Rückruf. Ob dahinter wirklich er steckt oder jemand seine Kennung nutzt, weiß ich nicht.
 
-Eigentlich passt mir das überhaupt nicht – gerade jetzt, wo PHANTOME noch nicht geklärt ist. Eigentlich müsste ich über die -1200 zurückrufen und nachfragen. Keine Zeit. Ich gehe hoch.
+Zwei Fälle, eine Firma, eine Adresse – dieselbe wie bei Northbridge. Das kann immer noch Zufall sein. Aber wenn Northbridge und Nova Trade denselben Eigentümer haben, ist der saubere Namensabgleich von PHANTOME nichts wert. Ich muss in die Handelsregister: Wem gehören die beiden – und wem gehört deren Eigentümer?
 
-Falls ich nicht rechtzeitig zurück bin: Die Zahlung darf nicht im Buchungslauf landen. Für den Compliance-Stopp im ZV-Cockpit braucht es meinen dreistelligen Freigabecode. Aufgeschrieben habe ich ihn nicht – er ergibt sich aus meinen drei Prüfungen, in dieser Reihenfolge:
-  · wie viele Fehlalarme der Listenabgleich hatte,
-  · wie viele Buchungen das verdächtige Muster bilden,
-  · an welcher Stelle die Zahlung steht, die nicht ausgeführt werden darf.`}};
+Und jetzt das: eine Nachricht aus dem Vorstand. Ich soll umgehend in den 12. Stock kommen. Vertraulich. Keine Unterlagen mitnehmen. Niemanden informieren. Eigentlich müsste ich über die -1200 zurückrufen. Keine Zeit. Ich gehe hoch.
+
+Falls ich nicht rechtzeitig zurück bin: PHANTOME darf nicht im Buchungslauf landen, solange niemand weiß, wem Northbridge wirklich gehört.`}};
 const notesFor = () => { const t = S.mode === "ermittler" ? NOTES_ERMITTLER : NOTES_AZUBI; const o = {};
   Object.keys(t).forEach(k => o[k] = {...t[k], ...(NOTE_LOCKS[k] || {})}); return o; };
 // Ermittler: Kennwörter lassen sich jederzeit eingeben – wer früh schlussfolgert, darf früh öffnen. Azubi bleibt geführt.
@@ -860,7 +909,10 @@ RENDER.whistle = b => {
     <div class="doc" style="margin-top:6px"><b>Eure gesicherten Spuren</b><ul class="ctx" style="margin-top:6px">
       <li>Kopfzeilen: Die gefälschten Vorstandsmails kamen vom Rechner <span class="mono">PC-ZV-114</span>.</li>
       <li>Intranet: Der Rechner <span class="mono">PC-ZV-114</span> ist einem Arbeitsplatz zugeordnet.</li>
-      <li>Gesendet: Um 15:31 ging von Webers entsperrtem PC eine Mail raus – Weber war seit 15:26 weg.</li></ul></div>
+      <li>Gesendet: Um 15:31 ging von Webers entsperrtem PC eine Mail raus – Weber war seit 15:26 weg.</li>
+      ${S.f.fraud ? `<li>FraudDesk: Die Umleitung der Mira-Zahlung zu Nova Trade erfasste die Kennung <span class="mono">s.kranz</span> – ohne Rückruf.</li>` : ""}
+      ${S.v.zvSel ? `<li>ZV-Cockpit: Die 1. Freigabe von PHANTOME kam über <span class="mono">zv.batch07</span> vom Arbeitsplatz <span class="mono">PC-ZV-114</span>.</li>` : ""}</ul>
+      <p class="mini muted" style="margin:6px 0 0">Ein Arbeitsplatz oder eine Kennung ist noch kein Beweis, wer davor saß. Die Spuren begründen einen Verdacht – die Feststellung trifft die Revision.</p></div>
     <p class="mini">Wählt die Person, gegen die sich der Hinweis richtet. Die Interne Revision prüft jeden Hinweis – ein falscher Verdacht trifft einen unschuldigen Menschen.</p>
     <p><span class="tag ${left === 2 ? "info" : "warn"}">${left === 2 ? "2 Versuche" : "Letzter Versuch!"}</span></p>
     <div class="suspects">${SUSPECTS.map(p => `<label class="suspect ${(S.v.ruledOut || []).includes(p.id) ? "out" : ""}"><input type="radio" name="sus" value="${p.id}" ${(S.v.ruledOut || []).includes(p.id) ? "disabled" : ""}><span class="av">${p.icon}</span><b>${p.name}</b><small>${p.dept}</small></label>`).join("")}</div>
@@ -906,32 +958,33 @@ RENDER.chat = b => {
 
 /* ---------- EmbargoCheck ---------- */
 const RECIPIENT = {name:"Northbridge S.A.", addr:"Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt", country:"Panama", reg:"155-690-1207"};
+// Northbridge steht selbst auf keiner Liste. Gelistet ist die Muttergesellschaft, die erst die Recherche im Browser zutage fördert.
 const LIST = [
-  {id:"SAN-2207", name:"North Bridge Holding AG", addr:"Bahnhofstrasse 12, 6300 Zug", country:"Schweiz", reg:"CHE-401.338.207", score:84, since:"05/2023", reason:"Finanzierung von Embargoverstößen", ok:"fp"},
-  {id:"SAN-3871", name:"Northbridge Trading S.A.", addr:"Avenida Balboa 88, Panama-Stadt", country:"Panama", reg:"155-771-2024", score:91, since:"08/2024", reason:"Handel mit embargierten Gütern", ok:"fp"},
-  {id:"SAN-4417", name:"Northbridge S.A.", addr:"Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt", country:"Panama", reg:"155-690-1207", score:100, since:"02/2025", reason:"Tarnfirma eines sanktionierten Netzwerks", ok:"hit"},
-  {id:"SAN-4790", name:"Northbridge SA", addr:"– keine Angabe –", country:"Panama", reg:"– keine Angabe –", score:97, since:"06/2025", reason:"Beteiligung an Sanktionsumgehung", ok:"unclear"},
-  {id:"SAN-5150", name:"Northbridge Shipping Ltd.", addr:"Triq il-Port 4, Valletta", country:"Malta", reg:"C 88150", score:88, since:"11/2024", reason:"Verschleierung von Warenlieferungen", ok:"fp"}];
+  {id:"SAN-2207", name:"Aurelius Industrial Holding AG", addr:"Bahnhofstrasse 12, 6300 Zug", country:"Schweiz", reg:"CHE-401.338.207", score:84, since:"05/2023", reason:"Finanzierung von Embargoverstößen", ok:"fp"},
+  {id:"SAN-3871", name:"Aurelia Industrial Group Ltd.", addr:"28 Oktovriou Ave 211, Limassol", country:"Zypern", reg:"HE 377120", score:91, since:"08/2024", reason:"Handel mit embargierten Gütern", ok:"fp"},
+  {id:"SAN-4417", name:"Aurelius Industrial Group PJSC", addr:"ul. Zavodskaya 17, Jekaterinburg", country:"Russland", reg:"OGRN 1156658044171", score:100, since:"02/2025", reason:"Rüstungszulieferung, Umgehung von Ausfuhrbeschränkungen", ok:"hit"},
+  {id:"SAN-4790", name:"Aurelius Group", addr:"– keine Angabe –", country:"Russland", reg:"– keine Angabe –", score:97, since:"06/2025", reason:"Beteiligung an Sanktionsumgehung", ok:"unclear"},
+  {id:"SAN-5150", name:"Aurelius Industrial Shipping Ltd.", addr:"Triq il-Port 4, Valletta", country:"Malta", reg:"C 88150", score:88, since:"11/2024", reason:"Verschleierung von Warenlieferungen", ok:"fp"}];
 const EMB_EVAL = [
-  ["hit", "Echter Treffer", "Alle verfügbaren Merkmale stimmen mit dem Empfänger überein.", "no"],
-  ["fp", "Fehlalarm", "Eindeutige Merkmale wie Registernummer, Adresse und Land widersprechen dem Empfänger.", "ok"],
+  ["hit", "Echter Treffer", "Alle verfügbaren Merkmale stimmen mit dem geprüften Unternehmen überein.", "no"],
+  ["fp", "Fehlalarm", "Eindeutige Merkmale wie Registernummer, Adresse und Land widersprechen dem geprüften Unternehmen.", "ok"],
   ["unclear", "Nicht eindeutig", "Merkmale fehlen oder passen nur teilweise – weitere Angaben anfordern, bevor entschieden wird.", "warn"]];
 const EMB_PROC = [
-  ["stop", "Zahlung nicht ausführen, Prüfung dokumentieren und an den Sanktionsbeauftragten eskalieren."],
-  ["run", "Zahlung ausführen – die meisten Treffer waren ja Fehlalarme.", "Ein einziger bestätigter Treffer reicht: Die Zahlung darf nicht ausgeführt werden."],
-  ["ask", "Bei der AeroTrans GmbH nachfragen, ob der Empfänger wirklich sanktioniert ist.", "Den Kunden über einen Sanktionstreffer zu informieren kann die Aufklärung gefährden. Eskaliert wird intern."]];
+  ["stop", "Treffer bestätigt: Die gelistete Aurelius Industrial Group PJSC hält über Aurelius Global Holdings 100 % an Northbridge S.A. PHANTOME ist mittelbar sanktionsbetroffen – Ergebnis an den Zahlungsverkehr: Compliance-Stopp, Eskalation an den Sanktionsbeauftragten."],
+  ["run", "Northbridge S.A. selbst steht auf keiner Liste – die Zahlung ist sanktionsrechtlich unbedenklich.", "Ein fehlender direkter Treffer ist kein Freibrief: Northbridge gehört über die Holding vollständig einem gelisteten Konzern. Eigentum und Kontrolle zählen."],
+  ["ask", "Bei der AeroTrans GmbH nachfragen, wem Northbridge eigentlich gehört.", "Den Auftraggeber einzuweihen kann die Aufklärung gefährden. Geklärt und eskaliert wird intern."]];
 const evalTag = v => { const e = EMB_EVAL.find(x => x[0] === v); return e ? `<span class="tag ${e[3]}">${e[1]}</span>` : `<span class="tag info">offen</span>`; };
 RENDER.embargo = b => {
   b.className = "wbody";
   const done = S.f.embargo, ev = S.v.embEval || (S.v.embEval = {}), sel = LIST.find(x => x.id === S.v.embSel);
   const Q = (S.v.embQ || "").toUpperCase().replace(/[^A-Z]/g, "");
-  const hits = done ? LIST : S.v.embSearched ? (Q.length >= 4 && ("NORTHBRIDGE".includes(Q) || Q.includes("NORTH")) ? LIST : []) : null;
+  const hits = done ? LIST : S.v.embSearched ? (Q.length >= 5 && Q.includes("AUREL") ? LIST : []) : null;
   const allRated = hits && hits.length && hits.every(h => ev[h.id]);
   b.innerHTML = `<div class="appbar" style="background:#7a1c27">🌐 EmbargoCheck <small>Benutzer: m.weber</small></div>
     <h3>Neue Prüfung: Sanktionslisten-Screening</h3>
-    <p class="mini muted" style="margin:0">Namen des Geschäftspartners eingeben. Danach jeden Treffer öffnen, mit den Partnerdaten vergleichen und bewerten.</p>
+    <p class="mini muted" style="margin:0">Namen eines Unternehmens eingeben. Danach jeden Treffer öffnen, mit den bekannten Daten des Unternehmens vergleichen und bewerten.</p>
     ${done ? "" : `<div class="row" style="margin-top:6px"><input id="embQ" placeholder="Name, z. B. Firmenname" aria-label="Name"><button class="primary" id="embSearch">Suchen</button></div>`}
-    ${hits === null ? "" : !hits.length ? `<p style="margin-top:12px"><span class="tag ok">✓ Kein Treffer</span> <span class="mini muted">Prüft die Schreibweise des Namens.</span></p>` :
+    ${hits === null ? "" : !hits.length ? `<p style="margin-top:12px"><span class="tag ok">✓ Kein Treffer für „${esc(S.v.embQ || "")}“</span></p><p class="mini muted">Der Namensabgleich prüft nur, ob dieser Name auf einer Liste steht – nicht, wem das Unternehmen gehört.</p>` :
     `<p class="mini" style="margin:12px 0 4px"><b>${hits.length} mögliche Treffer</b> auf der Sanktionsliste (fiktiv) – zum Öffnen anklicken:</p>
     <table class="tbl"><tr><th>Listen-ID</th><th>Name</th><th>Land</th><th>Namensähnlichkeit</th><th>Bewertung</th></tr>
       ${hits.map(h => `<tr class="click ${h.id === S.v.embSel ? "sel" : ""}" data-id="${h.id}"><td class="mono">${h.id}</td><td>${h.name}</td><td>${h.country}</td><td>${h.score} %</td><td>${evalTag(ev[h.id])}</td></tr>`).join("")}</table>`}
@@ -941,13 +994,15 @@ RENDER.embargo = b => {
       <p style="margin:10px 0 4px"><b>Bewertung für ${sel.id}:</b></p>
       ${EMB_EVAL.map(([v,t,d]) => `<label class="choice"><input type="radio" name="embEv" value="${v}" ${ev[sel.id] === v ? "checked" : ""}><span><b>${t}</b> – ${d}</span></label>`).join("")}
       <div class="row"><button class="primary" id="embRate">Bewertung übernehmen</button></div>` : ""}
-    ${allRated && !done ? `<div class="doc" style="margin-top:14px"><h3>Prüfung abschließen</h3><p class="mini" style="margin-top:0">Alle Treffer sind bewertet. Was passiert jetzt mit der Zahlung PHANTOME?</p>
+    ${allRated && !done ? `<div class="doc" style="margin-top:14px"><h3>Prüfung abschließen</h3><p class="mini" style="margin-top:0">Alle Treffer sind bewertet. Welches Ergebnis dokumentiert ihr für die Zahlung PHANTOME?</p>
       ${EMB_PROC.map(([v,t]) => `<label class="choice"><input type="radio" name="embProc" value="${v}"><span>${t}</span></label>`).join("")}
       <div class="row"><button class="primary" id="embDone">Prüfung abschließen</button></div></div>` : ""}
-    ${done ? `<p><span class="tag no">✕ Treffer bestätigt: SAN-4417 · Zahlung nicht ausführen · eskaliert</span></p>` + vorgangBox("embargo", "Notiz 2") : ""}`;
+    ${done ? `<p><span class="tag no">✕ Treffer bestätigt: SAN-4417 · Aurelius Industrial Group PJSC</span> <span class="tag no">mittelbar betroffen: Northbridge S.A.</span></p>` + vorgangBox("embargo", "Notiz 2") : ""}`;
   if ($("embQ")){
     $("embQ").value = S.v.embQ || "";
-    const search = () => { S.v.embQ = $("embQ").value; S.v.embSearched = true; S.v.embSel = null; render("embargo"); updateHud(); };
+    const search = () => { S.v.embQ = $("embQ").value; S.v.embSearched = true; S.v.embSel = null;
+      if (/north/i.test(S.v.embQ) && !S.v.nbScreened){ S.v.nbScreened = true; narrate("EmbargoCheck: Kein Treffer für Northbridge S.A. – der Name steht auf keiner Liste. Wem die Firma gehört, prüft der Namensabgleich nicht."); }
+      render("embargo"); updateHud(); };
     $("embSearch").addEventListener("click", search); $("embQ").addEventListener("keydown", e => { if (e.key === "Enter") search(); });
   }
   if (!done) on(b, "tr.click", "click", e => { S.v.embSel = e.currentTarget.dataset.id; render("embargo"); b.querySelector(".doc").scrollIntoView({block:"nearest"}); });
@@ -961,11 +1016,11 @@ RENDER.embargo = b => {
     const p = (b.querySelector("input[name=embProc]:checked") || {}).value;
     if (!p){ fb("embargo", "Wählt, was mit der Zahlung passiert."); return; }
     const bad = LIST.filter(h => ev[h.id] !== h.ok).length;
-    if (bad) return wrong("embargo", (bad === 1 ? "Eine Bewertung stimmt" : bad + " Bewertungen stimmen") + " nicht. Vergleicht Name, Adresse, Land und Registernummer noch einmal mit den Empfängerdaten im ZV-Cockpit.");
+    if (bad) return wrong("embargo", (bad === 1 ? "Eine Bewertung stimmt" : bad + " Bewertungen stimmen") + " nicht. Vergleicht Name, Adresse, Land und Registernummer noch einmal mit den Registerdaten aus eurer Recherche.");
     if (p !== "stop") return wrong("embargo", EMB_PROC.find(x => x[0] === p)[2]);
     solved("embargo", "embargo", "Notiz 2",
-      "EmbargoCheck: SAN-4417 ist der Empfänger – Name, Adresse, Land und Registernummer stimmen. Drei Fehlalarme, ein nicht eindeutiger Eintrag. Zahlung nicht ausführen, eskaliert. Vorgang " + VORGANG.embargo + ".",
-      "Richtig: ein echter Treffer, drei Fehlalarme, ein nicht eindeutiger Eintrag. Die Zahlung darf nicht ausgeführt werden.");
+      "EmbargoCheck: SAN-4417 ist die Aurelius Industrial Group PJSC – Adresse, Land und Registernummer stimmen. Über Aurelius Global Holdings gehört ihr Northbridge S.A. zu 100 %. Drei Fehlalarme, ein nicht eindeutiger Eintrag. Vorgang " + VORGANG.embargo + ".",
+      "Richtig: ein echter Treffer, drei Fehlalarme, ein nicht eindeutiger Eintrag. Northbridge ist mittelbar sanktionsbetroffen – der Stopp gehört jetzt ins ZV-Cockpit.");
   });
 };
 
@@ -1047,7 +1102,7 @@ RENDER.aml = b => {
       <tr><th>Gegründet</th><td>2025 · keine Website, keine Mitarbeitenden bekannt</td></tr></table></div>
       ${res[a.id] === "escalated" ? `<p><span class="tag no">Fall an den Geldwäschebeauftragten gemeldet</span></p>` : `
       <p style="margin:12px 0 4px"><b>Mit welchem Unternehmen aus euren bisherigen Prüfungen teilt sich Nova Trade die Adresse?</b></p>
-      <select id="amlLink" class="sel" aria-label="Unternehmen"><option value="">– bitte wählen –</option><option value="aero">AeroTrans GmbH</option><option value="north">Northbridge S.A.</option><option value="trading">Northbridge Trading S.A.</option><option value="none">Mit keinem bekannten Unternehmen</option></select>
+      <select id="amlLink" class="sel" aria-label="Unternehmen"><option value="">– bitte wählen –</option><option value="aero">AeroTrans GmbH</option><option value="north">Northbridge S.A.</option><option value="mira">Mira Energie GmbH</option><option value="none">Mit keinem bekannten Unternehmen</option></select>
       <p style="margin:14px 0 4px"><b>Wie geht es mit dem Alert weiter?</b></p>
       ${AML_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="amlDec" value="${v}"><span>${t}</span></label>`).join("")}
       <div class="row"><button class="primary" id="amlDone">Alert abschließen</button></div>`}`;
@@ -1081,7 +1136,7 @@ RENDER.aml = b => {
   if ($("amlDone")) $("amlDone").addEventListener("click", () => {
     const link = $("amlLink").value, d = (b.querySelector("input[name=amlDec]:checked") || {}).value;
     if (!link || !d){ fb("aml", "Beantwortet beide Fragen."); return; }
-    if (link !== "north") return wrong("aml", "Die Adresse passt nicht. Vergleicht sie mit den Listeneinträgen aus dem EmbargoCheck.");
+    if (link !== "north") return wrong("aml", "Die Adresse passt nicht. Vergleicht sie mit den Empfängerdaten von PHANTOME im ZV-Cockpit.");
     if (d !== "mlro") return wrong("aml", AML_DEC.find(x => x[0] === d)[2]);
     amlRes()[a.id] = "escalated"; narrate("AML-Monitor: " + a.id + " an den Geldwäschebeauftragten gegeben.");
     render("aml"); if (!amlCheckDone()) fb("aml", "Fall an den Geldwäschebeauftragten gegeben. Noch " + amlOpenCount() + " Alert(s) in der Queue offen.", "good"); updateHud();
@@ -1111,7 +1166,7 @@ const PAYMENTS = [
       ["01.08.","Nordlicht IT GmbH","DE21 2005 0000 0041 7733 18","RE-2026-0934 Wartung Serverraum Juli","− 4.860,00 €"]],
     ok:"go", why:"VoP stimmt, Rechnung und Akte passen, und die Kontoumsätze zeigen seit Monaten dieselbe Pauschale an dieselbe IBAN. Zurückgehalten wurde sie nur wegen der Betragsgrenze – nach der üblichen Zweitfreigabe wird sie weiterbearbeitet."},
   {id:"mira", name:"Mira Energie GmbH", payer:"Gartenbau Lindner GmbH", iban:"LT59 3250 0612 9944 0187", amount:"48.750,00 €",
-    purpose:"Vorauszahlung Q4 – sofort fällig", vop:"no", vopText:"Keine Übereinstimmung – Name passt nicht zum Konto",
+    purpose:"Vorauszahlung Q4 – sofort fällig", vop:"no", vopText:"Keine Übereinstimmung – Kontoinhaber laut Empfängerbank: „Nova Trade Ltd.“",
     context:["Lieferant seit 2019, Liefervertrag mit monatlichen Abschlägen","Kontoänderung heute um 15:02 per E-Mail von buchhaltung@mira-energie-gmbh.example – hinterlegte Domain: @mira-energie.example","Änderung erfasst um 15:05 von Benutzer s.kranz (Zahlungsverkehr) – ohne Rückrufbestätigung über die hinterlegte Telefonnummer","Vorauszahlungen sind im Liefervertrag nicht vorgesehen"],
     history:[
       ["27.10.","Löhne und Gehälter (Sammler)","–","Löhne Oktober","− 21.300,00 €"],
@@ -1128,7 +1183,7 @@ const PAYMENTS = [
       ["28.07.","Löhne und Gehälter (Sammler)","–","Löhne Juli","− 21.110,00 €"],
       ["17.07.","Baumschule Ammerland KG","DE47 2806 2165 0004 8812 30","Pflanzen Lieferung KW 28","− 2.180,00 €"],
       ["10.07.","Saatgut Hansen GmbH","DE19 2175 0000 0000 9911 52","Saatgut Rasenflächen","− 980,00 €"]],
-    ok:"stop", why:"In den Kontoumsätzen gingen alle Abschläge an Mira Energie auf eine deutsche IBAN (DE88 …) und lagen bei rund 3.900 € – jetzt soll ein Vielfaches auf ein litauisches Konto gehen. Die Kontoänderung kam über eine fremde Domain und wurde nie bestätigt, und Vorauszahlungen sieht der Vertrag nicht vor. VoP-Abweichung und neue IBAN hängen zusammen – sie sind kein doppelter Beleg, aber zusammen mit dem Rest eindeutig: nicht ausführen, Lieferanten über die bekannte Nummer kontaktieren, eskalieren."},
+    ok:"stop", why:"In den Kontoumsätzen gingen alle Abschläge an Mira Energie auf eine deutsche IBAN (DE88 …) und lagen bei rund 3.900 € – jetzt soll ein Vielfaches auf ein litauisches Konto gehen, das laut Empfängerbank der Nova Trade Ltd. gehört. Die Kontoänderung kam über eine fremde Domain und wurde nie bestätigt, und Vorauszahlungen sieht der Vertrag nicht vor. VoP-Abweichung und neue IBAN hängen zusammen – sie sind kein doppelter Beleg, aber zusammen mit dem Rest eindeutig: nicht ausführen, Lieferanten über die bekannte Nummer kontaktieren, eskalieren."},
   {id:"stadtwerke", name:"Stadtwerke West", payer:"Petra Schulz (privat)", iban:"DE47 3705 0198 0012 6688 02", amount:"1.284,30 €",
     purpose:"Vertragskonto 7004 5512 · Nachzahlung Jahresabrechnung 2026", vop:"close", vopText:"Ähnliche Übereinstimmung – Kontoinhaber laut Empfängerbank: „Stadtwerke West Energie GmbH“",
     context:["Vertragskonto 7004 5512 ist in den Kundendaten hinterlegt – Vertragspartner laut Unterlagen: „Stadtwerke West GmbH“","Jahresabrechnung liegt vor und weist eine Nachzahlung von 1.284,30 € aus","Kein Hinweis auf eine Umfirmierung"],
@@ -1203,13 +1258,69 @@ RENDER.fraud = b => {
     if (PAYMENTS.some(p => !ready(p.id))){ fb("fraud", "Prüft zuerst jede Zahlung: VoP-Abfrage, Akte und Kontoumsätze."); return; }
     if (PAYMENTS.some(p => !dec[p.id])){ fb("fraud", "Trefft für jede Zahlung eine Entscheidung."); return; }
     if (PAYMENTS.every(p => dec[p.id] === p.ok)) return solved("fraud", "fraud", "Notiz 4",
-      "FraudDesk: Die Zahlung an „Mira Energie“ sollte auf ein fremdes Konto umgeleitet werden – nicht ausgeführt und eskaliert. Nordlicht IT und der Sparkonto-Übertrag laufen weiter, bei den Stadtwerken wird die Namensabweichung geklärt. Vorgang " + VORGANG.fraud + ".",
+      "FraudDesk: Die Zahlung an „Mira Energie“ sollte auf ein Konto der Nova Trade Ltd. umgeleitet werden – erfasst von s.kranz, ohne Rückruf. Nicht ausgeführt und eskaliert. Nordlicht IT und der Sparkonto-Übertrag laufen weiter, bei den Stadtwerken wird die Namensabweichung geklärt. Vorgang " + VORGANG.fraud + ".",
       "Alle Entscheidungen sind richtig. VoP ist ein Prüfbaustein, keine Entscheidung für sich.");
     if (dec.mira !== "stop") return wrong("fraud", "Bei einer Zahlung reagiert ihr zu schwach: Mehrere Warnsignale und eine Kontoänderung, die nie bestätigt wurde – da reicht weder Weiterbearbeiten noch eine Rückfrage.");
     if (dec.sparbank !== "go") return wrong("fraud", "Bei einer Zahlung erklären die Kontoumsätze die VoP-Abweichung bereits. Weder Rückfrage noch Eskalation sind nötig.");
     if (dec.stadtwerke === "stop") return wrong("fraud", "Bei einer Zahlung reagiert ihr zu hart: Eine Namensabweichung allein ist kein Betrugsverdacht – vor allem, wenn IBAN und Rechnung passen.");
     if (dec.stadtwerke === "go") return wrong("fraud", "Bei einer Zahlung meldet VoP eine Abweichung, die weder Akte noch Kontoumsätze erklären. Ohne Klärung auszuführen ist zu früh.");
     wrong("fraud", "Eine Zahlung ist vollständig belegt. Sie zurückzuhalten verzögert sie ohne Grund.");
+  });
+};
+
+/* ---------- Browser ---------- */
+// Simuliertes Internet mit festen Seiten. Gesucht wird nur nach Firmennamen – so führt der Weg zur Holding zwingend über Nova Trade.
+const WEB = {
+  nb_site:{kw:["northbridge"], title:"Northbridge S.A. – Consulting & Trading", url:"www.northbridge-sa.example", snippet:"Beratung und internationaler Handel mit Sitz in Panama-Stadt.",
+    html:`<h3>Northbridge S.A.</h3><p><i>Consulting · Trading · Logistics Solutions</i></p><p>Wir begleiten internationale Kunden bei Beschaffung, Handel und Logistik – diskret, schnell, zuverlässig.</p><p class="mini muted">Calle 50, Torre Ámbar, Of. 1207 · Panama-Stadt · info@northbridge-sa.example<br>Impressum: Geschäftsführer Rafael Ordóñez Vega</p>`},
+  nb_reg:{kw:["northbridge"], title:"Registro Público de Panamá – Northbridge S.A.", url:"registro-publico.example/sociedad/155-690-1207", snippet:"Registerauszug · Sociedad Anónima · Panama-Stadt", reg:true,
+    rows:[["Firma","Northbridge S.A."],["Registernummer","155-690-1207"],["Sitz","Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt"],["Gegründet","03/2024"],["Geschäftsführer","Rafael Ordóñez Vega"],["Anteilseigner","nicht offengelegt – Inhaberaktien, verwahrt durch Istmo Nominees S.A. (Treuhänder)"]],
+    log:"Browser: Im Register von Panama ist der Eigentümer von Northbridge S.A. nicht offengelegt – die Aktien verwahrt ein Treuhänder."},
+  nbh:{kw:["northbridge","north bridge"], title:"North Bridge Holding AG – Zug", url:"www.northbridge-holding.example", snippet:"Immobilienverwaltung in der Zentralschweiz seit 1987.",
+    html:`<h3>North Bridge Holding AG</h3><p>Immobilienverwaltung in der Zentralschweiz seit 1987. Familiengeführt.</p><p class="mini muted">Bahnhofstrasse 40 · 6300 Zug</p>`},
+  istmo:{kw:["istmo"], title:"Istmo Nominees S.A. – Servicios Fiduciarios", url:"www.istmo-nominees.example", snippet:"Treuhanddienstleistungen und Verwahrung von Inhaberaktien für Gesellschaften.",
+    html:`<h3>Istmo Nominees S.A.</h3><p>Wir übernehmen die treuhänderische Verwahrung von Inhaberaktien und stellen Direktoren für über 400 Gesellschaften. Diskretion ist unser Geschäft.</p><p class="mini muted">Auskünfte über Mandanten erteilen wir grundsätzlich nicht.</p>`},
+  nt_dir:{kw:["nova trade","novatrade"], title:"Firmenverzeichnis Panamá – Nova Trade Ltd.", url:"empresas-panama.example/nova-trade-ltd", snippet:"Handelsgesellschaft · Calle 50, Panama-Stadt · 0 Mitarbeitende gemeldet",
+    html:`<h3>Nova Trade Ltd.</h3><p>Branche: Groß- und Außenhandel<br>Mitarbeitende: 0 gemeldet<br>Website: keine</p><p class="mini muted">Calle 50, Torre Ámbar, Of. 1207 · Panama-Stadt</p>`},
+  nt_reg:{kw:["nova trade","novatrade"], title:"Registro Público de Panamá – Nova Trade Ltd.", url:"registro-publico.example/sociedad/155-702-3318", snippet:"Registerauszug · Limited · Panama-Stadt", reg:true,
+    rows:[["Firma","Nova Trade Ltd."],["Registernummer","155-702-3318"],["Sitz","Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt"],["Gegründet","01/2025"],["Geschäftsführer","Rafael Ordóñez Vega"],["Anteilseigner","Aurelius Global Holdings Ltd., Limassol (Zypern) – 100 %"]],
+    log:"Browser: Nova Trade Ltd. sitzt unter derselben Adresse wie Northbridge und hat denselben Geschäftsführer. Eigentümerin: Aurelius Global Holdings Ltd. (100 %)."},
+  agh:{kw:["aurelius global","aurelius holdings","aurelius"], title:"Handelsregister Zypern – Aurelius Global Holdings Ltd.", url:"companies-registry.example/HE418207", snippet:"Registerauszug · Private Limited Company · Limassol", reg:true,
+    rows:[["Firma","Aurelius Global Holdings Ltd."],["Registernummer","HE 418207"],["Sitz","Arch. Makariou III 155, Limassol, Zypern"],["Gesellschafter","Aurelius Industrial Group PJSC, Jekaterinburg – 100 %"],["Beteiligungen","Northbridge S.A., Panama – 100 %<br>Nova Trade Ltd., Panama – 100 %"]],
+    log:"Browser: Aurelius Global Holdings hält 100 % an Northbridge S.A. und an Nova Trade Ltd. – und gehört selbst zu 100 % der Aurelius Industrial Group PJSC."},
+  aig:{kw:["aurelius industrial","aurelius group","aurelius"], title:"Aurelius Industrial Group PJSC – Unternehmensprofil", url:"www.aurelius-industrial.example/about", snippet:"Maschinenbau und Industrieausrüstung · Jekaterinburg", reg:true,
+    rows:[["Firma","Aurelius Industrial Group PJSC"],["Rechtsform","Öffentliche Aktiengesellschaft"],["Sitz","ul. Zavodskaya 17, Jekaterinburg"],["Land","Russland"],["Registernummer","OGRN 1156658044171"],["Geschäftsfelder","Maschinenbau, Industrieausrüstung, Zulieferung Verteidigungssektor"],["Tochtergesellschaften (Auszug)","Aurelius Global Holdings Ltd., Zypern – 100 %"]],
+    log:"Browser: Am Ende der Kette steht die Aurelius Industrial Group PJSC, Jekaterinburg (OGRN 1156658044171)."},
+  aurel:{kw:["aurel"], title:"Mark Aurel – römischer Kaiser (121–180 n. Chr.)", url:"lexikon.example/mark-aurel", snippet:"Römischer Kaiser und Philosoph, Verfasser der „Selbstbetrachtungen“.",
+    html:`<h3>Mark Aurel</h3><p>Römischer Kaiser von 161 bis 180 n. Chr. und stoischer Philosoph. Bekannt für seine „Selbstbetrachtungen“.</p><p class="mini muted">Vermutlich nicht das, was ihr sucht.</p>`}};
+const webNorm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
+const webSearch = q => { const n = webNorm(q); if (n.length < 4) return [];
+  return Object.entries(WEB).filter(([, w]) => w.kw.some(k => n.includes(k) || k.startsWith(n))).map(([id]) => id); };
+RENDER.browser = b => {
+  const page = WEB[S.v.webPage], q = S.v.webQ || "", seen = S.v.web || (S.v.web = {});
+  b.className = "wbody flush web";
+  const res = webSearch(q);
+  b.innerHTML = `<div class="bbar"><button id="webBack" ${page ? "" : "disabled"} aria-label="Zurück">←</button>${page ? `<div class="url">🔒 ${page.url}</div>` : `<input id="webQ" placeholder="Suchen …" aria-label="Suche"><button class="primary" id="webGo">Suchen</button>`}</div>
+    <div class="pane" style="padding:14px 16px">${page ? (page.reg ? `<div class="doc"><span class="stamp">REGISTERAUSZUG</span><h3>${page.title}</h3><table>${page.rows.map(([k,v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join("")}</table></div>
+      <div class="row"><button id="webJournal">${(S.v.webJ || {})[S.v.webPage] ? "✓ Im Ermittlungsjournal" : "＋ Ins Ermittlungsjournal übernehmen"}</button></div>` : page.html) :
+      !q ? `<h3 style="margin-top:20px">Findr</h3><p class="mini muted">Websuche. Gebt einen Firmennamen ein.</p>` :
+      res.length ? `<p class="mini muted">${res.length} Ergebnis${res.length === 1 ? "" : "se"} für „${esc(q)}“</p>${res.map(id => `<button class="sres" data-w="${id}"><b>${WEB[id].title}</b><small>${WEB[id].url}</small><span>${WEB[id].snippet}</span></button>`).join("")}` :
+      `<p class="mini muted">Keine Ergebnisse für „${esc(q)}“. Versucht es mit einem Firmennamen.</p>`}</div>`;
+  if ($("webQ")){
+    $("webQ").value = q;
+    const go = () => { S.v.webQ = $("webQ").value; render("browser"); };
+    $("webGo").addEventListener("click", go); $("webQ").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
+  }
+  $("webBack").addEventListener("click", () => { S.v.webPage = null; render("browser"); });
+  on(b, ".sres", "click", e => { const id = e.currentTarget.dataset.w; S.v.webPage = id;
+    if (!seen[id]){ seen[id] = true; if (WEB[id].log) narrate(WEB[id].log);
+      if (seen.agh && seen.aig && !S.f.research){ S.f.research = true; notify("Recherche", "Eigentümerkette rekonstruiert: Northbridge → Aurelius Global Holdings → Aurelius Industrial Group.", "browser"); }
+      updateHud(); }
+    render("browser"); });
+  if ($("webJournal")) $("webJournal").addEventListener("click", () => {
+    const j = S.v.webJ || (S.v.webJ = {}); if (j[S.v.webPage]) return;
+    j[S.v.webPage] = true; (S.journal || (S.journal = [])).unshift({id:Date.now(), t:storyTime(), title:page.title, text:page.rows.map(([k,v]) => k + ": " + v.replace(/<br>/g, "; ")).join("\n")});
+    fb("browser", "Registerauszug ins Ermittlungsjournal übernommen.", "good"); render("browser"); render("journal"); saveGame();
   });
 };
 
@@ -1266,10 +1377,10 @@ const ZV_REASONS = [
   ["abroad", "Empfänger sitzt im Ausland", false]];
 // Ermittler: freier Vermerk statt Ankreuzliste – kein Abgleich, sondern eine Musterbegründung zum Vergleich.
 const ZV_MODEL = `<div class="doc" style="margin:10px 0"><b>Musterbegründung zum Vergleich</b>
-  <p style="margin:6px 0"><b>Tragender Grund:</b> Der Empfänger Northbridge S.A. stimmt in Name, Adresse, Land und Registernummer mit dem Listeneintrag SAN-4417 überein – ein bestätigter Sanktionstreffer. Die Zahlung darf nicht ausgeführt werden.</p>
-  <p style="margin:6px 0"><b>Ergänzend:</b> Die Bareinzahlungen von Jonas K. wurden jeweils am selben Tag an Nova Trade Ltd. weitergeleitet – an dieselbe Adresse wie Northbridge. Das deutet auf ein Netzwerk hin und gehört in die Geldwäscheprüfung.</p>
-  <p style="margin:6px 0"><b>Für sich allein kein Stoppgrund:</b> der hohe Betrag, der Auslandsbezug, das Land Panama.</p>
-  <p class="mini muted" style="margin:6px 0 0">Vergleicht euren Vermerk: Habt ihr den tragenden Grund genannt – und ihn mit euren Prüfergebnissen belegt?</p></div>`;
+  <p style="margin:6px 0"><b>Tragender Grund:</b> Northbridge S.A. steht selbst auf keiner Liste. Laut Registern gehört sie aber über die Aurelius Global Holdings Ltd. (100 %) vollständig der Aurelius Industrial Group PJSC – gelistet unter SAN-4417, bestätigt über Adresse, Land und Registernummer. Damit ist die Zahlung mittelbar sanktionsbetroffen und darf nicht ausgeführt werden.</p>
+  <p style="margin:6px 0"><b>Ergänzend:</b> Nova Trade Ltd. gehört derselben Holding, sitzt unter derselben Adresse und hat denselben Geschäftsführer wie Northbridge. Sie erhält die Bargeld-Weiterleitungen von Jonas K. und sollte die umgeleitete Mira-Zahlung bekommen – Hinweise auf ein Netzwerk, die an den Geldwäschebeauftragten gehören.</p>
+  <p style="margin:6px 0"><b>Für sich allein kein Stoppgrund:</b> der hohe Betrag, der Auslandsbezug, das Land Panama. Und umgekehrt: Ein fehlender direkter Namenstreffer ist kein Freibrief.</p>
+  <p class="mini muted" style="margin:6px 0 0">In der Praxis gilt: Sobald der Sanktionsbezug bestätigt ist, wird sofort gestoppt und eskaliert. Vergleicht euren Vermerk: Habt ihr den tragenden Grund genannt – und ihn belegt?</p></div>`;
 const ZV_DEC = [
   ["ok","Fall an Compliance bzw. den Geldwäschebeauftragten eskalieren. Die angebliche Vorstandsanweisung über die bekannte Durchwahl -1200 prüfen."],
   ["release","Stopp am Montag wieder aufheben – die Anweisung kommt schließlich vom Vorstand.", "Eine ungeprüfte „Vorstandsanweisung“ ersetzt keine Prüfung. Genau darauf setzen die Täter."],
@@ -1296,16 +1407,17 @@ RENDER.zv = b => {
     <tr><th>Auftraggeber</th><td>AeroTrans GmbH, Hamburg</td></tr>
     <tr><th>Empfänger</th><td><b>${RECIPIENT.name}</b></td></tr><tr><th>Adresse</th><td><b>${RECIPIENT.addr}</b></td></tr><tr><th>Land</th><td><b>${RECIPIENT.country}</b></td></tr><tr><th>Registernummer</th><td class="mono"><b>${RECIPIENT.reg}</b></td></tr>
     <tr><th>Betrag · Zweck</th><td>3.800.000,00 EUR · „Beratungsleistungen“</td></tr>
-    <tr><th>Sanktionsscreening</th><td>${S.f.embargo ? `<span class="tag no">Treffer bestätigt</span>` : `<span class="tag warn">mögliche Treffer – manuelle Prüfung offen</span>`}</td></tr>
+    <tr><th>Sanktionsscreening</th><td>${S.f.embargo ? `<span class="tag no">mittelbarer Treffer bestätigt</span> Eigentümerin Aurelius Industrial Group PJSC (SAN-4417)` : `<span class="tag ok">Namensabgleich Northbridge S.A.: kein Treffer</span> <small class="muted">Eigentümerstruktur nicht geprüft</small>`}</td></tr>
     <tr><th>1. Freigabe</th><td>heute 15:12 · Sammelkennung <span class="mono">zv.batch07</span> · Arbeitsplatz <span class="mono">PC-ZV-114</span></td></tr>
     <tr><th>Ausführung</th><td>automatisch im Buchungslauf 16:30 · fallverantwortlich: m.weber</td></tr></table></div>
     ${S.f.stopped ? `<p><span class="tag no">COMPLIANCE-STOPP · ESKALIERT</span></p>` : S.f.code ? `<p><span class="tag ok">Compliance-Stopp eingetragen</span></p>${S.mode === "ermittler" && S.v.stopNote ? `<div class="doc" style="margin:10px 0"><b>Euer Vermerk</b><p style="margin:6px 0 0;white-space:pre-wrap">${esc(S.v.stopNote)}</p></div>${ZV_MODEL}` : ""}<p>Wie geht es jetzt weiter?</p>${ZV_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="zvdec" value="${v}"><span>${t}</span></label>`).join("")}<div class="row"><button class="primary" id="zvDecBtn">Bestätigen</button></div>` :
     `<div class="row"><button id="zvRelease">Jetzt freigeben</button><button id="zvOpenStop" class="primary">Compliance-Stopp setzen …</button></div>
     <div id="zvForm" class="${S.v.zvForm ? "" : "hidden"}" style="margin-top:12px">
-      ${canStop ? "" : `<p class="tag warn">Ihr braucht Webers Freigabecode.</p>`}
+      ${S.mode === "ermittler" ? `<p style="margin:10px 0 4px"><b>1. Prüfbefund</b></p>
+      ${S.f.embargo ? `<p style="margin:0"><span class="tag ok">✓ Sanktionsprüfung abgeschlossen · Vorgang ${VORGANG.embargo}</span></p>` : `<p style="margin:0"><span class="tag warn">Sanktionsprüfung noch nicht abgeschlossen</span> <small class="muted">Ein Stopp braucht einen dokumentierten Befund.</small></p>`}` : `${canStop ? "" : `<p class="tag warn">Ihr braucht Webers Freigabecode.</p>`}
       <p style="margin:10px 0 4px"><b>1. Freigabecode</b> von m.weber (3 Ziffern)</p>
       <input id="zvCode" inputmode="numeric" maxlength="3" placeholder="_ _ _" aria-label="Freigabecode" class="mono" style="max-width:140px;font-size:1.15rem;letter-spacing:.3em">
-      <details class="pwhint" style="margin-top:8px"><summary>💡 Kennworthinweis anzeigen</summary><p>Drei Prüfungen, drei Ziffern – in dieser Reihenfolge: Zählt die Fehlalarme im EmbargoCheck, zählt die Buchungen des erkannten Musters im AML-Monitor und nehmt die Position der Zahlung, die ihr im FraudDesk nicht ausgeführt habt.</p></details>
+      <details class="pwhint" style="margin-top:8px"><summary>💡 Kennworthinweis anzeigen</summary><p>Drei Prüfungen, drei Ziffern – in dieser Reihenfolge: Zählt die Fehlalarme im EmbargoCheck, zählt die Buchungen des erkannten Musters im AML-Monitor und nehmt die Position der Zahlung, die ihr im FraudDesk nicht ausgeführt habt.</p></details>`}
       ${S.mode === "ermittler" ? `<p style="margin:12px 0 4px"><b>2. Begründung des Compliance-Stopps</b> (Vermerk)</p>
       <textarea id="zvNote" rows="4" maxlength="800" style="width:100%" placeholder="Warum darf PHANTOME nicht ausgeführt werden? Nennt den tragenden Grund und womit ihr ihn belegt."></textarea>` :
       `<p style="margin:12px 0 4px"><b>2. Begründung</b> – den tragenden Grund und ergänzende Befunde ankreuzen, aber nur Belegbares</p>
@@ -1314,15 +1426,17 @@ RENDER.zv = b => {
   if ($("zvRelease")) $("zvRelease").addEventListener("click", () => wrong("zv", "Mit offenem Compliance-Vermerk darf die Zahlung nicht freigegeben werden."));
   if ($("zvOpenStop")) $("zvOpenStop").addEventListener("click", () => { S.v.zvForm = true; $("zvForm").classList.remove("hidden"); $("zvForm").scrollIntoView({block:"nearest"}); });
   if ($("zvStop")) $("zvStop").addEventListener("click", () => {
-    const c = $("zvCode").value.replace(/\D/g, "");
-    const rs = [...b.querySelectorAll("input[name=zvr]:checked")].map(x => x.value);
-    if (hash(c) !== CODE_H) return wrong("zv", "Freigabecode ungültig.");
+    // Ermittler: kein Code – der Stopp folgt unmittelbar aus dem bestätigten Sanktionsbefund und braucht einen Vermerk.
     if (S.mode === "ermittler"){
+      if (!S.f.embargo) return fb("zv", "Für einen Compliance-Stopp braucht es einen dokumentierten Prüfbefund. Die Sanktionsprüfung ist noch nicht abgeschlossen.");
       const note = $("zvNote").value.trim();
       if (note.length < 20) return fb("zv", "Ein Stopp braucht einen Vermerk: Schreibt kurz auf, warum die Zahlung nicht ausgeführt werden darf.");
       S.f.code = true; S.v.stopNote = note; narrate("ZV-Cockpit: Compliance-Stopp für PHANTOME eingetragen – mit Vermerk des Teams.");
       fb("zv", "Stopp eingetragen. Vergleicht euren Vermerk mit der Musterbegründung.", "good"); updateHud(); render("zv"); return;
     }
+    const c = $("zvCode").value.replace(/\D/g, "");
+    const rs = [...b.querySelectorAll("input[name=zvr]:checked")].map(x => x.value);
+    if (hash(c) !== CODE_H) return wrong("zv", "Freigabecode ungültig.");
     if (!rs.length) return fb("zv", "Kreuzt mindestens einen Grund an.");
     const okR = ZV_REASONS.filter(r => r[2]).map(r => r[0]);
     if (rs.some(r => !okR.includes(r))) return wrong("zv", "Ein hoher Betrag oder ein Auslandsbezug allein sind kein Stoppgrund. Nennt nur, was ihr in den Prüfungen belegt habt.");
@@ -1405,7 +1519,8 @@ function report(mins){
   const chk = (ok, id) => (ok ? "✓ abgeschlossen" : "✗ offen") + " · " + (S.err[id] || 0) + " Fehlentscheidung" + ((S.err[id] || 0) === 1 ? "" : "en");
   return [["PHANTOME gestoppt", S.f.stopped ? "✓ Ja" : "✗ Nein"],
     ["Vermerk zum Stopp", S.v.stopNote ? "„" + S.v.stopNote + "“" : "–"],
-    ["Sanktionsprüfung", chk(S.f.embargo, "embargo")],
+    ["Eigentümerkette recherchiert", S.f.research ? "✓ Northbridge → Aurelius Global Holdings → Aurelius Industrial Group" : "✗ nicht rekonstruiert"],
+    ["Sanktionsprüfung der Muttergesellschaft", chk(S.f.embargo, "embargo")],
     ["Geldwäscheprüfung (vier Alerts)", chk(S.f.aml, "aml")],
     ["Vier zurückgehaltene Zahlungen", chk(S.f.fraud, "fraud")],
     ["Compliance-Stopp und Eskalation", chk(S.f.stopped, "zv")],
@@ -1433,7 +1548,7 @@ function finish(timeout){
     text = "Die Zahlung ist gestoppt, aber der Hinweis traf zweimal die falsche Person. In der Nachbesprechung: Welche Spuren hätten zu Sven Kranz geführt?";
   } else if (!S.f.stopped){
     lines = ["16:30 Uhr. Der Buchungslauf startet. 214 Zahlungen gehen raus – auch PHANTOME.",
-      "3,8 Millionen Euro an Northbridge S.A. – eine Firma, die auf der Sanktionsliste steht.",
+      "3,8 Millionen Euro an Northbridge S.A. – eine Firma, die über eine Holding vollständig der gelisteten Aurelius Industrial Group gehört. Kein direkter Namenstreffer, aber ein klarer Sanktionsbezug.",
       "Am Montag: Meldung an die Aufsicht, interne Sonderprüfung, Anfragen der Presse. Ein Bußgeld in Millionenhöhe steht im Raum – der Reputationsschaden ist kaum zu beziffern.",
       "Und Sven Kranz aus dem Zahlungsverkehr geht pünktlich in den Feierabend."];
     title = "16:30 Uhr – zu spät"; eyebrow = "ZEIT ABGELAUFEN"; head = "PHANTOME ist durchgelaufen.";
@@ -1445,7 +1560,8 @@ function finish(timeout){
     text = "Die Zahlung ist sicher. Den internen Täter habt ihr aber nicht rechtzeitig gemeldet.";
   } else {
     lines = [`${t} Uhr. PHANTOME ist gestoppt, der Hinweis ist bei Compliance und Interner Revision.`, ...weber,
-      "Die Revision sichert seinen PC. Die Spuren führen zu Sven Kranz: Die gefälschten Vorstandsmails kamen von seinem Rechner, die Mail von Webers PC ging an ihn, und die Mira-Kontoänderung lief ohne Rückruf über seine Kennung.",
+      "Die Revision sichert seinen PC. Die Spuren führen zu Sven Kranz: Die gefälschten Vorstandsmails kamen von seinem Rechner, die Mail von Webers PC ging an ihn, und die Umleitung der Mira-Zahlung auf ein Konto von Nova Trade lief ohne Rückruf über seine Kennung.",
+      "Die Sanktions-Compliance bestätigt: Northbridge und Nova Trade gehören über Aurelius Global Holdings einem gelisteten Konzern. Der Fall geht an die Aufsicht.",
       "Die Revision stuft den Verdacht als erhärtet ein und leitet eine interne Untersuchung ein. Warum Kranz Northbridge geholfen haben könnte, ist noch offen – das zu klären ist jetzt Aufgabe der Ermittler.",
       "Um 16:30 Uhr startet der Buchungslauf. 213 Zahlungen gehen raus. PHANTOME nicht."];
     title = "PHANTOME gestoppt."; eyebrow = "MISSION ERFÜLLT"; head = "PHANTOME gestoppt – Verdacht gemeldet.";
@@ -1475,7 +1591,8 @@ function renderStartCards(){
   const mode = (document.querySelector("input[name=mode]:checked") || {}).value || "ermittler";
   START_CARDS[mode].forEach(([n,h,t], i) => { $("c"+(i+1)+"n").textContent = n; $("c"+(i+1)+"h").textContent = h; $("c"+(i+1)+"p").textContent = t; });
 }
-// Der Azubi-Modus ist derzeit abgeschaltet; zum Reaktivieren AZUBI_AKTIV auf true setzen – dann erscheint die Stufenwahl wieder.
+// Der Azubi-Modus ist derzeit abgeschaltet und folgt noch dem früheren Fall (Northbridge als direkter Treffer, Code 362).
+// Vor dem Reaktivieren (AZUBI_AKTIV = true) Notizen, Hinweise und Ablauf an die Aurelius-Kette anpassen.
 const AZUBI_AKTIV = false;
 if (AZUBI_AKTIV) $("modeSelect").classList.remove("hidden");
 document.querySelectorAll("input[name=mode]").forEach(r => r.addEventListener("change", renderStartCards));
