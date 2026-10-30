@@ -4,7 +4,7 @@ Ein Escape Room im Browser mit Story, angesiedelt bei der fiktiven **Kreisbank H
 
 Der rote Faden sind Webers Notizen: Notiz 1 ist offen und nennt den ersten Schritt. Jede weitere Notiz ist mit einem Rätsel gesperrt, dessen Antwort nur kennt, wer die vorherige Prüfung (EmbargoCheck, AML-Monitor, FraudDesk) wirklich gelöst hat. Auch Webers Freigabecode für den Compliance-Stopp im ZV-Cockpit muss aus den drei Fällen hergeleitet werden. Zum Schluss deckt das Team auf, wer im Haus geholfen hat: ein Mitarbeiter des Zahlungsverkehrs, der Weber mit einer gefälschten Vorstandsmail weggelockt und dessen entsperrten PC benutzt hat.
 
-**Zwei Schwierigkeitsstufen:** *Azubi* – Webers Notizen führen Schritt für Schritt, die Seitenleiste zeigt den nächsten Schritt und den Fortschritt. *Ermittler* – Webers Notizen sind persönliche Beobachtungen, ohne Schrittanzeige und automatisches Protokoll; das Team führt ein eigenes Ermittlungsjournal (freie Notizen ohne Vorgaben), Hinweise kosten mehr. Die Fachrätsel sind in beiden Stufen identisch. An jedem gesperrten Notizeintrag und am Freigabecode gibt es einen kostenlosen, aufklappbaren Kennworthinweis – er hilft beim Entschlüsseln, nicht beim Lösen der Fälle.
+**Zwei Schwierigkeitsstufen:** *Azubi* – Webers Notizen führen Schritt für Schritt, die Seitenleiste zeigt den nächsten Schritt und den Fortschritt. *Ermittler* – Webers Notizen sind persönliche Beobachtungen, ohne Schrittanzeige und automatisches Protokoll; das Team führt ein eigenes Ermittlungsjournal (freie Notizen ohne Vorgaben). Statt Punkten zählt die Zeit: Über „Hilfe anfordern“ antwortet nach einer Bestätigung sofort eine Fachkollegin oder ein Fachkollege per Mail mit einem Hinweis passend zum aktuellen Stand; jede Anfrage lässt die Uhr um 3 Minuten vorrücken. Am Ende steht ein Ermittlungsbericht (Stopp, Begründung, Fehlentscheidungen je Prüfung, Verdachtsmeldung, Hilfeanfragen, Restzeit). Die Fachrätsel sind in beiden Stufen identisch. An jedem gesperrten Notizeintrag und am Freigabecode gibt es einen kostenlosen, aufklappbaren Kennworthinweis – er hilft beim Entschlüsseln, nicht beim Lösen der Fälle.
 
 <details><summary>Lösung für Spielleitung</summary>
 
@@ -17,7 +17,7 @@ Der rote Faden sind Webers Notizen: Notiz 1 ist offen und nennt den ersten Schri
 7. Interner Täter: Kopfzeilen der Vorstandsmails → PC-ZV-114 → Intranet: Sven Kranz. Weitere Spuren: „Gesendet“ 15:31, Mira-Kontoänderung durch s.kranz, 1. Freigabe von PC-ZV-114.
 8. Hinweisgebersystem: öffnet erst, wenn Kopfzeilen, Intranet-Zuordnung und „Gesendet“-Mail ausgewertet sind. Dann Sven Kranz auswählen. Zwei Versuche; nach dem zweiten falschen Verdacht ist das Spiel verloren.
 
-Punkte: +250 pro Prüfung, −20 pro Fehlversuch, Hinweise −25 (Denkanstoß) / −50 (konkret), Zeitbonus höchstens 100. Der Spielstand wird im Browser gespeichert; nach versehentlichem Neuladen kann das Team fortsetzen.
+Punkte (nur Stufe Azubi): +250 pro Prüfung, −20 pro Fehlversuch, Hinweise −25 (Denkanstoß) / −50 (konkret), Zeitbonus höchstens 100. Der Spielstand wird im Browser gespeichert; nach versehentlichem Neuladen kann das Team fortsetzen.
 </details>
 
 ## Lokal testen

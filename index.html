@@ -284,9 +284,9 @@ h3{font-size:1.05rem;margin-bottom:6px}
       <div class="panel" id="logPanel"><div class="eyebrow" style="margin-bottom:8px">Ermittlungsprotokoll</div><div class="log" id="log" aria-live="polite"></div></div>
       <div class="panel">
         <div class="eyebrow">Team <span id="teamLabel" style="color:var(--text)"></span></div>
-        <div class="side-stat"><span class="muted">Punkte</span><strong id="score">0</strong></div>
+        <div class="side-stat" id="scoreRow"><span class="muted">Punkte</span><strong id="score">0</strong></div>
         <div class="side-stat"><span class="muted">Fehlversuche</span><strong id="mistakes">0</strong></div>
-        <div class="side-stat"><span class="muted">Hinweise</span><strong id="hints">0</strong></div>
+        <div class="side-stat"><span class="muted" id="hintsLbl">Hinweise</span><strong id="hints">0</strong></div>
       </div>
       <button class="subtle" id="hintBtn" style="width:100%">Hinweis verwenden (−50 P.)</button>
       <div id="hintBox" class="feedback hidden mini"></div>
@@ -316,7 +316,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.7</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.8</footer>
 </div>
 
 <script>
@@ -410,14 +410,25 @@ function objective(){
 }
 // Jeder Schritt hat zwei Hinweisstufen: erst ein Denkanstoß, dann ein konkreter Hinweis.
 function hintFor(){
-  if (S.f.stopped) return {key:"insider", steps:[
-    "Die gefälschte Vorstandsmail verrät mehr, als in ihrem Text steht. Woher kam sie technisch?",
-    "Öffnet die Vorstandsmail, klickt auf „Kopfzeilen anzeigen“ und sucht den Rechnernamen im Intranet. Auch die Lieferantenakte von Mira (FraudDesk) und die 1. Freigabe von PHANTOME (ZV-Cockpit) führen zum selben Rechner."]};
+  if (S.f.stopped){
+    if (!S.v.hdrSeen) return {key:"ins1", steps:[
+      "Schaut bei der Vorstandsmail nicht nur auf den Absender. Die technischen Angaben verraten, woher sie wirklich kam.",
+      "Öffnet eine der Vorstandsmails und klickt auf „Kopfzeilen anzeigen“. Dort steht der Rechner, von dem sie verschickt wurde."]};
+    if (!S.v.pcSeen) return {key:"ins2", steps:[
+      "Ein Rechnername allein ist noch kein Name. Wo im Haus lässt sich nachschlagen, wem ein Arbeitsplatz gehört?",
+      "Sucht im Intranet nach dem Rechnernamen aus den Kopfzeilen (PC-ZV-114)."]};
+    if (!S.v.sentSeen) return {key:"ins3", steps:[
+      "Vergleicht die Uhrzeiten mit Webers Abwesenheit. Ist von seinem PC etwas verschickt worden, als er gar nicht da war?",
+      "Öffnet in der Mail-App den Ordner „Gesendet“. Achtet auf Uhrzeit und Empfänger der Mail von 15:31."]};
+    return {key:"ins4", steps:[
+      "Legt eure drei Spuren nebeneinander: Rechner der Vorstandsmails, Zuordnung im Intranet, Empfänger der Mail von 15:31. Wohin zeigen sie gemeinsam?",
+      "Auch die 1. Freigabe von PHANTOME (ZV-Cockpit) und die Mira-Kontoänderung (FraudDesk) führen zum selben Arbeitsplatz. Meldet die Person, der dieser Arbeitsplatz gehört."]};
+  }
   if (S.f.code) return {key:"zvdec", steps:[
     "Freigeben ist keine Option – und den Kunden vorwarnen auch nicht.",
     "Richtig ist: eskalieren und die angebliche Vorstandsanweisung über einen unabhängig bekannten Kanal (-1200) prüfen."]};
   if (!S.v.notesSeen) return {key:"start", steps:[
-    "Weber hat einen Zettel an den Monitor geklebt. Wo steht laut ihm alles?",
+    "Matthias klebt sich gern Zettel an den Monitor. Wo steht laut ihm alles?",
     "Klickt auf dem Desktop auf „Notizen“. Der erste Eintrag (14:52) ist nicht gesperrt."]};
   if (!S.v.zvSel) return {key:"zv", steps:[
     "Bevor ihr den Empfänger prüfen könnt, braucht ihr seine genauen Daten.",
@@ -451,9 +462,36 @@ function hintFor(){
     "Fehlalarme im EmbargoCheck, Anzahl der Muster-Buchungen, Nummer der nicht ausgeführten Überweisung. Als Grund trägt der Sanktionstreffer; die Nova-Trade-Verbindung könnt ihr ergänzend dokumentieren."]};
 }
 const hintCost = i => (S.mode === "ermittler" ? [35, 70] : [25, 50])[i];
+// Ermittler: Statt Punkte kostet Hilfe Zeit. Die Antwort kommt als Mail einer Fachkollegin oder eines Fachkollegen.
+const HELP_MIN = 3;
+const HELPERS = {
+  san:{from:"Jana Petersen", addr:"j.petersen@kreisbank-hohenbrueck.example", dept:"Sanktions-Compliance", hi:"Hallo zusammen,", lead:"kurz und präzise zu eurer Frage:", bye:"Beste Grüße\nJana Petersen · Sanktions-Compliance"},
+  aml:{from:"Martin Scholz", addr:"m.scholz@kreisbank-hohenbrueck.example", dept:"Geldwäscheprävention", hi:"Hallo zusammen,", lead:"ich habe mir eure Anfrage angesehen. Ohne den Fall vorwegzunehmen:", bye:"Viele Grüße\nMartin Scholz · Geldwäscheprävention"},
+  fraud:{from:"Tobias Rehm", addr:"t.rehm@kreisbank-hohenbrueck.example", dept:"Betrugsprävention", hi:"Moin,", lead:"aus der Praxis:", bye:"Tobias\nBetrugsprävention"},
+  rev:{from:"Ines Hartmann", addr:"i.hartmann@kreisbank-hohenbrueck.example", dept:"Interne Revision", hi:"Guten Tag,", lead:"vertraulich und nur zu eurer Orientierung:", bye:"Mit freundlichen Grüßen\nInes Hartmann · Interne Revision"}};
+const HELP_TOPIC = {start:["san","Wo anfangen?"], zv:["san","Empfänger von PHANTOME"], embargo:["san","Listenabgleich Northbridge"], n2:["san","Webers Notiz 15:03"],
+  aml0:["aml","Offene AML-Alerts"], aml1:["aml","Auffälliges Kundenkonto"], aml2:["aml","Gegenpartei"], n3:["aml","Webers Notiz 15:17"],
+  fraud:["fraud","Zurückgehaltene Zahlungen"], n4:["fraud","Webers Notiz 15:25"], stop:["san","Compliance-Stopp PHANTOME"], zvdec:["san","Vorstandsanweisung PHANTOME"],
+  ins1:["rev","Vorstandsmail"], ins2:["rev","Arbeitsplatz-Zuordnung"], ins3:["rev","Webers Postausgang"], ins4:["rev","Hinweis an die Revision"]};
+const helpLeft = () => Math.max(0, S.deadline - Date.now()) > (HELP_MIN + 1) * 60000;
+function requestHelp(){
+  const h = hintFor(), used = S.hintUsed[h.key] || 0, [who, topic] = HELP_TOPIC[h.key] || ["san","PHANTOME"], c = HELPERS[who];
+  S.hintUsed[h.key] = used + 1; S.hints++;
+  S.startAt -= HELP_MIN * 60000; S.deadline -= HELP_MIN * 60000;
+  const body = [c.hi, c.lead, h.steps[used]].map(t => `<p>${t}</p>`).join("") + `<p>${c.bye.replace("\n", "<br>")}</p>`;
+  mailIn({from:c.from, addr:c.addr, subj:"AW: Rückfrage – " + topic, body, hdr:`Received: from ${c.dept} · mail-gw01.kreisbank.intern`});
+  S.v.folder = "inbox"; S.v.mail = 0; openApp("mail"); render("mail");
+  showHint("Anfrage verschickt – " + c.from + " (" + c.dept + ") hat geantwortet. Die Antwort liegt im Postfach. Die Uhr ist um " + HELP_MIN + " Minuten vorgerückt.");
+  narrate("Hilfe angefordert: " + c.from + " (" + c.dept + "), " + topic + "."); tick(); updateHud();
+}
 function hintLabel(){
   if (!S.startAt || S.ended) return ["Hinweis verwenden", false];
   const h = hintFor(), used = S.hintUsed[h.key] || 0;
+  if (S.mode === "ermittler"){
+    if (used >= h.steps.length) return ["Zu diesem Punkt hat niemand mehr einen Rat", true];
+    if (!helpLeft()) return ["Für Rückfragen ist keine Zeit mehr", true];
+    return ["✉ Hilfe anfordern (kostet " + HELP_MIN + " Min.)", false];
+  }
   if (used >= h.steps.length) return ["Keine weiteren Spielhinweise für diesen Schritt", true];
   return ["Spielhinweis: " + (used ? "konkret" : "Denkanstoß") + " (−" + hintCost(used) + " P.)", false];
 }
@@ -461,6 +499,14 @@ $("hintBtn").addEventListener("click", () => {
   if (S.ended || !S.startAt) return;
   const h = hintFor(), used = S.hintUsed[h.key] || 0;
   if (used >= h.steps.length) return;
+  if (S.mode === "ermittler"){
+    if (!helpLeft()) return;
+    $("hintBox").innerHTML = `<b>Hilfe anfordern?</b><br>Eine Kollegin oder ein Kollege mit passendem Fachgebiet antwortet sofort per Mail. Dafür rückt die Uhr um <b>${HELP_MIN} Minuten</b> vor – von ${storyTime()} auf ${storyTime(Math.min(50, storyMin() + HELP_MIN))} Uhr.<div class="row" style="margin-top:8px"><button class="primary" id="helpSend">Anfrage senden</button><button id="helpCancel">Abbrechen</button></div>`;
+    $("hintBox").classList.remove("hidden");
+    $("helpSend").addEventListener("click", requestHelp);
+    $("helpCancel").addEventListener("click", () => $("hintBox").classList.add("hidden"));
+    return;
+  }
   S.hintUsed[h.key] = used + 1; S.hints++; S.score = Math.max(0, S.score - hintCost(used));
   showHint((used ? "KONKRETER HINWEIS: " : "DENKANSTOSS: ") + h.steps[used] + " (−" + hintCost(used) + " Punkte)");
   narrate((used ? "Hinweis: " : "Denkanstoß: ") + h.steps[used]); updateHud();
@@ -498,6 +544,7 @@ function updateHud(){
   const shown = cur === -1 ? STEPS : STEPS.slice(0, cur + 1);
   $("steps").innerHTML = shown.map((s,i) => `<li class="${s.done() ? "done" : i === cur ? "cur" : ""}">${s.label}</li>`).join("") + (cur !== -1 && cur < STEPS.length - 1 ? `<li class="more">… weitere Schritte folgen</li>` : "");
   const erm = S.mode === "ermittler"; $("objLbl").textContent = erm ? "Aktuelle Lage" : "Nächster Schritt"; $("stepsPanel").classList.toggle("hidden", erm); $("logPanel").classList.toggle("hidden", erm);
+  $("scoreRow").classList.toggle("hidden", erm); $("hintsLbl").textContent = erm ? "Hilfeanfragen" : "Hinweise";
   const [hl, hd] = hintLabel(); $("hintBtn").textContent = hl; $("hintBtn").disabled = hd;
   renderIcons(); renderTasks(); saveGame();
 }
@@ -588,7 +635,8 @@ function makeDraggable(w){
 const RENDER = {};
 function render(id){ if (WIN[id]) RENDER[id](WIN[id].body); }
 function fb(id, text, kind = ""){ const w = WIN[id]; if (!w) return; w.fb.className = "wfb " + kind; w.fb.textContent = text; }
-function wrong(id, msg){ S.err[id] = (S.err[id] || 0) + 1; S.mistakes++; S.score = Math.max(0, S.score - 20); fb(id, msg + " (−20 Punkte)", "bad"); updateHud(); }
+const pts = t => S.mode === "ermittler" ? "" : t;
+function wrong(id, msg){ S.err[id] = (S.err[id] || 0) + 1; S.mistakes++; S.score = Math.max(0, S.score - 20); fb(id, msg + pts(" (−20 Punkte)"), "bad"); updateHud(); }
 let notifTimer;
 function notify(title, text, app){
   const n = $("notif"); n.innerHTML = ""; const b = document.createElement("b"); b.textContent = title; n.appendChild(b); n.appendChild(document.createTextNode(text));
@@ -601,7 +649,7 @@ function vorgangBox(key, next){
 }
 function solved(app, key, nextNote, narr, msg){
   S.f[key] = true; S.score += 250; narrate(narr);
-  render(app); fb(app, msg + " +250 Punkte.", "good"); updateHud(); render("zv"); render("notes");
+  render(app); fb(app, msg + pts(" +250 Punkte."), "good"); updateHud(); render("zv"); render("notes");
   notify("Vorgang " + VORGANG[key] + " angelegt", S.mode === "ermittler" ? "Prüfung dokumentiert." : "Webers nächste Notiz lässt sich jetzt entsperren.", "notes");
 }
 
@@ -802,7 +850,7 @@ RENDER.whistle = b => {
     if (!who){ fb("whistle", "Wählt eine Person aus."); return; }
     if (hash(who) === SUSPECT_H){
       S.f.insider = true; S.score += 250; narrate("Hinweisgebersystem: Hinweis gegen Sven Kranz übermittelt. Webers PC wird gesperrt und als Beweis gesichert.");
-      render("whistle"); fb("whistle", "Hinweis übermittelt. +250 Punkte.", "good"); updateHud();
+      render("whistle"); fb("whistle", "Hinweis übermittelt." + pts(" +250 Punkte."), "good"); updateHud();
       setTimeout(() => finish(false), 1200); return;
     }
     S.v.accuseFails = (S.v.accuseFails || 0) + 1; (S.v.ruledOut = S.v.ruledOut || []).push(who);
@@ -1006,7 +1054,7 @@ RENDER.aml = b => {
   });
   if ($("amlBtn")) $("amlBtn").addEventListener("click", () => {
     const sel = S.v.amlSel, falsePos = sel.some(i => !TX_OK.includes(i)), missing = TX_OK.some(i => !sel.includes(i));
-    if (!falsePos && !missing){ S.v.amlPattern = true; S.score += 100; narrate("AML-Monitor: Drei Bareinzahlungen, jeweils am selben Tag an Nova Trade Ltd. weitergeleitet."); S.v.amlTab = "eval"; render("aml"); fb("aml", "Muster bestätigt. +100 Punkte. Prüft jetzt die Gegenpartei.", "good"); updateHud(); }
+    if (!falsePos && !missing){ S.v.amlPattern = true; S.score += 100; narrate("AML-Monitor: Drei Bareinzahlungen, jeweils am selben Tag an Nova Trade Ltd. weitergeleitet."); S.v.amlTab = "eval"; render("aml"); fb("aml", "Muster bestätigt." + pts(" +100 Punkte.") + " Prüft jetzt die Gegenpartei.", "good"); updateHud(); }
     else if (falsePos) wrong("aml", "Mindestens eine markierte Buchung ist für sich unauffällig. Was passt nicht zum Kundenprofil?");
     else wrong("aml", "Das Muster ist noch unvollständig – es fehlen zusammengehörige Buchungen.");
   });
@@ -1248,12 +1296,12 @@ RENDER.zv = b => {
     if (!rs.includes("san")) return wrong("zv", "Der tragende Grund fehlt: Welche Prüfung hat ergeben, dass diese Zahlung auf keinen Fall ausgeführt werden darf?");
     const full = rs.includes("aml");
     S.f.code = true; S.score += full ? 150 : 100; narrate("ZV-Cockpit: Compliance-Stopp für PHANTOME eingetragen – Grund: bestätigter Sanktionstreffer" + (full ? ", ergänzend die Geldflüsse über Nova Trade." : "."));
-    fb("zv", full ? "Stopp eingetragen: tragender Grund und ergänzender Befund dokumentiert. +150 Punkte." : "Stopp eingetragen – der Sanktionstreffer trägt ihn allein. Die Verbindung zu Nova Trade hättet ihr ergänzend dokumentieren können. +100 Punkte.", "good"); updateHud(); render("zv");
+    S.v.stopFull = full; fb("zv", (full ? "Stopp eingetragen: tragender Grund und ergänzender Befund dokumentiert." : "Stopp eingetragen – der Sanktionstreffer trägt ihn allein. Die Verbindung zu Nova Trade hättet ihr ergänzend dokumentieren können.") + pts(full ? " +150 Punkte." : " +100 Punkte."), "good"); updateHud(); render("zv");
   });
   if ($("zvDecBtn")) $("zvDecBtn").addEventListener("click", () => {
     const v = (b.querySelector("input[name=zvdec]:checked") || {}).value;
     if (!v){ fb("zv", "Wählt eine Option."); return; }
-    if (v === "ok"){ S.score += 100; S.f.stopped = true; narrate("PHANTOME ist gestoppt und eskaliert. Offen bleibt: Wer im Haus hilft Northbridge – und hat Weber weggelockt?"); fb("zv", "Gestoppt und eskaliert. +100 Punkte.", "good"); updateHud(); render("zv"); setTimeout(phaseTwo, 900); } else wrong("zv", ZV_DEC.find(x => x[0] === v)[2]);
+    if (v === "ok"){ S.score += 100; S.f.stopped = true; narrate("PHANTOME ist gestoppt und eskaliert. Offen bleibt: Wer im Haus hilft Northbridge – und hat Weber weggelockt?"); fb("zv", "Gestoppt und eskaliert." + pts(" +100 Punkte."), "good"); updateHud(); render("zv"); setTimeout(phaseTwo, 900); } else wrong("zv", ZV_DEC.find(x => x[0] === v)[2]);
   });
 };
 
@@ -1314,13 +1362,27 @@ const TOPICS = [
   ["Interner Täter / Hinweisgebersystem", "whistle", () => S.f.insider],
   ["Webers Rätsel (Notizen)", "notes", () => S.notes.n4]];
 const topicResults = () => TOPICS.map(([name, id, ok]) => ({name, ok:!!ok(), err:S.err[id] || 0}));
+// Ermittler: sachlicher Bericht statt Punktestand.
+function report(mins){
+  const chk = (ok, id) => (ok ? "✓ abgeschlossen" : "✗ offen") + " · " + (S.err[id] || 0) + " Fehlentscheidung" + ((S.err[id] || 0) === 1 ? "" : "en");
+  return [["PHANTOME gestoppt", S.f.stopped ? "✓ Ja" : "✗ Nein"],
+    ["Begründung des Stopps", !S.f.code ? "–" : S.v.stopFull ? "Sanktionstreffer, ergänzend Geldflüsse über Nova Trade" : "Sanktionstreffer (ohne ergänzenden Befund)"],
+    ["Sanktionsprüfung", chk(S.f.embargo, "embargo")],
+    ["Geldwäscheprüfung (vier Alerts)", chk(S.f.aml, "aml")],
+    ["Vier zurückgehaltene Zahlungen", chk(S.f.fraud, "fraud")],
+    ["Compliance-Stopp und Eskalation", chk(S.f.stopped, "zv")],
+    ["Interner Verdacht", S.f.insider ? "✓ begründet gemeldet" + (S.v.accuseFails ? " (im 2. Versuch)" : " (im 1. Versuch)") : S.f.wrongAccused ? "✗ zweimal eine unschuldige Person gemeldet" : "✗ nicht gemeldet"],
+    ["Hilfe angefordert", S.hints + "× (" + S.hints * HELP_MIN + " Min.)"],
+    ["Verbleibende Zeit", S.timeout ? "0 Min. – Buchungslauf gestartet" : mins + " Min."]];
+}
 function finish(timeout){
   if (S.ended) return; S.ended = true; S.timeout = timeout; clearInterval(S.timerId); clearSave();
   const remaining = Math.max(0, S.deadline - Date.now()), mins = Math.floor(remaining/60000);
   const bonus = timeout || S.f.wrongAccused ? 0 : Math.min(100, mins*2); S.score += bonus;
   const elapsed = Math.min(3000, Math.round((Date.now() - S.startAt)/1000)), t = storyTime();
   const parts = solvedCount() + (S.f.stopped ? 1 : 0);
-  window.phantomeResult = {mode:S.mode, topics:topicResults(), team:S.team, score:S.score, completed:parts, mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout, stopped:!!S.f.stopped, insider:!!S.f.insider};
+  const erm = S.mode === "ermittler", rep = report(mins);
+  window.phantomeResult = {report:erm ? rep : null, mode:S.mode, topics:topicResults(), team:S.team, score:S.score, completed:parts, mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout, stopped:!!S.f.stopped, insider:!!S.f.insider};
   const weber = ["Um 16:34 kommt Weber zurück, außer Atem. „Raum 12.04 ist ein Lager. Ich stand vor verschlossener Tür, und mein Ausweis ging plötzlich nicht mehr.“",
     "Er sieht auf seinen Bildschirm und wird blass. „Ich habe in der Eile meinen PC nicht gesperrt. Genau darauf hat er gesetzt.“"];
   let lines, title, eyebrow, head, text;
@@ -1349,14 +1411,18 @@ function finish(timeout){
       "Die Revision stuft den Verdacht als erhärtet ein und leitet eine interne Untersuchung ein. Warum Kranz Northbridge geholfen haben könnte, ist noch offen – das zu klären ist jetzt Aufgabe der Ermittler.",
       "Um 16:30 Uhr startet der Buchungslauf. 213 Zahlungen gehen raus. PHANTOME nicht."];
     title = "PHANTOME gestoppt."; eyebrow = "MISSION ERFÜLLT"; head = "PHANTOME gestoppt – Verdacht gemeldet.";
-    text = `Ihr habt den Fall um ${t} Uhr abgeschlossen – ${mins} Minuten vor dem Buchungslauf. Zeitbonus: +${bonus} Punkte. In der Praxis gelten stets die internen Eskalations- und Meldeprozesse.`;
+    text = `Ihr habt den Fall um ${t} Uhr abgeschlossen – ${mins} Minuten vor dem Buchungslauf.${S.mode === "ermittler" ? "" : " Zeitbonus: +" + bonus + " Punkte."} In der Praxis gelten stets die internen Eskalations- und Meldeprozesse.`;
   }
   cutscene({eyebrow:"Epilog", title, lines, button:"Zur Auswertung →", onDone:() => {
     $("final").classList.remove("hidden");
     $("finalEyebrow").textContent = eyebrow; $("finalTitle").textContent = head; $("finalText").textContent = text;
     $("finalScore").textContent = S.score + " Punkte"; $("finalTeam").textContent = S.team;
     $("finalStats").textContent = `Stufe ${S.mode === "ermittler" ? "Ermittler" : "Azubi"} · ${parts}/4 Kernaufgaben · Täter ${S.f.insider ? "gemeldet" : "nicht gemeldet"} · ${S.mistakes} ${S.mistakes === 1 ? "Fehlversuch" : "Fehlversuche"} · ${S.hints} ${S.hints === 1 ? "Hinweis" : "Hinweise"} · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min.`;
-    $("finalTopics").innerHTML = `<table class="ftable"><tr><th>Thema</th><th>Ergebnis</th><th>Fehlversuche</th></tr>${topicResults().map(t => `<tr><td>${t.name}</td><td>${t.ok ? "✓ gelöst" : "✗ offen"}</td><td>${t.err}</td></tr>`).join("")}</table>`;
+    $("finalScore").classList.toggle("hidden", erm);
+    if (erm) $("finalStats").textContent = `Stufe Ermittler · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min. Spielzeit`;
+    $("finalTopics").innerHTML = erm
+      ? `<h2 style="margin-top:20px">Ermittlungsbericht</h2><table class="ftable"><tr><th>Kriterium</th><th>Ergebnis</th></tr>${rep.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("")}</table>`
+      : `<table class="ftable"><tr><th>Thema</th><th>Ergebnis</th><th>Fehlversuche</th></tr>${topicResults().map(t => `<tr><td>${t.name}</td><td>${t.ok ? "✓ gelöst" : "✗ offen"}</td><td>${t.err}</td></tr>`).join("")}</table>`;
   }});
 }
 // Die Startkarten beschreiben je nach Stufe, wie gespielt wird – Ermittler verrät den Ablauf nicht.
@@ -1366,7 +1432,7 @@ const START_CARDS = {
     ["PUNKTE","Sorgfalt vor Tempo","+250 pro gelöster Prüfung, −20 pro Fehlversuch, Spielhinweise −25 oder −50. Restzeit bringt höchstens 100 Punkte."]],
   ermittler:[["DIE LAGE","Rekonstruiert Webers Ermittlung","Ein fremder Arbeitsplatz, halbfertige Notizen, mehrere Programme. Was davon wichtig ist, müsst ihr selbst herausfinden."],
     ["EURE ARBEITSWEISE","Erkenntnisse verbinden","Keine Schrittanzeige, kein automatisches Protokoll. Haltet fest, was ihr findet, und führt die Spuren selbst zusammen."],
-    ["PUNKTE","Sorgfalt vor Tempo","+250 pro gelöster Prüfung, −20 pro Fehlversuch, Spielhinweise −35 oder −70. Restzeit bringt höchstens 100 Punkte."]]};
+    ["ZEIT IST EURE RESSOURCE","Hilfe kostet Zeit","Es gibt keine Punkte. Kommt ihr nicht weiter, fragt ihr Kolleginnen und Kollegen per Mail um Rat – jede Anfrage kostet 3 Minuten. Am Ende steht ein Ermittlungsbericht."]]};
 function renderStartCards(){
   const mode = (document.querySelector("input[name=mode]:checked") || {}).value || "azubi";
   START_CARDS[mode].forEach(([n,h,t], i) => { $("c"+(i+1)+"n").textContent = n; $("c"+(i+1)+"h").textContent = h; $("c"+(i+1)+"p").textContent = t; });
@@ -1392,6 +1458,12 @@ if (saved){
 }
 $("copyBtn").addEventListener("click", async () => {
   const r = window.phantomeResult; if (!r) return;
+  if (r.report){
+    const txt = `Projekt Phantome – Ermittlungsbericht\nTeam: ${r.team}\nStufe: Ermittler\n\n${r.report.map(([k, v]) => k + ": " + v).join("\n")}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.`;
+    try { await navigator.clipboard.writeText(txt); $("copyFeedback").textContent = "Bericht wurde in die Zwischenablage kopiert."; }
+    catch(e){ $("copyFeedback").textContent = txt; }
+    $("copyFeedback").classList.remove("hidden"); return;
+  }
   const txt = `Projekt Phantome – Ergebnis\nTeam: ${r.team}\nStufe: ${r.mode === "ermittler" ? "Ermittler" : "Azubi"}\nPunkte: ${r.score}\nKernaufgaben gelöst: ${r.completed}/4 (Embargo, Geldwäsche, Betrug, Zahlungsstopp)\nInterner Täter: ${r.insider ? "gemeldet" : "nicht gemeldet"}\nFehlversuche: ${r.mistakes}\nHinweise: ${r.hints}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.\nZeit abgelaufen: ${r.timeout ? "Ja" : "Nein"}\n\nNach Thema:\n${r.topics.map(t => `${t.ok ? "✓" : "✗"} ${t.name} (Fehlversuche: ${t.err})`).join("\n")}`;
   try { await navigator.clipboard.writeText(txt); $("copyFeedback").textContent = "Ergebnis wurde in die Zwischenablage kopiert."; }
   catch(e){ $("copyFeedback").textContent = txt; }
