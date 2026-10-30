@@ -326,7 +326,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.2</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.3</footer>
 </div>
 
 <script>
@@ -674,6 +674,7 @@ function openApp(id){
 }
 function focusWin(id){
   const w = WIN[id]; if (!w) return;
+  if (w.el.classList.contains("focus") && !w.min && w.el.style.zIndex == zTop){ if (id === "mail" && (S.v.newMail || S.unread.mail)){ S.v.newMail = false; S.unread.mail = 0; renderIcons(); } return; }
   Object.values(WIN).forEach(o => o.el.classList.remove("focus"));
   w.min = false; w.el.classList.remove("hidden"); w.el.classList.add("focus"); w.el.style.zIndex = ++zTop; renderTasks();
   if (id === "mail" && (S.v.newMail || S.unread.mail)){ S.v.newMail = false; S.unread.mail = 0; renderIcons(); }
@@ -713,13 +714,17 @@ const on = (root, sel, ev, fn) => root.querySelectorAll(sel).forEach(el => el.ad
 // beim Loslassen aus und verwerfen den Klick, den der Browser eventuell noch hinterherschickt.
 (() => {
   const TAP = "button,label,summary,a,tr.click,input[type=radio],input[type=checkbox]";
+  const TYPE = "input:not([type=radio]):not([type=checkbox]),textarea,select";
   let down = null, ghost = null;
   addEventListener("pointerdown", e => {
-    down = e.pointerType === "mouse" ? null : {el: e.target.closest(TAP), x:e.clientX, y:e.clientY}; }, true);
+    down = e.pointerType === "mouse" ? null : {el: e.target.closest(TAP), field: e.target.closest(TYPE), x:e.clientX, y:e.clientY}; }, true);
   addEventListener("pointermove", e => { if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) > 12) down = null; }, true);
   addEventListener("pointercancel", () => { down = null; }, true);
   addEventListener("pointerup", e => {
-    const d = down; down = null; if (!d || !d.el || !d.el.isConnected || d.el.disabled) return;
+    const d = down; down = null; if (!d) return;
+    // Eingabefelder: Fokus selbst setzen, damit Safari die Bildschirmtastatur öffnet.
+    if (d.field && d.field.isConnected && !d.field.disabled){ if (document.activeElement !== d.field) d.field.focus(); return; }
+    if (!d.el || !d.el.isConnected || d.el.disabled) return;
     ghost = {x:e.clientX, y:e.clientY, t:Date.now()};
     if (d.el.matches("input,label")) e.preventDefault();
     d.el.click();
