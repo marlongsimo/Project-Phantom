@@ -316,7 +316,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.5</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.6</footer>
 </div>
 
 <script>
@@ -444,8 +444,8 @@ function hintFor(){
     "Nicht jede Auffälligkeit ist Betrug. Fragt bei jeder Zahlung: Ist die Abweichung erklärt – oder nicht?",
     "Sucht in den Kontoumsätzen nach früheren Zahlungen an denselben Empfänger: Stimmen Name und IBAN überein? Alles belegt oder erklärt → weiterbearbeiten. Abweichung ohne Erklärung → klären. Unbestätigte Kontoänderung plus weitere Warnsignale → nicht ausführen und eskalieren."]};
   if (!S.notes.n4) return {key:"n4", steps:[
-    "Übersetzt eure vier FraudDesk-Entscheidungen in Ziffern.",
-    "Weiterbearbeiten = 1, Klären = 2, Nicht ausführen = 0 – für Überweisung 1 bis 4 hintereinander."]};
+    "Schaut in den Kennworthinweis der Notiz: Gesucht ist ein Betrag aus dem FraudDesk.",
+    "Nehmt die Zahlung, die ihr nicht ausgeführt und eskaliert habt, und gebt die ersten drei Ziffern ihres Betrags ein."]};
   return {key:"stop", steps:[
     "Weber verrät in seiner letzten Notiz, woraus der Code besteht – es geht um eure drei Prüfungen.",
     "Fehlalarme im EmbargoCheck, Anzahl der Muster-Buchungen, Nummer der nicht ausgeführten Überweisung. Als Grund trägt der Sanktionstreffer; die Nova-Trade-Verbindung könnt ihr ergänzend dokumentieren."]};
@@ -610,7 +610,7 @@ function solved(app, key, nextNote, narr, msg){
 const NOTE_LOCKS = {
   n2:{gate:"embargo", code:"1dp01qu7ixb", pwHint:"Die Kennung des Listeneintrags, der wirklich zum Empfänger von PHANTOME gehört. Vergleicht dafür die Identitätsmerkmale – eingeben nur die vier Ziffern, ohne „SAN-“."},
   n3:{gate:"aml", code:"2135pxw35o8", pwHint:"Wohin ist das Geld geflossen – und wie viel war es insgesamt? Zählt nur die Weiterleitungen, nicht die Einzahlungen. Betrag in Euro, ohne Cent und ohne Punkt."},
-  n4:{gate:"fraud", code:"1fnric9x17x", pwHint:"Eure vier FraudDesk-Entscheidungen der Reihe nach als Ziffern: Weiterbearbeiten = 1, Klären = 2, Nicht ausführen = 0. Die Ziffern aneinanderreihen, nicht addieren."}};
+  n4:{gate:"fraud", code:"131g06wtogr", pwHint:"Die Zahlung, die auf keinen Fall ausgeführt werden darf: die ersten drei Ziffern ihres Betrags."}};
 const NOTES_AZUBI = {
   n1:{title:"14:52 · Northbridge", text:`Falls ich nicht zurück bin – das hier ist für euch.
 
