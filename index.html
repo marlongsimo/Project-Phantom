@@ -8,7 +8,7 @@
 <style>
 :root{--bg:#181316;--panel:#221a1d;--panel2:#2b2125;--line:#43343a;--text:#f4eeeb;--muted:#bba9a8;--cyan:#e27a88;--amber:#ffca70;--red:#ff6b78;--green:#7ee0a3;--paper:#fbf8f0;--ink:#1d2533;--os:#a82538}
 *{box-sizing:border-box}
-html{background:var(--bg)}
+html{background:var(--bg);touch-action:manipulation}
 body{margin:0;background:radial-gradient(ellipse at 15% 0%,#3a1d25 0,transparent 45%),var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
 button,input{font:inherit}
 button{cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:10px 15px;color:var(--text);background:#2e2226;font-weight:650}
@@ -320,7 +320,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.11</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.12</footer>
 </div>
 
 <script>
@@ -596,6 +596,7 @@ function toggleStart(force){
   m.classList.toggle("hidden", !show);
 }
 $("startBtnOs").addEventListener("click", e => { e.stopPropagation(); toggleStart(); });
+$("screen").addEventListener("contextmenu", e => { if (!e.target.closest("input,textarea")) e.preventDefault(); });
 $("screen").addEventListener("pointerdown", e => { if (!e.target.closest("#startmenu,#startBtnOs")) toggleStart(false); });
 $("showDesk").addEventListener("click", () => Object.keys(WIN).forEach(minimize));
 function openApp(id){
@@ -639,7 +640,13 @@ function makeDraggable(w){
   });
 }
 const RENDER = {};
-function render(id){ if (WIN[id]) RENDER[id](WIN[id].body); }
+function render(id){
+  if (!WIN[id]) return;
+  // Die Listenspalte behält ihre Scrollposition, sonst springt sie bei jeder Auswahl nach oben.
+  const old = WIN[id].body.querySelector(".split .list"), top = old ? old.scrollTop : 0;
+  RENDER[id](WIN[id].body);
+  const nl = WIN[id].body.querySelector(".split .list"); if (nl) nl.scrollTop = top;
+}
 function fb(id, text, kind = ""){ const w = WIN[id]; if (!w) return; w.fb.className = "wfb " + kind; w.fb.textContent = text; }
 const pts = t => S.mode === "ermittler" ? "" : t;
 function wrong(id, msg){ S.err[id] = (S.err[id] || 0) + 1; S.mistakes++; S.score = Math.max(0, S.score - 20); fb(id, msg + pts(" (−20 Punkte)"), "bad"); updateHud(); }
@@ -649,7 +656,12 @@ function notify(title, text, app){
   n.onclick = () => { n.classList.add("hidden"); if (app) openApp(app); };
   n.classList.remove("hidden"); clearTimeout(notifTimer); notifTimer = setTimeout(() => n.classList.add("hidden"), 8000);
 }
-const on = (root, sel, ev, fn) => root.querySelectorAll(sel).forEach(el => el.addEventListener(ev, fn));
+// Touchscreens (v. a. Windows) lösen bei etwas längerem Antippen statt "click" einen Rechtsklick aus.
+// Listeneinträge reagieren deshalb zusätzlich auf das Loslassen des Fingers – die Auswahl ist idempotent.
+const on = (root, sel, ev, fn) => root.querySelectorAll(sel).forEach(el => {
+  el.addEventListener(ev, fn);
+  if (ev === "click" && el.classList.contains("li")) el.addEventListener("pointerup", e => { if (e.pointerType !== "mouse") fn(e); });
+});
 function vorgangBox(key, next){
   return `<div class="vorgang"><div><div class="mini muted">Vorgangsnummer</div><b>${VORGANG[key]}</b></div><div class="mini">Prüfung abgeschlossen und dokumentiert.${S.mode === "ermittler" ? "" : `<br>Weiter geht es mit Webers nächster Notiz.`}</div></div>`;
 }
