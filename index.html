@@ -133,6 +133,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .wtitle .wb button{width:42px;height:36px;border:0;border-radius:0;background:transparent;color:#1d2533;padding:0;font-weight:400}
 .wtitle .wb button:hover{background:rgba(0,0,0,.08)}
 .wtitle .wb button.x:hover{background:#e81123;color:#fff}
+@media(pointer:coarse){.wtitle{height:42px}.wtitle .wb button{width:50px;height:42px;font-size:1.05rem}.tabs button{padding:11px 16px!important}}
 .wbody{flex:1;overflow:auto;padding:14px 16px;min-height:0}
 .wbody.flush{padding:0;display:flex}
 .wfb{flex:none;margin:0;padding:10px 14px;border-top:1px solid #dccdcb;background:#f1e9e7;font-size:.9rem}
@@ -325,7 +326,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.0</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.1</footer>
 </div>
 
 <script>
@@ -706,12 +707,22 @@ function notify(title, text, app){
   n.onclick = () => { n.classList.add("hidden"); if (app) openApp(app); };
   n.classList.remove("hidden"); clearTimeout(notifTimer); notifTimer = setTimeout(() => n.classList.add("hidden"), 8000);
 }
-// Touchscreens (v. a. Windows) lösen bei etwas längerem Antippen statt "click" einen Rechtsklick aus.
-// Listeneinträge reagieren deshalb zusätzlich auf das Loslassen des Fingers – die Auswahl ist idempotent.
-const on = (root, sel, ev, fn) => root.querySelectorAll(sel).forEach(el => {
-  el.addEventListener(ev, fn);
-  if (ev === "click" && el.classList.contains("li")) el.addEventListener("pointerup", e => { if (e.pointerType !== "mouse") fn(e); });
-});
+const on = (root, sel, ev, fn) => root.querySelectorAll(sel).forEach(el => el.addEventListener(ev, fn));
+// Touchscreens (v. a. Windows) machen aus etwas längerem Antippen einen Rechtsklick – dann kommt kein "click".
+// Für alle Bedienelemente wird der Klick in diesem Fall nachgereicht; ein doch noch folgender Klick wird verworfen.
+(() => {
+  const TAP = "button,label,summary,a,tr.click,input[type=radio],input[type=checkbox]";
+  let down = null, longPress = false, fired = null;
+  const fire = () => { const el = down && down.el; down = null; longPress = false;
+    if (!el || !el.isConnected || el.disabled) return; fired = {el, t:Date.now()}; el.click(); };
+  addEventListener("pointerdown", e => { longPress = false;
+    down = e.pointerType === "mouse" ? null : {el: e.target.closest(TAP), x:e.clientX, y:e.clientY, up:false}; }, true);
+  addEventListener("pointermove", e => { if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) > 12) down.el = null; }, true);
+  addEventListener("contextmenu", e => { if (!down) return; e.preventDefault(); longPress = true; if (down.up) fire(); }, true);
+  addEventListener("pointerup", e => { if (!down) return; down.up = true; if (longPress) fire(); else setTimeout(() => { if (down && down.up && !longPress) down = null; }, 600); }, true);
+  addEventListener("click", e => { if (fired && Date.now() - fired.t < 700 && e.isTrusted && fired.el.contains(e.target)){ e.preventDefault(); e.stopPropagation(); fired = null; }
+    else if (down && e.isTrusted) down = null; }, true);
+})();
 function vorgangBox(key, next){
   return `<div class="vorgang"><div><div class="mini muted">Vorgangsnummer</div><b>${VORGANG[key]}</b></div><div class="mini">Prüfung abgeschlossen und dokumentiert.${S.mode === "ermittler" ? "" : `<br>Weiter geht es mit Webers nächster Notiz.`}</div></div>`;
 }
