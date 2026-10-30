@@ -238,9 +238,9 @@ h3{font-size:1.05rem;margin-bottom:6px}
     <h1>Weber ist weg.<br>Sein PC ist noch an.</h1>
     <div id="resumeBox" class="notice hidden"></div>
     <p class="muted" style="max-width:680px;font-size:1.08rem">Freitag, 15:40 Uhr. Senior-Analyst Matthias Weber war an etwas Großem dran – dann ist er verschwunden. Um 16:30 Uhr startet der Buchungslauf, und mit ihm eine Zahlung über 3,8 Millionen Euro an eine Firma, die auf einer Sanktionsliste stehen könnte. Folgt Webers Notizen und stoppt die Zahlung rechtzeitig.</p>
-    <div class="modes" role="radiogroup" aria-label="Schwierigkeitsstufe">
-      <label class="mode"><input type="radio" name="mode" value="azubi" checked><b>Azubi</b><small>Webers Notizen führen Schritt für Schritt. Die Seitenleiste zeigt den nächsten Schritt und euren Fortschritt.</small></label>
-      <label class="mode"><input type="radio" name="mode" value="ermittler"><b>Ermittler</b><small>Webers Notizen sind persönliche Beobachtungen. Keine Schrittanzeige, kein automatisches Protokoll – führt euer eigenes Journal. Hinweise kosten mehr.</small></label>
+    <div class="modes hidden" id="modeSelect" role="radiogroup" aria-label="Schwierigkeitsstufe">
+      <label class="mode"><input type="radio" name="mode" value="azubi"><b>Azubi</b><small>Webers Notizen führen Schritt für Schritt. Die Seitenleiste zeigt den nächsten Schritt und euren Fortschritt.</small></label>
+      <label class="mode"><input type="radio" name="mode" value="ermittler" checked><b>Ermittler</b><small>Webers Notizen sind persönliche Beobachtungen. Keine Schrittanzeige, kein automatisches Protokoll – führt euer eigenes Journal. Hilfe kostet Zeit statt Punkte.</small></label>
     </div>
     <div class="field" style="max-width:460px">
       <input id="teamName" maxlength="40" placeholder="Teamname eingeben" aria-label="Teamname">
@@ -316,7 +316,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.8</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.9</footer>
 </div>
 
 <script>
@@ -1336,7 +1336,7 @@ function phaseTwo(){
 /* ---------- Ablauf ---------- */
 function start(){
   clearSave();
-  S.mode = (document.querySelector("input[name=mode]:checked") || {}).value || "azubi";
+  S.mode = (document.querySelector("input[name=mode]:checked") || {}).value || "ermittler";
   S.team = $("teamName").value.trim() || "Phantome";
   cutscene({eyebrow:"Prolog", title:"Freitag, 15:40 Uhr",
     lines:["Financial Crime Unit, vierte Etage. Ihr seid das Abendteam und kommt zur Übergabe in das Büro von Senior-Analyst Matthias Weber.",
@@ -1434,9 +1434,12 @@ const START_CARDS = {
     ["EURE ARBEITSWEISE","Erkenntnisse verbinden","Keine Schrittanzeige, kein automatisches Protokoll. Haltet fest, was ihr findet, und führt die Spuren selbst zusammen."],
     ["ZEIT IST EURE RESSOURCE","Hilfe kostet Zeit","Es gibt keine Punkte. Kommt ihr nicht weiter, fragt ihr Kolleginnen und Kollegen per Mail um Rat – jede Anfrage kostet 3 Minuten. Am Ende steht ein Ermittlungsbericht."]]};
 function renderStartCards(){
-  const mode = (document.querySelector("input[name=mode]:checked") || {}).value || "azubi";
+  const mode = (document.querySelector("input[name=mode]:checked") || {}).value || "ermittler";
   START_CARDS[mode].forEach(([n,h,t], i) => { $("c"+(i+1)+"n").textContent = n; $("c"+(i+1)+"h").textContent = h; $("c"+(i+1)+"p").textContent = t; });
 }
+// Der Azubi-Modus ist derzeit abgeschaltet; zum Reaktivieren AZUBI_AKTIV auf true setzen – dann erscheint die Stufenwahl wieder.
+const AZUBI_AKTIV = false;
+if (AZUBI_AKTIV) $("modeSelect").classList.remove("hidden");
 document.querySelectorAll("input[name=mode]").forEach(r => r.addEventListener("change", renderStartCards));
 renderStartCards();
 $("startBtn").addEventListener("click", start);
