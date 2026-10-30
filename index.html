@@ -320,7 +320,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.13</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.14</footer>
 </div>
 
 <script>
@@ -1264,6 +1264,12 @@ const ZV_REASONS = [
   ["aml", "Hinweise auf Geldwäsche: Gelder über Nova Trade an dieselbe Adresse", true],
   ["amount", "Betrag über 1 Mio. €", false],
   ["abroad", "Empfänger sitzt im Ausland", false]];
+// Ermittler: freier Vermerk statt Ankreuzliste – kein Abgleich, sondern eine Musterbegründung zum Vergleich.
+const ZV_MODEL = `<div class="doc" style="margin:10px 0"><b>Musterbegründung zum Vergleich</b>
+  <p style="margin:6px 0"><b>Tragender Grund:</b> Der Empfänger Northbridge S.A. stimmt in Name, Adresse, Land und Registernummer mit dem Listeneintrag SAN-4417 überein – ein bestätigter Sanktionstreffer. Die Zahlung darf nicht ausgeführt werden.</p>
+  <p style="margin:6px 0"><b>Ergänzend:</b> Die Bareinzahlungen von Jonas K. wurden jeweils am selben Tag an Nova Trade Ltd. weitergeleitet – an dieselbe Adresse wie Northbridge. Das deutet auf ein Netzwerk hin und gehört in die Geldwäscheprüfung.</p>
+  <p style="margin:6px 0"><b>Für sich allein kein Stoppgrund:</b> der hohe Betrag, der Auslandsbezug, das Land Panama.</p>
+  <p class="mini muted" style="margin:6px 0 0">Vergleicht euren Vermerk: Habt ihr den tragenden Grund genannt – und ihn mit euren Prüfergebnissen belegt?</p></div>`;
 const ZV_DEC = [
   ["ok","Fall an Compliance bzw. den Geldwäschebeauftragten eskalieren. Die angebliche Vorstandsanweisung über die bekannte Durchwahl -1200 prüfen."],
   ["release","Stopp am Montag wieder aufheben – die Anweisung kommt schließlich vom Vorstand.", "Eine ungeprüfte „Vorstandsanweisung“ ersetzt keine Prüfung. Genau darauf setzen die Täter."],
@@ -1293,15 +1299,17 @@ RENDER.zv = b => {
     <tr><th>Sanktionsscreening</th><td>${S.f.embargo ? `<span class="tag no">Treffer bestätigt</span>` : `<span class="tag warn">mögliche Treffer – manuelle Prüfung offen</span>`}</td></tr>
     <tr><th>1. Freigabe</th><td>heute 15:12 · Sammelkennung <span class="mono">zv.batch07</span> · Arbeitsplatz <span class="mono">PC-ZV-114</span></td></tr>
     <tr><th>Ausführung</th><td>automatisch im Buchungslauf 16:30 · fallverantwortlich: m.weber</td></tr></table></div>
-    ${S.f.stopped ? `<p><span class="tag no">COMPLIANCE-STOPP · ESKALIERT</span></p>` : S.f.code ? `<p><span class="tag ok">Compliance-Stopp eingetragen</span> Wie geht es jetzt weiter?</p>${ZV_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="zvdec" value="${v}"><span>${t}</span></label>`).join("")}<div class="row"><button class="primary" id="zvDecBtn">Bestätigen</button></div>` :
+    ${S.f.stopped ? `<p><span class="tag no">COMPLIANCE-STOPP · ESKALIERT</span></p>` : S.f.code ? `<p><span class="tag ok">Compliance-Stopp eingetragen</span></p>${S.mode === "ermittler" && S.v.stopNote ? `<div class="doc" style="margin:10px 0"><b>Euer Vermerk</b><p style="margin:6px 0 0;white-space:pre-wrap">${esc(S.v.stopNote)}</p></div>${ZV_MODEL}` : ""}<p>Wie geht es jetzt weiter?</p>${ZV_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="zvdec" value="${v}"><span>${t}</span></label>`).join("")}<div class="row"><button class="primary" id="zvDecBtn">Bestätigen</button></div>` :
     `<div class="row"><button id="zvRelease">Jetzt freigeben</button><button id="zvOpenStop" class="primary">Compliance-Stopp setzen …</button></div>
     <div id="zvForm" class="${S.v.zvForm ? "" : "hidden"}" style="margin-top:12px">
       ${canStop ? "" : `<p class="tag warn">Ihr braucht Webers Freigabecode.</p>`}
       <p style="margin:10px 0 4px"><b>1. Freigabecode</b> von m.weber (3 Ziffern)</p>
       <input id="zvCode" inputmode="numeric" maxlength="3" placeholder="_ _ _" aria-label="Freigabecode" class="mono" style="max-width:140px;font-size:1.15rem;letter-spacing:.3em">
       <details class="pwhint" style="margin-top:8px"><summary>💡 Kennworthinweis anzeigen</summary><p>Drei Prüfungen, drei Ziffern – in dieser Reihenfolge: Zählt die Fehlalarme im EmbargoCheck, zählt die Buchungen des erkannten Musters im AML-Monitor und nehmt die Position der Zahlung, die ihr im FraudDesk nicht ausgeführt habt.</p></details>
-      <p style="margin:12px 0 4px"><b>2. Begründung</b> – den tragenden Grund und ergänzende Befunde ankreuzen, aber nur Belegbares</p>
-      ${ZV_REASONS.map(([v,t]) => `<label class="choice"><input type="checkbox" name="zvr" value="${v}"><span>${t}</span></label>`).join("")}
+      ${S.mode === "ermittler" ? `<p style="margin:12px 0 4px"><b>2. Begründung des Compliance-Stopps</b> (Vermerk)</p>
+      <textarea id="zvNote" rows="4" maxlength="800" style="width:100%" placeholder="Warum darf PHANTOME nicht ausgeführt werden? Nennt den tragenden Grund und womit ihr ihn belegt."></textarea>` :
+      `<p style="margin:12px 0 4px"><b>2. Begründung</b> – den tragenden Grund und ergänzende Befunde ankreuzen, aber nur Belegbares</p>
+      ${ZV_REASONS.map(([v,t]) => `<label class="choice"><input type="checkbox" name="zvr" value="${v}"><span>${t}</span></label>`).join("")}`}
       <div class="row"><button class="primary" id="zvStop">Stopp eintragen</button></div></div>`}`;
   if ($("zvRelease")) $("zvRelease").addEventListener("click", () => wrong("zv", "Mit offenem Compliance-Vermerk darf die Zahlung nicht freigegeben werden."));
   if ($("zvOpenStop")) $("zvOpenStop").addEventListener("click", () => { S.v.zvForm = true; $("zvForm").classList.remove("hidden"); $("zvForm").scrollIntoView({block:"nearest"}); });
@@ -1309,6 +1317,12 @@ RENDER.zv = b => {
     const c = $("zvCode").value.replace(/\D/g, "");
     const rs = [...b.querySelectorAll("input[name=zvr]:checked")].map(x => x.value);
     if (hash(c) !== CODE_H) return wrong("zv", "Freigabecode ungültig.");
+    if (S.mode === "ermittler"){
+      const note = $("zvNote").value.trim();
+      if (note.length < 20) return fb("zv", "Ein Stopp braucht einen Vermerk: Schreibt kurz auf, warum die Zahlung nicht ausgeführt werden darf.");
+      S.f.code = true; S.v.stopNote = note; narrate("ZV-Cockpit: Compliance-Stopp für PHANTOME eingetragen – mit Vermerk des Teams.");
+      fb("zv", "Stopp eingetragen. Vergleicht euren Vermerk mit der Musterbegründung.", "good"); updateHud(); render("zv"); return;
+    }
     if (!rs.length) return fb("zv", "Kreuzt mindestens einen Grund an.");
     const okR = ZV_REASONS.filter(r => r[2]).map(r => r[0]);
     if (rs.some(r => !okR.includes(r))) return wrong("zv", "Ein hoher Betrag oder ein Auslandsbezug allein sind kein Stoppgrund. Nennt nur, was ihr in den Prüfungen belegt habt.");
@@ -1390,7 +1404,7 @@ const topicResults = () => TOPICS.map(([name, id, ok]) => ({name, ok:!!ok(), err
 function report(mins){
   const chk = (ok, id) => (ok ? "✓ abgeschlossen" : "✗ offen") + " · " + (S.err[id] || 0) + " Fehlentscheidung" + ((S.err[id] || 0) === 1 ? "" : "en");
   return [["PHANTOME gestoppt", S.f.stopped ? "✓ Ja" : "✗ Nein"],
-    ["Begründung des Stopps", !S.f.code ? "–" : S.v.stopFull ? "Sanktionstreffer, ergänzend Geldflüsse über Nova Trade" : "Sanktionstreffer (ohne ergänzenden Befund)"],
+    ["Vermerk zum Stopp", S.v.stopNote ? "„" + S.v.stopNote + "“" : "–"],
     ["Sanktionsprüfung", chk(S.f.embargo, "embargo")],
     ["Geldwäscheprüfung (vier Alerts)", chk(S.f.aml, "aml")],
     ["Vier zurückgehaltene Zahlungen", chk(S.f.fraud, "fraud")],
@@ -1445,7 +1459,7 @@ function finish(timeout){
     $("finalScore").classList.toggle("hidden", erm);
     if (erm) $("finalStats").textContent = `Stufe Ermittler · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min. Spielzeit`;
     $("finalTopics").innerHTML = erm
-      ? `<h2 style="margin-top:20px">Ermittlungsbericht</h2><table class="ftable"><tr><th>Kriterium</th><th>Ergebnis</th></tr>${rep.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("")}</table>`
+      ? `<h2 style="margin-top:20px">Ermittlungsbericht</h2><table class="ftable"><tr><th>Kriterium</th><th>Ergebnis</th></tr>${rep.map(([k, v]) => `<tr><td>${k}</td><td style="white-space:pre-wrap">${esc(v)}</td></tr>`).join("")}</table>`
       : `<table class="ftable"><tr><th>Thema</th><th>Ergebnis</th><th>Fehlversuche</th></tr>${topicResults().map(t => `<tr><td>${t.name}</td><td>${t.ok ? "✓ gelöst" : "✗ offen"}</td><td>${t.err}</td></tr>`).join("")}</table>`;
   }});
 }
