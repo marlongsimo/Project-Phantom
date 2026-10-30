@@ -108,7 +108,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .win textarea{width:100%;padding:8px 10px;border:1px solid #d2c0bf;border-radius:6px;background:#fff;color:#1d2533;font:inherit;resize:vertical}
 .win select{max-width:100%}
 @media(max-width:700px){.modes{grid-template-columns:1fr}}
-.pwhint{margin:0 0 12px;text-align:left;font-size:.86rem}.pwhint summary{cursor:pointer;color:#a82538;font-weight:600}.pwhint p{margin:6px 0 0;padding:8px 10px;background:#fff;border:1px solid #e0d3d1;border-radius:6px}
+.pwhint{margin:0 0 12px;text-align:left;font-size:.9rem}.pwhint summary{cursor:pointer;color:#a82538;font-weight:700;display:inline-block;padding:6px 12px;border:1px solid #e3c2c7;border-radius:6px;background:#fff}.pwhint summary:hover{background:#f8e9eb}.pwhint p{margin:6px 0 0;padding:8px 10px;background:#fff;border:1px solid #e0d3d1;border-radius:6px}
 .badge.new{background:#ffca70;color:#3a2f00}
 .badge{position:absolute;top:-5px;right:-12px;background:#e81123;color:#fff;border-radius:9px;font-size:.66rem;font-weight:700;padding:1px 5px;text-shadow:none}
 .taskbar{position:absolute;left:0;right:0;bottom:0;height:46px;background:rgba(24,16,19,.95);display:flex;align-items:center;gap:3px;padding:0 6px;color:#fff;z-index:900;overflow:hidden}
@@ -215,7 +215,6 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .steps li.cur{color:var(--text);font-weight:700}
 .steps li.more{list-style:none;color:var(--muted);font-style:italic}
 .steps .code{font-family:ui-monospace,Consolas,monospace;color:var(--amber);font-weight:700;margin-left:4px}
-.riddle{background:#fff6c9;border:1px dashed #c9a400;border-radius:8px;padding:10px 12px;margin:0 auto 12px;font-size:1rem;color:#3a2f00;text-align:left}
 .vorgang{display:flex;gap:16px;align-items:center;margin-top:12px;padding:12px 14px;border:2px dashed #a82538;border-radius:10px;background:#f8e9eb}
 .vorgang b{font-family:ui-monospace,Consolas,monospace;font-size:1.9rem;letter-spacing:.12em;color:#6e1d2b}
 .tabs{display:flex;gap:4px;border-bottom:2px solid #e0d3d1;margin:10px 0 12px}
@@ -317,7 +316,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.3</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.4</footer>
 </div>
 
 <script>
@@ -427,7 +426,7 @@ function hintFor(){
     "Ein ähnlicher Name ist noch kein Treffer. Vergleicht jeden Eintrag Merkmal für Merkmal mit dem Empfänger.",
     "Sucht nach „Northbridge“ und öffnet alle fünf Einträge. Alles stimmt überein → echter Treffer. Registernummer, Adresse und Land widersprechen → Fehlalarm. Merkmale fehlen → nicht eindeutig. Danach: Zahlung nicht ausführen und eskalieren."]};
   if (!S.notes.n2) return {key:"n2", steps:[
-    "Die Antwort steht im EmbargoCheck – beim Eintrag, den ihr als echten Treffer bewertet habt.",
+    "Schaut in den Kennworthinweis der Notiz – die Antwort steht im EmbargoCheck, beim Eintrag, den ihr als echten Treffer bewertet habt.",
     "Gebt die vier Ziffern der Listen-ID des echten Treffers ein, ohne „SAN-“."]};
   if (!S.f.aml && !S.v.amlSus) return {key:"aml0", steps:[
     "Vergleicht bei jedem Alert die Umsätze mit dem Kundenprofil. Ist die Auffälligkeit erklärt – oder nicht?",
@@ -609,9 +608,9 @@ function solved(app, key, nextNote, narr, msg){
 /* ---------- Notizen ---------- */
 // Gleiche Schlösser in beiden Stufen – nur der Ton unterscheidet sich: Azubi führt, Ermittler deutet an.
 const NOTE_LOCKS = {
-  n2:{gate:"embargo", code:"1dp01qu7ixb", riddle:"Die vierstellige Nummer des Listeneintrags, der wirklich zum Empfänger von PHANTOME gehört.", pwHint:"Vergleicht die Identitätsmerkmale des Zahlungsempfängers mit den Listendatensätzen. Der passende Eintrag enthält die gesuchte Kennung – nur die vier Ziffern, ohne „SAN-“."},
-  n3:{gate:"aml", code:"2135pxw35o8", riddle:"Wie viel Geld hat Jonas K. insgesamt an Nova Trade überwiesen? Betrag in Euro – ohne Cent und ohne Punkt.", pwHint:"Nicht die Bareinzahlungen sind gefragt, sondern die wiederkehrenden Abgänge an denselben Empfänger. Zusammenzählen und ohne Cent und Punkt eingeben."},
-  n4:{gate:"fraud", code:"1fnric9x17x", riddle:"Übersetzt eure vier FraudDesk-Entscheidungen der Reihe nach in Ziffern: Weiterbearbeiten = 1, Klären = 2, Nicht ausführen = 0.", pwHint:"Die Reihenfolge der vier Überweisungen ist entscheidend. Jede Entscheidung steht für eine Ziffer. Die Ziffern werden aneinandergereiht, nicht addiert."}};
+  n2:{gate:"embargo", code:"1dp01qu7ixb", pwHint:"Die Kennung des Listeneintrags, der wirklich zum Empfänger von PHANTOME gehört. Vergleicht dafür die Identitätsmerkmale – eingeben nur die vier Ziffern, ohne „SAN-“."},
+  n3:{gate:"aml", code:"2135pxw35o8", pwHint:"Wie viel Geld hat Jonas K. insgesamt an Nova Trade überwiesen? Nicht die Bareinzahlungen, sondern die Abgänge an Nova Trade zusammenzählen – ohne Cent und ohne Punkt eingeben."},
+  n4:{gate:"fraud", code:"1fnric9x17x", pwHint:"Eure vier FraudDesk-Entscheidungen der Reihe nach als Ziffern: Weiterbearbeiten = 1, Klären = 2, Nicht ausführen = 0. Die Ziffern aneinanderreihen, nicht addieren."}};
 const NOTES_AZUBI = {
   n1:{title:"14:52 · Northbridge", text:`Falls ich nicht zurück bin – das hier ist für euch.
 
@@ -683,9 +682,9 @@ RENDER.notes = b => {
   const NOTES = notesFor(), id = S.v.note, n = NOTES[id], open = S.notes[id];
   b.innerHTML = `<div class="split"><div class="list">${Object.entries(NOTES).map(([k,x]) => `<button class="li ${k === id ? "sel" : ""}" data-k="${k}">${S.notes[k] ? "📄" : "🔒"} ${x.title}<small>${S.notes[k] ? "geöffnet" : S.f[x.gate] ? "gesperrt · Passwort eingeben" : "gesperrt"}</small></button>`).join("")}</div>
     <div class="pane notesbg">${open ? `<p class="mini muted" style="margin:0">Persönliches Journal · Freitag, 30. Oktober 2026</p><h3>${n.title}</h3><div class="notetext"></div>` :
-    !S.f[n.gate] ? `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini" style="margin-bottom:4px">Diese Notiz ist gesperrt. Webers Rätsel:</p><div class="riddle hand">${n.riddle}</div><details class="pwhint"><summary>Kennworthinweis anzeigen</summary><p>${n.pwHint}</p></details>
+    !S.f[n.gate] ? `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini" style="margin-bottom:10px">Dieser Eintrag ist passwortgeschützt.</p><details class="pwhint"><summary>💡 Kennworthinweis anzeigen</summary><p>${n.pwHint}</p></details>
       <p class="mini muted">Das Passwort könnt ihr eingeben, sobald ihr die Prüfung im <b>${APPS[n.gate].label}</b> abgeschlossen habt.</p></div>` :
-    `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini" style="margin-bottom:4px">Diese Notiz ist gesperrt. Webers Rätsel:</p><div class="riddle hand">${n.riddle}</div><details class="pwhint"><summary>Kennworthinweis anzeigen</summary><p>${n.pwHint}</p></details>
+    `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini" style="margin-bottom:10px">Dieser Eintrag ist passwortgeschützt.</p><details class="pwhint"><summary>💡 Kennworthinweis anzeigen</summary><p>${n.pwHint}</p></details>
       <div class="row"><input id="noteCode" inputmode="numeric" maxlength="6" placeholder="Code" aria-label="Code" class="mono" style="letter-spacing:.25em"><button class="primary" id="noteBtn">Öffnen</button></div></div>`}</div></div>`;
   if (open) b.querySelector(".notetext").textContent = n.text;
   on(b, ".li", "click", e => { S.v.note = e.currentTarget.dataset.k; render("notes"); });
@@ -1228,7 +1227,7 @@ RENDER.zv = b => {
       ${canStop ? "" : `<p class="tag warn">Ihr braucht Webers Freigabecode.</p>`}
       <p style="margin:10px 0 4px"><b>1. Freigabecode</b> von m.weber (3 Ziffern)</p>
       <input id="zvCode" inputmode="numeric" maxlength="3" placeholder="_ _ _" aria-label="Freigabecode" class="mono" style="max-width:140px;font-size:1.15rem;letter-spacing:.3em">
-      <details class="pwhint" style="margin-top:8px"><summary>Kennworthinweis anzeigen</summary><p>Drei Prüfungen, drei Ziffern – in dieser Reihenfolge: Zählt die Fehlalarme im EmbargoCheck, zählt die Buchungen des erkannten Musters im AML-Monitor und nehmt die Position der Zahlung, die ihr im FraudDesk nicht ausgeführt habt.</p></details>
+      <details class="pwhint" style="margin-top:8px"><summary>💡 Kennworthinweis anzeigen</summary><p>Drei Prüfungen, drei Ziffern – in dieser Reihenfolge: Zählt die Fehlalarme im EmbargoCheck, zählt die Buchungen des erkannten Musters im AML-Monitor und nehmt die Position der Zahlung, die ihr im FraudDesk nicht ausgeführt habt.</p></details>
       <p style="margin:12px 0 4px"><b>2. Begründung</b> – den tragenden Grund und ergänzende Befunde ankreuzen, aber nur Belegbares</p>
       ${ZV_REASONS.map(([v,t]) => `<label class="choice"><input type="checkbox" name="zvr" value="${v}"><span>${t}</span></label>`).join("")}
       <div class="row"><button class="primary" id="zvStop">Stopp eintragen</button></div></div>`}`;
