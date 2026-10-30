@@ -108,6 +108,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .win textarea{width:100%;padding:8px 10px;border:1px solid #d2c0bf;border-radius:6px;background:#fff;color:#1d2533;font:inherit;resize:vertical}
 .win select{max-width:100%}
 @media(max-width:700px){.modes{grid-template-columns:1fr}}
+.pwhint{margin:0 0 12px;text-align:left;font-size:.86rem}.pwhint summary{cursor:pointer;color:#a82538;font-weight:600}.pwhint p{margin:6px 0 0;padding:8px 10px;background:#fff;border:1px solid #e0d3d1;border-radius:6px}
 .badge.new{background:#ffca70;color:#3a2f00}
 .badge{position:absolute;top:-5px;right:-12px;background:#e81123;color:#fff;border-radius:9px;font-size:.66rem;font-weight:700;padding:1px 5px;text-shadow:none}
 .taskbar{position:absolute;left:0;right:0;bottom:0;height:46px;background:rgba(24,16,19,.95);display:flex;align-items:center;gap:3px;padding:0 6px;color:#fff;z-index:900;overflow:hidden}
@@ -316,7 +317,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.1</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.2</footer>
 </div>
 
 <script>
@@ -608,9 +609,9 @@ function solved(app, key, nextNote, narr, msg){
 /* ---------- Notizen ---------- */
 // Gleiche Schlösser in beiden Stufen – nur der Ton unterscheidet sich: Azubi führt, Ermittler deutet an.
 const NOTE_LOCKS = {
-  n2:{gate:"embargo", code:"1dp01qu7ixb", riddle:"Die vierstellige Nummer des Listeneintrags, der wirklich zum Empfänger von PHANTOME gehört."},
-  n3:{gate:"aml", code:"2135pxw35o8", riddle:"Wie viel Geld hat Jonas K. insgesamt an Nova Trade überwiesen? Betrag in Euro – ohne Cent und ohne Punkt."},
-  n4:{gate:"fraud", code:"1fnric9x17x", riddle:"Übersetzt eure vier FraudDesk-Entscheidungen der Reihe nach in Ziffern: Weiterbearbeiten = 1, Klären = 2, Nicht ausführen = 0."}};
+  n2:{gate:"embargo", code:"1dp01qu7ixb", riddle:"Die vierstellige Nummer des Listeneintrags, der wirklich zum Empfänger von PHANTOME gehört.", pwHint:"Vergleicht die Identitätsmerkmale des Zahlungsempfängers mit den Listendatensätzen. Der passende Eintrag enthält die gesuchte Kennung – nur die vier Ziffern, ohne „SAN-“."},
+  n3:{gate:"aml", code:"2135pxw35o8", riddle:"Wie viel Geld hat Jonas K. insgesamt an Nova Trade überwiesen? Betrag in Euro – ohne Cent und ohne Punkt.", pwHint:"Nicht die Bareinzahlungen sind gefragt, sondern die wiederkehrenden Abgänge an denselben Empfänger. Zusammenzählen und ohne Cent und Punkt eingeben."},
+  n4:{gate:"fraud", code:"1fnric9x17x", riddle:"Übersetzt eure vier FraudDesk-Entscheidungen der Reihe nach in Ziffern: Weiterbearbeiten = 1, Klären = 2, Nicht ausführen = 0.", pwHint:"Die Reihenfolge der vier Überweisungen ist entscheidend. Jede Entscheidung steht für eine Ziffer. Die Ziffern werden aneinandergereiht, nicht addiert."}};
 const NOTES_AZUBI = {
   n1:{title:"14:52 · Northbridge", text:`Falls ich nicht zurück bin – das hier ist für euch.
 
@@ -644,28 +645,37 @@ Als Grund nur angeben, was ihr belegen könnt. Danach eskalieren – und die „
 
 P.S. Die 1. Freigabe von PHANTOME kam über die Sammelkennung zv.batch07. Das kann nur jemand aus dem Zahlungsverkehr gewesen sein. Wenn ihr rausfindet, wer: Hinweisgebersystem. Niemanden ansprechen!`}};
 const NOTES_ERMITTLER = {
-  n1:{title:"14:52 · Northbridge", text:`Die Zahlung über 3,8 Mio. EUR macht mir Bauchschmerzen. Empfänger: Northbridge S.A., Panama. Ausführung heute, 16:30.
+  n1:{title:"14:52 · PHANTOME", text:`3,8 Mio. EUR. Ausführung heute um 16:30 Uhr. Empfänger: Northbridge S.A., Panama.
 
-Der Name allein sagt noch nicht viel – auf den Listen gibt es mehrere Unternehmen mit ähnlicher Bezeichnung. Ich muss die genauen Daten aus dem Auftrag nehmen und Merkmal für Merkmal vergleichen.
+Der Name taucht beim Listenabgleich in mehreren Treffern auf. Einige sehen auf den ersten Blick verdächtig ähnlich aus. Aber eine Namensähnlichkeit allein ist kein Treffer.
 
-Die Adresse in Panama kommt mir allerdings bekannt vor. Wo habe ich die schon einmal gesehen?
+Ich muss die Angaben aus dem Zahlungsauftrag danebenlegen. Adresse, Land, Registerdaten – die entscheidenden Merkmale müssen zusammenpassen.
 
-(Notiz an mich: die nächsten Einträge sperren. Wer sie lesen will, muss erst verstanden haben, was hier los ist.)`},
-  n2:{title:"15:03 · Geldbewegungen", text:`Wenn Northbridge auf der Liste steht – woher kommt dann das Geld für PHANTOME?
+Und noch etwas: Die erste Freigabe ist schon erteilt – über eine Sammelkennung. Wer nutzt die eigentlich?
 
-Heute sind mehrere Alerts aufgelaufen. Die meisten werden harmlos sein: Bäcker zahlen Bargeld ein, Leute verkaufen Autos, Rentner vermieten Ferienwohnungen. Aber ein Profil passt nicht zu seinen Bewegungen.
+(Die nächsten Einträge sperre ich. Wer sie lesen will, muss erst verstanden haben, was hier los ist.)`},
+  n2:{title:"15:03 · Offene Fälle", text:`Vier Alerts liegen noch in meiner Queue. Unterschiedliche Auslöser, unterschiedliche Kunden.
 
-Die Erklärung aus der Filiale klingt zunächst plausibel. Aber warum wird das Geld so schnell weitergeleitet? Und warum immer an denselben Empfänger?`},
-  n3:{title:"15:17 · Ungewöhnliche Vorgänge", text:`Vier Zahlungen wurden zurückgehalten. Nicht jede Auffälligkeit bedeutet Betrug – ich darf mich nicht auf den ersten Eindruck verlassen. Ein falscher Name kann ein Tippfehler sein, eine neue IBAN eine Umstellung. Erst wenn ich weiß, wie es bisher lief, sehe ich, was nicht passt.
+Auslandseingänge, Bareinzahlungen und ungewöhnliche Folgebewegungen. Bei manchen Fällen liegen bereits Verträge oder andere Unterlagen vor. In anderen findet sich bisher nur ein kurzer Vermerk aus der Filiale.
 
-Besonders die Änderungen an Stammdaten machen mir Sorgen. Wer hat sie veranlasst – und auf welcher Grundlage?`},
-  n4:{title:"15:25 · Der Vorstand", text:`Eine Mail aus dem Vorstand. Ich soll sofort in den 12. Stock kommen. Ohne Unterlagen. Niemanden informieren.
+Ich möchte mich nicht allein auf die Regel verlassen, die den Alert ausgelöst hat. Ein ungewöhnlicher Umsatz ist nicht automatisch verdächtig.
 
-Eine Rückfrage vom Vorstand wäre normalerweise kein Problem. Aber warum ausgerechnet heute, eine Stunde vor dem Buchungslauf? Ich habe ein ungutes Gefühl.
+Entscheidend ist, ob die tatsächlichen Bewegungen zum Kundenprofil passen. Und ob sich die jeweilige Erklärung auch belegen lässt.`},
+  n3:{title:"15:17 · Vier zurückgehaltene Zahlungen", text:`Im Zahlungsverkehr warten vier Überweisungen auf eine Entscheidung.
 
-Falls ich nicht rechtzeitig zurück bin: PHANTOME muss gestoppt werden. Den Stopp-Code habe ich nirgends notiert. Wer die Fehlalarme auf der Liste gezählt, die verdächtigen Buchungen gezählt und die faule Zahlung gefunden hat, kennt ihn ohnehin.
+Ich habe mir die Rückmeldungen der Empfängerprüfung und die bisherigen Vorgänge angesehen. Auf den ersten Blick sind die Fälle nicht miteinander vergleichbar.
 
-Und noch etwas: Die 1. Freigabe kam über zv.batch07. Das war jemand aus dem Haus.`}};
+Bei einer Zahlung scheint sich gegenüber den bisherigen Buchungen etwas verändert zu haben. Eine neue Kontoverbindung ist zunächst nichts Ungewöhnliches. Allerdings sollte sich nachvollziehen lassen, wer diese Änderung veranlasst hat und ob sie tatsächlich bestätigt wurde.
+
+Ich will keine Zahlung unnötig blockieren. Aber eine ungeklärte Änderung darf auch nicht einfach durchgewunken werden.`},
+  n4:{title:"15:25 · Eine merkwürdige Einladung", text:`Eine Nachricht aus dem Vorstand. Ich soll umgehend in den 12. Stock kommen. Vertraulich. Keine Unterlagen mitnehmen. Niemanden informieren.
+
+Eigentlich passt mir das überhaupt nicht – gerade jetzt, wo PHANTOME noch nicht geklärt ist. Eigentlich müsste ich über die -1200 zurückrufen und nachfragen. Keine Zeit. Ich gehe hoch.
+
+Falls ich nicht rechtzeitig zurück bin: Die Zahlung darf nicht im Buchungslauf landen. Für den Compliance-Stopp braucht es meinen dreistelligen Freigabecode. Aufgeschrieben habe ich ihn nicht – er ergibt sich aus meinen drei Prüfungen, in dieser Reihenfolge:
+  · wie viele Fehlalarme der Listenabgleich hatte,
+  · wie viele Buchungen das verdächtige Muster bilden,
+  · an welcher Stelle die Zahlung steht, die nicht ausgeführt werden darf.`}};
 const notesFor = () => { const t = S.mode === "ermittler" ? NOTES_ERMITTLER : NOTES_AZUBI; const o = {};
   Object.keys(t).forEach(k => o[k] = {...t[k], ...(NOTE_LOCKS[k] || {})}); return o; };
 RENDER.notes = b => {
@@ -674,7 +684,7 @@ RENDER.notes = b => {
   b.innerHTML = `<div class="split"><div class="list">${Object.entries(NOTES).map(([k,x]) => `<button class="li ${k === id ? "sel" : ""}" data-k="${k}">${S.notes[k] ? "📄" : "🔒"} ${x.title}<small>${S.notes[k] ? "geöffnet" : S.f[x.gate] ? "gesperrt · Rätsel lösen" : "gesperrt"}</small></button>`).join("")}</div>
     <div class="pane notesbg">${open ? `<p class="mini muted" style="margin:0">Persönliches Journal · Freitag, 30. Oktober 2026</p><h3>${n.title}</h3><div class="notetext"></div>` :
     !S.f[n.gate] ? `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini">Diese Notiz lässt sich erst öffnen, wenn ihr die Prüfung im <b>${APPS[n.gate].label}</b> abgeschlossen habt.</p></div>` :
-    `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini" style="margin-bottom:4px">Diese Notiz ist gesperrt. Webers Rätsel:</p><div class="riddle hand">${n.riddle}</div>
+    `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini" style="margin-bottom:4px">Diese Notiz ist gesperrt. Webers Rätsel:</p><div class="riddle hand">${n.riddle}</div><details class="pwhint"><summary>Kennworthinweis anzeigen</summary><p>${n.pwHint}</p></details>
       <div class="row"><input id="noteCode" inputmode="numeric" maxlength="6" placeholder="Code" aria-label="Code" class="mono" style="letter-spacing:.25em"><button class="primary" id="noteBtn">Öffnen</button></div></div>`}</div></div>`;
   if (open) b.querySelector(".notetext").textContent = n.text;
   on(b, ".li", "click", e => { S.v.note = e.currentTarget.dataset.k; render("notes"); });
@@ -1189,7 +1199,7 @@ const ZV_DEC = [
   ["warn","Die AeroTrans GmbH anrufen und vorwarnen, dass ihre Zahlung gestoppt wurde.", "Kunden dürfen nicht über laufende Prüfungen oder mögliche Meldungen informiert werden (Tipping-off-Verbot)."]];
 RENDER.zv = b => {
   b.className = "wbody";
-  const fs = id => !S.f.fraud ? `<span class="tag warn">zurückgehalten</span>` : id === "sparbank" ? `<span class="tag info">weiterbearbeitet</span>` : id === "mira" ? `<span class="tag no">nicht ausgeführt · eskaliert</span>` : id === "stadtwerke" ? `<span class="tag warn">in Klärung</span>` : `<span class="tag info">Zweitfreigabe</span>`;
+  const fs = id => !S.f.fraud ? `<span class="tag warn">zurückgehalten · Prüfung im FraudDesk</span>` : id === "sparbank" ? `<span class="tag info">weiterbearbeitet</span>` : id === "mira" ? `<span class="tag no">nicht ausgeführt · eskaliert</span>` : id === "stadtwerke" ? `<span class="tag warn">in Klärung</span>` : `<span class="tag info">Zweitfreigabe</span>`;
   const sec = Math.ceil(Math.max(0, S.deadline - Date.now())/1000);
   b.innerHTML = `<div class="appbar" style="background:#0f3e6e">💶 ZV-Cockpit <small>Buchungslauf 16:30 · noch <b id="zvCountdown">${pad(Math.floor(sec/60))}:${pad(sec%60)}</b></small></div>
     <h3>Buchungslauf 16:30 – Auszug</h3>
@@ -1217,6 +1227,7 @@ RENDER.zv = b => {
       ${canStop ? "" : `<p class="tag warn">Ihr braucht Webers Freigabecode.</p>`}
       <p style="margin:10px 0 4px"><b>1. Freigabecode</b> von m.weber (3 Ziffern)</p>
       <input id="zvCode" inputmode="numeric" maxlength="3" placeholder="_ _ _" aria-label="Freigabecode" class="mono" style="max-width:140px;font-size:1.15rem;letter-spacing:.3em">
+      <details class="pwhint" style="margin-top:8px"><summary>Kennworthinweis anzeigen</summary><p>Drei Prüfungen, drei Ziffern – in dieser Reihenfolge: Zählt die Fehlalarme im EmbargoCheck, zählt die Buchungen des erkannten Musters im AML-Monitor und nehmt die Position der Zahlung, die ihr im FraudDesk nicht ausgeführt habt.</p></details>
       <p style="margin:12px 0 4px"><b>2. Begründung</b> – den tragenden Grund und ergänzende Befunde ankreuzen, aber nur Belegbares</p>
       ${ZV_REASONS.map(([v,t]) => `<label class="choice"><input type="checkbox" name="zvr" value="${v}"><span>${t}</span></label>`).join("")}
       <div class="row"><button class="primary" id="zvStop">Stopp eintragen</button></div></div>`}`;
