@@ -189,7 +189,11 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .notif b{display:block;margin-bottom:2px}
 .mailenv{position:absolute;left:10px;bottom:54px;z-index:950;display:flex;align-items:center;gap:8px;background:#2a1e22;color:#fff;border-radius:8px;padding:8px 14px 8px 10px;font-size:.86rem;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.5);border-left:4px solid #e27a88;pointer-events:none;animation:envin .4s ease-out}
 .mailenv .env{font-size:1.5rem;line-height:1}
-.wbody.web{flex-direction:column}.wbody.web .pane{flex:1;overflow:auto;min-width:0}
+.wbody.web{flex-direction:column}.btabs{flex:none;display:flex;gap:2px;align-items:flex-end;background:#d4c7c5;padding:6px 6px 0;overflow-x:auto}
+.btab{display:flex;align-items:center;background:#e4dbd9;border-radius:8px 8px 0 0;max-width:200px;min-width:0}.btab.on{background:#f6f2f0}
+.btab button{border:0!important;background:none!important;padding:6px 8px!important;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.btab .btsel{max-width:170px}.btab .btx{padding:6px 6px!important;color:#6f5f62}
+#webNewTab{border:0;background:none;padding:4px 10px;font-size:1rem}
+.calcgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.calcgrid button{padding:12px 0;font-size:1.1rem}.wbody.web .pane{flex:1;overflow:auto;min-width:0}
 .bbar{flex:none;display:flex;gap:6px;align-items:center;background:#e4dbd9;padding:6px 8px;border-bottom:1px solid #cdbdbb}
 .bbar input{flex:1;min-width:0}.bbar .url{flex:1;min-width:0;font:.8rem ui-monospace,Consolas,monospace;background:#fff;border:1px solid #cdbdbb;border-radius:14px;padding:5px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sres{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #ece3e1;padding:10px 4px;cursor:pointer;color:inherit;font:inherit}
@@ -326,7 +330,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.4</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.5</footer>
 </div>
 
 <script>
@@ -456,7 +460,7 @@ function hintErm(){
     "Öffnet im Browser das Profil der Aurelius Industrial Group PJSC: Adresse, Land, Registernummer."]};
   if (!S.f.embargo) return {key:"embargo", steps:[
     "Prüft nicht nur den Empfänger. Steht sein Eigentümer auf der Liste? Ein ähnlicher Name ist dabei noch kein Treffer.",
-    "Sucht im EmbargoCheck nach „Aurelius“ und vergleicht jeden Treffer mit den Registerdaten der Aurelius Industrial Group PJSC. Alles stimmt → echter Treffer; Adresse, Land oder Registernummer widersprechen → Fehlalarm; Merkmale fehlen → nicht eindeutig. Ergebnis: mittelbar sanktionsbetroffen."]};
+    "Prüft im EmbargoCheck den vollständigen Namen der Muttergesellschaft („Aurelius Industrial Group PJSC“) und vergleicht jeden Treffer mit ihren Registerdaten aus dem Browser. Alles stimmt → echter Treffer; Adresse, Land oder Registernummer widersprechen → Fehlalarm; Merkmale fehlen → nicht eindeutig. Ergebnis: mittelbar sanktionsbetroffen."]};
   return {key:"stop", steps:[
     "Der Stopp braucht einen Vermerk: Was ist der tragende Grund, und womit belegt ihr ihn?",
     "Tragender Grund: Northbridge gehört über Aurelius Global Holdings (100 %) der gelisteten Aurelius Industrial Group PJSC (SAN-4417). Ergänzend: Nova Trade im selben Netzwerk (AML-Alert, Mira-Umleitung)."]};
@@ -620,6 +624,7 @@ const APPS = {
   fraud:{label:"FraudDesk", icon:"🛡️", title:"FraudDesk – Zahlungsprüfung", w:800, h:540},
   zv:{label:"ZV-Cockpit", icon:"💶", title:"ZV-Cockpit – Zahlungsverkehr", w:780, h:520},
   browser:{label:"Browser", icon:"🌐", title:"Browser – Internet", w:820, h:560},
+  calc:{label:"Rechner", icon:"🧮", title:"Rechner", w:300, h:440, right:true},
   intranet:{label:"Intranet", icon:"🏢", title:"Intranet – Mitarbeiterverzeichnis", w:680, h:440},
   whistle:{label:"Hinweisgeber", icon:"📣", title:"Hinweisgebersystem", w:720, h:540},
   konto:{label:"Kontoumsätze", icon:"📊", title:"Kontoumsätze", w:760, h:500, hidden:true, right:true}};
@@ -755,7 +760,7 @@ function solved(app, key, nextNote, narr, msg){
 // Gleiche Schlösser in beiden Stufen – nur der Ton unterscheidet sich: Azubi führt, Ermittler deutet an.
 const NOTE_LOCKS = {
   n2:{gate:"embargo", code:"gsuns1emmu", pwHint:"Wer genau ist der Empfänger von PHANTOME? Die letzten vier Ziffern seiner Registernummer."},
-  n3:{gate:"aml", code:"2135pxw35o8", pwHint:"Wohin ist das Geld geflossen – und wie viel war es insgesamt? Zählt nur die Weiterleitungen, nicht die Einzahlungen. Betrag in Euro, ohne Cent und ohne Punkt."},
+  n3:{gate:"aml", code:"2135pxw35o8", pwHint:"Die Summe der Ausgänge an die Firma, an die das Geld weitergeleitet wurde – in Euro, ohne Cent und ohne Punkt."},
   n4:{gate:"fraud", code:"131g06wtogr", pwHint:"Die umgeleitete Zahlung aus dem FraudDesk, die auf keinen Fall ausgeführt werden darf: die ersten drei Ziffern ihres Betrags."}};
 const NOTES_AZUBI = {
   n1:{title:"14:52 · Northbridge", text:`Falls ich nicht zurück bin – das hier ist für euch.
@@ -815,7 +820,9 @@ Bei einer Zahlung scheint sich gegenüber den bisherigen Buchungen etwas veränd
 Und dann lässt mir noch etwas keine Ruhe: PHANTOME ist seit ein paar Minuten zur Hälfte freigegeben – über eine Sammelkennung, die der Zahlungsverkehr eigentlich nur für Gehaltsläufe nutzt. Wer gibt damit eine Zahlung über 3,8 Millionen frei?`},
   n4:{title:"15:25 · Eine merkwürdige Einladung", text:`Die neue IBAN im Mira-Fall gehört laut Empfängerbank: Nova Trade Ltd. Schon wieder Nova Trade. Erfasst hat die Änderung die Kennung s.kranz – ohne Rückruf. Ob dahinter wirklich er steckt oder jemand seine Kennung nutzt, weiß ich nicht.
 
-Zwei Fälle, eine Firma, eine Adresse – dieselbe wie bei Northbridge. Das kann immer noch Zufall sein. Aber wenn Northbridge und Nova Trade denselben Eigentümer haben, ist der saubere Namensabgleich von PHANTOME nichts wert. Ich muss in die Handelsregister: Wem gehören die beiden – und wem gehört deren Eigentümer?
+Zwei Fälle, eine Firma, eine Adresse – dieselbe wie bei Northbridge. Wenn Northbridge und Nova Trade denselben Eigentümer haben, ist der saubere Namensabgleich von PHANTOME nichts wert. Dann zählt nicht der Name, sondern wem die Firma gehört.
+
+Hab im Browser angefangen, die Handelsregister durchzugehen. Northbridge: Eigentümer nicht offengelegt, die Aktien liegen bei einem Treuhänder. Als Nächstes Nova Trade – vielleicht ist die weniger verschwiegen. Und wenn am Ende der Kette ein Konzern steht: der muss durch den EmbargoCheck, bevor PHANTOME rausgeht.
 
 Und jetzt das: eine Nachricht aus dem Vorstand. Ich soll umgehend in den 12. Stock kommen. Vertraulich. Keine Unterlagen mitnehmen. Niemanden informieren. Eigentlich müsste ich über die -1200 zurückrufen. Keine Zeit. Ich gehe hoch.
 
@@ -834,6 +841,7 @@ RENDER.notes = b => {
     `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini" style="margin-bottom:10px">Dieser Eintrag ist passwortgeschützt.</p><details class="pwhint"><summary>💡 Kennworthinweis anzeigen</summary><p>${n.pwHint}</p></details>
       <div class="row"><input id="noteCode" inputmode="numeric" maxlength="6" placeholder="Code" aria-label="Code" class="mono" style="letter-spacing:.25em"><button class="primary" id="noteBtn">Öffnen</button></div></div>`}</div></div>`;
   if (open) b.querySelector(".notetext").textContent = n.text;
+  on(b, ".pwhint", "toggle", e => { if (e.currentTarget.open) S.v.pwhintSeen = true; });
   on(b, ".li", "click", e => { S.v.note = e.currentTarget.dataset.k; render("notes"); });
   if (id === "n1" && !S.v.notesSeen){ S.v.notesSeen = true; narrate("Webers Notizen: Der erste Eintrag ist offen, die weiteren hat er gesperrt – jedes Schloss hat ein Rätsel."); updateHud(); }
   if (!open && $("noteCode")){
@@ -929,28 +937,28 @@ RENDER.whistle = b => {
   const head = `<div class="appbar" style="background:#5b3f8c">📣 Hinweisgebersystem <small>vertraulich · geschützt</small></div>`;
   if (S.f.insider){ b.innerHTML = head + `<p><span class="tag ok">✓ Hinweis übermittelt</span></p><p>Eingangsnummer <b class="mono">HG-2026-0417</b>. Compliance und Interne Revision übernehmen.</p>`; return; }
   const left = 2 - (S.v.accuseFails || 0);
-  const traces = [[S.v.hdrSeen, "Herkunft der gefälschten Vorstandsmail geprüft (Kopfzeilen)"], [S.v.pcSeen, "Absender-Arbeitsplatz und Anmeldeprotokoll im Intranet geprüft"], [S.v.sentSeen, "Verdächtige Mail in „Gesendet“ untersucht"],
-    [S.f.fraud, "Kontoänderung im Mira-Fall ausgewertet (FraudDesk)"], [S.v.zvSel, "Freigaben von PHANTOME geprüft (ZV-Cockpit)"]];
-  if (traces.some(t => !t[0])){
-    b.innerHTML = head + `<h3>Bevor ihr einen Hinweis abgebt</h3><p class="mini">Ein Hinweis braucht Belege. Das System nimmt ihn erst an, wenn ihr diese Spuren ausgewertet habt:</p>
-      <ul class="traces">${traces.map(([ok, t]) => `<li class="${ok ? "ok" : ""}">${ok ? "✓" : "○"} ${t}</li>`).join("")}</ul>`;
-    return;
-  }
+  const traces = [[S.v.hdrSeen, `Kopfzeilen: Die gefälschten Vorstandsmails kamen vom Rechner <span class="mono">PC-ZV-114</span>.`],
+    [S.v.pcSeen, `Intranet: Der Rechner <span class="mono">PC-ZV-114</span> ist einem Arbeitsplatz zugeordnet; laut Anmeldeprotokoll war dort zur Zeit der Mails dieselbe Kennung angemeldet.`],
+    [S.v.sentSeen, `Gesendet: Um 15:31 ging von Webers entsperrtem PC eine Mail raus – Weber war seit 15:26 weg.`],
+    [S.f.fraud, `FraudDesk: Die Umleitung der Mira-Zahlung zu Nova Trade erfasste die Kennung <span class="mono">s.kranz</span> – ohne Rückruf.`],
+    [S.v.zvSel, `ZV-Cockpit: Die 1. Freigabe von PHANTOME kam über <span class="mono">zv.batch07</span> vom Arbeitsplatz <span class="mono">PC-ZV-114</span>.`]];
+  const found = traces.filter(t => t[0]);
+  // Keine Sperre: Ein Hinweis kann jederzeit abgegeben werden – aber nur mit Begründung. Sie steht im Ermittlungsbericht.
   b.innerHTML = head + `<h3>Gegen welche Person ergeben die gesicherten Spuren einen begründeten Verdacht?</h3>
-    <div class="doc" style="margin-top:6px"><b>Eure gesicherten Spuren</b><ul class="ctx" style="margin-top:6px">
-      <li>Kopfzeilen: Die gefälschten Vorstandsmails kamen vom Rechner <span class="mono">PC-ZV-114</span>.</li>
-      <li>Intranet: Der Rechner <span class="mono">PC-ZV-114</span> ist einem Arbeitsplatz zugeordnet; laut Anmeldeprotokoll war dort zur Zeit der Mails dieselbe Kennung angemeldet.</li>
-      <li>Gesendet: Um 15:31 ging von Webers entsperrtem PC eine Mail raus – Weber war seit 15:26 weg.</li>
-      <li>FraudDesk: Die Umleitung der Mira-Zahlung zu Nova Trade erfasste die Kennung <span class="mono">s.kranz</span> – ohne Rückruf.</li>
-      <li>ZV-Cockpit: Die 1. Freigabe von PHANTOME kam über <span class="mono">zv.batch07</span> vom Arbeitsplatz <span class="mono">PC-ZV-114</span>.</li></ul>
+    <div class="doc" style="margin-top:6px"><b>Von euch gesicherte Spuren (${found.length})</b>${found.length ? `<ul class="ctx" style="margin-top:6px">${found.map(t => `<li>${t[1]}</li>`).join("")}</ul>` : `<p class="mini muted" style="margin:6px 0 0">Bisher keine. Ein Hinweis ohne Belege trifft womöglich einen unschuldigen Menschen.</p>`}
       <p class="mini muted" style="margin:6px 0 0">Ein Arbeitsplatz oder eine Kennung ist noch kein Beweis, wer davor saß. Die Spuren begründen einen Verdacht – die Feststellung trifft die Revision.</p></div>
     <p class="mini">Wählt die Person, gegen die sich der Hinweis richtet. Die Interne Revision prüft jeden Hinweis – ein falscher Verdacht trifft einen unschuldigen Menschen.</p>
     <p><span class="tag ${left === 2 ? "info" : "warn"}">${left === 2 ? "2 Versuche" : "Letzter Versuch!"}</span></p>
     <div class="suspects">${SUSPECTS.map(p => `<label class="suspect ${(S.v.ruledOut || []).includes(p.id) ? "out" : ""}"><input type="radio" name="sus" value="${p.id}" ${(S.v.ruledOut || []).includes(p.id) ? "disabled" : ""}><span class="av">${p.icon}</span><b>${p.name}</b><small>${p.dept}</small></label>`).join("")}</div>
+    <p style="margin:12px 0 4px"><b>Begründung des Hinweises</b> – welche Belege stützen euren Verdacht?</p>
+    <textarea id="wbNote" rows="4" maxlength="800" style="width:100%" placeholder="Was habt ihr gefunden, und wie hängt es mit der Person zusammen?"></textarea>
     <div class="row"><button class="primary" id="wbBtn">Hinweis absenden</button></div>`;
+  $("wbNote").value = S.v.wbNote || ""; $("wbNote").addEventListener("input", e => { S.v.wbNote = e.target.value; });
   $("wbBtn").addEventListener("click", () => {
     const who = (b.querySelector("input[name=sus]:checked") || {}).value;
     if (!who){ fb("whistle", "Wählt eine Person aus."); return; }
+    if ((S.v.wbNote || "").trim().length < 20){ fb("whistle", "Ein Hinweis braucht eine Begründung: Schreibt kurz auf, welche Belege euren Verdacht stützen."); return; }
+    (S.v.wbNotes = S.v.wbNotes || []).push(SUSPECTS.find(p => p.id === who).name + ": " + S.v.wbNote.trim());
     if (hash(who) === SUSPECT_H){
       S.f.insider = true; S.score += 250; narrate("Hinweisgebersystem: Hinweis gegen Sven Kranz übermittelt. Webers PC wird gesperrt und als Beweis gesichert.");
       render("whistle"); fb("whistle", "Hinweis übermittelt." + pts(" +250 Punkte."), "good"); updateHud();
@@ -1004,22 +1012,36 @@ const EMB_PROC = [
   ["stop", "Treffer bestätigt: Die gelistete Aurelius Industrial Group PJSC hält über Aurelius Global Holdings 100 % an Northbridge S.A. PHANTOME ist mittelbar sanktionsbetroffen – Ergebnis an den Zahlungsverkehr: Compliance-Stopp, Eskalation an den Sanktionsbeauftragten."],
   ["run", "Northbridge S.A. selbst steht auf keiner Liste – die Zahlung ist sanktionsrechtlich unbedenklich.", "Ein fehlender direkter Treffer ist kein Freibrief: Northbridge gehört über die Holding vollständig einem gelisteten Konzern. Eigentum und Kontrolle zählen."],
   ["ask", "Bei der AeroTrans GmbH nachfragen, wem Northbridge eigentlich gehört.", "Den Auftraggeber einzuweihen kann die Aufklärung gefährden. Geklärt und eskaliert wird intern."]];
+// Namensähnlichkeit wird aus dem Suchbegriff berechnet (Bigramm-Vergleich ohne Rechtsform). Bewertet wird nur,
+// wenn das geprüfte Unternehmen selbst gemeint ist – ähnliche Namen allein sind keine Treffer.
+const PARENT = "Aurelius Industrial Group PJSC";
+const nameKey = t => (" " + t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z ]/g, " ") + " ")
+  .replace(/ (ltd|limited|pjsc|ag|sa|s a|gmbh|inc|llc) /g, " ").replace(/\s+/g, "");
+const bigrams = t => { const r = []; for (let i = 0; i < t.length - 1; i++) r.push(t.slice(i, i + 2)); return r; };
+const nameSim = (a, b) => { const x = bigrams(nameKey(a)), y = bigrams(nameKey(b)); if (!x.length || !y.length) return 0;
+  const pool = [...y]; let hit = 0; x.forEach(g => { const i = pool.indexOf(g); if (i >= 0){ hit++; pool.splice(i, 1); } });
+  return Math.round(200 * hit / (x.length + y.length)); };
 const evalTag = v => { const e = EMB_EVAL.find(x => x[0] === v); return e ? `<span class="tag ${e[3]}">${e[1]}</span>` : `<span class="tag info">offen</span>`; };
 RENDER.embargo = b => {
   b.className = "wbody";
   const done = S.f.embargo, ev = S.v.embEval || (S.v.embEval = {}), sel = LIST.find(x => x.id === S.v.embSel);
-  const Q = (S.v.embQ || "").toUpperCase().replace(/[^A-Z]/g, "");
-  const hits = done ? LIST : S.v.embSearched ? (Q.length >= 5 && Q.includes("AUREL") ? LIST : []) : null;
-  const allRated = hits && hits.length && hits.every(h => ev[h.id]);
+  const q = done ? PARENT : (S.v.embQ || ""), evaluable = done || nameSim(q, PARENT) >= 95;
+  const scored = LIST.map(h => ({...h, score:nameSim(q, h.name)})).sort((a, b) => b.score - a.score);
+  const hits = !done && !S.v.embSearched ? null : evaluable ? scored : scored.filter(h => h.score >= 60);
+  const allRated = evaluable && hits.every(h => ev[h.id]);
   b.innerHTML = `<div class="appbar" style="background:#7a1c27">🌐 EmbargoCheck <small>Benutzer: m.weber</small></div>
     <h3>Neue Prüfung: Sanktionslisten-Screening</h3>
     <p class="mini muted" style="margin:0">Namen eines Unternehmens eingeben. Danach jeden Treffer öffnen, mit den bekannten Daten des Unternehmens vergleichen und bewerten.</p>
     ${done ? "" : `<div class="row" style="margin-top:6px"><input id="embQ" placeholder="Name, z. B. Firmenname" aria-label="Name"><button class="primary" id="embSearch">Suchen</button></div>`}
     ${hits === null ? "" : !hits.length ? `<p style="margin-top:12px"><span class="tag ok">✓ Kein Treffer für „${esc(S.v.embQ || "")}“</span></p><p class="mini muted">Der Namensabgleich prüft nur, ob dieser Name auf einer Liste steht – nicht, wem das Unternehmen gehört.</p>` :
-    `<p class="mini" style="margin:12px 0 4px"><b>${hits.length} mögliche Treffer</b> auf der Sanktionsliste (fiktiv) – zum Öffnen anklicken:</p>
+    !evaluable ? `<p style="margin-top:12px"><span class="tag ok">Kein exakter Treffer für „${esc(q)}“</span></p><p class="mini" style="margin:6px 0 4px">Ähnliche Namen auf der Sanktionsliste (fiktiv):</p>
+    <table class="tbl"><tr><th>Listen-ID</th><th>Name</th><th>Land</th><th>Namensähnlichkeit</th></tr>
+      ${hits.map(h => `<tr><td class="mono">${h.id}</td><td>${h.name}</td><td>${h.country}</td><td>${h.score} %</td></tr>`).join("")}</table>
+    <p class="mini muted">Ein ähnlicher Name ist kein Treffer. Bewertet wird, wenn ihr ein Unternehmen mit seinem vollständigen Namen prüft und seine Daten (Adresse, Land, Registernummer) kennt.</p>` :
+    `<p class="mini" style="margin:12px 0 4px"><b>${hits.length} mögliche Treffer</b> für „${esc(q)}“ auf der Sanktionsliste (fiktiv) – zum Öffnen anklicken:</p>
     <table class="tbl"><tr><th>Listen-ID</th><th>Name</th><th>Land</th><th>Namensähnlichkeit</th><th>Bewertung</th></tr>
       ${hits.map(h => `<tr class="click ${h.id === S.v.embSel ? "sel" : ""}" data-id="${h.id}"><td class="mono">${h.id}</td><td>${h.name}</td><td>${h.country}</td><td>${h.score} %</td><td>${evalTag(ev[h.id])}</td></tr>`).join("")}</table>`}
-    ${sel && !done ? `<div class="doc"><span class="stamp">LISTENEINTRAG</span><h3>${sel.id} · ${sel.name}</h3><table>
+    ${sel && evaluable && !done ? `<div class="doc"><span class="stamp">LISTENEINTRAG</span><h3>${sel.id} · ${sel.name}</h3><table>
       <tr><th>Adresse</th><td>${sel.addr}</td></tr><tr><th>Land</th><td>${sel.country}</td></tr><tr><th>Registernummer</th><td class="mono">${sel.reg}</td></tr>
       <tr><th>Gelistet seit</th><td>${sel.since}</td></tr><tr><th>Grund</th><td>${sel.reason}</td></tr></table></div>
       <p style="margin:10px 0 4px"><b>Bewertung für ${sel.id}:</b></p>
@@ -1032,11 +1054,12 @@ RENDER.embargo = b => {
   if ($("embQ")){
     $("embQ").value = S.v.embQ || "";
     const search = () => { S.v.embQ = $("embQ").value; S.v.embSearched = true; S.v.embSel = null;
+      S.v.embEval = {};
       if (/north/i.test(S.v.embQ) && !S.v.nbScreened){ S.v.nbScreened = true; narrate("EmbargoCheck: Kein Treffer für Northbridge S.A. – der Name steht auf keiner Liste. Wem die Firma gehört, prüft der Namensabgleich nicht."); }
       render("embargo"); updateHud(); };
     $("embSearch").addEventListener("click", search); $("embQ").addEventListener("keydown", e => { if (e.key === "Enter") search(); });
   }
-  if (!done) on(b, "tr.click", "click", e => { S.v.embSel = e.currentTarget.dataset.id; render("embargo"); b.querySelector(".doc").scrollIntoView({block:"nearest"}); });
+  if (!done && evaluable) on(b, "tr.click", "click", e => { S.v.embSel = e.currentTarget.dataset.id; render("embargo"); b.querySelector(".doc").scrollIntoView({block:"nearest"}); });
   if ($("embRate")) $("embRate").addEventListener("click", () => {
     const v = (b.querySelector("input[name=embEv]:checked") || {}).value;
     if (!v){ fb("embargo", "Wählt eine Bewertung."); return; }
@@ -1195,7 +1218,7 @@ const PAYMENTS = [
       ["28.08.","Löhne und Gehälter (Sammler)","–","Gehälter August","− 38.105,00 €"],
       ["12.08.","Finanzamt Hohenbrück","DE86 7600 0000 0076 0015 03","USt-Vorauszahlung Juli","− 9.311,00 €"],
       ["01.08.","Nordlicht IT GmbH","DE21 2005 0000 0041 7733 18","RE-2026-0934 Wartung Serverraum Juli","− 4.860,00 €"]],
-    ok:"go", why:"VoP stimmt, Rechnung und Akte passen, und die Kontoumsätze zeigen seit Monaten dieselbe Pauschale an dieselbe IBAN. Zurückgehalten wurde sie nur wegen der Betragsgrenze – nach der üblichen Zweitfreigabe wird sie weiterbearbeitet."},
+    ok:"go", alt:"clarify", why:"VoP stimmt, Rechnung und Akte passen, und die Kontoumsätze zeigen seit Monaten dieselbe Pauschale an dieselbe IBAN. Zurückgehalten wurde sie nur wegen der Betragsgrenze – nach der üblichen Zweitfreigabe kann sie weiterbearbeitet werden. Vertretbar ist auch eine kurze Klärung: Die Einzelfreigabegrenze von 4.500 € ist überschritten, und wer die Überschreitung bestätigen lassen will, fragt nach. Nicht vertretbar wäre ein Stopp – es gibt keinen Hinweis auf Betrug."},
   {id:"mira", name:"Mira Energie GmbH", payer:"Gartenbau Lindner GmbH", iban:"LT59 3250 0612 9944 0187", amount:"48.750,00 €",
     purpose:"Vorauszahlung Q4 – sofort fällig", vop:"no", vopText:"Keine Übereinstimmung – Kontoinhaber laut Empfängerbank: „Nova Trade Ltd.“",
     context:["Lieferant seit 2019, Liefervertrag mit monatlichen Abschlägen","Kontoänderung heute um 15:02 per E-Mail von buchhaltung@mira-energie-gmbh.example – hinterlegte Domain: @mira-energie.example","Änderung erfasst um 15:05 von Benutzer s.kranz (Zahlungsverkehr) – ohne Rückrufbestätigung über die hinterlegte Telefonnummer","Vorauszahlungen sind im Liefervertrag nicht vorgesehen"],
@@ -1252,7 +1275,8 @@ const PAYMENTS = [
       ["15.08.","Thomas Berger","DE62 2905 0101 0080 3344 57","Übertrag Sparkonto","− 500,00 €"],
       ["03.08.","Hausverwaltung Lenz","DE90 2004 1155 0777 8899 10","Miete August","− 920,00 €"],
       ["01.08.","Streaming Plus","Gläubiger-ID DE71ZZZ00000998811","Lastschrift Abo","− 12,99 €"]],
-    ok:"go", why:"„Sparbank“ ist der Name der Bank, nicht des Kontoinhabers – deshalb kein VoP-Match. In den Kontoumsätzen gehen seit Monaten 500 € auf genau diese IBAN, mit dem eigenen Namen als Empfänger. Ein Eigenübertrag ohne Betrugsrisiko: weiterbearbeiten und den Kunden auf den korrekten Empfängernamen hinweisen."}];
+    ok:"go", alt:"clarify", why:"„Sparbank“ ist der Name der Bank, nicht des Kontoinhabers – deshalb kein VoP-Match. In den Kontoumsätzen gehen seit Monaten 500 € auf genau diese IBAN, mit dem eigenen Namen als Empfänger. Ein Eigenübertrag ohne Betrugsrisiko: weiterbearbeiten und den Kunden auf den korrekten Empfängernamen hinweisen. Vertretbar ist auch eine Rückfrage beim Kunden, weil VoP formal keine Übereinstimmung meldet – eskaliert werden muss aber nichts."}];
+const fraudOk = (p, v) => v === p.ok || v === p.alt;
 const VOP_TAG = {ok:["ok","✓"], no:["no","✕"], close:["warn","≈"]};
 const FRAUD_CHECKS = ["vop","file","hist"];
 RENDER.fraud = b => {
@@ -1271,7 +1295,7 @@ RENDER.fraud = b => {
       </table>
       ${done ? "" : `<div class="row"><button class="doVop" ${c.vop ? "disabled" : ""}>🔎 VoP-Abfrage starten</button><button class="doFile" ${c.file ? "disabled" : ""}>📂 Akte öffnen</button><button class="doHist">📊 Kontoumsätze${c.hist ? " ↗" : ""}</button></div>`}
       ${done ? `<div class="row"><button class="doHist">📊 Kontoumsätze ansehen ↗</button></div>` : ""}
-      <div class="decide">${FRAUD_DEC.map(([v,t]) => `<label class="${v}"><input type="radio" name="pay-${p.id}" value="${v}" ${done ? (v === p.ok ? "checked disabled" : "disabled") : (ready(p.id) ? "" : "disabled") + (S.v.fraudDec[p.id] === v ? " checked" : "")}><span>${t}</span></label>`).join("")}</div>
+      <div class="decide">${FRAUD_DEC.map(([v,t]) => `<label class="${v}"><input type="radio" name="pay-${p.id}" value="${v}" ${done ? (v === (S.v.fraudDec[p.id] || p.ok) ? "checked disabled" : "disabled") : (ready(p.id) ? "" : "disabled") + (S.v.fraudDec[p.id] === v ? " checked" : "")}><span>${t}</span></label>`).join("")}</div>
       ${done ? `<p class="mini" style="margin:10px 0 0"><b>Begründung:</b> ${p.why}</p>` : ""}</div>`; }).join("")}
     ${done ? vorgangBox("fraud", "Notiz 4") : `<div class="row"><button class="primary" id="fraudBtn">Entscheidungen buchen</button></div>`}`;
   const unlock = (card, id) => { if (FRAUD_CHECKS.every(k => fx[id][k])) card.querySelectorAll(".decide input").forEach(x => x.disabled = false); };
@@ -1288,11 +1312,11 @@ RENDER.fraud = b => {
     const dec = S.v.fraudDec;
     if (PAYMENTS.some(p => !ready(p.id))){ fb("fraud", "Prüft zuerst jede Zahlung: VoP-Abfrage, Akte und Kontoumsätze."); return; }
     if (PAYMENTS.some(p => !dec[p.id])){ fb("fraud", "Trefft für jede Zahlung eine Entscheidung."); return; }
-    if (PAYMENTS.every(p => dec[p.id] === p.ok)) return solved("fraud", "fraud", "Notiz 4",
-      "FraudDesk: Die Zahlung an „Mira Energie“ sollte auf ein Konto der Nova Trade Ltd. umgeleitet werden – erfasst von s.kranz, ohne Rückruf. Nicht ausgeführt und eskaliert. Nordlicht IT und der Sparkonto-Übertrag laufen weiter, bei den Stadtwerken wird die Namensabweichung geklärt. Vorgang " + VORGANG.fraud + ".",
-      "Alle Entscheidungen sind richtig. VoP ist ein Prüfbaustein, keine Entscheidung für sich.");
+    if (PAYMENTS.every(p => fraudOk(p, dec[p.id]))) return solved("fraud", "fraud", "Notiz 4",
+      "FraudDesk: Die Zahlung an „Mira Energie“ sollte auf ein Konto der Nova Trade Ltd. umgeleitet werden – erfasst von s.kranz, ohne Rückruf. Nicht ausgeführt und eskaliert. Nordlicht IT und der Sparkonto-Übertrag sind unkritisch, bei den Stadtwerken wird die Namensabweichung geklärt. Vorgang " + VORGANG.fraud + ".",
+      "Alle Entscheidungen sind vertretbar. VoP ist ein Prüfbaustein, keine Entscheidung für sich – die Begründungen zeigen, wo auch eine andere Entscheidung möglich gewesen wäre.");
     if (dec.mira !== "stop") return wrong("fraud", "Bei einer Zahlung reagiert ihr zu schwach: Mehrere Warnsignale und eine Kontoänderung, die nie bestätigt wurde – da reicht weder Weiterbearbeiten noch eine Rückfrage.");
-    if (dec.sparbank !== "go") return wrong("fraud", "Bei einer Zahlung erklären die Kontoumsätze die VoP-Abweichung bereits. Weder Rückfrage noch Eskalation sind nötig.");
+    if (dec.sparbank === "stop") return wrong("fraud", "Bei einer Zahlung erklären die Kontoumsätze die VoP-Abweichung bereits. Eine Eskalation ist überzogen.");
     if (dec.stadtwerke === "stop") return wrong("fraud", "Bei einer Zahlung reagiert ihr zu hart: Eine Namensabweichung allein ist kein Betrugsverdacht – vor allem, wenn IBAN und Rechnung passen.");
     if (dec.stadtwerke === "go") return wrong("fraud", "Bei einer Zahlung meldet VoP eine Abweichung, die weder Akte noch Kontoumsätze erklären. Ohne Klärung auszuführen ist zu früh.");
     wrong("fraud", "Eine Zahlung ist vollständig belegt. Sie zurückzuhalten verzögert sie ohne Grund.");
@@ -1327,32 +1351,58 @@ const WEB = {
 const webNorm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
 const webSearch = q => { const n = webNorm(q); if (n.length < 4) return [];
   return Object.entries(WEB).filter(([, w]) => w.kw.some(k => n.includes(k) || k.startsWith(n))).map(([id]) => id); };
+// Jeder Tab merkt sich eigene Suche und Seite – so lassen sich Registerauszüge nebeneinander vergleichen.
+const webTabs = () => S.v.tabs || (S.v.tabs = [{q:"", page:null}]);
+const tabTitle = t => t.page ? WEB[t.page].title.replace(/^.* – /, "") : t.q ? "Suche: " + t.q : "Neuer Tab";
 RENDER.browser = b => {
-  const page = WEB[S.v.webPage], q = S.v.webQ || "", seen = S.v.web || (S.v.web = {});
+  const tabs = webTabs(); if (!(S.v.tab < tabs.length)) S.v.tab = 0;
+  const tab = tabs[S.v.tab], page = WEB[tab.page], q = tab.q, seen = S.v.web || (S.v.web = {});
   b.className = "wbody flush web";
   const res = webSearch(q);
-  b.innerHTML = `<div class="bbar"><button id="webBack" ${page ? "" : "disabled"} aria-label="Zurück">←</button>${page ? `<div class="url">🔒 ${page.url}</div>` : `<input id="webQ" placeholder="Suchen …" aria-label="Suche"><button class="primary" id="webGo">Suchen</button>`}</div>
+  b.innerHTML = `<div class="btabs">${tabs.map((t, i) => `<div class="btab ${i === S.v.tab ? "on" : ""}"><button class="btsel" data-t="${i}">${esc(tabTitle(t))}</button>${tabs.length > 1 ? `<button class="btx" data-t="${i}" aria-label="Tab schließen">✕</button>` : ""}</div>`).join("")}<button id="webNewTab" aria-label="Neuer Tab">＋</button></div>
+    <div class="bbar"><button id="webBack" ${page ? "" : "disabled"} aria-label="Zurück">←</button>${page ? `<div class="url">🔒 ${page.url}</div>` : `<input id="webQ" placeholder="Suchen …" aria-label="Suche"><button class="primary" id="webGo">Suchen</button>`}</div>
     <div class="pane" style="padding:14px 16px">${page ? (page.reg ? `<div class="doc"><span class="stamp">REGISTERAUSZUG</span><h3>${page.title}</h3><table>${page.rows.map(([k,v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join("")}</table></div>
-      <div class="row"><button id="webJournal">${(S.v.webJ || {})[S.v.webPage] ? "✓ Im Ermittlungsjournal" : "＋ Ins Ermittlungsjournal übernehmen"}</button></div>` : page.html) :
+      <div class="row"><button id="webJournal">${(S.v.webJ || {})[tab.page] ? "✓ Im Ermittlungsjournal" : "＋ Ins Ermittlungsjournal übernehmen"}</button></div>` : page.html) :
       !q ? `<h3 style="margin-top:20px">Findr</h3><p class="mini muted">Websuche. Gebt einen Firmennamen ein.</p>` :
       res.length ? `<p class="mini muted">${res.length} Ergebnis${res.length === 1 ? "" : "se"} für „${esc(q)}“</p>${res.map(id => `<button class="sres" data-w="${id}"><b>${WEB[id].title}</b><small>${WEB[id].url}</small><span>${WEB[id].snippet}</span></button>`).join("")}` :
       `<p class="mini muted">Keine Ergebnisse für „${esc(q)}“. Versucht es mit einem Firmennamen.</p>`}</div>`;
   if ($("webQ")){
     $("webQ").value = q;
-    const go = () => { S.v.webQ = $("webQ").value; render("browser"); };
+    const go = () => { tab.q = $("webQ").value; render("browser"); };
     $("webGo").addEventListener("click", go); $("webQ").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
   }
-  $("webBack").addEventListener("click", () => { S.v.webPage = null; render("browser"); });
-  on(b, ".sres", "click", e => { const id = e.currentTarget.dataset.w; S.v.webPage = id;
+  $("webBack").addEventListener("click", () => { tab.page = null; render("browser"); });
+  $("webNewTab").addEventListener("click", () => { tabs.push({q:"", page:null}); S.v.tab = tabs.length - 1; render("browser"); });
+  on(b, ".btsel", "click", e => { S.v.tab = +e.currentTarget.dataset.t; render("browser"); });
+  on(b, ".btx", "click", e => { e.stopPropagation(); const i = +e.currentTarget.dataset.t; tabs.splice(i, 1); if (S.v.tab >= i && S.v.tab > 0) S.v.tab--; render("browser"); });
+  on(b, ".sres", "click", e => { const id = e.currentTarget.dataset.w; tab.page = id;
     if (!seen[id]){ seen[id] = true; if (WEB[id].log) narrate(WEB[id].log);
       if (seen.nt_reg && seen.agh && seen.aig && !S.f.research){ S.f.research = true; notify("Recherche", "Eigentümerkette rekonstruiert: Northbridge → Aurelius Global Holdings → Aurelius Industrial Group.", "browser"); }
       updateHud(); }
     render("browser"); });
   if ($("webJournal")) $("webJournal").addEventListener("click", () => {
-    const j = S.v.webJ || (S.v.webJ = {}); if (j[S.v.webPage]) return;
-    j[S.v.webPage] = true; (S.journal || (S.journal = [])).unshift({id:Date.now(), t:storyTime(), title:page.title, text:page.rows.map(([k,v]) => k + ": " + v.replace(/<br>/g, "; ")).join("\n")});
+    const j = S.v.webJ || (S.v.webJ = {}); if (j[tab.page]) return;
+    j[tab.page] = true; (S.journal || (S.journal = [])).unshift({id:Date.now(), t:storyTime(), title:page.title, text:page.rows.map(([k,v]) => k + ": " + v.replace(/<br>/g, "; ")).join("\n")});
     fb("browser", "Registerauszug ins Ermittlungsjournal übernommen.", "good"); render("browser"); render("journal"); saveGame();
   });
+};
+
+/* ---------- Taschenrechner ---------- */
+const calcEval = t => { const x = t.replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-").replace(/\./g, "").replace(/,/g, ".");
+  if (!/^[\d+\-*/(). ]+$/.test(x)) return null;
+  try { const v = Function("return (" + x + ")")(); return isFinite(v) ? v : null; } catch(e){ return null; } };
+RENDER.calc = b => {
+  b.className = "wbody";
+  const keys = ["7","8","9","÷","4","5","6","×","1","2","3","−","0",",","=","+"];
+  b.innerHTML = `<input id="calcIn" class="mono" inputmode="decimal" aria-label="Rechnung" style="width:100%;font-size:1.3rem;text-align:right" placeholder="0">
+    <div id="calcRes" class="mono" style="text-align:right;min-height:1.6em;color:#6f5f62;margin:6px 2px"></div>
+    <div class="calcgrid">${keys.map(k => `<button data-k="${k}" class="${k === "=" ? "primary" : ""}">${k}</button>`).join("")}<button data-k="C">C</button><button data-k="⌫">⌫</button></div>`;
+  const inp = $("calcIn"); inp.value = S.v.calc || "";
+  const show = () => { const v = calcEval(inp.value); $("calcRes").textContent = inp.value && v !== null ? "= " + v.toLocaleString("de-DE", {maximumFractionDigits:2}) : ""; S.v.calc = inp.value; };
+  const eq = () => { const v = calcEval(inp.value); if (v !== null){ inp.value = v.toLocaleString("de-DE", {maximumFractionDigits:2, useGrouping:false}); show(); } else $("calcRes").textContent = "Fehler"; };
+  on(b, "[data-k]", "click", e => { const k = e.currentTarget.dataset.k;
+    if (k === "C") inp.value = ""; else if (k === "⌫") inp.value = inp.value.slice(0, -1); else if (k === "=") return eq(); else inp.value += k; show(); });
+  inp.addEventListener("input", show); inp.addEventListener("keydown", e => { if (e.key === "Enter") eq(); }); show();
 };
 
 /* ---------- Kontoumsätze ---------- */
@@ -1419,7 +1469,7 @@ const ZV_DEC = [
   ["warn","Die AeroTrans GmbH anrufen und vorwarnen, dass ihre Zahlung gestoppt wurde.", "Den Auftraggeber vorzuwarnen gefährdet die Aufklärung – und falls eine Verdachtsmeldung beabsichtigt ist oder erstattet wurde, verbietet § 47 GwG, ihn darüber zu informieren."]];
 RENDER.zv = b => {
   b.className = "wbody";
-  const fs = id => !S.f.fraud ? `<span class="tag warn">zurückgehalten · Prüfung im FraudDesk</span>` : id === "sparbank" ? `<span class="tag info">weiterbearbeitet</span>` : id === "mira" ? `<span class="tag no">nicht ausgeführt · eskaliert</span>` : id === "stadtwerke" ? `<span class="tag warn">in Klärung</span>` : `<span class="tag info">Zweitfreigabe</span>`;
+  const fs = id => !S.f.fraud ? `<span class="tag warn">zurückgehalten · Prüfung im FraudDesk</span>` : id === "mira" ? `<span class="tag no">nicht ausgeführt · eskaliert</span>` : (S.v.fraudDec[id] || "go") === "clarify" ? `<span class="tag warn">in Klärung</span>` : id === "nordlicht" ? `<span class="tag info">Zweitfreigabe</span>` : `<span class="tag info">weiterbearbeitet</span>`;
   const sec = Math.ceil(Math.max(0, S.deadline - Date.now())/1000);
   b.innerHTML = `<div class="appbar" style="background:#0f3e6e">💶 ZV-Cockpit <small>Buchungslauf 16:30 · noch <b id="zvCountdown">${pad(Math.floor(sec/60))}:${pad(sec%60)}</b></small></div>
     <h3>Buchungslauf 16:30 – Auszug</h3>
@@ -1493,6 +1543,7 @@ function mailIn(m, quiet){
   if (!WIN.mail || WIN.mail.min){ S.unread.mail++; renderIcons(); } render("mail"); notify(m.from, m.subj, "mail"); }
 const EVENTS = [
   {at:6, fn:() => chatIn("Seid ihr in Webers Büro? Er geht nicht ans Handy. Das ist nicht seine Art.")},
+  {at:9, fn:() => { if (!S.v.pwhintSeen && !S.notes.n2) chatIn("Habt ihr euch Webers gesperrte Notizen schon angesehen? Er schreibt sich bei Passwörtern immer eine Eselsbrücke dazu – steht direkt unter dem Schloss."); }},
   {at:18, fn:() => mailIn({from:"ZV-Batch", addr:"zv-batch@kreisbank-hohenbrueck.example", subj:"Erinnerung: Buchungslauf in 30 Minuten", hdr:`Received: from zv-batch01.kreisbank.intern (10.4.1.20)`, body:`<p>Automatische Nachricht. Der Buchungslauf startet um 16:30 Uhr. 1 Zahlung mit offenem Compliance-Vermerk (PHANTOME).</p>`})},
   {at:31, fn:() => chatIn("Der Empfang sagt: Raum 12.04 ist ein Lagerraum. Da findet nie ein Vorstandsgespräch statt. Wer schickt Weber denn dahin?")},
   {at:38, fn:() => mailIn({from:"Assistenz des Vorstands", addr:"assistenz.vorstand@kreisbank-hohenbrueck-vorstand.example", subj:"LETZTE ERINNERUNG: PHANTOME", fake:true, hdr:FAKE_HDR, body:`<p>Herr Weber,</p><p>wir erwarten die Ausführung von PHANTOME im Lauf um 16:30 Uhr. Jede weitere Verzögerung wird Konsequenzen haben.</p><p>Assistenz des Vorstands</p>`})},
@@ -1555,7 +1606,9 @@ function report(mins){
     ["Geldwäscheprüfung (vier Alerts)", chk(S.f.aml, "aml")],
     ["Vier zurückgehaltene Zahlungen", chk(S.f.fraud, "fraud")],
     ["Eskalation und Prüfung der Vorstandsanweisung", chk(S.f.stopped, "zv")],
-    ["Interner Verdacht", S.f.insider ? "✓ begründet gemeldet" + (S.v.accuseFails ? " (im 2. Versuch)" : " (im 1. Versuch)") : S.f.wrongAccused ? "✗ zweimal eine unschuldige Person gemeldet" : "✗ nicht gemeldet"],
+    ["Interner Verdacht", S.f.insider ? "✓ richtige Person gemeldet" + (S.v.accuseFails ? " (im 2. Versuch)" : " (im 1. Versuch)") : S.f.wrongAccused ? "✗ zweimal eine unschuldige Person gemeldet" : "✗ nicht gemeldet"],
+    ["Begründung des Hinweises", (S.v.wbNotes || []).length ? S.v.wbNotes.map(t => "„" + t + "“").join("\n") : "–"],
+    ["Gesicherte Spuren zum Verdacht", [S.v.hdrSeen, S.v.pcSeen, S.v.sentSeen, S.f.fraud, S.v.zvSel].filter(Boolean).length + " von 5"],
     ["Hilfe angefordert", S.hints + "× (" + S.hints * HELP_MIN + " Min.)"],
     ["Verbleibende Zeit", S.timeout ? "0 Min. – Buchungslauf gestartet" : mins + " Min."]];
 }
