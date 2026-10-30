@@ -249,9 +249,9 @@ h3{font-size:1.05rem;margin-bottom:6px}
     <p class="mini muted">Alle Personen, Unternehmen, Adressen, Domains und Listeneinträge sind fiktiv. Dieses Lernspiel ersetzt keine internen Arbeitsanweisungen.</p>
   </div>
   <div class="grid">
-    <div class="card"><div class="num">SO WIRD GESPIELT</div><h3>Folgt Webers Notizen</h3><p class="muted">Sein erster Eintrag ist offen, die weiteren sind gesperrt. Haltet eure eigenen Erkenntnisse im Ermittlungsjournal fest.</p></div>
-    <div class="card"><div class="num">DER ROTE FADEN</div><h3>Prüfen → Code → nächste Notiz</h3><p class="muted">Jede Notiz ist mit einem Rätsel gesperrt, das nur lösen kann, wer die Prüfung davor geschafft hat. So geht es Notiz für Notiz weiter – bis zum Freigabecode für den Stopp.</p></div>
-    <div class="card"><div class="num">PUNKTE</div><h3>Sorgfalt vor Tempo</h3><p class="muted">+250 pro gelöster Prüfung, −20 pro Fehlversuch, Hinweise −25 oder −50. Sorgfalt zählt mehr als Tempo: Restzeit bringt höchstens 100 Punkte.</p></div>
+    <div class="card"><div class="num" id="c1n"></div><h3 id="c1h"></h3><p class="muted" id="c1p"></p></div>
+    <div class="card"><div class="num" id="c2n"></div><h3 id="c2h"></h3><p class="muted" id="c2p"></p></div>
+    <div class="card"><div class="num" id="c3n"></div><h3 id="c3h"></h3><p class="muted" id="c3p"></p></div>
   </div>
 </section>
 
@@ -279,7 +279,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
     </div>
     <aside>
       <div class="panel phase" id="phaseBox"><div class="eyebrow" id="phaseLbl">Phase 1 von 2</div><b id="phaseTitle">Die Zahlung PHANTOME stoppen</b></div>
-      <div class="panel"><div class="eyebrow">Nächster Schritt</div><p id="objective" style="margin:6px 0 0"></p></div>
+      <div class="panel"><div class="eyebrow" id="objLbl">Nächster Schritt</div><p id="objective" style="margin:6px 0 0"></p></div>
       <div class="panel" id="stepsPanel"><div class="eyebrow" style="margin-bottom:6px">Fortschritt</div><ol class="steps" id="steps"></ol></div>
       <div class="panel" id="logPanel"><div class="eyebrow" style="margin-bottom:8px">Ermittlungsprotokoll</div><div class="log" id="log" aria-live="polite"></div></div>
       <div class="panel">
@@ -316,7 +316,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.6</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.7</footer>
 </div>
 
 <script>
@@ -393,7 +393,7 @@ const STEPS = [
   {label:"FraudDesk: zurückgehaltene Zahlungen prüfen", done:() => S.f.fraud},
   {label:"Webers Notiz 15:25 entsperren", done:() => S.notes.n4},
   {label:"ZV-Cockpit: Stopp setzen und dokumentieren", done:() => S.f.stopped},
-  {label:"Den internen Helfer finden und melden", done:() => S.f.insider}];
+  {label:"Den Verdacht im Haus prüfen und melden", done:() => S.f.insider}];
 function objective(){
   if (S.mode === "ermittler" && !S.f.code) return S.f.stopped ? "Wer hat Weber weggelockt und seinen PC benutzt? Sammelt Belege und meldet die Person im Hinweisgebersystem – ihr habt zwei Versuche." : "Findet heraus, was hinter PHANTOME steckt, und stoppt die Zahlung vor 16:30. Webers Notizen und euer eigenes Journal helfen dabei.";
   if (S.f.stopped) return "PHANTOME ist gestoppt. Jetzt der interne Helfer: Wer hat Weber weggelockt und seinen PC benutzt? Sammelt Spuren und meldet die Person im Hinweisgebersystem – ihr habt nur zwei Versuche.";
@@ -454,8 +454,8 @@ const hintCost = i => (S.mode === "ermittler" ? [35, 70] : [25, 50])[i];
 function hintLabel(){
   if (!S.startAt || S.ended) return ["Hinweis verwenden", false];
   const h = hintFor(), used = S.hintUsed[h.key] || 0;
-  if (used >= h.steps.length) return ["Keine weiteren Hinweise für diesen Schritt", true];
-  return [(used ? "Konkreter Hinweis" : "Denkanstoß") + " (−" + hintCost(used) + " P.)", false];
+  if (used >= h.steps.length) return ["Keine weiteren Spielhinweise für diesen Schritt", true];
+  return ["Spielhinweis: " + (used ? "konkret" : "Denkanstoß") + " (−" + hintCost(used) + " P.)", false];
 }
 $("hintBtn").addEventListener("click", () => {
   if (S.ended || !S.startAt) return;
@@ -491,13 +491,13 @@ function updateHud(){
   const p2 = !!S.f.stopped;
   $("phaseBox").classList.toggle("p2", p2);
   $("phaseLbl").textContent = p2 ? "Phase 2 von 2" : "Phase 1 von 2";
-  $("phaseTitle").textContent = p2 ? "Den Helfer im Haus finden und melden" : "Die Zahlung PHANTOME stoppen";
+  $("phaseTitle").textContent = p2 ? "Den Verdacht im Haus prüfen und melden" : "Die Zahlung PHANTOME stoppen";
   $("timerLbl").textContent = p2 ? "ZEIT BIS 16:30" : "BUCHUNGSLAUF IN";
   const cur = STEPS.findIndex(s => !s.done());
   // Nur erledigte Schritte und den aktuellen zeigen – der Rest bleibt eine Überraschung.
   const shown = cur === -1 ? STEPS : STEPS.slice(0, cur + 1);
   $("steps").innerHTML = shown.map((s,i) => `<li class="${s.done() ? "done" : i === cur ? "cur" : ""}">${s.label}</li>`).join("") + (cur !== -1 && cur < STEPS.length - 1 ? `<li class="more">… weitere Schritte folgen</li>` : "");
-  const erm = S.mode === "ermittler"; $("stepsPanel").classList.toggle("hidden", erm); $("logPanel").classList.toggle("hidden", erm);
+  const erm = S.mode === "ermittler"; $("objLbl").textContent = erm ? "Aktuelle Lage" : "Nächster Schritt"; $("stepsPanel").classList.toggle("hidden", erm); $("logPanel").classList.toggle("hidden", erm);
   const [hl, hd] = hintLabel(); $("hintBtn").textContent = hl; $("hintBtn").disabled = hd;
   renderIcons(); renderTasks(); saveGame();
 }
@@ -650,23 +650,23 @@ Der Name taucht beim Listenabgleich in mehreren Treffern auf. Einige sehen auf d
 
 Ich muss die Angaben aus dem Zahlungsauftrag danebenlegen. Adresse, Land, Registerdaten – die entscheidenden Merkmale müssen zusammenpassen.
 
-Und noch etwas: Die erste Freigabe ist schon erteilt – über eine Sammelkennung. Wer nutzt die eigentlich?
-
 (Die nächsten Einträge sperre ich. Wer sie lesen will, muss erst verstanden haben, was hier los ist.)`},
   n2:{title:"15:03 · Offene Fälle", text:`Vier Alerts liegen noch in meiner Queue. Unterschiedliche Auslöser, unterschiedliche Kunden.
 
-Auslandseingänge, Bareinzahlungen und ungewöhnliche Folgebewegungen. Bei manchen Fällen liegen bereits Verträge oder andere Unterlagen vor. In anderen findet sich bisher nur ein kurzer Vermerk aus der Filiale.
+Auslandseingänge, Bareinzahlungen und ungewöhnliche Folgebewegungen. Bei manchen Fällen liegen bereits Verträge oder andere Unterlagen vor. In anderen findet sich bisher nur ein kurzer Vermerk aus der Filiale. Ob die jeweilige Erklärung tatsächlich zu den Buchungen passt, habe ich noch nicht geprüft.
 
 Ich möchte mich nicht allein auf die Regel verlassen, die den Alert ausgelöst hat. Ein ungewöhnlicher Umsatz ist nicht automatisch verdächtig.
 
 Entscheidend ist, ob die tatsächlichen Bewegungen zum Kundenprofil passen. Und ob sich die jeweilige Erklärung auch belegen lässt.`},
-  n3:{title:"15:17 · Vier zurückgehaltene Zahlungen", text:`Im Zahlungsverkehr warten vier Überweisungen auf eine Entscheidung.
+  n3:{title:"15:17 · Vier zurückgehaltene Zahlungen", text:`Als wäre das nicht genug: Im Zahlungsverkehr warten auch noch vier Überweisungen auf eine Entscheidung.
 
 Ich habe mir die Rückmeldungen der Empfängerprüfung und die bisherigen Vorgänge angesehen. Auf den ersten Blick sind die Fälle nicht miteinander vergleichbar.
 
 Bei einer Zahlung scheint sich gegenüber den bisherigen Buchungen etwas verändert zu haben. Eine neue Kontoverbindung ist zunächst nichts Ungewöhnliches. Allerdings sollte sich nachvollziehen lassen, wer diese Änderung veranlasst hat und ob sie tatsächlich bestätigt wurde.
 
-Ich will keine Zahlung unnötig blockieren. Aber eine ungeklärte Änderung darf auch nicht einfach durchgewunken werden.`},
+Ich will keine Zahlung unnötig blockieren. Aber eine ungeklärte Änderung darf auch nicht einfach durchgewunken werden.
+
+Und dann lässt mir noch etwas keine Ruhe: PHANTOME ist seit ein paar Minuten zur Hälfte freigegeben – über eine Sammelkennung, die der Zahlungsverkehr eigentlich nur für Gehaltsläufe nutzt. Wer gibt damit eine Zahlung über 3,8 Millionen frei?`},
   n4:{title:"15:25 · Eine merkwürdige Einladung", text:`Eine Nachricht aus dem Vorstand. Ich soll umgehend in den 12. Stock kommen. Vertraulich. Keine Unterlagen mitnehmen. Niemanden informieren.
 
 Eigentlich passt mir das überhaupt nicht – gerade jetzt, wo PHANTOME noch nicht geklärt ist. Eigentlich müsste ich über die -1200 zurückrufen und nachfragen. Keine Zeit. Ich gehe hoch.
@@ -788,7 +788,11 @@ RENDER.whistle = b => {
       <ul class="traces">${traces.map(([ok, t]) => `<li class="${ok ? "ok" : ""}">${ok ? "✓" : "○"} ${t}</li>`).join("")}</ul>`;
     return;
   }
-  b.innerHTML = head + `<h3>Wer hat Weber weggelockt und seinen PC benutzt?</h3>
+  b.innerHTML = head + `<h3>Gegen welche Person ergeben die gesicherten Spuren einen begründeten Verdacht?</h3>
+    <div class="doc" style="margin-top:6px"><b>Eure gesicherten Spuren</b><ul class="ctx" style="margin-top:6px">
+      <li>Kopfzeilen: Die gefälschten Vorstandsmails kamen vom Rechner <span class="mono">PC-ZV-114</span>.</li>
+      <li>Intranet: Der Rechner <span class="mono">PC-ZV-114</span> ist einem Arbeitsplatz zugeordnet.</li>
+      <li>Gesendet: Um 15:31 ging von Webers entsperrtem PC eine Mail raus – Weber war seit 15:26 weg.</li></ul></div>
     <p class="mini">Wählt die Person, gegen die sich der Hinweis richtet. Die Interne Revision prüft jeden Hinweis – ein falscher Verdacht trifft einen unschuldigen Menschen.</p>
     <p><span class="tag ${left === 2 ? "info" : "warn"}">${left === 2 ? "2 Versuche" : "Letzter Versuch!"}</span></p>
     <div class="suspects">${SUSPECTS.map(p => `<label class="suspect ${(S.v.ruledOut || []).includes(p.id) ? "out" : ""}"><input type="radio" name="sus" value="${p.id}" ${(S.v.ruledOut || []).includes(p.id) ? "disabled" : ""}><span class="av">${p.icon}</span><b>${p.name}</b><small>${p.dept}</small></label>`).join("")}</div>
@@ -1355,6 +1359,20 @@ function finish(timeout){
     $("finalTopics").innerHTML = `<table class="ftable"><tr><th>Thema</th><th>Ergebnis</th><th>Fehlversuche</th></tr>${topicResults().map(t => `<tr><td>${t.name}</td><td>${t.ok ? "✓ gelöst" : "✗ offen"}</td><td>${t.err}</td></tr>`).join("")}</table>`;
   }});
 }
+// Die Startkarten beschreiben je nach Stufe, wie gespielt wird – Ermittler verrät den Ablauf nicht.
+const START_CARDS = {
+  azubi:[["SO WIRD GESPIELT","Folgt Webers Notizen","Sein erster Eintrag ist offen, die weiteren sind gesperrt. Haltet eure eigenen Erkenntnisse im Ermittlungsjournal fest."],
+    ["DER ROTE FADEN","Prüfen → Passwort → nächste Notiz","Jede Notiz ist passwortgeschützt. Das Passwort findet, wer die Prüfung davor geschafft hat – bis zum Freigabecode für den Stopp."],
+    ["PUNKTE","Sorgfalt vor Tempo","+250 pro gelöster Prüfung, −20 pro Fehlversuch, Spielhinweise −25 oder −50. Restzeit bringt höchstens 100 Punkte."]],
+  ermittler:[["DIE LAGE","Rekonstruiert Webers Ermittlung","Ein fremder Arbeitsplatz, halbfertige Notizen, mehrere Programme. Was davon wichtig ist, müsst ihr selbst herausfinden."],
+    ["EURE ARBEITSWEISE","Erkenntnisse verbinden","Keine Schrittanzeige, kein automatisches Protokoll. Haltet fest, was ihr findet, und führt die Spuren selbst zusammen."],
+    ["PUNKTE","Sorgfalt vor Tempo","+250 pro gelöster Prüfung, −20 pro Fehlversuch, Spielhinweise −35 oder −70. Restzeit bringt höchstens 100 Punkte."]]};
+function renderStartCards(){
+  const mode = (document.querySelector("input[name=mode]:checked") || {}).value || "azubi";
+  START_CARDS[mode].forEach(([n,h,t], i) => { $("c"+(i+1)+"n").textContent = n; $("c"+(i+1)+"h").textContent = h; $("c"+(i+1)+"p").textContent = t; });
+}
+document.querySelectorAll("input[name=mode]").forEach(r => r.addEventListener("change", renderStartCards));
+renderStartCards();
 $("startBtn").addEventListener("click", start);
 $("teamName").addEventListener("keydown", e => { if (e.key === "Enter") start(); });
 $("restartBtn").addEventListener("click", () => { clearSave(); location.reload(); });
