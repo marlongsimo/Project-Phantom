@@ -326,7 +326,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.3</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.4</footer>
 </div>
 
 <script>
@@ -354,7 +354,7 @@ function tick(){
   $("timer").textContent = pad(Math.floor(sec/60)) + ":" + pad(sec % 60);
   $("clock").textContent = "Uhrzeit " + storyTime();
   $("trayTime").textContent = storyTime();
-  $("trayRun").textContent = (S.f.stopped ? "16:30 in " : "Lauf in ") + Math.ceil(sec/60) + " Min.";
+  $("trayRun").textContent = (S.f.code ? "16:30 in " : "Lauf in ") + Math.ceil(sec/60) + " Min.";
   $("timerBox").classList.toggle("urgent", sec <= 300);
   EVENTS.forEach((e, i) => { if (!S.firedEvents[i] && storyMin() >= e.at){ S.firedEvents[i] = true; e.fn(); } });
   if (sec % 5 === 0) saveGame();
@@ -473,6 +473,12 @@ function hintFor(){
     if (!S.v.sentSeen) return {key:"ins3", steps:[
       "Vergleicht die Uhrzeiten mit Webers Abwesenheit. Ist von seinem PC etwas verschickt worden, als er gar nicht da war?",
       "Öffnet in der Mail-App den Ordner „Gesendet“. Achtet auf Uhrzeit und Empfänger der Mail von 15:31."]};
+    if (!S.v.zvSel) return {key:"ins5", steps:[
+      "Wer hat PHANTOME eigentlich schon freigegeben?",
+      "Öffnet im ZV-Cockpit die Zahlung PHANTOME und schaut auf die Freigaben: Kennung und Arbeitsplatz der 1. Freigabe."]};
+    if (!S.f.fraud) return {key:"ins6", steps:[
+      "Im FraudDesk liegt noch eine Spur: Wer hat die verdächtige Kontoänderung erfasst?",
+      "Bearbeitet den FraudDesk: Die Akte der Mira-Zahlung zeigt, welche Kennung die Kontoänderung ohne Rückruf erfasst hat."]};
     return {key:"ins4", steps:[
       "Legt eure drei Spuren nebeneinander: Rechner der Vorstandsmails, Zuordnung im Intranet, Empfänger der Mail von 15:31. Wohin zeigen sie gemeinsam?",
       "Auch die 1. Freigabe von PHANTOME (ZV-Cockpit) und die Mira-Umleitung zu Nova Trade (FraudDesk) führen zum selben Arbeitsplatz bzw. zur selben Kennung. Meldet die Person, der dieser Arbeitsplatz gehört."]};
@@ -526,7 +532,7 @@ const HELPERS = {
 const HELP_TOPIC = {start:["san","Wo anfangen?"], zv:["san","Empfänger von PHANTOME"], embargo:["san","Listenabgleich Northbridge"], n2:["san","Webers Notiz 15:03"],
   aml0:["aml","Offene AML-Alerts"], aml1:["aml","Auffälliges Kundenkonto"], aml2:["aml","Gegenpartei"], n3:["aml","Webers Notiz 15:17"],
   fraud:["fraud","Zurückgehaltene Zahlungen"], n4:["fraud","Webers Notiz 15:25"], stop:["san","Compliance-Stopp PHANTOME"], r1:["san","Eigentümer von Northbridge"], r2:["san","Eigentümer von Nova Trade"], r3:["san","Konzernstruktur Aurelius"], zvdec:["san","Vorstandsanweisung PHANTOME"],
-  ins1:["rev","Vorstandsmail"], ins2:["rev","Arbeitsplatz-Zuordnung"], ins3:["rev","Webers Postausgang"], ins4:["rev","Hinweis an die Revision"]};
+  ins1:["rev","Vorstandsmail"], ins2:["rev","Arbeitsplatz-Zuordnung"], ins3:["rev","Webers Postausgang"], ins4:["rev","Hinweis an die Revision"], ins5:["rev","Freigaben PHANTOME"], ins6:["rev","Kontoänderung Mira"]};
 const helpLeft = () => Math.max(0, S.deadline - Date.now()) > (HELP_MIN + 1) * 60000;
 function requestHelp(){
   const h = hintFor(), used = S.hintUsed[h.key] || 0, [who, topic] = HELP_TOPIC[h.key] || ["san","PHANTOME"], c = HELPERS[who];
@@ -800,7 +806,7 @@ Auslandseingänge, Bareinzahlungen und ungewöhnliche Folgebewegungen. Bei manch
 Ich möchte mich nicht allein auf die Regel verlassen, die den Alert ausgelöst hat. Ein ungewöhnlicher Umsatz ist nicht automatisch verdächtig.
 
 Entscheidend ist, ob die tatsächlichen Bewegungen zum Kundenprofil passen. Und wohin das Geld am Ende fließt.`},
-  n3:{title:"15:17 · Vier zurückgehaltene Zahlungen", text:`Einer der Alerts lässt mich nicht los: Bargeld rein, am selben Tag weiter an eine Firma in Panama – Nova Trade Ltd. Die Adresse kommt mir bekannt vor. Ob das mehr ist als ein Zufall, weiß ich nicht. Briefkastenfirmen teilen sich oft eine Adresse.
+  n3:{title:"15:17 · Weitere Auffälligkeiten", text:`Einer der Alerts lässt mich nicht los: Bargeld rein, am selben Tag weiter an eine Firma in Panama – Nova Trade Ltd. Die Adresse kommt mir bekannt vor. Ob das mehr ist als ein Zufall, weiß ich nicht. Briefkastenfirmen teilen sich oft eine Adresse.
 
 Als wäre das nicht genug: Im FraudDesk warten auch noch vier zurückgehaltene Überweisungen auf eine Entscheidung. Auf den ersten Blick sind die Fälle nicht miteinander vergleichbar.
 
@@ -889,24 +895,24 @@ RENDER.mail = b => {
 
 /* ---------- Intranet ---------- */
 const STAFF = [
-  ["Matthias Weber","Financial Crime Unit","-4417","PC-FCU-417"],
-  ["Katrin Albers","Financial Crime Unit","-4421","PC-FCU-421"],
-  ["Deniz Yilmaz","Financial Crime Unit","-4425","PC-FCU-425"],
-  ["Sven Kranz","Zahlungsverkehr","-3114","PC-ZV-114"],
-  ["Lena Brandt","Zahlungsverkehr","-3118","PC-ZV-118"],
-  ["Vorstandsbüro","Vorstand","-1200","PC-VS-001"],
-  ["IT-Sicherheit","IT","-4911","PC-IT-002"]];
+  ["Matthias Weber","Financial Crime Unit","-4417","PC-FCU-417","m.weber · seit 08:12 · nicht gesperrt"],
+  ["Katrin Albers","Financial Crime Unit","-4421","PC-FCU-421","k.albers · seit 07:58"],
+  ["Deniz Yilmaz","Financial Crime Unit","-4425","PC-FCU-425","d.yilmaz · 08:30–14:05"],
+  ["Sven Kranz","Zahlungsverkehr","-3114","PC-ZV-114","s.kranz · 13:02–15:41"],
+  ["Lena Brandt","Zahlungsverkehr","-3118","PC-ZV-118","l.brandt · seit 09:10"],
+  ["Vorstandsbüro","Vorstand","-1200","PC-VS-001","heute keine Anmeldung"],
+  ["IT-Sicherheit","IT","-4911","PC-IT-002","it.admin · seit 07:00"]];
 RENDER.intranet = b => {
   b.className = "wbody";
   const q = (S.v.staffQ || "").toLowerCase().trim();
   const rows = STAFF.filter(r => !q || r.join(" ").toLowerCase().includes(q));
   b.innerHTML = `<div class="appbar" style="background:#44515f">🏢 Intranet <small>Mitarbeiterverzeichnis</small></div>
     <div class="row" style="margin-top:0"><input id="staffQ" placeholder="Name, Abteilung, Durchwahl oder Arbeitsplatz" aria-label="Suche"><button class="primary" id="staffBtn">Suchen</button></div>
-    <table class="tbl" style="margin-top:10px"><tr><th>Name</th><th>Abteilung</th><th>Durchwahl</th><th>Arbeitsplatz</th></tr>
-    ${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td class="mono">${r[2]}</td><td class="mono">${r[3]}</td></tr>`).join("") || `<tr><td colspan="4" class="muted">Keine Einträge gefunden.</td></tr>`}</table>
+    <table class="tbl" style="margin-top:10px"><tr><th>Name</th><th>Abteilung</th><th>Durchwahl</th><th>Arbeitsplatz</th><th>Anmeldung heute</th></tr>
+    ${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td class="mono">${r[2]}</td><td class="mono">${r[3]}</td><td class="mini">${r[4]}</td></tr>`).join("") || `<tr><td colspan="5" class="muted">Keine Einträge gefunden.</td></tr>`}</table>
     <p class="mini muted">Raum 12.04 (12. OG): Lagerraum – kein Besprechungsraum.</p>`;
   $("staffQ").value = S.v.staffQ || "";
-  if (rows.length === 1 && rows[0][3] === "PC-ZV-114" && !S.v.pcSeen){ S.v.pcSeen = true; narrate("Intranet: Der Rechner PC-ZV-114 gehört Sven Kranz aus dem Zahlungsverkehr."); updateHud(); render("whistle"); }
+  if (rows.length === 1 && rows[0][3] === "PC-ZV-114" && !S.v.pcSeen){ S.v.pcSeen = true; narrate("Intranet: Der Rechner PC-ZV-114 gehört Sven Kranz aus dem Zahlungsverkehr. Laut Anmeldeprotokoll war dort heute von 13:02 bis 15:41 die Kennung s.kranz angemeldet."); updateHud(); render("whistle"); }
   const go = () => { S.v.staffQ = $("staffQ").value; render("intranet"); };
   $("staffBtn").addEventListener("click", go); $("staffQ").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
 };
@@ -923,7 +929,8 @@ RENDER.whistle = b => {
   const head = `<div class="appbar" style="background:#5b3f8c">📣 Hinweisgebersystem <small>vertraulich · geschützt</small></div>`;
   if (S.f.insider){ b.innerHTML = head + `<p><span class="tag ok">✓ Hinweis übermittelt</span></p><p>Eingangsnummer <b class="mono">HG-2026-0417</b>. Compliance und Interne Revision übernehmen.</p>`; return; }
   const left = 2 - (S.v.accuseFails || 0);
-  const traces = [[S.v.hdrSeen, "Herkunft der gefälschten Vorstandsmail geprüft (Kopfzeilen)"], [S.v.pcSeen, "Absender-Arbeitsplatz im Intranet zugeordnet"], [S.v.sentSeen, "Verdächtige Mail in „Gesendet“ untersucht"]];
+  const traces = [[S.v.hdrSeen, "Herkunft der gefälschten Vorstandsmail geprüft (Kopfzeilen)"], [S.v.pcSeen, "Absender-Arbeitsplatz und Anmeldeprotokoll im Intranet geprüft"], [S.v.sentSeen, "Verdächtige Mail in „Gesendet“ untersucht"],
+    [S.f.fraud, "Kontoänderung im Mira-Fall ausgewertet (FraudDesk)"], [S.v.zvSel, "Freigaben von PHANTOME geprüft (ZV-Cockpit)"]];
   if (traces.some(t => !t[0])){
     b.innerHTML = head + `<h3>Bevor ihr einen Hinweis abgebt</h3><p class="mini">Ein Hinweis braucht Belege. Das System nimmt ihn erst an, wenn ihr diese Spuren ausgewertet habt:</p>
       <ul class="traces">${traces.map(([ok, t]) => `<li class="${ok ? "ok" : ""}">${ok ? "✓" : "○"} ${t}</li>`).join("")}</ul>`;
@@ -932,10 +939,10 @@ RENDER.whistle = b => {
   b.innerHTML = head + `<h3>Gegen welche Person ergeben die gesicherten Spuren einen begründeten Verdacht?</h3>
     <div class="doc" style="margin-top:6px"><b>Eure gesicherten Spuren</b><ul class="ctx" style="margin-top:6px">
       <li>Kopfzeilen: Die gefälschten Vorstandsmails kamen vom Rechner <span class="mono">PC-ZV-114</span>.</li>
-      <li>Intranet: Der Rechner <span class="mono">PC-ZV-114</span> ist einem Arbeitsplatz zugeordnet.</li>
+      <li>Intranet: Der Rechner <span class="mono">PC-ZV-114</span> ist einem Arbeitsplatz zugeordnet; laut Anmeldeprotokoll war dort zur Zeit der Mails dieselbe Kennung angemeldet.</li>
       <li>Gesendet: Um 15:31 ging von Webers entsperrtem PC eine Mail raus – Weber war seit 15:26 weg.</li>
-      ${S.f.fraud ? `<li>FraudDesk: Die Umleitung der Mira-Zahlung zu Nova Trade erfasste die Kennung <span class="mono">s.kranz</span> – ohne Rückruf.</li>` : ""}
-      ${S.v.zvSel ? `<li>ZV-Cockpit: Die 1. Freigabe von PHANTOME kam über <span class="mono">zv.batch07</span> vom Arbeitsplatz <span class="mono">PC-ZV-114</span>.</li>` : ""}</ul>
+      <li>FraudDesk: Die Umleitung der Mira-Zahlung zu Nova Trade erfasste die Kennung <span class="mono">s.kranz</span> – ohne Rückruf.</li>
+      <li>ZV-Cockpit: Die 1. Freigabe von PHANTOME kam über <span class="mono">zv.batch07</span> vom Arbeitsplatz <span class="mono">PC-ZV-114</span>.</li></ul>
       <p class="mini muted" style="margin:6px 0 0">Ein Arbeitsplatz oder eine Kennung ist noch kein Beweis, wer davor saß. Die Spuren begründen einen Verdacht – die Feststellung trifft die Revision.</p></div>
     <p class="mini">Wählt die Person, gegen die sich der Hinweis richtet. Die Interne Revision prüft jeden Hinweis – ein falscher Verdacht trifft einen unschuldigen Menschen.</p>
     <p><span class="tag ${left === 2 ? "info" : "warn"}">${left === 2 ? "2 Versuche" : "Letzter Versuch!"}</span></p>
@@ -1081,8 +1088,8 @@ const AML_EVAL = [
   ["sus","Auffällig – die Umsätze passen nicht zum Profil und sind nicht erklärt. Vertieft prüfen."]];
 const AML_DEC = [
   ["mlro","Vertiefte Prüfung einleiten: Herkunft der Mittel und Zweck der Weiterleitung klären, Fall an den Geldwäschebeauftragten geben – er entscheidet über eine Verdachtsmeldung."],
-  ["fiu","Sofort selbst eine Verdachtsmeldung an die FIU schicken.", "Über eine Verdachtsmeldung entscheidet der Geldwäschebeauftragte nach interner Prüfung – nicht die Sachbearbeitung im Alleingang."],
-  ["tell","Konto sofort kündigen und dem Kunden den Grund nennen.", "Kunden dürfen nicht über eine Prüfung oder mögliche Meldung informiert werden (Tipping-off-Verbot)."]];
+  ["fiu","Sofort selbst eine Verdachtsmeldung an die FIU schicken.", "Die Meldepflicht nach § 43 GwG trifft die Bank. Intern läuft die Meldung über den Geldwäschebeauftragten, der den Fall bewertet und die Meldung abgibt – nicht über die Sachbearbeitung im Alleingang."],
+  ["tell","Konto sofort kündigen und dem Kunden den Grund nennen.", "§ 47 GwG verbietet, den Kunden über eine beabsichtigte oder erstattete Verdachtsmeldung und daraus folgende Ermittlungen zu informieren. Eine Kündigung mit Begründung würde genau das verraten."]];
 const amlRes = () => S.v.amlRes || (S.v.amlRes = {});
 const amlOpenCount = () => ALERTS.filter(a => !amlRes()[a.id]).length;
 function amlCheckDone(){
@@ -1310,8 +1317,8 @@ const WEB = {
     rows:[["Firma","Nova Trade Ltd."],["Registernummer","155-702-3318"],["Sitz","Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt"],["Gegründet","01/2025"],["Geschäftsführer","Rafael Ordóñez Vega"],["Anteilseigner","Aurelius Global Holdings Ltd., Limassol (Zypern) – 100 %"]],
     log:"Browser: Nova Trade Ltd. sitzt unter derselben Adresse wie Northbridge und hat denselben Geschäftsführer. Eigentümerin: Aurelius Global Holdings Ltd. (100 %)."},
   agh:{kw:["aurelius global","aurelius holdings","aurelius"], title:"Handelsregister Zypern – Aurelius Global Holdings Ltd.", url:"companies-registry.example/HE418207", snippet:"Registerauszug · Private Limited Company · Limassol", reg:true,
-    rows:[["Firma","Aurelius Global Holdings Ltd."],["Registernummer","HE 418207"],["Sitz","Arch. Makariou III 155, Limassol, Zypern"],["Gesellschafter","Aurelius Industrial Group PJSC, Jekaterinburg – 100 %"],["Beteiligungen","Northbridge S.A., Panama – 100 %<br>Nova Trade Ltd., Panama – 100 %"]],
-    log:"Browser: Aurelius Global Holdings hält 100 % an Northbridge S.A. und an Nova Trade Ltd. – und gehört selbst zu 100 % der Aurelius Industrial Group PJSC."},
+    rows:[["Firma","Aurelius Global Holdings Ltd."],["Registernummer","HE 418207"],["Sitz","Arch. Makariou III 155, Limassol, Zypern"],["Gesellschafter","Aurelius Industrial Group PJSC, Jekaterinburg – 100 %"],["Beteiligungen","Northbridge S.A., Panama – 100 % (Inhaberaktien, treuhänderisch verwahrt durch Istmo Nominees S.A.)<br>Nova Trade Ltd., Panama – 100 % (direkt)"],["Wirtschaftlich Berechtigte","über die Gesellschafterin: Aurelius Industrial Group PJSC"]],
+    log:"Browser: Aurelius Global Holdings hält 100 % an Nova Trade und – treuhänderisch über Istmo Nominees – 100 % an Northbridge S.A. Sie gehört selbst zu 100 % der Aurelius Industrial Group PJSC."},
   aig:{kw:["aurelius industrial","aurelius group","aurelius"], title:"Aurelius Industrial Group PJSC – Unternehmensprofil", url:"www.aurelius-industrial.example/about", snippet:"Maschinenbau und Industrieausrüstung · Jekaterinburg", reg:true,
     rows:[["Firma","Aurelius Industrial Group PJSC"],["Rechtsform","Öffentliche Aktiengesellschaft"],["Sitz","ul. Zavodskaya 17, Jekaterinburg"],["Land","Russland"],["Registernummer","OGRN 1156658044171"],["Geschäftsfelder","Maschinenbau, Industrieausrüstung, Zulieferung Verteidigungssektor"],["Tochtergesellschaften (Auszug)","Aurelius Global Holdings Ltd., Zypern – 100 %"]],
     log:"Browser: Am Ende der Kette steht die Aurelius Industrial Group PJSC, Jekaterinburg (OGRN 1156658044171)."},
@@ -1338,7 +1345,7 @@ RENDER.browser = b => {
   $("webBack").addEventListener("click", () => { S.v.webPage = null; render("browser"); });
   on(b, ".sres", "click", e => { const id = e.currentTarget.dataset.w; S.v.webPage = id;
     if (!seen[id]){ seen[id] = true; if (WEB[id].log) narrate(WEB[id].log);
-      if (seen.agh && seen.aig && !S.f.research){ S.f.research = true; notify("Recherche", "Eigentümerkette rekonstruiert: Northbridge → Aurelius Global Holdings → Aurelius Industrial Group.", "browser"); }
+      if (seen.nt_reg && seen.agh && seen.aig && !S.f.research){ S.f.research = true; notify("Recherche", "Eigentümerkette rekonstruiert: Northbridge → Aurelius Global Holdings → Aurelius Industrial Group.", "browser"); }
       updateHud(); }
     render("browser"); });
   if ($("webJournal")) $("webJournal").addEventListener("click", () => {
@@ -1409,7 +1416,7 @@ const ZV_DEC = [
   ["ok","Fall an Compliance bzw. den Geldwäschebeauftragten eskalieren. Die angebliche Vorstandsanweisung über die bekannte Durchwahl -1200 prüfen."],
   ["release","Stopp am Montag wieder aufheben – die Anweisung kommt schließlich vom Vorstand.", "Eine ungeprüfte „Vorstandsanweisung“ ersetzt keine Prüfung. Genau darauf setzen die Täter."],
   ["reply","Per Antwort auf die Vorstandsmail nachfragen, ob die Anweisung echt ist.", "Die Antwort landet direkt bei den Tätern. Geprüft wird nur über einen unabhängig bekannten Kanal."],
-  ["warn","Die AeroTrans GmbH anrufen und vorwarnen, dass ihre Zahlung gestoppt wurde.", "Kunden dürfen nicht über laufende Prüfungen oder mögliche Meldungen informiert werden (Tipping-off-Verbot)."]];
+  ["warn","Die AeroTrans GmbH anrufen und vorwarnen, dass ihre Zahlung gestoppt wurde.", "Den Auftraggeber vorzuwarnen gefährdet die Aufklärung – und falls eine Verdachtsmeldung beabsichtigt ist oder erstattet wurde, verbietet § 47 GwG, ihn darüber zu informieren."]];
 RENDER.zv = b => {
   b.className = "wbody";
   const fs = id => !S.f.fraud ? `<span class="tag warn">zurückgehalten · Prüfung im FraudDesk</span>` : id === "sparbank" ? `<span class="tag info">weiterbearbeitet</span>` : id === "mira" ? `<span class="tag no">nicht ausgeführt · eskaliert</span>` : id === "stadtwerke" ? `<span class="tag warn">in Klärung</span>` : `<span class="tag info">Zweitfreigabe</span>`;
@@ -1422,8 +1429,8 @@ RENDER.zv = b => {
       <tr><td>Mira Energie GmbH</td><td style="text-align:right">48.750,00 €</td><td>${fs("mira")}</td></tr>
       <tr><td>Stadtwerke West</td><td style="text-align:right">1.284,30 €</td><td>${fs("stadtwerke")}</td></tr>
       <tr><td>Sparbank (Übertrag T. Berger)</td><td style="text-align:right">500,00 €</td><td>${fs("sparbank")}</td></tr>
-      <tr class="click warn" id="zvPh"><td><b>PHANTOME</b> <small class="muted">← für Details anklicken</small></td><td style="text-align:right"><b>3.800.000,00 €</b></td><td><span class="tag warn">⚠ Compliance-Vermerk offen</span></td></tr></table>
-    <p class="mini muted">+ 209 weitere Zahlungen ohne Auffälligkeiten</p><div id="zvDetail"></div>`;
+      <tr class="click ${S.f.code ? "" : "warn"}" id="zvPh"><td><b>PHANTOME</b> <small class="muted">← für Details anklicken</small></td><td style="text-align:right"><b>3.800.000,00 €</b></td><td>${S.f.code ? `<span class="tag no">⛔ Compliance-Stopp${S.f.stopped ? " · eskaliert" : ""}</span>` : `<span class="tag warn">⚠ Compliance-Vermerk offen</span>`}</td></tr></table>
+    <p class="mini muted">+ 208 weitere Zahlungen ohne Auffälligkeiten · 214 Zahlungen im Lauf</p><div id="zvDetail"></div>`;
   $("zvPh").addEventListener("click", () => { if (!S.v.zvSel){ S.v.zvSel = true; narrate("ZV-Cockpit: PHANTOME geht an die Northbridge S.A., Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt (Panama)."); updateHud(); } render("zv"); });
   if (!S.v.zvSel) return;
   const canStop = S.notes.n4;
@@ -1432,9 +1439,9 @@ RENDER.zv = b => {
     <tr><th>Empfänger</th><td><b>${RECIPIENT.name}</b></td></tr><tr><th>Adresse</th><td><b>${RECIPIENT.addr}</b></td></tr><tr><th>Land</th><td><b>${RECIPIENT.country}</b></td></tr><tr><th>Registernummer</th><td class="mono"><b>${RECIPIENT.reg}</b></td></tr>
     <tr><th>Betrag · Zweck</th><td>3.800.000,00 EUR · „Beratungsleistungen“</td></tr>
     <tr><th>Sanktionsscreening</th><td>${S.f.embargo ? `<span class="tag no">mittelbarer Treffer bestätigt</span> Eigentümerin Aurelius Industrial Group PJSC (SAN-4417)` : `<span class="tag ok">Namensabgleich Northbridge S.A.: kein Treffer</span> <small class="muted">Eigentümerstruktur nicht geprüft</small>`}</td></tr>
-    <tr><th>1. Freigabe</th><td>heute 15:12 · Sammelkennung <span class="mono">zv.batch07</span> · Arbeitsplatz <span class="mono">PC-ZV-114</span></td></tr>
+    <tr><th>Freigaben</th><td><b>1 von 2</b> – Zweitfreigabe ausstehend<br><small>1. Freigabe: heute 15:12 · Sammelkennung <span class="mono">zv.batch07</span> · Arbeitsplatz <span class="mono">PC-ZV-114</span></small></td></tr>
     <tr><th>Ausführung</th><td>automatisch im Buchungslauf 16:30 · fallverantwortlich: m.weber</td></tr></table></div>
-    ${S.f.stopped ? `<p><span class="tag no">COMPLIANCE-STOPP · ESKALIERT</span></p>` : S.f.code ? `<p><span class="tag ok">Compliance-Stopp eingetragen</span></p>${S.mode === "ermittler" && S.v.stopNote ? `<div class="doc" style="margin:10px 0"><b>Euer Vermerk</b><p style="margin:6px 0 0;white-space:pre-wrap">${esc(S.v.stopNote)}</p></div>${ZV_MODEL}` : ""}<p>Wie geht es jetzt weiter?</p>${ZV_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="zvdec" value="${v}"><span>${t}</span></label>`).join("")}<div class="row"><button class="primary" id="zvDecBtn">Bestätigen</button></div>` :
+    ${S.f.stopped ? `<p><span class="tag no">COMPLIANCE-STOPP · ESKALIERT</span></p>` : S.f.code ? `<p><span class="tag no">⛔ Compliance-Stopp eingetragen – PHANTOME ist aus dem Buchungslauf genommen.</span></p>${S.mode === "ermittler" && S.v.stopNote ? `<div class="doc" style="margin:10px 0"><b>Euer Vermerk</b><p style="margin:6px 0 0;white-space:pre-wrap">${esc(S.v.stopNote)}</p></div>${ZV_MODEL}` : ""}<p><b>Wie geht es jetzt weiter?</b> Der Stopp hält – jetzt muss der Fall richtig eskaliert werden.</p>${ZV_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="zvdec" value="${v}"><span>${t}</span></label>`).join("")}<div class="row"><button class="primary" id="zvDecBtn">Bestätigen</button></div>` :
     `<div class="row"><button id="zvRelease">Jetzt freigeben</button><button id="zvOpenStop" class="primary">Compliance-Stopp setzen …</button></div>
     <div id="zvForm" class="${S.v.zvForm ? "" : "hidden"}" style="margin-top:12px">
       ${S.mode === "ermittler" ? `<p style="margin:10px 0 4px"><b>1. Prüfbefund</b></p>
@@ -1541,13 +1548,13 @@ const topicResults = () => TOPICS.map(([name, id, ok]) => ({name, ok:!!ok(), err
 // Ermittler: sachlicher Bericht statt Punktestand.
 function report(mins){
   const chk = (ok, id) => (ok ? "✓ abgeschlossen" : "✗ offen") + " · " + (S.err[id] || 0) + " Fehlentscheidung" + ((S.err[id] || 0) === 1 ? "" : "en");
-  return [["PHANTOME gestoppt", S.f.stopped ? "✓ Ja" : "✗ Nein"],
+  return [["PHANTOME gestoppt", S.f.code ? "✓ Ja" : "✗ Nein"],
     ["Vermerk zum Stopp", S.v.stopNote ? "„" + S.v.stopNote + "“" : "–"],
     ["Eigentümerkette recherchiert", S.f.research ? "✓ Northbridge → Aurelius Global Holdings → Aurelius Industrial Group" : "✗ nicht rekonstruiert"],
     ["Sanktionsprüfung der Muttergesellschaft", chk(S.f.embargo, "embargo")],
     ["Geldwäscheprüfung (vier Alerts)", chk(S.f.aml, "aml")],
     ["Vier zurückgehaltene Zahlungen", chk(S.f.fraud, "fraud")],
-    ["Compliance-Stopp und Eskalation", chk(S.f.stopped, "zv")],
+    ["Eskalation und Prüfung der Vorstandsanweisung", chk(S.f.stopped, "zv")],
     ["Interner Verdacht", S.f.insider ? "✓ begründet gemeldet" + (S.v.accuseFails ? " (im 2. Versuch)" : " (im 1. Versuch)") : S.f.wrongAccused ? "✗ zweimal eine unschuldige Person gemeldet" : "✗ nicht gemeldet"],
     ["Hilfe angefordert", S.hints + "× (" + S.hints * HELP_MIN + " Min.)"],
     ["Verbleibende Zeit", S.timeout ? "0 Min. – Buchungslauf gestartet" : mins + " Min."]];
@@ -1557,9 +1564,9 @@ function finish(timeout){
   const remaining = Math.max(0, S.deadline - Date.now()), mins = Math.floor(remaining/60000);
   const bonus = timeout || S.f.wrongAccused ? 0 : Math.min(100, mins*2); S.score += bonus;
   const elapsed = Math.min(3000, Math.round((Date.now() - S.startAt)/1000)), t = storyTime();
-  const parts = solvedCount() + (S.f.stopped ? 1 : 0);
+  const parts = solvedCount() + (S.f.code ? 1 : 0);
   const erm = S.mode === "ermittler", rep = report(mins);
-  window.phantomeResult = {report:erm ? rep : null, mode:S.mode, topics:topicResults(), team:S.team, score:S.score, completed:parts, mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout, stopped:!!S.f.stopped, insider:!!S.f.insider};
+  window.phantomeResult = {report:erm ? rep : null, mode:S.mode, topics:topicResults(), team:S.team, score:S.score, completed:parts, mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout, stopped:!!S.f.code, escalated:!!S.f.stopped, insider:!!S.f.insider};
   const weber = ["Um 16:34 kommt Weber zurück, außer Atem. „Raum 12.04 ist ein Lager. Ich stand vor verschlossener Tür, und mein Ausweis ging plötzlich nicht mehr.“",
     "Er sieht auf seinen Bildschirm und wird blass. „Ich habe in der Eile meinen PC nicht gesperrt. Genau darauf hat er gesetzt.“"];
   let lines, title, eyebrow, head, text;
@@ -1570,15 +1577,22 @@ function finish(timeout){
       "Ein falscher Verdacht hat Folgen: für den Ruf eines unschuldigen Menschen – und für die Aufklärung."];
     title = "Falscher Verdacht"; eyebrow = "VERLOREN"; head = "Der Täter ist entkommen.";
     text = "Die Zahlung ist gestoppt, aber der Hinweis traf zweimal die falsche Person. In der Nachbesprechung: Welche Spuren hätten zu Sven Kranz geführt?";
-  } else if (!S.f.stopped){
+  } else if (!S.f.code){
     lines = ["16:30 Uhr. Der Buchungslauf startet. 214 Zahlungen gehen raus – auch PHANTOME.",
       "3,8 Millionen Euro an Northbridge S.A. – eine Firma, die über eine Holding vollständig der gelisteten Aurelius Industrial Group gehört. Kein direkter Namenstreffer, aber ein klarer Sanktionsbezug.",
       "Am Montag: Meldung an die Aufsicht, interne Sonderprüfung, Anfragen der Presse. Ein Bußgeld in Millionenhöhe steht im Raum – der Reputationsschaden ist kaum zu beziffern.",
       "Und Sven Kranz aus dem Zahlungsverkehr geht pünktlich in den Feierabend."];
     title = "16:30 Uhr – zu spät"; eyebrow = "ZEIT ABGELAUFEN"; head = "PHANTOME ist durchgelaufen.";
     text = "Die Zeit ist abgelaufen. Geht in der Nachbesprechung durch, welche Hinweise noch offen waren.";
+  } else if (!S.f.stopped){
+    lines = ["16:30 Uhr. Der Buchungslauf startet – ohne PHANTOME. Der Compliance-Stopp hält.",
+      "Aber der Fall liegt noch auf Webers Tisch: nicht eskaliert, die angebliche Vorstandsanweisung ungeprüft. Niemand außer euch weiß, was hinter Northbridge steckt.",
+      ...weber,
+      "Am Montag ist der Stopp wieder aufgehoben – „auf Anweisung des Vorstands“, erfasst über eine Sammelkennung. Ohne Eskalation konnte ihn niemand absichern."];
+    title = "Gestoppt – aber nicht eskaliert"; eyebrow = "TEILERFOLG"; head = "Zahlung gestoppt, Fall nicht eskaliert.";
+    text = "Der Stopp war richtig, aber ein Stopp allein reicht nicht: Der Fall muss an Compliance bzw. den Geldwäschebeauftragten, und die Vorstandsanweisung muss über einen unabhängigen Kanal geprüft werden.";
   } else if (!S.f.insider){
-    lines = ["16:30 Uhr. Der Buchungslauf startet. 213 Zahlungen gehen raus. PHANTOME nicht – der Compliance-Stopp hält.", ...weber,
+    lines = ["16:30 Uhr. Der Buchungslauf startet – ohne PHANTOME. Der Compliance-Stopp hält.", ...weber,
       "Aber wer hat ihn weggelockt? Bis Montag hat Sven Kranz seine Spuren beseitigt. Der interne Helfer bleibt unentdeckt."];
     title = "Gestoppt – aber nicht aufgeklärt"; eyebrow = "TEILERFOLG"; head = "Zahlung gestoppt, Täter unbekannt.";
     text = "Die Zahlung ist sicher. Den internen Täter habt ihr aber nicht rechtzeitig gemeldet.";
@@ -1587,7 +1601,7 @@ function finish(timeout){
       "Die Revision sichert seinen PC. Die Spuren führen zu Sven Kranz: Die gefälschten Vorstandsmails kamen von seinem Rechner, die Mail von Webers PC ging an ihn, und die Umleitung der Mira-Zahlung auf ein Konto von Nova Trade lief ohne Rückruf über seine Kennung.",
       "Die Sanktions-Compliance bestätigt: Northbridge und Nova Trade gehören über Aurelius Global Holdings einem gelisteten Konzern. Der Fall geht an die Aufsicht.",
       "Die Revision stuft den Verdacht als erhärtet ein und leitet eine interne Untersuchung ein. Warum Kranz Northbridge geholfen haben könnte, ist noch offen – das zu klären ist jetzt Aufgabe der Ermittler.",
-      "Um 16:30 Uhr startet der Buchungslauf. 213 Zahlungen gehen raus. PHANTOME nicht."];
+      "Um 16:30 Uhr startet der Buchungslauf – ohne PHANTOME."];
     title = "PHANTOME gestoppt."; eyebrow = "MISSION ERFÜLLT"; head = "PHANTOME gestoppt – Verdacht gemeldet.";
     text = `Ihr habt den Fall um ${t} Uhr abgeschlossen – ${mins} Minuten vor dem Buchungslauf.${S.mode === "ermittler" ? "" : " Zeitbonus: +" + bonus + " Punkte."} In der Praxis gelten stets die internen Eskalations- und Meldeprozesse.`;
   }
