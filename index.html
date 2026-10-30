@@ -316,7 +316,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.4</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.5</footer>
 </div>
 
 <script>
@@ -438,7 +438,7 @@ function hintFor(){
     "Schaut zuerst ins Kundenprofil: Was wird bei diesem Kunden erwartet – und was nicht?",
     "Markiert jede Bareinzahlung und die Überweisung an Nova Trade vom selben Tag. Gehalt, Miete und Kleinbeträge gehören nicht dazu."]};
   if (!S.notes.n3) return {key:"n3", steps:[
-    "Ihr müsst rechnen: Welche Buchungen gingen an Nova Trade?",
+    "Ihr müsst rechnen – beim verdächtigen Alert. Welche Buchungen haben das Konto wieder verlassen?",
     "Addiert die drei Überweisungen an Nova Trade Ltd. und gebt den Betrag ohne Cent und ohne Punkt ein."]};
   if (!S.f.fraud) return {key:"fraud", steps:[
     "Nicht jede Auffälligkeit ist Betrug. Fragt bei jeder Zahlung: Ist die Abweichung erklärt – oder nicht?",
@@ -609,7 +609,7 @@ function solved(app, key, nextNote, narr, msg){
 // Gleiche Schlösser in beiden Stufen – nur der Ton unterscheidet sich: Azubi führt, Ermittler deutet an.
 const NOTE_LOCKS = {
   n2:{gate:"embargo", code:"1dp01qu7ixb", pwHint:"Die Kennung des Listeneintrags, der wirklich zum Empfänger von PHANTOME gehört. Vergleicht dafür die Identitätsmerkmale – eingeben nur die vier Ziffern, ohne „SAN-“."},
-  n3:{gate:"aml", code:"2135pxw35o8", pwHint:"Wie viel Geld hat Jonas K. insgesamt an Nova Trade überwiesen? Nicht die Bareinzahlungen, sondern die Abgänge an Nova Trade zusammenzählen – ohne Cent und ohne Punkt eingeben."},
+  n3:{gate:"aml", code:"2135pxw35o8", pwHint:"Wohin ist das Geld geflossen – und wie viel war es insgesamt? Zählt nur die Weiterleitungen, nicht die Einzahlungen. Betrag in Euro, ohne Cent und ohne Punkt."},
   n4:{gate:"fraud", code:"1fnric9x17x", pwHint:"Eure vier FraudDesk-Entscheidungen der Reihe nach als Ziffern: Weiterbearbeiten = 1, Klären = 2, Nicht ausführen = 0. Die Ziffern aneinanderreihen, nicht addieren."}};
 const NOTES_AZUBI = {
   n1:{title:"14:52 · Northbridge", text:`Falls ich nicht zurück bin – das hier ist für euch.
