@@ -297,14 +297,14 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="grid">
     <div class="card"><div class="num">EMBARGO · EMBARGOCHECK</div><h3>Den echten Treffer finden</h3><p class="muted mini">Ähnliche Namen gibt es viele, und die Prozentzahl misst nur die Namensähnlichkeit. Bestätigt ist ein Treffer erst, wenn Name, Adresse, Land und Registernummer zusammenpassen. Widersprechen eindeutige Merkmale wie die Registernummer: Fehlalarm. Fehlen Merkmale oder passt nur ein Teil: nicht eindeutig – weitere Angaben anfordern. Bei einem echten Treffer: nicht ausführen, dokumentieren, eskalieren.</p></div>
     <div class="card"><div class="num">GELDWÄSCHE · AML-MONITOR</div><h3>Das Muster bei Fall K.</h3><p class="muted mini">Nicht ein Schwellenwert entscheidet, sondern das Gesamtbild: Bargeld, das nicht zum Kundenprofil passt, sofortige Weiterleitung, eine Gegenpartei ohne erkennbaren Geschäftszweck – und eine Erklärung („Geschenk der Oma“), die das Muster nicht erklärt. Ein Alert ist noch kein Verdacht: Er führt zur vertieften Prüfung, über eine Verdachtsmeldung entscheidet der Geldwäschebeauftragte.</p></div>
-    <div class="card"><div class="num">BETRUG · FRAUDDESK</div><h3>Drei Zahlungen, drei Antworten</h3><p class="muted mini">VoP ist ein Prüfbaustein, keine Entscheidung. Alles belegt → weiterbearbeiten. Namensabweichung ohne Erklärung, sonst plausibel → klären. Unbestätigte Kontoänderung plus weitere Warnsignale → nicht ausführen und eskalieren. Zusammenhängende Signale wie neue IBAN und VoP-Abweichung sind kein doppelter Beleg.</p></div>
+    <div class="card"><div class="num">BETRUG · FRAUDDESK</div><h3>Vier Zahlungen, vier Entscheidungen</h3><p class="muted mini">VoP ist ein Prüfbaustein, keine Entscheidung. Alles belegt → weiterbearbeiten. Namensabweichung ohne Erklärung, sonst plausibel → klären. Unbestätigte Kontoänderung plus weitere Warnsignale → nicht ausführen und eskalieren. Zusammenhängende Signale wie neue IBAN und VoP-Abweichung sind kein doppelter Beleg.</p></div>
     <div class="card"><div class="num">INTERNE DOLOSE HANDLUNG · HINWEISGEBERSYSTEM</div><h3>Der Helfer im Haus</h3><p class="muted mini">Die Spuren führen zu einem Mitarbeiter mit Zugang zum Zahlungsverkehr: gefälschte Mails von seinem Rechner, eine Mail von Webers entsperrtem PC, eine Kontoänderung ohne Rückruf. Das ist ein erhärteter Verdacht, kein Urteil. Mit Belegen über das Hinweisgebersystem melden, Beweise sichern – und die Person nicht selbst ansprechen.</p></div>
     <div class="card"><div class="num">INFORMATIONSSICHERHEIT · SOCIAL ENGINEERING</div><h3>Der entsperrte PC</h3><p class="muted mini">Zeitdruck und „Vertraulichkeit“ haben Weber aus dem Büro gelockt – ohne Bildschirmsperre. So konnte der Täter in seinem Namen mailen. Darum: Absender und Kopfzeilen prüfen, Termine über bekannte Kanäle bestätigen und beim Verlassen immer Windows + L.</p></div>
   </div>
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 3.6</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 3.7</footer>
 </div>
 
 <script>
@@ -718,7 +718,7 @@ RENDER.intranet = b => {
     ${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td class="mono">${r[2]}</td><td class="mono">${r[3]}</td></tr>`).join("") || `<tr><td colspan="4" class="muted">Keine Einträge gefunden.</td></tr>`}</table>
     <p class="mini muted">Raum 12.04 (12. OG): Lagerraum – kein Besprechungsraum.</p>`;
   $("staffQ").value = S.v.staffQ || "";
-  if (q && (rows.length === 1 && rows[0][3] === "PC-ZV-114" || q.includes("114")) && !S.v.pcSeen){ S.v.pcSeen = true; narrate("Intranet: Der Rechner PC-ZV-114 gehört Sven Kranz aus dem Zahlungsverkehr."); updateHud(); render("whistle"); }
+  if (rows.length === 1 && rows[0][3] === "PC-ZV-114" && !S.v.pcSeen){ S.v.pcSeen = true; narrate("Intranet: Der Rechner PC-ZV-114 gehört Sven Kranz aus dem Zahlungsverkehr."); updateHud(); render("whistle"); }
   const go = () => { S.v.staffQ = $("staffQ").value; render("intranet"); };
   $("staffBtn").addEventListener("click", go); $("staffQ").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
 };
@@ -1229,7 +1229,7 @@ function finish(timeout){
       "Die Revision sichert seinen PC. Die Spuren führen zu Sven Kranz: Die gefälschten Vorstandsmails kamen von seinem Rechner, die Mail von Webers PC ging an ihn, und die Mira-Kontoänderung lief ohne Rückruf über seine Kennung.",
       "Die Revision stuft den Verdacht als erhärtet ein und leitet eine interne Untersuchung ein. Warum Kranz Northbridge geholfen haben könnte, ist noch offen – das zu klären ist jetzt Aufgabe der Ermittler.",
       "Um 16:30 Uhr startet der Buchungslauf. 213 Zahlungen gehen raus. PHANTOME nicht."];
-    title = "Fall gelöst."; eyebrow = "MISSION ERFÜLLT"; head = "Zahlung gestoppt. Täter gemeldet.";
+    title = "PHANTOME gestoppt."; eyebrow = "MISSION ERFÜLLT"; head = "PHANTOME gestoppt – Verdacht gemeldet.";
     text = `Ihr habt den Fall um ${t} Uhr abgeschlossen – ${mins} Minuten vor dem Buchungslauf. Zeitbonus: +${bonus} Punkte. In der Praxis gelten stets die internen Eskalations- und Meldeprozesse.`;
   }
   cutscene({eyebrow:"Epilog", title, lines, button:"Zur Auswertung →", onDone:() => {
