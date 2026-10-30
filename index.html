@@ -320,7 +320,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.10</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 4.11</footer>
 </div>
 
 <script>
@@ -731,12 +731,14 @@ Falls ich nicht rechtzeitig zurück bin: Die Zahlung darf nicht im Buchungslauf 
   · an welcher Stelle die Zahlung steht, die nicht ausgeführt werden darf.`}};
 const notesFor = () => { const t = S.mode === "ermittler" ? NOTES_ERMITTLER : NOTES_AZUBI; const o = {};
   Object.keys(t).forEach(k => o[k] = {...t[k], ...(NOTE_LOCKS[k] || {})}); return o; };
+// Ermittler: Kennwörter lassen sich jederzeit eingeben – wer früh schlussfolgert, darf früh öffnen. Azubi bleibt geführt.
+const gateOpen = n => S.mode === "ermittler" || !!S.f[n.gate];
 RENDER.notes = b => {
   b.className = "wbody flush";
   const NOTES = notesFor(), id = S.v.note, n = NOTES[id], open = S.notes[id];
-  b.innerHTML = `<div class="split"><div class="list">${Object.entries(NOTES).map(([k,x]) => `<button class="li ${k === id ? "sel" : ""}" data-k="${k}">${S.notes[k] ? "📄" : "🔒"} ${x.title}<small>${S.notes[k] ? "geöffnet" : S.f[x.gate] ? "gesperrt · Passwort eingeben" : "gesperrt"}</small></button>`).join("")}</div>
+  b.innerHTML = `<div class="split"><div class="list">${Object.entries(NOTES).map(([k,x]) => `<button class="li ${k === id ? "sel" : ""}" data-k="${k}">${S.notes[k] ? "📄" : "🔒"} ${x.title}<small>${S.notes[k] ? "geöffnet" : gateOpen(x) ? "gesperrt · Passwort eingeben" : "gesperrt"}</small></button>`).join("")}</div>
     <div class="pane notesbg">${open ? `<p class="mini muted" style="margin:0">Persönliches Journal · Freitag, 30. Oktober 2026</p><h3>${n.title}</h3><div class="notetext"></div>` :
-    !S.f[n.gate] ? `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini" style="margin-bottom:10px">Dieser Eintrag ist passwortgeschützt.</p><details class="pwhint"><summary>💡 Kennworthinweis anzeigen</summary><p>${n.pwHint}</p></details>
+    !gateOpen(n) ? `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini" style="margin-bottom:10px">Dieser Eintrag ist passwortgeschützt.</p><details class="pwhint"><summary>💡 Kennworthinweis anzeigen</summary><p>${n.pwHint}</p></details>
       <p class="mini muted">Das Passwort könnt ihr eingeben, sobald ihr die Prüfung im <b>${APPS[n.gate].label}</b> abgeschlossen habt.</p></div>` :
     `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini" style="margin-bottom:10px">Dieser Eintrag ist passwortgeschützt.</p><details class="pwhint"><summary>💡 Kennworthinweis anzeigen</summary><p>${n.pwHint}</p></details>
       <div class="row"><input id="noteCode" inputmode="numeric" maxlength="6" placeholder="Code" aria-label="Code" class="mono" style="letter-spacing:.25em"><button class="primary" id="noteBtn">Öffnen</button></div></div>`}</div></div>`;
@@ -748,7 +750,7 @@ RENDER.notes = b => {
       const c = $("noteCode").value.replace(/\D/g, "");
       if (!c){ fb("notes", "Gebt einen Zahlencode ein."); return; }
       if (hash(c) === n.code){ S.notes[id] = true; fb("notes", n.title + " ist geöffnet.", "good"); narrate(n.title + " geöffnet."); render("notes"); updateHud(); }
-      else { wrong("notes", "Falscher Code. Die Notiz bleibt gesperrt."); $("noteCode").value = ""; }
+      else { if (S.mode === "ermittler") fb("notes", "Kennwort falsch. Die Notiz bleibt gesperrt.", "bad"); else wrong("notes", "Falscher Code. Die Notiz bleibt gesperrt."); $("noteCode").value = ""; }
     };
     $("noteBtn").addEventListener("click", go); $("noteCode").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
   }
