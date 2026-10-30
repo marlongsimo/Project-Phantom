@@ -326,7 +326,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.1</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.2</footer>
 </div>
 
 <script>
@@ -708,20 +708,28 @@ function notify(title, text, app){
   n.classList.remove("hidden"); clearTimeout(notifTimer); notifTimer = setTimeout(() => n.classList.add("hidden"), 8000);
 }
 const on = (root, sel, ev, fn) => root.querySelectorAll(sel).forEach(el => el.addEventListener(ev, fn));
-// Touchscreens (v. a. Windows) machen aus etwas längerem Antippen einen Rechtsklick – dann kommt kein "click".
-// Für alle Bedienelemente wird der Klick in diesem Fall nachgereicht; ein doch noch folgender Klick wird verworfen.
+// Touch (iPad/Safari, Windows-Touchscreens): Browser verschlucken den Klick, wenn sich beim Antippen etwas
+// im Fenster ändert oder etwas länger gedrückt wird. Bei Fingereingabe lösen wir den Klick deshalb selbst
+// beim Loslassen aus und verwerfen den Klick, den der Browser eventuell noch hinterherschickt.
 (() => {
   const TAP = "button,label,summary,a,tr.click,input[type=radio],input[type=checkbox]";
-  let down = null, longPress = false, fired = null;
-  const fire = () => { const el = down && down.el; down = null; longPress = false;
-    if (!el || !el.isConnected || el.disabled) return; fired = {el, t:Date.now()}; el.click(); };
-  addEventListener("pointerdown", e => { longPress = false;
-    down = e.pointerType === "mouse" ? null : {el: e.target.closest(TAP), x:e.clientX, y:e.clientY, up:false}; }, true);
-  addEventListener("pointermove", e => { if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) > 12) down.el = null; }, true);
-  addEventListener("contextmenu", e => { if (!down) return; e.preventDefault(); longPress = true; if (down.up) fire(); }, true);
-  addEventListener("pointerup", e => { if (!down) return; down.up = true; if (longPress) fire(); else setTimeout(() => { if (down && down.up && !longPress) down = null; }, 600); }, true);
-  addEventListener("click", e => { if (fired && Date.now() - fired.t < 700 && e.isTrusted && fired.el.contains(e.target)){ e.preventDefault(); e.stopPropagation(); fired = null; }
-    else if (down && e.isTrusted) down = null; }, true);
+  let down = null, ghost = null;
+  addEventListener("pointerdown", e => {
+    down = e.pointerType === "mouse" ? null : {el: e.target.closest(TAP), x:e.clientX, y:e.clientY}; }, true);
+  addEventListener("pointermove", e => { if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) > 12) down = null; }, true);
+  addEventListener("pointercancel", () => { down = null; }, true);
+  addEventListener("pointerup", e => {
+    const d = down; down = null; if (!d || !d.el || !d.el.isConnected || d.el.disabled) return;
+    ghost = {x:e.clientX, y:e.clientY, t:Date.now()};
+    if (d.el.matches("input,label")) e.preventDefault();
+    d.el.click();
+  }, true);
+  addEventListener("click", e => {
+    if (!e.isTrusted || !ghost) return;
+    if (Date.now() - ghost.t < 800 && Math.hypot(e.clientX - ghost.x, e.clientY - ghost.y) < 40){ e.preventDefault(); e.stopPropagation(); }
+    ghost = null;
+  }, true);
+  addEventListener("contextmenu", e => { if (e.target.closest(TAP)) e.preventDefault(); }, true);
 })();
 function vorgangBox(key, next){
   return `<div class="vorgang"><div><div class="mini muted">Vorgangsnummer</div><b>${VORGANG[key]}</b></div><div class="mini">Prüfung abgeschlossen und dokumentiert.${S.mode === "ermittler" ? "" : `<br>Weiter geht es mit Webers nächster Notiz.`}</div></div>`;
