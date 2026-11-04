@@ -330,7 +330,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.5</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.6</footer>
 </div>
 
 <script>
@@ -457,7 +457,7 @@ function hintErm(){
     "Sucht im Browser nach „Aurelius Global Holdings“ und schaut euch Gesellschafter und Beteiligungen an."]};
   if (!web.aig) return {key:"r3", steps:[
     "Am Ende der Kette steht ein Konzern. Für einen Listenabgleich braucht ihr seine genauen Daten.",
-    "Öffnet im Browser das Profil der Aurelius Industrial Group PJSC: Adresse, Land, Registernummer."]};
+    "Öffnet im Browser das Profil der Aurelius Industrial Group PJSC: Adresse, Land, Registernummer. Das Aktionärsregister daneben braucht ihr später für die Eskalation."]};
   if (!S.f.embargo) return {key:"embargo", steps:[
     "Prüft nicht nur den Empfänger. Steht sein Eigentümer auf der Liste? Ein ähnlicher Name ist dabei noch kein Treffer.",
     "Prüft im EmbargoCheck den vollständigen Namen der Muttergesellschaft („Aurelius Industrial Group PJSC“) und vergleicht jeden Treffer mit ihren Registerdaten aus dem Browser. Alles stimmt → echter Treffer; Adresse, Land oder Registernummer widersprechen → Fehlalarm; Merkmale fehlen → nicht eindeutig. Ergebnis: mittelbar sanktionsbetroffen."]};
@@ -487,9 +487,12 @@ function hintFor(){
       "Legt eure drei Spuren nebeneinander: Rechner der Vorstandsmails, Zuordnung im Intranet, Empfänger der Mail von 15:31. Wohin zeigen sie gemeinsam?",
       "Auch die 1. Freigabe von PHANTOME (ZV-Cockpit) und die Mira-Umleitung zu Nova Trade (FraudDesk) führen zum selben Arbeitsplatz bzw. zur selben Kennung. Meldet die Person, der dieser Arbeitsplatz gehört."]};
   }
+  if (S.f.code && S.mode === "ermittler" && !(S.v.web || {}).shr) return {key:"ubo", steps:[
+    "Für die Eskalation fehlt noch eine Angabe: Welcher Mensch steht am Ende der Kette? Ein Unternehmen, ein Treuhänder oder ein Geschäftsführer ist es nicht.",
+    "Sucht im Browser nach der Aurelius Industrial Group und öffnet das Aktionärsregister: Wer hält mehr als 25 % der Anteile oder Stimmrechte?"]};
   if (S.f.code) return {key:"zvdec", steps:[
-    "Freigeben ist keine Option – und den Kunden vorwarnen auch nicht.",
-    "Richtig ist: eskalieren und die angebliche Vorstandsanweisung über einen unabhängig bekannten Kanal (-1200) prüfen."]};
+    "Freigeben ist keine Option – und den Kunden vorwarnen auch nicht." + (S.mode === "ermittler" ? " Wirtschaftlich berechtigt ist nur eine natürliche Person, der die Kette am Ende gehört." : ""),
+    "Richtig ist: eskalieren und die angebliche Vorstandsanweisung über einen unabhängig bekannten Kanal (-1200) prüfen." + (S.mode === "ermittler" ? " Wirtschaftlich Berechtigter ist Viktor Sokolov (60 % an der Muttergesellschaft) – nicht der Geschäftsführer, nicht der Treuhänder." : "")]};
   if (!S.v.notesSeen) return {key:"start", steps:[
     "Matthias klebt sich gern Zettel an den Monitor. Wo steht laut ihm alles?",
     "Klickt auf dem Desktop auf „Notizen“. Der erste Eintrag (14:52) ist nicht gesperrt."]};
@@ -535,7 +538,7 @@ const HELPERS = {
   rev:{from:"Ines Hartmann", addr:"i.hartmann@kreisbank-hohenbrueck.example", dept:"Interne Revision", hi:"Guten Tag,", lead:"vertraulich und nur zu eurer Orientierung:", bye:"Mit freundlichen Grüßen\nInes Hartmann · Interne Revision"}};
 const HELP_TOPIC = {start:["san","Wo anfangen?"], zv:["san","Empfänger von PHANTOME"], embargo:["san","Listenabgleich Northbridge"], n2:["san","Webers Notiz 15:03"],
   aml0:["aml","Offene AML-Alerts"], aml1:["aml","Auffälliges Kundenkonto"], aml2:["aml","Gegenpartei"], n3:["aml","Webers Notiz 15:17"],
-  fraud:["fraud","Zurückgehaltene Zahlungen"], n4:["fraud","Webers Notiz 15:25"], stop:["san","Compliance-Stopp PHANTOME"], r1:["san","Eigentümer von Northbridge"], r2:["san","Eigentümer von Nova Trade"], r3:["san","Konzernstruktur Aurelius"], zvdec:["san","Vorstandsanweisung PHANTOME"],
+  fraud:["fraud","Zurückgehaltene Zahlungen"], n4:["fraud","Webers Notiz 15:25"], stop:["san","Compliance-Stopp PHANTOME"], r1:["san","Eigentümer von Northbridge"], r2:["san","Eigentümer von Nova Trade"], r3:["san","Konzernstruktur Aurelius"], ubo:["aml","Wirtschaftlich Berechtigter"], zvdec:["san","Vorstandsanweisung PHANTOME"],
   ins1:["rev","Vorstandsmail"], ins2:["rev","Arbeitsplatz-Zuordnung"], ins3:["rev","Webers Postausgang"], ins4:["rev","Hinweis an die Revision"], ins5:["rev","Freigaben PHANTOME"], ins6:["rev","Kontoänderung Mira"]};
 const helpLeft = () => Math.max(0, S.deadline - Date.now()) > (HELP_MIN + 1) * 60000;
 function requestHelp(){
@@ -1009,8 +1012,8 @@ const EMB_EVAL = [
   ["fp", "Fehlalarm", "Eindeutige Merkmale wie Registernummer, Adresse und Land widersprechen dem geprüften Unternehmen.", "ok"],
   ["unclear", "Nicht eindeutig", "Merkmale fehlen oder passen nur teilweise – weitere Angaben anfordern, bevor entschieden wird.", "warn"]];
 const EMB_PROC = [
-  ["stop", "Treffer bestätigt: Die gelistete Aurelius Industrial Group PJSC hält über Aurelius Global Holdings 100 % an Northbridge S.A. PHANTOME ist mittelbar sanktionsbetroffen – Ergebnis an den Zahlungsverkehr: Compliance-Stopp, Eskalation an den Sanktionsbeauftragten."],
-  ["run", "Northbridge S.A. selbst steht auf keiner Liste – die Zahlung ist sanktionsrechtlich unbedenklich.", "Ein fehlender direkter Treffer ist kein Freibrief: Northbridge gehört über die Holding vollständig einem gelisteten Konzern. Eigentum und Kontrolle zählen."],
+  ["stop", "Treffer bestätigt: Die gelistete Aurelius Industrial Group PJSC hält über Aurelius Global Holdings 100 % an Northbridge S.A. Bei dieser Eigentums- und Kontrollstruktur käme die Zahlung der gelisteten Gesellschaft zugute – Ergebnis an den Zahlungsverkehr: Compliance-Stopp, Bewertung durch die Sanktions-Compliance."],
+  ["run", "Northbridge S.A. selbst steht auf keiner Liste – die Zahlung ist sanktionsrechtlich unbedenklich.", "Ein fehlender direkter Treffer ist kein Freibrief: Northbridge gehört über die Holding vollständig einem gelisteten Konzern. Eigentum und Kontrolle zählen – die konkrete Bewertung trifft die Sanktions-Compliance."],
   ["ask", "Bei der AeroTrans GmbH nachfragen, wem Northbridge eigentlich gehört.", "Den Auftraggeber einzuweihen kann die Aufklärung gefährden. Geklärt und eskaliert wird intern."]];
 // Namensähnlichkeit wird aus dem Suchbegriff berechnet (Bigramm-Vergleich ohne Rechtsform). Bewertet wird nur,
 // wenn das geprüfte Unternehmen selbst gemeint ist – ähnliche Namen allein sind keine Treffer.
@@ -1050,7 +1053,7 @@ RENDER.embargo = b => {
     ${allRated && !done ? `<div class="doc" style="margin-top:14px"><h3>Prüfung abschließen</h3><p class="mini" style="margin-top:0">Alle Treffer sind bewertet. Welches Ergebnis dokumentiert ihr für die Zahlung PHANTOME?</p>
       ${EMB_PROC.map(([v,t]) => `<label class="choice"><input type="radio" name="embProc" value="${v}"><span>${t}</span></label>`).join("")}
       <div class="row"><button class="primary" id="embDone">Prüfung abschließen</button></div></div>` : ""}
-    ${done ? `<p><span class="tag no">✕ Treffer bestätigt: SAN-4417 · Aurelius Industrial Group PJSC</span> <span class="tag no">mittelbar betroffen: Northbridge S.A.</span></p>` + vorgangBox("embargo", "Notiz 2") : ""}`;
+    ${done ? `<p><span class="tag no">✕ Treffer bestätigt: SAN-4417 · Aurelius Industrial Group PJSC</span> <span class="tag no">Eigentümerin von Northbridge S.A.</span></p>` + vorgangBox("embargo", "Notiz 2") : ""}`;
   if ($("embQ")){
     $("embQ").value = S.v.embQ || "";
     const search = () => { S.v.embQ = $("embQ").value; S.v.embSearched = true; S.v.embSel = null;
@@ -1074,7 +1077,7 @@ RENDER.embargo = b => {
     if (p !== "stop") return wrong("embargo", EMB_PROC.find(x => x[0] === p)[2]);
     solved("embargo", "embargo", "Notiz 2",
       "EmbargoCheck: SAN-4417 ist die Aurelius Industrial Group PJSC – Adresse, Land und Registernummer stimmen. Über Aurelius Global Holdings gehört ihr Northbridge S.A. zu 100 %. Drei Fehlalarme, ein nicht eindeutiger Eintrag. Vorgang " + VORGANG.embargo + ".",
-      "Richtig: ein echter Treffer, drei Fehlalarme, ein nicht eindeutiger Eintrag. Northbridge ist mittelbar sanktionsbetroffen – der Stopp gehört jetzt ins ZV-Cockpit.");
+      "Richtig: ein echter Treffer, drei Fehlalarme, ein nicht eindeutiger Eintrag. Northbridge gehört vollständig einer gelisteten Gesellschaft – der Stopp gehört jetzt ins ZV-Cockpit.");
   });
 };
 
@@ -1341,11 +1344,14 @@ const WEB = {
     rows:[["Firma","Nova Trade Ltd."],["Registernummer","155-702-3318"],["Sitz","Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt"],["Gegründet","01/2025"],["Geschäftsführer","Rafael Ordóñez Vega"],["Anteilseigner","Aurelius Global Holdings Ltd., Limassol (Zypern) – 100 %"]],
     log:"Browser: Nova Trade Ltd. sitzt unter derselben Adresse wie Northbridge und hat denselben Geschäftsführer. Eigentümerin: Aurelius Global Holdings Ltd. (100 %)."},
   agh:{kw:["aurelius global","aurelius holdings","aurelius"], title:"Handelsregister Zypern – Aurelius Global Holdings Ltd.", url:"companies-registry.example/HE418207", snippet:"Registerauszug · Private Limited Company · Limassol", reg:true,
-    rows:[["Firma","Aurelius Global Holdings Ltd."],["Registernummer","HE 418207"],["Sitz","Arch. Makariou III 155, Limassol, Zypern"],["Gesellschafter","Aurelius Industrial Group PJSC, Jekaterinburg – 100 %"],["Beteiligungen","Northbridge S.A., Panama – 100 % (Inhaberaktien, treuhänderisch verwahrt durch Istmo Nominees S.A.)<br>Nova Trade Ltd., Panama – 100 % (direkt)"],["Wirtschaftlich Berechtigte","über die Gesellschafterin: Aurelius Industrial Group PJSC"]],
+    rows:[["Firma","Aurelius Global Holdings Ltd."],["Registernummer","HE 418207"],["Sitz","Arch. Makariou III 155, Limassol, Zypern"],["Gesellschafter","Aurelius Industrial Group PJSC, Jekaterinburg – 100 %"],["Beteiligungen","Northbridge S.A., Panama – 100 % (Inhaberaktien, gehalten von Istmo Nominees S.A. als Nominee für die Gesellschaft; Weisungsrecht und wirtschaftliche Berechtigung bei Aurelius Global Holdings)<br>Nova Trade Ltd., Panama – 100 % (direkt)"],["Wirtschaftlich Berechtigte","auf Ebene der Gesellschaft keine natürliche Person mit mehr als 25 % – einzige Gesellschafterin ist die Aurelius Industrial Group PJSC"]],
     log:"Browser: Aurelius Global Holdings hält 100 % an Nova Trade und – treuhänderisch über Istmo Nominees – 100 % an Northbridge S.A. Sie gehört selbst zu 100 % der Aurelius Industrial Group PJSC."},
   aig:{kw:["aurelius industrial","aurelius group","aurelius"], title:"Aurelius Industrial Group PJSC – Unternehmensprofil", url:"www.aurelius-industrial.example/about", snippet:"Maschinenbau und Industrieausrüstung · Jekaterinburg", reg:true,
-    rows:[["Firma","Aurelius Industrial Group PJSC"],["Rechtsform","Öffentliche Aktiengesellschaft"],["Sitz","ul. Zavodskaya 17, Jekaterinburg"],["Land","Russland"],["Registernummer","OGRN 1156658044171"],["Geschäftsfelder","Maschinenbau, Industrieausrüstung, Zulieferung Verteidigungssektor"],["Tochtergesellschaften (Auszug)","Aurelius Global Holdings Ltd., Zypern – 100 %"]],
+    rows:[["Firma","Aurelius Industrial Group PJSC"],["Rechtsform","Öffentliche Aktiengesellschaft"],["Sitz","ul. Zavodskaya 17, Jekaterinburg"],["Land","Russland"],["Registernummer","OGRN 1156658044171"],["Geschäftsfelder","Maschinenbau, Industrieausrüstung, Zulieferung Verteidigungssektor"],["Tochtergesellschaften (Auszug)","Aurelius Global Holdings Ltd., Zypern – 100 %"],["Aktionäre","siehe Aktionärsregister"]],
     log:"Browser: Am Ende der Kette steht die Aurelius Industrial Group PJSC, Jekaterinburg (OGRN 1156658044171)."},
+  shr:{kw:["aurelius industrial","aurelius group","aurelius","sokolov","aktionarsregister"], title:"Aktionärsregister – Aurelius Industrial Group PJSC", url:"shareholder-registry.example/ogrn-1156658044171", snippet:"Offenlegung der Aktionäre mit wesentlicher Beteiligung · Stand 30.09.2026", reg:true,
+    rows:[["Gesellschaft","Aurelius Industrial Group PJSC (OGRN 1156658044171)"],["Aktionär","<b>Viktor Sokolov</b> – Kapitalanteil 60 %, Stimmrechte 60 %"],["Geburtsdatum","14.02.1972"],["Staatsangehörigkeit","russisch"],["Wohnort","Jekaterinburg"],["Weitere Aktionäre","40 % im Streubesitz – kein Aktionär einzeln über 25 %, keine Stimmbindung oder sonstige Kontrolle bekannt"]],
+    log:"Browser: Laut Aktionärsregister hält Viktor Sokolov 60 % der Anteile und Stimmrechte an der Aurelius Industrial Group PJSC. Die übrigen 40 % liegen im Streubesitz."},
   aurel:{kw:["aurel"], title:"Mark Aurel – römischer Kaiser (121–180 n. Chr.)", url:"lexikon.example/mark-aurel", snippet:"Römischer Kaiser und Philosoph, Verfasser der „Selbstbetrachtungen“.",
     html:`<h3>Mark Aurel</h3><p>Römischer Kaiser von 161 bis 180 n. Chr. und stoischer Philosoph. Bekannt für seine „Selbstbetrachtungen“.</p><p class="mini muted">Vermutlich nicht das, was ihr sucht.</p>`}};
 const webNorm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
@@ -1458,10 +1464,17 @@ const ZV_REASONS = [
   ["abroad", "Empfänger sitzt im Ausland", false]];
 // Ermittler: freier Vermerk statt Ankreuzliste – kein Abgleich, sondern eine Musterbegründung zum Vergleich.
 const ZV_MODEL = `<div class="doc" style="margin:10px 0"><b>Musterbegründung zum Vergleich</b>
-  <p style="margin:6px 0"><b>Tragender Grund:</b> Northbridge S.A. steht selbst auf keiner Liste. Laut Registern gehört sie aber über die Aurelius Global Holdings Ltd. (100 %) vollständig der Aurelius Industrial Group PJSC – gelistet unter SAN-4417, bestätigt über Adresse, Land und Registernummer. Damit ist die Zahlung mittelbar sanktionsbetroffen und darf nicht ausgeführt werden.</p>
+  <p style="margin:6px 0"><b>Tragender Grund:</b> Northbridge S.A. steht selbst auf keiner Liste. Laut Registern gehört sie aber über die Aurelius Global Holdings Ltd. (100 %) vollständig der Aurelius Industrial Group PJSC – gelistet unter SAN-4417, bestätigt über Adresse, Land und Registernummer. Bei 100 % Eigentum ist davon auszugehen, dass die Zahlung der gelisteten Gesellschaft zugutekäme; sie darf nicht ausgeführt werden. Die konkrete Bewertung nach dem einschlägigen Sanktionsregime trifft die Sanktions-Compliance.</p>
   <p style="margin:6px 0"><b>Ergänzend:</b> Nova Trade Ltd. gehört derselben Holding, sitzt unter derselben Adresse und hat denselben Geschäftsführer wie Northbridge. Sie erhält die Bargeld-Weiterleitungen von Jonas K. und sollte die umgeleitete Mira-Zahlung bekommen – Hinweise auf ein Netzwerk, die an den Geldwäschebeauftragten gehören.</p>
+  <p style="margin:6px 0"><b>Wirtschaftlich Berechtigter (Geldwäscheprävention):</b> Viktor Sokolov – 60 % an der Aurelius Industrial Group PJSC und damit über die Kette an Northbridge und Nova Trade. Er steht selbst auf keiner Liste; seine Staatsangehörigkeit ist kein Sanktionsgrund. Er ist für die Geldwäscheprüfung relevant, nicht als Stoppgrund.</p>
   <p style="margin:6px 0"><b>Für sich allein kein Stoppgrund:</b> der hohe Betrag, der Auslandsbezug, das Land Panama. Und umgekehrt: Ein fehlender direkter Namenstreffer ist kein Freibrief.</p>
   <p class="mini muted" style="margin:6px 0 0">In der Praxis gilt: Sobald der Sanktionsbezug bestätigt ist, wird sofort gestoppt und eskaliert. Vergleicht euren Vermerk: Habt ihr den tragenden Grund genannt – und ihn belegt?</p></div>`;
+const UBO = [
+  ["vega","Rafael Ordóñez Vega – Geschäftsführer von Northbridge und Nova Trade","Wer eine Firma führt, dem gehört sie nicht. Wirtschaftlich berechtigt ist, wem die Kette am Ende gehört oder wer sie kontrolliert. Die Geschäftsleitung gilt nur ersatzweise als wirtschaftlich berechtigt, wenn sich keine solche Person ermitteln lässt."],
+  ["istmo","Istmo Nominees S.A. – Treuhänder der Northbridge-Aktien","Istmo hält die Aktien nur als Nominee für die Holding. Ein Treuhänder ist nicht wirtschaftlich berechtigt – und ein Unternehmen ohnehin keine natürliche Person."],
+  ["aig","Aurelius Industrial Group PJSC – Muttergesellschaft","Ein Unternehmen ist keine natürliche Person. Verfolgt die Kette bis zu den Aktionären der Muttergesellschaft."],
+  ["sokolov","Viktor Sokolov – Aktionär der Aurelius Industrial Group PJSC"],
+  ["none","Nicht ermittelbar – die Geschäftsleitung als fiktiv wirtschaftlich Berechtigten angeben","Die Person lässt sich ermitteln: Das Aktionärsregister der Muttergesellschaft nennt einen Aktionär mit mehr als 25 %. Der Ersatz durch die Geschäftsleitung gilt nur, wenn das wirklich nicht gelingt."]];
 const ZV_DEC = [
   ["ok","Fall an Compliance bzw. den Geldwäschebeauftragten eskalieren. Die angebliche Vorstandsanweisung über die bekannte Durchwahl -1200 prüfen."],
   ["release","Stopp am Montag wieder aufheben – die Anweisung kommt schließlich vom Vorstand.", "Eine ungeprüfte „Vorstandsanweisung“ ersetzt keine Prüfung. Genau darauf setzen die Täter."],
@@ -1488,10 +1501,10 @@ RENDER.zv = b => {
     <tr><th>Auftraggeber</th><td>AeroTrans GmbH, Hamburg</td></tr>
     <tr><th>Empfänger</th><td><b>${RECIPIENT.name}</b></td></tr><tr><th>Adresse</th><td><b>${RECIPIENT.addr}</b></td></tr><tr><th>Land</th><td><b>${RECIPIENT.country}</b></td></tr><tr><th>Registernummer</th><td class="mono"><b>${RECIPIENT.reg}</b></td></tr>
     <tr><th>Betrag · Zweck</th><td>3.800.000,00 EUR · „Beratungsleistungen“</td></tr>
-    <tr><th>Sanktionsscreening</th><td>${S.f.embargo ? `<span class="tag no">mittelbarer Treffer bestätigt</span> Eigentümerin Aurelius Industrial Group PJSC (SAN-4417)` : `<span class="tag ok">Namensabgleich Northbridge S.A.: kein Treffer</span> <small class="muted">Eigentümerstruktur nicht geprüft</small>`}</td></tr>
+    <tr><th>Sanktionsscreening</th><td>${S.f.embargo ? `<span class="tag no">Treffer bei der Eigentümerin bestätigt</span> Aurelius Industrial Group PJSC (SAN-4417)` : `<span class="tag ok">Namensabgleich Northbridge S.A.: kein Treffer</span> <small class="muted">Eigentümerstruktur nicht geprüft</small>`}</td></tr>
     <tr><th>Freigaben</th><td><b>1 von 2</b> – Zweitfreigabe ausstehend<br><small>1. Freigabe: heute 15:12 · Sammelkennung <span class="mono">zv.batch07</span> · Arbeitsplatz <span class="mono">PC-ZV-114</span></small></td></tr>
     <tr><th>Ausführung</th><td>automatisch im Buchungslauf 16:30 · fallverantwortlich: m.weber</td></tr></table></div>
-    ${S.f.stopped ? `<p><span class="tag no">COMPLIANCE-STOPP · ESKALIERT</span></p>` : S.f.code ? `<p><span class="tag no">⛔ Compliance-Stopp eingetragen – PHANTOME ist aus dem Buchungslauf genommen.</span></p>${S.mode === "ermittler" && S.v.stopNote ? `<div class="doc" style="margin:10px 0"><b>Euer Vermerk</b><p style="margin:6px 0 0;white-space:pre-wrap">${esc(S.v.stopNote)}</p></div>${ZV_MODEL}` : ""}<p><b>Wie geht es jetzt weiter?</b> Der Stopp hält – jetzt muss der Fall richtig eskaliert werden.</p>${ZV_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="zvdec" value="${v}"><span>${t}</span></label>`).join("")}<div class="row"><button class="primary" id="zvDecBtn">Bestätigen</button></div>` :
+    ${S.f.stopped ? `<p><span class="tag no">COMPLIANCE-STOPP · ESKALIERT</span></p>` : S.f.code ? `<p><span class="tag no">⛔ Compliance-Stopp eingetragen – PHANTOME ist aus dem Buchungslauf genommen.</span></p>${S.mode === "ermittler" && S.v.stopNote ? `<div class="doc" style="margin:10px 0"><b>Euer Vermerk</b><p style="margin:6px 0 0;white-space:pre-wrap">${esc(S.v.stopNote)}</p></div>${ZV_MODEL}` : ""}<p><b>Wie geht es jetzt weiter?</b> Der Stopp hält – jetzt muss der Fall richtig eskaliert werden.</p>${ZV_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="zvdec" value="${v}"><span>${t}</span></label>`).join("")}${S.mode === "ermittler" ? `<p style="margin:12px 0 4px"><b>Angabe für den Geldwäschebeauftragten:</b> Wirtschaftlich Berechtigter der Empfängerstruktur (natürliche Person)</p>${UBO.map(([v,t]) => `<label class="choice"><input type="radio" name="zvubo" value="${v}"><span>${t}</span></label>`).join("")}` : ""}<div class="row"><button class="primary" id="zvDecBtn">Bestätigen</button></div>` :
     `<div class="row"><button id="zvRelease">Jetzt freigeben</button><button id="zvOpenStop" class="primary">Compliance-Stopp setzen …</button></div>
     <div id="zvForm" class="${S.v.zvForm ? "" : "hidden"}" style="margin-top:12px">
       ${S.mode === "ermittler" ? `<p style="margin:10px 0 4px"><b>1. Prüfbefund</b></p>
@@ -1530,6 +1543,12 @@ RENDER.zv = b => {
   if ($("zvDecBtn")) $("zvDecBtn").addEventListener("click", () => {
     const v = (b.querySelector("input[name=zvdec]:checked") || {}).value;
     if (!v){ fb("zv", "Wählt eine Option."); return; }
+    if (v === "ok" && S.mode === "ermittler"){
+      const u = (b.querySelector("input[name=zvubo]:checked") || {}).value;
+      if (!u) return fb("zv", "Gebt für den Geldwäschebeauftragten noch den wirtschaftlich Berechtigten an.");
+      if (u !== "sokolov") return wrong("zv", UBO.find(x => x[0] === u)[2]);
+      S.v.ubo = true; narrate("Eskalation: Wirtschaftlich Berechtigter der Kette ist Viktor Sokolov (60 % an der Aurelius Industrial Group PJSC) – selbst nicht gelistet, relevant für die Geldwäscheprüfung.");
+    }
     if (v === "ok"){ S.score += 100; S.f.stopped = true; narrate("PHANTOME ist gestoppt und eskaliert. Offen bleibt: Wer im Haus hilft Northbridge – und hat Weber weggelockt?"); fb("zv", "Gestoppt und eskaliert." + pts(" +100 Punkte."), "good"); updateHud(); render("zv"); setTimeout(phaseTwo, 900); } else wrong("zv", ZV_DEC.find(x => x[0] === v)[2]);
   });
 };
@@ -1603,6 +1622,7 @@ function report(mins){
     ["Vermerk zum Stopp", S.v.stopNote ? "„" + S.v.stopNote + "“" : "–"],
     ["Eigentümerkette recherchiert", S.f.research ? "✓ Northbridge → Aurelius Global Holdings → Aurelius Industrial Group" : "✗ nicht rekonstruiert"],
     ["Sanktionsprüfung der Muttergesellschaft", chk(S.f.embargo, "embargo")],
+    ["Wirtschaftlich Berechtigter ermittelt", S.v.ubo ? "✓ Viktor Sokolov (60 % an der Aurelius Industrial Group PJSC)" : "✗ nicht ermittelt"],
     ["Geldwäscheprüfung (vier Alerts)", chk(S.f.aml, "aml")],
     ["Vier zurückgehaltene Zahlungen", chk(S.f.fraud, "fraud")],
     ["Eskalation und Prüfung der Vorstandsanweisung", chk(S.f.stopped, "zv")],
@@ -1652,7 +1672,7 @@ function finish(timeout){
   } else {
     lines = [`${t} Uhr. PHANTOME ist gestoppt, der Hinweis ist bei Compliance und Interner Revision.`, ...weber,
       "Die Revision sichert seinen PC. Die Spuren führen zu Sven Kranz: Die gefälschten Vorstandsmails kamen von seinem Rechner, die Mail von Webers PC ging an ihn, und die Umleitung der Mira-Zahlung auf ein Konto von Nova Trade lief ohne Rückruf über seine Kennung.",
-      "Die Sanktions-Compliance bestätigt: Northbridge und Nova Trade gehören über Aurelius Global Holdings einem gelisteten Konzern. Der Fall geht an die Aufsicht.",
+      "Die Sanktions-Compliance bestätigt: Northbridge und Nova Trade gehören über Aurelius Global Holdings einem gelisteten Konzern. Der Geldwäschebeauftragte nimmt Viktor Sokolov als wirtschaftlich Berechtigten in seine Prüfung auf. Der Fall geht an die Aufsicht.",
       "Die Revision stuft den Verdacht als erhärtet ein und leitet eine interne Untersuchung ein. Warum Kranz Northbridge geholfen haben könnte, ist noch offen – das zu klären ist jetzt Aufgabe der Ermittler.",
       "Um 16:30 Uhr startet der Buchungslauf – ohne PHANTOME."];
     title = "PHANTOME gestoppt."; eyebrow = "MISSION ERFÜLLT"; head = "PHANTOME gestoppt – Verdacht gemeldet.";
