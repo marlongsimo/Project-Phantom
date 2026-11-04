@@ -108,6 +108,14 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .win textarea{width:100%;padding:8px 10px;border:1px solid #d2c0bf;border-radius:6px;background:#fff;color:#1d2533;font:inherit;resize:vertical}
 .win select{max-width:100%}
 @media(max-width:700px){.modes{grid-template-columns:1fr}}
+.learn{max-width:900px}.learn h1{font-size:clamp(1.6rem,4vw,2.4rem)}.learn p,.learn li{line-height:1.6}
+.learn table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.95rem}.learn th,.learn td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}.learn th{color:var(--muted);font-weight:600}
+.lnprog{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 18px}.lnprog span{font-size:.75rem;padding:3px 9px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.lnprog span.done{color:#c9f0d7;border-color:#3b7a55}.lnprog span.cur{color:#fff;border-color:#e27a88;background:rgba(168,37,56,.3)}
+.lnq{margin:18px 0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.18)}.lnq p{margin:6px 0 10px}
+.lnopt{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;margin:6px 0;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.lnopt:has(input:checked){border-color:#e27a88;background:rgba(168,37,56,.18)}.lnopt.ok{border-color:#3b7a55;background:rgba(59,122,85,.25)}.lnopt.bad{border-color:#a82538;background:rgba(168,37,56,.25)}
+.lnfb{padding:10px 12px;border-radius:8px;margin:10px 0 0}.lnfb.ok{background:rgba(59,122,85,.25)}.lnfb.bad{background:rgba(168,37,56,.25)}
 .pwhint{margin:0 0 12px;text-align:left;font-size:.9rem}.pwhint summary{cursor:pointer;color:#a82538;font-weight:700;display:inline-block;padding:6px 12px;border:1px solid #e3c2c7;border-radius:6px;background:#fff}.pwhint summary:hover{background:#f8e9eb}.pwhint p{margin:6px 0 0;padding:8px 10px;background:#fff;border:1px solid #e0d3d1;border-radius:6px}
 .badge.new{background:#ffca70;color:#3a2f00}
 .badge{position:absolute;top:-5px;right:-12px;background:#e81123;color:#fff;border-radius:9px;font-size:.66rem;font-weight:700;padding:1px 5px;text-shadow:none}
@@ -251,9 +259,9 @@ h3{font-size:1.05rem;margin-bottom:6px}
     <h1>Weber ist weg.<br>Sein PC ist noch an.</h1>
     <div id="resumeBox" class="notice hidden"></div>
     <p class="muted" style="max-width:680px;font-size:1.08rem">Freitag, 15:40 Uhr. Senior-Analyst Matthias Weber war an etwas Großem dran – dann ist er verschwunden. Um 16:30 Uhr startet der Buchungslauf, und mit ihm eine Zahlung über 3,8 Millionen Euro an eine Firma, die auf einer Sanktionsliste stehen könnte. Folgt Webers Notizen und stoppt die Zahlung rechtzeitig.</p>
-    <div class="modes hidden" id="modeSelect" role="radiogroup" aria-label="Schwierigkeitsstufe">
-      <label class="mode"><input type="radio" name="mode" value="azubi"><b>Azubi</b><small>Webers Notizen führen Schritt für Schritt. Die Seitenleiste zeigt den nächsten Schritt und euren Fortschritt.</small></label>
-      <label class="mode"><input type="radio" name="mode" value="ermittler" checked><b>Ermittler</b><small>Webers Notizen sind persönliche Beobachtungen. Keine Schrittanzeige, kein automatisches Protokoll – führt euer eigenes Journal. Hilfe kostet Zeit statt Punkte.</small></label>
+    <div class="modes" id="modeSelect" role="radiogroup" aria-label="Stufe">
+      <label class="mode"><input type="radio" name="mode" value="ermittler" checked><b>Ermittler</b><small>Direkt in den Fall: 50 Minuten, keine Schrittanzeige, Hilfe kostet Zeit.</small></label>
+      <label class="mode"><input type="radio" name="mode" value="azubi"><b>Azubi (Test)</b><small>Erst fünf kurze Lernmodule und ein Wissenstest (ab 9 von 12 bestanden), dann derselbe Fall mit 75 Minuten Spielzeit.</small></label>
     </div>
     <div class="field" style="max-width:460px">
       <input id="teamName" maxlength="40" placeholder="Teamname eingeben" aria-label="Teamname">
@@ -265,6 +273,15 @@ h3{font-size:1.05rem;margin-bottom:6px}
     <div class="card"><div class="num" id="c1n"></div><h3 id="c1h"></h3><p class="muted" id="c1p"></p></div>
     <div class="card"><div class="num" id="c2n"></div><h3 id="c2h"></h3><p class="muted" id="c2p"></p></div>
     <div class="card"><div class="num" id="c3n"></div><h3 id="c3h"></h3><p class="muted" id="c3p"></p></div>
+  </div>
+</section>
+
+<section id="learn" class="hidden">
+  <div class="hero learn">
+    <div class="eyebrow" id="lnEyebrow"></div>
+    <div class="lnprog" id="lnProg"></div>
+    <div id="lnBody"></div>
+    <div class="rowbuttons" id="lnNav"></div>
   </div>
 </section>
 
@@ -330,7 +347,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.6</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.7</footer>
 </div>
 
 <script>
@@ -348,10 +365,11 @@ const S = {team:"", startAt:0, deadline:0, timerId:null, ended:false, score:0, m
   f:{embargo:false, aml:false, fraud:false, code:false},
   notes:{n1:true, n2:false, n3:false, n4:false},
   v:{mail:0, chat:"albers", note:"n1", alert:null, amlSel:[], fraudDec:{}, zvSel:false, notesSeen:false, web:{}},
-  unread:{mail:2, chat:1}, hintUsed:{}, err:{}, mode:"azubi", journal:[]};
+  unread:{mail:2, chat:1}, hintUsed:{}, err:{}, mode:"ermittler", track:"ermittler", scale:1, journal:[]};
 
 /* ---------- Zeit ---------- */
-const storyMin = () => S.startAt ? Math.min(50, Math.floor((Date.now() - S.startAt)/60000)) : 0;
+// Eine Spielminute dauert im Azubi-Modus länger (scale), damit die Geschichte trotzdem um 16:30 endet.
+const storyMin = () => S.startAt ? Math.min(50, Math.floor((Date.now() - S.startAt)/(60000 * (S.scale || 1)))) : 0;
 const storyTime = (m = storyMin()) => { const t = 40 + m; return (15 + Math.floor(t/60)) + ":" + pad(t % 60); };
 function tick(){
   const remaining = Math.max(0, S.deadline - Date.now()), sec = Math.ceil(remaining/1000);
@@ -540,11 +558,11 @@ const HELP_TOPIC = {start:["san","Wo anfangen?"], zv:["san","Empfänger von PHAN
   aml0:["aml","Offene AML-Alerts"], aml1:["aml","Auffälliges Kundenkonto"], aml2:["aml","Gegenpartei"], n3:["aml","Webers Notiz 15:17"],
   fraud:["fraud","Zurückgehaltene Zahlungen"], n4:["fraud","Webers Notiz 15:25"], stop:["san","Compliance-Stopp PHANTOME"], r1:["san","Eigentümer von Northbridge"], r2:["san","Eigentümer von Nova Trade"], r3:["san","Konzernstruktur Aurelius"], ubo:["aml","Wirtschaftlich Berechtigter"], zvdec:["san","Vorstandsanweisung PHANTOME"],
   ins1:["rev","Vorstandsmail"], ins2:["rev","Arbeitsplatz-Zuordnung"], ins3:["rev","Webers Postausgang"], ins4:["rev","Hinweis an die Revision"], ins5:["rev","Freigaben PHANTOME"], ins6:["rev","Kontoänderung Mira"]};
-const helpLeft = () => Math.max(0, S.deadline - Date.now()) > (HELP_MIN + 1) * 60000;
+const helpLeft = () => Math.max(0, S.deadline - Date.now()) > (HELP_MIN + 1) * 60000 * (S.scale || 1);
 function requestHelp(){
   const h = hintFor(), used = S.hintUsed[h.key] || 0, [who, topic] = HELP_TOPIC[h.key] || ["san","PHANTOME"], c = HELPERS[who];
   S.hintUsed[h.key] = used + 1; S.hints++;
-  S.startAt -= HELP_MIN * 60000; S.deadline -= HELP_MIN * 60000;
+  S.startAt -= HELP_MIN * 60000 * (S.scale || 1); S.deadline -= HELP_MIN * 60000 * (S.scale || 1);
   const body = [c.hi, c.lead, h.steps[used]].map(t => `<p>${t}</p>`).join("") + `<p>${c.bye.replace("\n", "<br>")}</p>`;
   mailIn({from:c.from, addr:c.addr, subj:"AW: Rückfrage – " + topic, body, hdr:`Received: from ${c.dept} · mail-gw01.kreisbank.intern`}, true);
   showHint("Anfrage verschickt. Die Uhr ist um " + HELP_MIN + " Minuten vorgerückt – die Antwort kommt per Mail.");
@@ -765,38 +783,6 @@ const NOTE_LOCKS = {
   n2:{gate:"embargo", code:"gsuns1emmu", pwHint:"Wer genau ist der Empfänger von PHANTOME? Die letzten vier Ziffern seiner Registernummer."},
   n3:{gate:"aml", code:"2135pxw35o8", pwHint:"Die Summe der Ausgänge an die Firma, an die das Geld weitergeleitet wurde – in Euro, ohne Cent und ohne Punkt."},
   n4:{gate:"fraud", code:"131g06wtogr", pwHint:"Die umgeleitete Zahlung aus dem FraudDesk, die auf keinen Fall ausgeführt werden darf: die ersten drei Ziffern ihres Betrags."}};
-const NOTES_AZUBI = {
-  n1:{title:"14:52 · Northbridge", text:`Falls ich nicht zurück bin – das hier ist für euch.
-
-Die Zahlung PHANTOME, 3,8 Mio. €, darf um 16:30 nicht rausgehen. Ich bin mir sicher, dahinter steckt mehr.
-
-Ich habe meine weiteren Notizen gesperrt – man weiß nie, wer mitliest. Jede öffnet sich erst, wenn ihr die Prüfung davor wirklich gelöst habt. Das Rätsel dazu steht auf dem Schloss.
-
-Wo anfangen? Beim Empfänger.
-→ Im ZV-Cockpit stehen seine genauen Daten (Zeile PHANTOME anklicken).
-→ Im EmbargoCheck prüft ihr ihn selbst. Vorsicht: Es gibt mehrere Firmen mit fast gleichem Namen.`},
-  n2:{title:"15:03 · Geldbewegungen", text:`Northbridge steht wirklich auf der Liste. Aber woher kommt das Geld?
-
-Im AML-Monitor sind heute vier Alerts offen. Ich glaube, einer davon hängt mit PHANTOME zusammen. Die anderen haben bestimmt eine harmlose Erklärung – schaut sie euch trotzdem alle an.
-
-→ Bei jedem Alert: Passt das, was auf dem Konto passiert, zum Kunden? Ist es erklärt?
-→ Beim verdächtigen: das Muster markieren und schauen, wohin das Geld fließt. Kommt euch die Adresse bekannt vor?`},
-  n3:{title:"15:17 · Ungewöhnliche Vorgänge", text:`Das Muster und die Verbindung zu Nova Trade begründen einen ernsten Verdacht. Ob Jonas K. bewusst als Strohmann eingesetzt wird oder selbst ausgenutzt wird, muss die vertiefte Prüfung klären. Sicher ist nur: Das Geld landet bei Leuten, die wir schon kennen.
-
-Heute hängen außerdem vier Zahlungen im FraudDesk. Eine ist eine Falle, die anderen sind echt – auch wenn nicht alle so aussehen. Und die Änderungen an Stammdaten machen mir Sorgen: Wer hat sie veranlasst?
-
-→ Bei jeder Zahlung: VoP-Abfrage, Akte, Kontoumsätze.
-→ Dann entscheiden: weiterbearbeiten, klären oder nicht ausführen. Nicht alles stoppen, was komisch aussieht!`},
-  n4:{title:"15:25 · Der Vorstand", text:`Schnell – ich muss gleich hoch. Eine Mail vom Vorstand: sofort, vertraulich, niemandem etwas sagen. Ein ungutes Gefühl habe ich trotzdem.
-
-Falls ich nicht rechtzeitig zurück bin: Stoppt PHANTOME im ZV-Cockpit (Zeile anklicken, Compliance-Stopp setzen). Meinen Freigabecode schreibe ich nirgends hin – aber wer meine drei Fälle gelöst hat, kennt ihn:
-  1. Ziffer: Wie viele Treffer im EmbargoCheck waren Fehlalarme?
-  2. Ziffer: Wie viele Buchungen bilden bei Jonas K. das Muster?
-  3. Ziffer: Welche Nummer hatte die Überweisung, die ihr im FraudDesk nicht ausgeführt habt?
-
-Als Grund nur angeben, was ihr belegen könnt. Danach eskalieren – und die „Vorstandsanweisung“ nur über die -1200 prüfen, nie per Antwort-Mail.
-
-P.S. Die 1. Freigabe von PHANTOME kam über die Sammelkennung zv.batch07. Das kann nur jemand aus dem Zahlungsverkehr gewesen sein. Wenn ihr rausfindet, wer: Hinweisgebersystem. Niemanden ansprechen!`}};
 const NOTES_ERMITTLER = {
   n1:{title:"14:52 · PHANTOME", text:`3,8 Mio. EUR an Northbridge S.A., Panama. Ausführung heute im Buchungslauf um 16:30 Uhr. Auftraggeber AeroTrans GmbH, Verwendungszweck „Beratungsleistungen“.
 
@@ -830,7 +816,7 @@ Hab im Browser angefangen, die Handelsregister durchzugehen. Northbridge: Eigent
 Und jetzt das: eine Nachricht aus dem Vorstand. Ich soll umgehend in den 12. Stock kommen. Vertraulich. Keine Unterlagen mitnehmen. Niemanden informieren. Eigentlich müsste ich über die -1200 zurückrufen. Keine Zeit. Ich gehe hoch.
 
 Falls ich nicht rechtzeitig zurück bin: PHANTOME darf nicht im Buchungslauf landen, solange niemand weiß, wem Northbridge wirklich gehört.`}};
-const notesFor = () => { const t = S.mode === "ermittler" ? NOTES_ERMITTLER : NOTES_AZUBI; const o = {};
+const notesFor = () => { const t = NOTES_ERMITTLER; const o = {};
   Object.keys(t).forEach(k => o[k] = {...t[k], ...(NOTE_LOCKS[k] || {})}); return o; };
 // Ermittler: Kennwörter lassen sich jederzeit eingeben – wer früh schlussfolgert, darf früh öffnen. Azubi bleibt geführt.
 const gateOpen = n => S.mode === "ermittler" || !!S.f[n.gate];
@@ -1586,22 +1572,188 @@ function phaseTwo(){
     }});
 }
 
+/* ---------- Azubi (Test): Lernmodul und Wissenstest ---------- */
+// Fachlicher Entwurf – vor dem Einsatz als Pflichtschulung durch Compliance bzw. den Geldwäschebeauftragten freigeben lassen.
+const AZUBI_MIN = 75;           // echte Spielzeit im Azubi-Modus; die Geschichte läuft weiter von 15:40 bis 16:30
+const QUIZ_N = 12, QUIZ_PASS = 9;
+const LEARN_KEY = "phantome-lernen-v1";
+const MODULES = [
+  {title:"Geldwäsche und Geldwäscheprävention", goal:"Ihr versteht, was Geldwäsche ist und warum eine Bank sie verhindern muss.",
+    html:`<p>Geldwäsche bezeichnet vereinfacht den Versuch, Vermögenswerte aus Straftaten so in den legalen Wirtschaftskreislauf einzuschleusen, dass ihre tatsächliche Herkunft verschleiert wird.</p>
+      <p>Ein klassisches Erklärungsmodell unterscheidet drei Phasen:</p>
+      <table><tr><th>Phase</th><th>Was passiert?</th><th>Beispiel</th></tr>
+      <tr><td><b>Placement</b> (Einspeisung)</td><td>Illegale Gelder gelangen in den Finanzkreislauf.</td><td>Einzahlung hoher Bargeldbeträge</td></tr>
+      <tr><td><b>Layering</b> (Verschleierung)</td><td>Die Herkunft wird durch viele Transaktionen verschleiert.</td><td>Zahlungen über mehrere Konten und Länder</td></tr>
+      <tr><td><b>Integration</b></td><td>Das Geld erscheint als legal erwirtschaftet.</td><td>Kauf einer Immobilie</td></tr></table>
+      <p class="mini muted">Das Modell ist vereinfacht – in der Praxis überschneiden sich die Phasen oder fallen teilweise weg.</p>
+      <p><b>Warum betrifft das die Bank?</b> Kreditinstitute sind Verpflichtete nach dem Geldwäschegesetz (§ 2 GwG). Zu ihren allgemeinen Sorgfaltspflichten (§§ 10, 11 GwG) gehört unter anderem:</p>
+      <ul><li>Kundinnen und Kunden identifizieren,</li><li>den wirtschaftlich Berechtigten abklären und die Eigentums- und Kontrollstruktur nachvollziehen,</li><li>Zweck und Art der Geschäftsbeziehung verstehen,</li><li>die Geschäftsbeziehung risikoorientiert überwachen.</li></ul>`,
+    q:{text:"Ein Kunde zahlt regelmäßig hohe Bargeldbeträge ein, die nicht zu seinem bekannten Geschäftsmodell passen. Was ist die richtige Reaktion?",
+      opts:["Die Einzahlungen werden akzeptiert – Bargeld ist gesetzliches Zahlungsmittel.","Der Sachverhalt wird anhand der verfügbaren Informationen geprüft und nach den internen Vorgaben behandelt.","Der Kunde wird sofort als Geldwäscher eingestuft."], ok:1,
+      why:"Auffällig heißt nicht schuldig – aber auch nicht egal. Geprüft wird, ob die Umsätze zum Kundenprofil passen und ob es eine belegbare Erklärung gibt."}},
+  {title:"Wirtschaftlich Berechtigte und Beteiligungsstrukturen", goal:"Ihr könnt erklären, wer wirtschaftlich Berechtigter ist und warum man eine Beteiligungskette bis zum Ende verfolgen muss.",
+    html:`<p><b>Wirtschaftlich Berechtigter</b> ist immer eine <b>natürliche Person</b> – der Mensch, in dessen Eigentum oder unter dessen Kontrolle eine Gesellschaft letztlich steht (§ 3 GwG). Bei Gesellschaften ist das insbesondere, wer unmittelbar oder mittelbar</p>
+      <ul><li><b>mehr als 25 %</b> der Kapitalanteile hält,</li><li><b>mehr als 25 %</b> der Stimmrechte kontrolliert oder</li><li>auf vergleichbare Weise Kontrolle ausübt.</li></ul>
+      <p class="mini muted">Die Schwelle lautet „mehr als 25 %“ – genau 25 % reichen nicht.</p>
+      <p><b>Beispiel einer Beteiligungskette:</b> Eine Person hält 60 % an Unternehmen A. A hält 100 % an B, B hält 100 % an C. Mit 60 % beherrscht die Person A – und über A und B auch C. Wirtschaftlich Berechtigte von C ist deshalb diese Person, nicht A und nicht B.</p>
+      <p class="mini muted">Mittelbar zählt eine Beteiligung vor allem dann, wenn die Person die Zwischengesellschaft kontrolliert. Eine kleine Beteiligung an A macht noch niemanden zum wirtschaftlich Berechtigten von C.</p>
+      <p><b>Treuhänder und Nominees:</b> Wer Anteile nur für jemand anderen hält, ist nicht wirtschaftlich berechtigt. Entscheidend ist, für wen gehalten wird.</p>
+      <p><b>Wenn sich niemand ermitteln lässt:</b> Erst wenn nach umfassenden Prüfungen keine natürliche Person ermittelt werden kann und keine Verdachtstatsachen (§ 43 Abs. 1 GwG) vorliegen, gelten ersatzweise die gesetzlichen Vertreter oder geschäftsführenden Personen als wirtschaftlich Berechtigte („fiktiv wirtschaftlich Berechtigte“). Das ist eine Ausnahme, keine Abkürzung.</p>`,
+    q:{text:"Eine GmbH gehört zu 100 % einer weiteren GmbH. An dieser Muttergesellschaft hält eine natürliche Person 70 %. Wer ist bei der Ermittlung des wirtschaftlich Berechtigten entscheidend?",
+      opts:["Ausschließlich die Tochtergesellschaft.","Ausschließlich die Muttergesellschaft.","Die natürliche Person an der Spitze der Beteiligungsstruktur."], ok:2,
+      why:"Unternehmen können nicht wirtschaftlich berechtigt sein. Mit 70 % beherrscht die Person die Muttergesellschaft und damit auch die Tochter."}},
+  {title:"Sanktionsprüfung und Embargos", goal:"Ihr versteht, warum Sanktionsprüfungen wichtig sind und warum auch Eigentum und Kontrolle zählen.",
+    html:`<p>Sanktionen sind rechtlich verbindliche Maßnahmen gegen bestimmte Personen, Organisationen, Staaten oder Tätigkeiten. In der EU gelten sie vor allem über Verordnungen unmittelbar. Im Bankalltag sind besonders <b>Finanzsanktionen</b> wichtig:</p>
+      <ul><li>Gelder und wirtschaftliche Ressourcen gelisteter Personen oder Organisationen werden eingefroren.</li><li>Ihnen dürfen weder unmittelbar noch mittelbar Gelder oder wirtschaftliche Ressourcen zur Verfügung gestellt werden oder zugutekommen.</li></ul>
+      <p>Eine Sanktionsprüfung darf sich deshalb nicht nur auf den Namen des Zahlungsempfängers beschränken. Auch <b>Eigentums- und Kontrollverhältnisse</b> können entscheidend sein – etwa wenn ein Empfänger von einer gelisteten Organisation gehalten oder kontrolliert wird. Die konkrete Bewertung richtet sich nach der jeweils anwendbaren Sanktionsregelung und erfolgt durch die zuständige Stelle im Haus.</p>
+      <p class="mini muted">Ein ähnlicher Name ist noch kein Treffer – verglichen werden Merkmale wie Adresse, Land und Registernummer. Und eine Staatsangehörigkeit ist für sich genommen kein Sanktionsgrund.</p>
+      <p><b>Geldwäscheprävention und Sanktionsprüfung sind nicht dasselbe:</b></p>
+      <table><tr><th>Geldwäscheprävention</th><th>Sanktionsprüfung</th></tr>
+      <tr><td>Wer ist wirtschaftlich Berechtigter?</td><td>Ist eine Person oder Organisation gelistet oder von einer Maßnahme erfasst?</td></tr>
+      <tr><td>Wie ist die Eigentums- und Kontrollstruktur aufgebaut?</td><td>Besteht eine relevante Eigentums- oder Kontrollbeziehung zu einer gelisteten Person oder Organisation?</td></tr>
+      <tr><td>Gibt es Auffälligkeiten in der Geschäftsbeziehung?</td><td>Ist die Transaktion nach den einschlägigen Sanktionsregeln zulässig?</td></tr></table>`,
+    q:{text:"Ein Unternehmen steht nicht selbst auf einer Sanktionsliste. Sein alleiniger Gesellschafter ist jedoch gelistet. Wie ist vorzugehen?",
+      opts:["Die Zahlung kann ausgeführt werden, weil nur der Gesellschafter gelistet ist.","Eigentums- und Kontrollverhältnisse sowie die einschlägigen Sanktionsregeln prüfen und den Fall nach den internen Vorgaben behandeln.","Die Zahlung wird immer freigegeben, wenn der Empfänger selbst nicht gelistet ist."], ok:1,
+      why:"Ein fehlender direkter Treffer ist kein Freibrief. Wem der Empfänger gehört, kann entscheiden, ob die Zahlung einer gelisteten Organisation zugutekäme."}},
+  {title:"Betrugsprävention und auffällige Überweisungen", goal:"Ihr erkennt typische Warnsignale und wisst, dass sie bewertet – nicht automatisch als Betrug gewertet – werden.",
+    html:`<p>Nicht jede auffällige Überweisung ist Betrug. Entscheidend ist die <b>Gesamtbetrachtung</b>. Typische Warnsignale:</p>
+      <ul><li><b>Verwendungszweck</b> passt nicht zum Empfänger oder zum bekannten Geschäft.</li><li><b>Empfängerdaten</b> weichen von den erwarteten Angaben ab – etwa eine kurzfristig geänderte Kontoverbindung.</li>
+      <li><b>Zahlungsverhalten</b> ist ungewöhnlich – plötzlich hohe Beträge an Unbekannte.</li><li><b>Kommunikation</b> ist auffällig – Zeitdruck, unerwartete Zahlungsaufforderungen, angebliche Anweisungen von Vorgesetzten.</li></ul>
+      <p>Bei geänderten Kontoverbindungen gilt: Bestätigung über einen <b>unabhängig bekannten Kanal</b> einholen (z. B. Rückruf unter der hinterlegten Nummer) – nie über Kontaktdaten aus der verdächtigen Nachricht.</p>
+      <p><b>Verification of Payee (VoP):</b> Seit Oktober 2025 gleichen Banken im Euroraum bei Euro-Überweisungen den angegebenen Empfängernamen mit dem Kontoinhaber der IBAN ab. Mögliche Ergebnisse:</p>
+      <ul><li>Übereinstimmung</li><li>nahezu Übereinstimmung (der tatsächliche Name wird angezeigt)</li><li>keine Übereinstimmung</li><li>Prüfung nicht möglich</li></ul>
+      <p>Eine Abweichung ist ein <b>Warnsignal, kein Beweis</b>. Oft gibt es harmlose Gründe – etwa wenn statt des Kontoinhabers der Name der Bank eingetragen wurde.</p>`,
+    q:{text:"Ein Kunde möchte 8.500 Euro überweisen. Der Empfängername stimmt laut VoP nicht mit dem Kontoinhaber überein. Was ist richtig?",
+      opts:["Die Überweisung wird ungeprüft ausgeführt.","Die Abweichung wird ignoriert, weil die IBAN technisch korrekt ist.","Die Abweichung wird bewertet und der Sachverhalt nach den vorgesehenen Prozessen geklärt."], ok:2,
+      why:"VoP ist ein Prüfbaustein. Zusammen mit Akte und bisherigen Umsätzen zeigt sich, ob die Abweichung erklärt ist oder geklärt werden muss."}},
+  {title:"Verdachtsfälle, Meldepflichten und richtiges Verhalten", goal:"Ihr wisst, wie ihr bei Auffälligkeiten richtig reagiert – und was ihr dem Kunden nicht sagen dürft.",
+    html:`<p>Mitarbeitende müssen Auffälligkeiten erkennen, dokumentieren und nach den internen Prozessen weitergeben. Die rechtliche Endbewertung trifft nicht die Sachbearbeitung, sondern die zuständige Stelle – in der Regel der Geldwäschebeauftragte.</p>
+      <p><b>Verdachtsmeldung (§ 43 GwG):</b> Die Meldepflicht trifft die Bank, wenn Tatsachen darauf hindeuten, dass etwa ein Vermögensgegenstand aus einer Straftat stammt, die Vortat der Geldwäsche sein kann, oder mit Terrorismusfinanzierung zusammenhängt.</p>
+      <ul><li>Es gibt <b>keinen Mindestbetrag</b>.</li><li>Ein <b>strafrechtlicher Nachweis ist nicht erforderlich</b> – Tatsachen, die auf einen Verdacht hindeuten, genügen.</li><li>Die Meldung an die FIU erfolgt <b>unverzüglich</b> – über die im Haus vorgesehenen Zuständigkeiten.</li></ul>
+      <p><b>Informationsverbot (§ 47 GwG, „Tipping-off“):</b> Der Kunde und Dritte dürfen nicht darüber informiert werden, dass eine Verdachtsmeldung beabsichtigt ist oder erstattet wurde oder dass deshalb ermittelt wird. Wer den Kunden „mal fragt, was da los ist“ und dabei den Verdacht schildert, kann die Aufklärung gefährden.</p>`,
+    q:{text:"Ihr stellt fest, dass mehrere Transaktionen ungewöhnliche Merkmale haben. Einen eindeutigen Beweis für eine Straftat gibt es nicht. Was ist richtig?",
+      opts:["Es muss nichts unternommen werden, solange kein Beweis vorliegt.","Der Sachverhalt wird dokumentiert und nach den internen Melde- und Eskalationsprozessen weitergegeben.","Der Kunde wird über den Verdacht informiert und um eine Erklärung gebeten."], ok:1,
+      why:"Für die interne Weitergabe braucht es keinen Beweis. Und den Kunden über einen Verdacht zu informieren, kann gegen das Informationsverbot verstoßen."}}];
+// Pool: 12 Themen mit je zwei Varianten – jeder Versuch zieht eine Variante pro Thema. Die richtige Antwort steht im Pool an erster Stelle.
+const QUIZ = [
+  {m:1, v:[["Was versteht man unter Geldwäsche?",["Das Verschleiern der illegalen Herkunft von Vermögenswerten, um sie in den legalen Wirtschaftskreislauf einzuschleusen","Jede Bareinzahlung über 10.000 Euro","Das Verschieben von Geld auf Auslandskonten, um Steuern zu sparen","Das Herstellen und Verbreiten von Falschgeld"]],
+    ["Was ist das Ziel von Geldwäsche?",["Die illegale Herkunft von Geld zu verschleiern, damit es legal erscheint","Möglichst hohe Zinsen zu erzielen","Bargeld in eine andere Währung zu tauschen","Überweisungen schneller auszuführen"]]]},
+  {m:1, v:[["Welche drei Phasen unterscheidet das klassische Geldwäschemodell?",["Placement, Layering, Integration","Identifizierung, Prüfung, Meldung","Einzahlung, Überweisung, Auszahlung","Planung, Ausführung, Kontrolle"]],
+    ["In welcher Phase wird die Herkunft durch viele Transaktionen über verschiedene Konten und Länder verschleiert?",["Layering","Placement","Integration","In keiner – das gehört nicht zur Geldwäsche"]]]},
+  {m:2, v:[["Wer kann wirtschaftlich Berechtigter sein?",["Nur eine natürliche Person","Auch eine Holdinggesellschaft","Der Treuhänder, der die Anteile verwahrt","Jede Gesellschaft, die Anteile hält"]],
+    ["Eine GmbH gehört zu 100 % einer Holding-AG. Ist die Holding-AG die wirtschaftlich Berechtigte?",["Nein – gesucht wird die natürliche Person hinter der Holding","Ja, weil sie 100 % hält","Ja, wenn sie im Ausland sitzt","Nur wenn die GmbH Verluste macht"]]]},
+  {m:2, v:[["Ab welcher Beteiligung greift das Beteiligungskriterium des § 3 GwG?",["Mehr als 25 %","Mindestens 25 %","Mehr als 50 %","Mindestens 10 %"]],
+    ["Eine Person hält genau 25 % der Anteile und übt sonst keine Kontrolle aus. Ist sie allein deshalb wirtschaftlich Berechtigte?",["Nein – erforderlich sind mehr als 25 %","Ja – 25 % reichen","Nur bei einer Aktiengesellschaft","Nur, wenn sie im Handelsregister steht"]]]},
+  {m:2, v:[["Müssen mittelbare Beteiligungen über andere Gesellschaften berücksichtigt werden?",["Ja – auch mittelbare Beteiligung und Kontrolle zählen","Nein, nur direkte Beteiligungen","Nur bei Gesellschaften mit Sitz in Deutschland","Nur, wenn der Kunde sie selbst angibt"]],
+    ["Person P hält 60 % an Unternehmen A. A hält 100 % an Unternehmen B. Was gilt für B?",["P beherrscht A und ist damit mittelbar wirtschaftlich Berechtigte von B","Wirtschaftlich Berechtigter von B ist Unternehmen A","B hat keinen wirtschaftlich Berechtigten","P zählt nicht, weil sie nicht direkt an B beteiligt ist"]]]},
+  {m:2, v:[["Wann gelten gesetzliche Vertreter (z. B. die Geschäftsführung) ersatzweise als wirtschaftlich Berechtigte?",["Erst wenn nach umfassender Prüfung keine natürliche Person ermittelt werden kann und keine Verdachtstatsachen vorliegen","Immer, weil sie das Unternehmen führen","Sobald die Beteiligungsstruktur mehr als zwei Ebenen hat","Wenn der Kunde das so wünscht"]],
+    ["Ein Treuhänder hält die Aktien einer Gesellschaft für eine Holding. Ist der Treuhänder wirtschaftlich Berechtigter?",["Nein – entscheidend ist, für wen er die Anteile hält","Ja, weil er im Register steht","Ja, sofern er selbst eine Gesellschaft ist","Nur bei Inhaberaktien"]]]},
+  {m:3, v:[["Was ist der Zweck einer Sanktionsprüfung?",["Festzustellen, ob Personen, Organisationen oder ein Geschäft von Sanktionsmaßnahmen erfasst sind","Die Kreditwürdigkeit eines Kunden zu bewerten","Die Herkunft von Bargeld zu belegen","Doppelte Überweisungen zu verhindern"]],
+    ["Was gehört typischerweise zu Finanzsanktionen?",["Einfrieren von Geldern und Verbot, gelisteten Personen Gelder zur Verfügung zu stellen","Höhere Gebühren für Auslandsüberweisungen","Eine Pflicht zur Barzahlung","Ein Verbot von Online-Banking"]]]},
+  {m:3, v:[["Ist ein Unternehmen automatisch unbedenklich, wenn es selbst auf keiner Sanktionsliste steht?",["Nein – auch Eigentums- und Kontrollverhältnisse können relevant sein","Ja, der Namensabgleich entscheidet","Ja, wenn es außerhalb der EU sitzt","Ja, wenn der Betrag unter 10.000 Euro liegt"]],
+    ["Der alleinige Gesellschafter eines Zahlungsempfängers ist gelistet. Was ist richtig?",["Eigentums- und Kontrollverhältnisse und die einschlägigen Sanktionsregeln prüfen und intern eskalieren","Ausführen – gelistet ist ja nur der Gesellschafter","Den Auftraggeber bitten, einen anderen Empfänger zu wählen","Die Zahlung in kleinere Beträge aufteilen"]]]},
+  {m:3, v:[["Welche Frage gehört zur Sanktionsprüfung – und nicht zur Ermittlung des wirtschaftlich Berechtigten?",["Ist eine beteiligte Person oder Organisation gelistet oder von einer Maßnahme erfasst?","Welche natürliche Person hält mehr als 25 %?","Wer übt über die Gesellschaft letztlich Kontrolle aus?"]],
+    ["Der wirtschaftlich Berechtigte eines Unternehmens hat eine bestimmte Staatsangehörigkeit. Ist das allein ein Sanktionsgrund?",["Nein – entscheidend ist, ob die Person oder Organisation von einer Maßnahme erfasst ist","Ja, immer","Ja, sobald der Zahlungsbetrag hoch ist"]]]},
+  {m:4, v:[["Ist eine VoP-Abweichung automatisch ein Betrugsnachweis?",["Nein – sie ist ein Warnsignal, das bewertet werden muss","Ja – die Zahlung ist sofort zu stoppen","Ja, wenn die IBAN ausländisch ist","Nein – VoP-Ergebnisse spielen keine Rolle"]],
+    ["Welche Kombination spricht bei einer Überweisung am ehesten für Betrug?",["Kurzfristig geänderte Kontoverbindung, ohne Rückruf bestätigt, dazu Zeitdruck","Zahlung an einen seit Jahren bekannten Empfänger mit unveränderter IBAN","Verwendungszweck mit Rechnungsnummer, die zur Akte passt","Zahlung am Monatsanfang"]]]},
+  {m:5, v:[["Gibt es für eine Verdachtsmeldung nach § 43 GwG einen Mindestbetrag?",["Nein","Ja, 10.000 Euro","Ja, 15.000 Euro","Nur bei Bargeld"]],
+    ["Braucht es einen strafrechtlichen Nachweis, bevor eine Auffälligkeit intern weitergegeben wird?",["Nein – Tatsachen, die auf einen Verdacht hindeuten, genügen","Ja, sonst drohen Schadensersatzklagen","Ja, zuerst muss die Polizei ermitteln","Nur bei Beträgen über 10.000 Euro"]]]},
+  {m:5, v:[["Ihr habt mehrere auffällige Transaktionen bemerkt. Was ist richtig?",["Sachverhalt dokumentieren und nach den internen Prozessen eskalieren","Den Kunden um eine Erklärung bitten und ihm den Verdacht schildern","Nichts tun, solange kein Beweis vorliegt","Das Konto selbst sofort kündigen"]],
+    ["Was verbietet § 47 GwG?",["Kunden oder Dritte über eine beabsichtigte oder erstattete Verdachtsmeldung und daraus folgende Ermittlungen zu informieren","Verdachtsmeldungen elektronisch abzugeben","Bargeld über 10.000 Euro anzunehmen","Mit dem Geldwäschebeauftragten über einen Fall zu sprechen"]]]}];
+const shuffle = a => { const r = [...a]; for (let i = r.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; };
+let L = null;
+const saveLearn = () => { try { localStorage.setItem(LEARN_KEY, JSON.stringify(L)); } catch(e){} };
+const clearLearn = () => { try { localStorage.removeItem(LEARN_KEY); } catch(e){} };
+const loadLearn = () => { try { return JSON.parse(localStorage.getItem(LEARN_KEY)); } catch(e){ return null; } };
+function drawQuiz(){
+  // Bei jedem Versuch eine andere Variante pro Thema als beim letzten Mal; Antworten gemischt.
+  L.draw = QUIZ.map((t, i) => { const v = L.lastV ? 1 - L.lastV[i] : Math.floor(Math.random() * 2); return {t:i, v, order:shuffle(t.v[v][1].map((_, k) => k))}; });
+  L.lastV = L.draw.map(d => d.v); L.ans = {}; L.phase = "test"; L.attempts = (L.attempts || 0) + 1;
+}
+function startLearn(team){
+  L = {team, page:0, phase:"modules", answered:{}, attempts:0};
+  showLearn();
+}
+function showLearn(){
+  ["start","cutscene","game","final"].forEach(id => $(id).classList.add("hidden")); $("learn").classList.remove("hidden"); $("timerBox").classList.add("hidden"); window.scrollTo(0, 0); renderLearn();
+}
+function renderLearn(){
+  saveLearn();
+  const body = $("lnBody"), nav = $("lnNav"), n = MODULES.length;
+  $("lnProg").innerHTML = [...Array(n + 2)].map((_, i) => { const cur = L.phase === "modules" ? L.page : n + 1;
+    return `<span class="${i < cur ? "done" : i === cur ? "cur" : ""}">${i === 0 ? "Start" : i <= n ? "Modul " + i : "Test"}</span>`; }).join("");
+  if (L.phase === "modules" && L.page === 0){
+    $("lnEyebrow").textContent = "AZUBI (TEST) · EINFÜHRUNG";
+    body.innerHTML = `<h1>Projekt PHANTOME – dein erster Einsatz in der Compliance</h1>
+      <p>Im Bankalltag begegnen dir täglich Kunden, Transaktionen und Geschäftsvorfälle. Die meisten sind unauffällig. Manche haben Besonderheiten, die genauer betrachtet werden müssen.</p>
+      <p>Deine Aufgabe: Auffälligkeiten erkennen, Informationen richtig einordnen und die richtigen Schlüsse ziehen. Bevor ihr euren ersten Ermittlungsauftrag übernehmt, geht es um die Grundlagen:</p>
+      <ol><li>Fünf kurze Lernmodule mit je einer Verständnisfrage</li><li>Wissenstest mit ${QUIZ_N} Fragen – bestanden ab ${QUIZ_PASS} richtigen Antworten</li><li>Danach der Escape Room: derselbe Fall wie für die Ermittler, mit ${AZUBI_MIN} Minuten Spielzeit</li></ol>
+      <p class="mini muted">Fachlicher Entwurf: Vor dem Einsatz als Pflichtschulung sind die Lerninhalte durch Compliance bzw. den Geldwäschebeauftragten freizugeben. Maßgeblich sind immer die internen Arbeitsanweisungen eures Instituts.</p>`;
+    nav.innerHTML = `<button class="primary" id="lnNext">Los geht’s →</button>`;
+    $("lnNext").addEventListener("click", () => { L.page = 1; renderLearn(); window.scrollTo(0, 0); });
+    return;
+  }
+  if (L.phase === "modules"){
+    const m = MODULES[L.page - 1], a = L.answered[L.page];
+    $("lnEyebrow").textContent = `AZUBI (TEST) · MODUL ${L.page} VON ${n}`;
+    body.innerHTML = `<h2>${m.title}</h2><p class="muted"><b>Lernziel:</b> ${m.goal}</p><div class="lncontent">${m.html}</div>
+      <div class="lnq"><b>Verständnisfrage</b><p>${m.q.text}</p>${m.q.opts.map((o, i) => `<label class="lnopt ${a !== undefined ? (i === m.q.ok ? "ok" : i === a ? "bad" : "") : ""}"><input type="radio" name="lnq" value="${i}" ${a === i ? "checked" : ""} ${a !== undefined ? "disabled" : ""}><span>${String.fromCharCode(65 + i)}) ${o}</span></label>`).join("")}
+      ${a === undefined ? `<div class="rowbuttons"><button id="lnCheck">Antwort prüfen</button></div>` : `<p class="lnfb ${a === m.q.ok ? "ok" : "bad"}">${a === m.q.ok ? "✓ Richtig." : "✗ Nicht ganz – richtig ist " + String.fromCharCode(65 + m.q.ok) + "."} ${m.q.why}</p>`}</div>`;
+    nav.innerHTML = `<button id="lnPrev">← Zurück</button><button class="primary" id="lnNext" ${a === undefined ? "disabled" : ""}>${L.page < n ? "Nächstes Modul →" : "Zum Wissenstest →"}</button>`;
+    if ($("lnCheck")) $("lnCheck").addEventListener("click", () => { const v = (body.querySelector("input[name=lnq]:checked") || {}).value; if (v === undefined) return; L.answered[L.page] = +v; renderLearn(); });
+    $("lnPrev").addEventListener("click", () => { L.page--; renderLearn(); window.scrollTo(0, 0); });
+    $("lnNext").addEventListener("click", () => { if (L.page < n){ L.page++; renderLearn(); } else { drawQuiz(); renderLearn(); } window.scrollTo(0, 0); });
+    return;
+  }
+  if (L.phase === "test"){
+    $("lnEyebrow").textContent = `AZUBI (TEST) · WISSENSTEST · VERSUCH ${L.attempts}`;
+    body.innerHTML = `<h2>Wissenstest</h2><p class="muted">${QUIZ_N} Fragen, je eine richtige Antwort. Bestanden ab ${QUIZ_PASS} richtigen Antworten (75 %).</p>
+      ${L.draw.map((d, qi) => { const [q, opts] = QUIZ[d.t].v[d.v]; return `<div class="lnq"><b>Frage ${qi + 1}</b><p>${q}</p>${d.order.map(k => `<label class="lnopt"><input type="radio" name="tq${qi}" value="${k}" ${L.ans[qi] === k ? "checked" : ""}><span>${opts[k]}</span></label>`).join("")}</div>`; }).join("")}`;
+    nav.innerHTML = `<button class="primary" id="lnSubmit">Test abgeben</button><span id="lnMiss" class="mini muted" style="align-self:center"></span>`;
+    body.querySelectorAll("input[type=radio]").forEach(r => r.addEventListener("change", e => { L.ans[+e.target.name.slice(2)] = +e.target.value; saveLearn(); }));
+    $("lnSubmit").addEventListener("click", () => {
+      const miss = L.draw.filter((_, i) => L.ans[i] === undefined).length;
+      if (miss){ $("lnMiss").textContent = `Noch ${miss} Frage${miss === 1 ? "" : "n"} offen.`; return; }
+      const wrong = L.draw.filter((d, i) => L.ans[i] !== 0).map(d => QUIZ[d.t].m);
+      L.score = QUIZ_N - wrong.length; L.wrongM = [...new Set(wrong)].sort(); L.passed = L.score >= QUIZ_PASS; L.phase = "result"; renderLearn(); window.scrollTo(0, 0);
+    });
+    return;
+  }
+  // Ergebnis
+  $("lnEyebrow").textContent = "AZUBI (TEST) · ERGEBNIS";
+  const pct = Math.round(L.score / QUIZ_N * 1000) / 10;
+  body.innerHTML = `<h2>${L.passed ? "Bestanden – der Escape Room ist freigeschaltet." : "Noch nicht bestanden."}</h2>
+    <div class="bigscore" style="font-size:2.6rem">${L.score} von ${QUIZ_N} <small style="font-size:1rem">(${String(pct).replace(".", ",")} %)</small></div>
+    ${L.wrongM.length ? `<p>Fehler gab es in diesen Themen – ${L.passed ? "schaut sie euch in der Nachbesprechung noch einmal an" : "wiederholt diese Module, bevor ihr den Test erneut schreibt"}:</p><ul>${L.wrongM.map(m => `<li>Modul ${m}: ${MODULES[m - 1].title}</li>`).join("")}</ul>` : `<p>Alle Fragen richtig.</p>`}
+    ${L.passed ? `<p>Jetzt geht es um die Praxis: Im Escape Room braucht ihr genau dieses Wissen. Ihr habt ${AZUBI_MIN} Minuten.</p>` : `<p>Beim nächsten Versuch werden die Fragen neu zusammengestellt.</p>`}`;
+  nav.innerHTML = L.passed ? `<button class="primary" id="lnGo">Zum Escape Room →</button>`
+    : `<button id="lnRepeat">Module wiederholen</button><button class="primary" id="lnRetry">Test erneut schreiben</button>`;
+  if ($("lnGo")) $("lnGo").addEventListener("click", () => { $("learn").classList.add("hidden"); prolog("azubi", L.team); });
+  if ($("lnRepeat")) $("lnRepeat").addEventListener("click", () => { L.phase = "modules"; L.page = L.wrongM[0] || 1; renderLearn(); window.scrollTo(0, 0); });
+  if ($("lnRetry")) $("lnRetry").addEventListener("click", () => { drawQuiz(); renderLearn(); window.scrollTo(0, 0); });
+}
+
 /* ---------- Ablauf ---------- */
 function start(){
   clearSave();
-  S.mode = (document.querySelector("input[name=mode]:checked") || {}).value || "ermittler";
-  S.team = $("teamName").value.trim() || "Phantome";
+  const track = (document.querySelector("input[name=mode]:checked") || {}).value || "ermittler", team = $("teamName").value.trim() || "Phantome";
+  if (track === "azubi") startLearn(team); else prolog("ermittler", team);
+}
+// Beide Stufen spielen denselben Fall; Azubi (Test) hat nur mehr echte Zeit und vorher Lernmodul und Wissenstest.
+function prolog(track, team){
+  S.mode = "ermittler"; S.track = track; S.team = team; S.scale = track === "azubi" ? AZUBI_MIN / 50 : 1;
+  if (track === "azubi" && L) S.quiz = {score:L.score, attempts:L.attempts};
   cutscene({eyebrow:"Prolog", title:"Freitag, 15:40 Uhr",
     lines:["Financial Crime Unit, vierte Etage. Ihr seid das Abendteam und kommt zur Übergabe in das Büro von Senior-Analyst Matthias Weber.",
       "Das Büro ist leer. Seine Jacke hängt über dem Stuhl, der Kaffee ist noch warm. Sein Handy geht direkt auf die Mailbox.",
       "Webers PC ist nicht gesperrt. Das macht Weber nie. Er muss es sehr eilig gehabt haben. Am Monitor klebt ein Zettel: „Alles steht in meinen Notizen!“",
       "Im Zahlungsverkehr wartet eine Zahlung über 3,8 Millionen Euro an eine Firma in Panama. Projektname: PHANTOME. Buchungslauf: 16:30 Uhr.",
       "Steckt dahinter Geldwäsche oder ein Sanktionsverstoß, drohen Bußgelder in Millionenhöhe, Ermittlungen und Schlagzeilen. Der Schaden für die Bank wäre enorm.",
-      "Weber war an etwas Großem dran. Jetzt müsst ihr weitermachen. Ihr habt 50 Minuten."],
+      "Weber war an etwas Großem dran. Jetzt müsst ihr weitermachen. Ihr habt " + Math.round(50 * S.scale) + " Minuten."],
     button:"An Webers PC setzen →", onDone: begin});
 }
 function begin(){
-  S.startAt = Date.now(); S.deadline = S.startAt + 50*60*1000;
+  S.startAt = Date.now(); S.deadline = S.startAt + 50*60*1000*S.scale; clearLearn(); $("timerBox").classList.remove("hidden");
   $("game").classList.remove("hidden");
   narrate("Ihr sitzt an Webers PC. Der Buchungslauf startet um 16:30 Uhr.");
   updateHud();
@@ -1618,7 +1770,8 @@ const topicResults = () => TOPICS.map(([name, id, ok]) => ({name, ok:!!ok(), err
 // Ermittler: sachlicher Bericht statt Punktestand.
 function report(mins){
   const chk = (ok, id) => (ok ? "✓ abgeschlossen" : "✗ offen") + " · " + (S.err[id] || 0) + " Fehlentscheidung" + ((S.err[id] || 0) === 1 ? "" : "en");
-  return [["PHANTOME gestoppt", S.f.code ? "✓ Ja" : "✗ Nein"],
+  return [...(S.track === "azubi" && S.quiz ? [["Wissenstest", S.quiz.score + " von " + QUIZ_N + " – bestanden im " + S.quiz.attempts + ". Versuch"]] : []),
+    ["PHANTOME gestoppt", S.f.code ? "✓ Ja" : "✗ Nein"],
     ["Vermerk zum Stopp", S.v.stopNote ? "„" + S.v.stopNote + "“" : "–"],
     ["Eigentümerkette recherchiert", S.f.research ? "✓ Northbridge → Aurelius Global Holdings → Aurelius Industrial Group" : "✗ nicht rekonstruiert"],
     ["Sanktionsprüfung der Muttergesellschaft", chk(S.f.embargo, "embargo")],
@@ -1636,10 +1789,10 @@ function finish(timeout){
   if (S.ended) return; S.ended = true; S.timeout = timeout; clearInterval(S.timerId); clearSave();
   const remaining = Math.max(0, S.deadline - Date.now()), mins = Math.floor(remaining/60000);
   const bonus = timeout || S.f.wrongAccused ? 0 : Math.min(100, mins*2); S.score += bonus;
-  const elapsed = Math.min(3000, Math.round((Date.now() - S.startAt)/1000)), t = storyTime();
+  const elapsed = Math.min(3000 * (S.scale || 1), Math.round((Date.now() - S.startAt)/1000)), t = storyTime();
   const parts = solvedCount() + (S.f.code ? 1 : 0);
   const erm = S.mode === "ermittler", rep = report(mins);
-  window.phantomeResult = {report:erm ? rep : null, mode:S.mode, topics:topicResults(), team:S.team, score:S.score, completed:parts, mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout, stopped:!!S.f.code, escalated:!!S.f.stopped, insider:!!S.f.insider};
+  window.phantomeResult = {report:erm ? rep : null, mode:S.mode, track:S.track, topics:topicResults(), team:S.team, score:S.score, completed:parts, mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout, stopped:!!S.f.code, escalated:!!S.f.stopped, insider:!!S.f.insider};
   const weber = ["Um 16:34 kommt Weber zurück, außer Atem. „Raum 12.04 ist ein Lager. Ich stand vor verschlossener Tür, und mein Ausweis ging plötzlich nicht mehr.“",
     "Er sieht auf seinen Bildschirm und wird blass. „Ich habe in der Eile meinen PC nicht gesperrt. Genau darauf hat er gesetzt.“"];
   let lines, title, eyebrow, head, text;
@@ -1684,7 +1837,7 @@ function finish(timeout){
     $("finalScore").textContent = S.score + " Punkte"; $("finalTeam").textContent = S.team;
     $("finalStats").textContent = `Stufe ${S.mode === "ermittler" ? "Ermittler" : "Azubi"} · ${parts}/4 Kernaufgaben · Täter ${S.f.insider ? "gemeldet" : "nicht gemeldet"} · ${S.mistakes} ${S.mistakes === 1 ? "Fehlversuch" : "Fehlversuche"} · ${S.hints} ${S.hints === 1 ? "Hinweis" : "Hinweise"} · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min.`;
     $("finalScore").classList.toggle("hidden", erm);
-    if (erm) $("finalStats").textContent = `Stufe Ermittler · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min. Spielzeit`;
+    if (erm) $("finalStats").textContent = `Stufe ${S.track === "azubi" ? "Azubi (Test)" : "Ermittler"} · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min. Spielzeit`;
     $("finalTopics").innerHTML = erm
       ? `<h2 style="margin-top:20px">Ermittlungsbericht</h2><table class="ftable"><tr><th>Kriterium</th><th>Ergebnis</th></tr>${rep.map(([k, v]) => `<tr><td>${k}</td><td style="white-space:pre-wrap">${esc(v)}</td></tr>`).join("")}</table>`
       : `<table class="ftable"><tr><th>Thema</th><th>Ergebnis</th><th>Fehlversuche</th></tr>${topicResults().map(t => `<tr><td>${t.name}</td><td>${t.ok ? "✓ gelöst" : "✗ offen"}</td><td>${t.err}</td></tr>`).join("")}</table>`;
@@ -1692,20 +1845,17 @@ function finish(timeout){
 }
 // Die Startkarten beschreiben je nach Stufe, wie gespielt wird – Ermittler verrät den Ablauf nicht.
 const START_CARDS = {
-  azubi:[["SO WIRD GESPIELT","Folgt Webers Notizen","Sein erster Eintrag ist offen, die weiteren sind gesperrt. Haltet eure eigenen Erkenntnisse im Ermittlungsjournal fest."],
-    ["DER ROTE FADEN","Prüfen → Passwort → nächste Notiz","Jede Notiz ist passwortgeschützt. Das Passwort findet, wer die Prüfung davor geschafft hat – bis zum Freigabecode für den Stopp."],
-    ["PUNKTE","Sorgfalt vor Tempo","+250 pro gelöster Prüfung, −20 pro Fehlversuch, Spielhinweise −25 oder −50. Restzeit bringt höchstens 100 Punkte."]],
+  azubi:[["1 · LERNEN","Fünf kurze Lernmodule","Geldwäsche, wirtschaftlich Berechtigte, Sanktionen, Betrugsprävention, Meldepflichten – jeweils mit einer Verständnisfrage."],
+    ["2 · WISSENSTEST","12 Fragen, ab 9 bestanden","Erst mit bestandenem Test öffnet sich der Escape Room. Bei einem neuen Versuch werden die Fragen neu zusammengestellt."],
+    ["3 · ESCAPE ROOM","Derselbe Fall, mehr Zeit","Ihr spielt den Fall der Ermittler – mit 75 Minuten Spielzeit. Hilfe per Mail kostet auch hier Zeit."]],
   ermittler:[["DIE LAGE","Rekonstruiert Webers Ermittlung","Ein fremder Arbeitsplatz, halbfertige Notizen, mehrere Programme. Was davon wichtig ist, müsst ihr selbst herausfinden."],
     ["EURE ARBEITSWEISE","Erkenntnisse verbinden","Keine Schrittanzeige, kein automatisches Protokoll. Haltet fest, was ihr findet, und führt die Spuren selbst zusammen."],
     ["ZEIT IST EURE RESSOURCE","Hilfe kostet Zeit","Es gibt keine Punkte. Kommt ihr nicht weiter, fragt ihr Kolleginnen und Kollegen per Mail um Rat – jede Anfrage kostet 3 Minuten. Am Ende steht ein Ermittlungsbericht."]]};
 function renderStartCards(){
   const mode = (document.querySelector("input[name=mode]:checked") || {}).value || "ermittler";
   START_CARDS[mode].forEach(([n,h,t], i) => { $("c"+(i+1)+"n").textContent = n; $("c"+(i+1)+"h").textContent = h; $("c"+(i+1)+"p").textContent = t; });
+  $("startBtn").textContent = mode === "azubi" ? "Lernmodul starten →" : "Büro betreten →";
 }
-// Der Azubi-Modus ist derzeit abgeschaltet und folgt noch dem früheren Fall (Northbridge als direkter Treffer, Code 362).
-// Vor dem Reaktivieren (AZUBI_AKTIV = true) Notizen, Hinweise und Ablauf an die Aurelius-Kette anpassen.
-const AZUBI_AKTIV = false;
-if (AZUBI_AKTIV) $("modeSelect").classList.remove("hidden");
 document.querySelectorAll("input[name=mode]").forEach(r => r.addEventListener("change", renderStartCards));
 renderStartCards();
 $("startBtn").addEventListener("click", start);
@@ -1717,7 +1867,14 @@ function resume(d){
   renderLog(); narrate("Spielstand wiederhergestellt – der Timer ist weitergelaufen."); updateHud();
   S.timerId = setInterval(tick, 1000); tick();
 }
-const saved = loadSave();
+const saved = loadSave(), learnSaved = !saved && loadLearn();
+if (learnSaved){
+  const where = learnSaved.phase === "modules" ? (learnSaved.page ? "Modul " + learnSaved.page : "Einführung") : learnSaved.phase === "test" ? "Wissenstest" : "Testergebnis";
+  $("resumeBox").innerHTML = `<b>Azubi (Test) – Lernmodul gefunden:</b> Team <span id="resumeTeam"></span> · ${where}<div class="rowbuttons"><button class="primary" id="resumeBtn">Fortsetzen →</button><button id="discardBtn">Verwerfen und neu beginnen</button></div>`;
+  $("resumeTeam").textContent = learnSaved.team; $("resumeBox").classList.remove("hidden");
+  $("resumeBtn").addEventListener("click", () => { L = learnSaved; showLearn(); });
+  $("discardBtn").addEventListener("click", () => { clearLearn(); $("resumeBox").classList.add("hidden"); });
+}
 if (saved){
   const left = Math.max(0, Math.ceil((saved.S.deadline - Date.now())/60000));
   $("resumeBox").innerHTML = `<b>Laufendes Spiel gefunden:</b> Team <span id="resumeTeam"></span> · noch ${left} Min. bis 16:30<div class="rowbuttons"><button class="primary" id="resumeBtn">Spiel fortsetzen →</button><button id="discardBtn">Verwerfen und neu beginnen</button></div>`;
@@ -1728,7 +1885,7 @@ if (saved){
 $("copyBtn").addEventListener("click", async () => {
   const r = window.phantomeResult; if (!r) return;
   if (r.report){
-    const txt = `Projekt Phantome – Ermittlungsbericht\nTeam: ${r.team}\nStufe: Ermittler\n\n${r.report.map(([k, v]) => k + ": " + v).join("\n")}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.`;
+    const txt = `Projekt Phantome – Ermittlungsbericht\nTeam: ${r.team}\nStufe: ${r.track === "azubi" ? "Azubi (Test)" : "Ermittler"}\n\n${r.report.map(([k, v]) => k + ": " + v).join("\n")}\nSpielzeit: ${Math.floor(r.timeSeconds/60)} Min. ${r.timeSeconds%60} Sek.`;
     try { await navigator.clipboard.writeText(txt); $("copyFeedback").textContent = "Bericht wurde in die Zwischenablage kopiert."; }
     catch(e){ $("copyFeedback").textContent = txt; }
     $("copyFeedback").classList.remove("hidden"); return;
