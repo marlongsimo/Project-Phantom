@@ -209,6 +209,23 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .onode.cur{border-color:#a82538!important;background:#fbeff1!important;border-width:2px!important}.onode.veil{border-style:dashed!important;border-color:#8a8f98!important;background:#f5f5f5!important}.onode.person{border-color:#2f6b55!important;background:#eef7f2!important;border-radius:22px!important}
 .ocon{position:relative;height:44px}.ocon i{position:absolute;width:2px;margin-left:-1px;background:#7a8696}.ocon i.bar{top:50%;height:2px;margin:0}
 .ocon em{position:absolute;margin-left:6px;font-size:.72rem;font-style:normal;font-weight:700;color:#1a4d8f;white-space:nowrap}
+.site{border:1px solid #d9d9d9;border-radius:8px;overflow:hidden;background:#fff;color:#222;font-size:.9rem;line-height:1.5}
+.s-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding:12px 18px;border-bottom:1px solid #eee}
+.s-logo{font-weight:800;letter-spacing:.04em;font-size:1.05rem}.s-logo small,.s-logo span{font-weight:400;opacity:.75}
+.s-nav{display:flex;flex-wrap:wrap;gap:14px;font-size:.82rem;color:#555}.s-hero{padding:26px 18px}.s-hero h2{margin:0 0 8px;font-size:1.45rem;line-height:1.2}.s-hero p{margin:0 0 12px;max-width:560px}
+.s-btn{display:inline-block;padding:7px 14px;border-radius:4px;font-size:.82rem;font-weight:700}
+.s-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;padding:16px 18px}.s-grid div{padding:12px;border-radius:6px;background:#f6f7f9}.s-grid p{margin:4px 0 0;font-size:.84rem;color:#444}
+.s-band{margin:0 18px 14px;padding:10px 14px;border-radius:6px;background:#f1f3f6;font-size:.84rem}.s-band.warn{background:#fff6e5;border:1px solid #f0d9a8}
+.s-foot{padding:12px 18px;border-top:1px solid #eee;font-size:.74rem;color:#777;background:#fafafa}
+.s-cols{display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:16px;padding:16px 18px}.s-main h2{margin:0 0 10px;font-size:1.3rem}.s-side{padding:12px;border:1px solid #e3e3e3;border-radius:6px;background:#fafafa;font-size:.84rem;align-self:start}
+.s-tbl{width:100%;border-collapse:collapse;font-size:.84rem}.s-tbl th{text-align:left;color:#666;font-weight:600;padding:5px 8px 5px 0;white-space:nowrap;vertical-align:top}.s-tbl td{padding:5px 0}.s-tbl tr{border-bottom:1px solid #f0f0f0}
+.s-note{font-size:.8rem;color:#666;font-style:italic}.s-ok{color:#2f6b55;font-weight:700}.s-crumb{padding:8px 18px;font-size:.76rem;color:#777;background:#fafafa;border-bottom:1px solid #eee}
+@media(max-width:560px){.s-cols{grid-template-columns:1fr}}
+.site.nb .s-head{background:#0d1b2a;color:#e8c872;border:0}.site.nb .s-nav{color:#c9d3df}.site.nb .s-hero{background:linear-gradient(120deg,#0d1b2a,#1b3a5c);color:#fff}.site.nb .s-btn{background:#e8c872;color:#0d1b2a}
+.site.nbh .s-logo{color:#2c5e3f}.site.nbh .s-hero{background:#eef4ef}.site.nbh .s-hero h2{color:#2c5e3f}
+.site.istmo .s-head{background:#3a3a3a;color:#fff}.site.istmo .s-nav{color:#ddd}.site.istmo .s-hero{background:#f3f0ea}.site.istmo .s-logo span{color:#c8a96a}
+.site.dir .s-logo{color:#d35400}.site.dir .s-btn{background:#d35400;color:#fff;margin-top:6px}
+.site.wiki{font-family:Georgia,serif}.site.wiki .s-head{background:#f8f9fa}.site.wiki .s-main h2{font-weight:400;border-bottom:1px solid #ccc;padding-bottom:4px}.site.wiki .s-side.info{background:#f8f9fa}
 .calcgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.calcgrid button{padding:12px 0;font-size:1.1rem}.wbody.web .pane{flex:1;overflow:auto;min-width:0}
 .bbar{flex:none;display:flex;gap:6px;align-items:center;background:#e4dbd9;padding:6px 8px;border-bottom:1px solid #cdbdbb}
 .bbar input{flex:1;min-width:0}.bbar .url{flex:1;min-width:0;font:.8rem ui-monospace,Consolas,monospace;background:#fff;border:1px solid #cdbdbb;border-radius:14px;padding:5px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -355,7 +372,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.8</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.9</footer>
 </div>
 
 <script>
@@ -1329,17 +1346,41 @@ RENDER.fraud = b => {
 // Simuliertes Internet mit festen Seiten. Gesucht wird nur nach Firmennamen – so führt der Weg zur Holding zwingend über Nova Trade.
 const WEB = {
   nb_site:{kw:["northbridge"], title:"Northbridge S.A. – Consulting & Trading", url:"www.northbridge-sa.example", snippet:"Beratung und internationaler Handel mit Sitz in Panama-Stadt.",
-    html:`<h3>Northbridge S.A.</h3><p><i>Consulting · Trading · Logistics Solutions</i></p><p>Wir begleiten internationale Kunden bei Beschaffung, Handel und Logistik – diskret, schnell, zuverlässig.</p><p class="mini muted">Calle 50, Torre Ámbar, Of. 1207 · Panama-Stadt · info@northbridge-sa.example<br>Impressum: Geschäftsführer Rafael Ordóñez Vega</p>`},
+    html:`<div class="site nb"><div class="s-head"><div class="s-logo">◆ NORTHBRIDGE <small>S.A.</small></div><div class="s-nav"><span>Leistungen</span><span>Über uns</span><span>Kontakt</span><span class="s-lang">ES · EN</span></div></div>
+      <div class="s-hero"><h2>Global sourcing.<br>Local discretion.</h2><p>Wir begleiten internationale Kunden bei Beschaffung, Handel und Logistik – diskret, schnell, zuverlässig.</p><span class="s-btn">Projekt anfragen</span></div>
+      <div class="s-grid"><div><b>Beschaffung</b><p>Zugang zu Lieferanten und Herstellern in Märkten, die für andere schwer erreichbar sind.</p></div>
+        <div><b>Handel</b><p>Abwicklung grenzüberschreitender Geschäfte – auch bei komplexen regulatorischen Rahmenbedingungen.</p></div>
+        <div><b>Beratung</b><p>Strukturierung von Liefer- und Zahlungswegen. Vertraulichkeit hat für uns oberste Priorität.</p></div></div>
+      <div class="s-band"><b>Warum Northbridge?</b> Kurze Wege · weltweites Partnernetz · Zahlungsabwicklung über etablierte Banken in Europa · Referenzen auf Anfrage</div>
+      <div class="s-foot">© 2024 Northbridge S.A. · Calle 50, Torre Ámbar, Of. 1207 · Panama-Stadt · info@northbridge-sa.example<br>Impressum: Northbridge S.A., Registro Público de Panamá 155-690-1207 · Geschäftsführer Rafael Ordóñez Vega</div></div>`},
   nb_reg:{kw:["northbridge"], title:"Registro Público de Panamá – Northbridge S.A.", url:"registro-publico.example/sociedad/155-690-1207", snippet:"Registerauszug · Sociedad Anónima · Panama-Stadt", reg:true,
     rows:[["Firma","Northbridge S.A."],["Registernummer","155-690-1207"],["Sitz","Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt"],["Gegründet","03/2024"],["Geschäftsführer","Rafael Ordóñez Vega"]],
     org:[[{name:"Anteilseigner nicht offengelegt", sub:"Inhaberaktien · verwahrt von Istmo Nominees S.A. (Treuhänder)", kind:"veil", q:"Istmo Nominees", down:"? %"}],[{name:"Northbridge S.A.", sub:"Panama", cur:1}]],
     log:"Browser: Im Register von Panama ist der Eigentümer von Northbridge S.A. nicht offengelegt – die Aktien verwahrt ein Treuhänder."},
   nbh:{kw:["northbridge","north bridge"], title:"North Bridge Holding AG – Zug", url:"www.northbridge-holding.example", snippet:"Immobilienverwaltung in der Zentralschweiz seit 1987.",
-    html:`<h3>North Bridge Holding AG</h3><p>Immobilienverwaltung in der Zentralschweiz seit 1987. Familiengeführt.</p><p class="mini muted">Bahnhofstrasse 40 · 6300 Zug</p>`},
+    html:`<div class="site nbh"><div class="s-head"><div class="s-logo">North Bridge <span>Holding AG</span></div><div class="s-nav"><span>Liegenschaften</span><span>Vermietung</span><span>Team</span><span>Kontakt</span></div></div>
+      <div class="s-hero"><h2>Wohnen und Arbeiten in der Zentralschweiz</h2><p>Seit 1987 verwalten wir als Familienunternehmen Wohn- und Gewerbeliegenschaften im Kanton Zug.</p></div>
+      <div class="s-grid"><div><b>Seepark Cham</b><p>24 Wohnungen · 2½ bis 5½ Zimmer · Bezug ab Frühjahr</p></div><div><b>Gewerbehaus Baar</b><p>Büro- und Lagerflächen ab 80 m²</p></div><div><b>Altstadt Zug</b><p>Ladenlokal an bester Lage · per sofort</p></div></div>
+      <div class="s-band"><b>Unser Team:</b> Ruedi Amstutz (Geschäftsführung) · Claudia Iten (Bewirtschaftung) · Marco Schuler (Vermietung)</div>
+      <div class="s-foot">North Bridge Holding AG · Bahnhofstrasse 40 · 6300 Zug · +41 41 710 20 40 · UID CHE-112.408.770<br>Nicht zu verwechseln mit anderen Unternehmen ähnlichen Namens.</div></div>`},
   istmo:{kw:["istmo"], title:"Istmo Nominees S.A. – Servicios Fiduciarios", url:"www.istmo-nominees.example", snippet:"Treuhanddienstleistungen und Verwahrung von Inhaberaktien für Gesellschaften.",
-    html:`<h3>Istmo Nominees S.A.</h3><p>Wir übernehmen die treuhänderische Verwahrung von Inhaberaktien und stellen Direktoren für über 400 Gesellschaften. Diskretion ist unser Geschäft.</p><p class="mini muted">Auskünfte über Mandanten erteilen wir grundsätzlich nicht.</p>`},
+    html:`<div class="site istmo"><div class="s-head"><div class="s-logo">ISTMO <span>NOMINEES S.A.</span></div><div class="s-nav"><span>Servicios</span><span>Jurisdicciones</span><span>Contacto</span></div></div>
+      <div class="s-hero"><h2>Corporate Services seit 1998</h2><p>Gründung, Verwaltung und Vertretung von Gesellschaften in Panama und weiteren Jurisdiktionen. Für über 400 Mandanten weltweit.</p></div>
+      <div class="s-grid"><div><b>Registered Agent</b><p>Gesetzlich vorgeschriebene Vertretung und Zustelladresse – auf Wunsch in der Torre Ámbar, Calle 50.</p></div>
+        <div><b>Nominee-Services</b><p>Stellung von Direktoren und Aktionären für Mandanten, die nicht selbst im Register erscheinen möchten.</p></div>
+        <div><b>Verwahrung von Inhaberaktien</b><p>Sichere Verwahrung gemäß den gesetzlichen Vorgaben – vertraulich und nach Weisung des Mandanten.</p></div></div>
+      <div class="s-band warn">Auskünfte über Mandanten oder Beteiligungsverhältnisse erteilen wir grundsätzlich nicht. Anfragen von Behörden bearbeiten wir ausschließlich auf dem Rechtsweg.</div>
+      <div class="s-foot">Istmo Nominees S.A. · Calle 50, Torre Ámbar, Of. 1201 · Panama-Stadt · Lizenz als Registered Agent Nr. RA-0412</div></div>`},
   nt_dir:{kw:["nova trade","novatrade"], title:"Firmenverzeichnis Panamá – Nova Trade Ltd.", url:"empresas-panama.example/nova-trade-ltd", snippet:"Handelsgesellschaft · Calle 50, Panama-Stadt · 0 Mitarbeitende gemeldet",
-    html:`<h3>Nova Trade Ltd.</h3><p>Branche: Groß- und Außenhandel<br>Mitarbeitende: 0 gemeldet<br>Website: keine</p><p class="mini muted">Calle 50, Torre Ámbar, Of. 1207 · Panama-Stadt</p>`},
+    html:`<div class="site dir"><div class="s-head"><div class="s-logo">empresas<span>Panamá</span></div><div class="s-nav"><span>Firmensuche</span><span>Branchen</span><span>Premium-Eintrag</span></div></div>
+      <div class="s-crumb">Startseite › Panama-Stadt › Groß- und Außenhandel › Nova Trade Ltd.</div>
+      <div class="s-cols"><div class="s-main"><h2>Nova Trade Ltd.</h2><table class="s-tbl">
+        <tr><th>Rechtsform</th><td>Limited (Ltd.)</td></tr><tr><th>Status</th><td><span class="s-ok">aktiv</span></td></tr><tr><th>Gegründet</th><td>01/2025</td></tr>
+        <tr><th>Branche</th><td>Groß- und Außenhandel</td></tr><tr><th>Adresse</th><td>Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt</td></tr>
+        <tr><th>Telefon</th><td>– nicht angegeben –</td></tr><tr><th>Website</th><td>– keine –</td></tr><tr><th>Mitarbeitende</th><td>0 gemeldet</td></tr><tr><th>Umsatz</th><td>keine Angabe</td></tr></table>
+        <p class="s-note">Unter dieser Adresse sind 37 weitere Unternehmen eingetragen.</p></div>
+      <div class="s-side"><b>Ist das Ihr Unternehmen?</b><p>Ergänzen Sie Ihren Eintrag mit Logo, Öffnungszeiten und Bewertungen.</p><span class="s-btn">Eintrag übernehmen</span></div></div>
+      <div class="s-foot">empresasPanamá – Branchenverzeichnis · Angaben ohne Gewähr, teilweise aus öffentlichen Quellen</div></div>`},
   nt_reg:{kw:["nova trade","novatrade"], title:"Registro Público de Panamá – Nova Trade Ltd.", url:"registro-publico.example/sociedad/155-702-3318", snippet:"Registerauszug · Limited · Panama-Stadt", reg:true,
     rows:[["Firma","Nova Trade Ltd."],["Registernummer","155-702-3318"],["Sitz","Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt"],["Gegründet","01/2025"],["Geschäftsführer","Rafael Ordóñez Vega"]],
     org:[[{name:"Aurelius Global Holdings Ltd.", sub:"Limassol, Zypern", q:"Aurelius Global Holdings", down:"100 %"}],[{name:"Nova Trade Ltd.", sub:"Panama", cur:1}]],
@@ -1357,7 +1398,11 @@ const WEB = {
     org:[[{name:"Viktor Sokolov", sub:"geb. 14.02.1972 · russisch · Jekaterinburg", kind:"person", q:"Viktor Sokolov", down:"60 %"},{name:"Streubesitz", sub:"viele Aktionäre, keiner einzeln über 25 %", kind:"veil", down:"40 %"}],[{name:"Aurelius Industrial Group PJSC", sub:"Jekaterinburg, Russland", cur:1}]],
     log:"Browser: Laut Aktionärsregister hält Viktor Sokolov 60 % der Anteile und Stimmrechte an der Aurelius Industrial Group PJSC. Die übrigen 40 % liegen im Streubesitz."},
   aurel:{kw:["aurel"], title:"Mark Aurel – römischer Kaiser (121–180 n. Chr.)", url:"lexikon.example/mark-aurel", snippet:"Römischer Kaiser und Philosoph, Verfasser der „Selbstbetrachtungen“.",
-    html:`<h3>Mark Aurel</h3><p>Römischer Kaiser von 161 bis 180 n. Chr. und stoischer Philosoph. Bekannt für seine „Selbstbetrachtungen“.</p><p class="mini muted">Vermutlich nicht das, was ihr sucht.</p>`}};
+    html:`<div class="site wiki"><div class="s-head"><div class="s-logo">Lexikon<span>.example</span></div><div class="s-nav"><span>Artikel</span><span>Diskussion</span><span>Suche</span></div></div>
+      <div class="s-cols"><div class="s-main"><h2>Mark Aurel</h2><p><b>Mark Aurel</b> (lateinisch Marcus Aurelius; * 121 in Rom; † 180) war von 161 bis 180 römischer Kaiser. Er gilt als letzter der sogenannten Adoptivkaiser.</p>
+        <p>Bekannt ist er vor allem als Philosoph der Stoa. Seine „Selbstbetrachtungen“, auf Griechisch verfasste Notizen an sich selbst, gehören bis heute zu den meistgelesenen Texten der Antike.</p>
+        <p><b>Siehe auch:</b> Stoa · Adoptivkaiser · Reiterstandbild des Mark Aurel</p><p class="s-note">Vermutlich nicht das, was ihr sucht.</p></div>
+      <div class="s-side info"><b>Mark Aurel</b><table class="s-tbl"><tr><th>Regierungszeit</th><td>161–180</td></tr><tr><th>Vorgänger</th><td>Antoninus Pius</td></tr><tr><th>Nachfolger</th><td>Commodus</td></tr><tr><th>Werk</th><td>Selbstbetrachtungen</td></tr></table></div></div></div>`}};
 // Organigramm: Ebenen von oben (Eigentümer) nach unten (Beteiligungen). Verbindungen mit Anteilen; Knoten mit q lösen eine Suche aus.
 const orgChart = (org, cap = "Beteiligungsstruktur laut Register", tip = true) => {
   const ctr = (i, n) => (i + .5) / n * 100;
