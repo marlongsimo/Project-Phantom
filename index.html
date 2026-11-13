@@ -115,6 +115,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .lnq{margin:18px 0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.18)}.lnq p{margin:6px 0 10px}
 .lnopt{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;margin:6px 0;border:1px solid var(--line);border-radius:8px;cursor:pointer}
 .lnopt:has(input:checked){border-color:#e27a88;background:rgba(168,37,56,.18)}.lnopt.ok{border-color:#3b7a55;background:rgba(59,122,85,.25)}.lnopt.bad{border-color:#a82538;background:rgba(168,37,56,.25)}
+.lnqq{margin:6px 0 10px}.learn .org{max-width:560px}
 .lnfb{padding:10px 12px;border-radius:8px;margin:10px 0 0}.lnfb.ok{background:rgba(59,122,85,.25)}.lnfb.bad{background:rgba(168,37,56,.25)}
 .pwhint{margin:0 0 12px;text-align:left;font-size:.9rem}.pwhint summary{cursor:pointer;color:#a82538;font-weight:700;display:inline-block;padding:6px 12px;border:1px solid #e3c2c7;border-radius:6px;background:#fff}.pwhint summary:hover{background:#f8e9eb}.pwhint p{margin:6px 0 0;padding:8px 10px;background:#fff;border:1px solid #e0d3d1;border-radius:6px}
 .badge.new{background:#ffca70;color:#3a2f00}
@@ -262,13 +263,13 @@ h3{font-size:1.05rem;margin-bottom:6px}
 
 <section id="start">
   <div class="hero">
-    <span class="pill">ESCAPE ROOM · TRAINING</span><span class="pill">4 NOTIZEN · 4 AUFGABEN</span><span class="pill">50 MINUTEN</span>
+    <span class="pill">ESCAPE ROOM · TRAINING</span><span class="pill">4 NOTIZEN · 4 AUFGABEN</span><span class="pill" id="startMin">50 MINUTEN</span>
     <h1>Weber ist weg.<br>Sein PC ist noch an.</h1>
     <div id="resumeBox" class="notice hidden"></div>
-    <p class="muted" style="max-width:680px;font-size:1.08rem">Freitag, 15:40 Uhr. Senior-Analyst Matthias Weber war an etwas Großem dran – dann ist er verschwunden. Um 16:30 Uhr startet der Buchungslauf, und mit ihm eine Zahlung über 3,8 Millionen Euro an eine Firma, die auf einer Sanktionsliste stehen könnte. Folgt Webers Notizen und stoppt die Zahlung rechtzeitig.</p>
+    <p class="muted" style="max-width:680px;font-size:1.08rem">Freitag, 15:40 Uhr. Senior-Analyst Matthias Weber war an etwas Großem dran – dann ist er verschwunden. Um <span id="startRun">16:30</span> Uhr startet der Buchungslauf, und mit ihm eine Zahlung über 3,8 Millionen Euro an eine Firma, die auf einer Sanktionsliste stehen könnte. Folgt Webers Notizen und stoppt die Zahlung rechtzeitig.</p>
     <div class="modes" id="modeSelect" role="radiogroup" aria-label="Stufe">
       <label class="mode"><input type="radio" name="mode" value="ermittler" checked><b>Ermittler</b><small>Direkt in den Fall: 50 Minuten, keine Schrittanzeige, Hilfe kostet Zeit.</small></label>
-      <label class="mode"><input type="radio" name="mode" value="azubi"><b>Azubi (Test)</b><small>Erst fünf kurze Lernmodule und ein Wissenstest (ab 9 von 12 bestanden), dann derselbe Fall mit 75 Minuten Spielzeit.</small></label>
+      <label class="mode"><input type="radio" name="mode" value="azubi"><b>Azubi (Test)</b><small>Erst sechs kurze Lernmodule und ein Wissenstest (ab 12 von 15 bestanden), dann derselbe Fall mit 75 Minuten – der Buchungslauf startet erst um 16:55.</small></label>
     </div>
     <div class="field" style="max-width:460px">
       <input id="teamName" maxlength="40" placeholder="Teamname eingeben" aria-label="Teamname">
@@ -305,7 +306,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="layout">
     <div class="monitor">
       <div class="postit-m a hand">Alles steht in meinen Notizen! – W.</div>
-      <div class="postit-m b hand">16:30 Buchungslauf!!</div>
+      <div class="postit-m b hand" id="postitRun">16:30 Buchungslauf!!</div>
       <div class="screen" id="screen">
         <div class="icons" id="icons"></div>
         <div id="windows"></div>
@@ -354,7 +355,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.8 (Prototyp Organigramm)</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.8</footer>
 </div>
 
 <script>
@@ -375,17 +376,21 @@ const S = {team:"", startAt:0, deadline:0, timerId:null, ended:false, score:0, m
   unread:{mail:2, chat:1}, hintUsed:{}, err:{}, mode:"ermittler", track:"ermittler", scale:1, journal:[]};
 
 /* ---------- Zeit ---------- */
-// Eine Spielminute dauert im Azubi-Modus länger (scale), damit die Geschichte trotzdem um 16:30 endet.
-const storyMin = () => S.startAt ? Math.min(50, Math.floor((Date.now() - S.startAt)/(60000 * (S.scale || 1)))) : 0;
+// Die Uhr läuft in Echtzeit ab 15:40. S.dur ist die Spieldauer: 50 Minuten (Ermittler, Lauf 16:30) oder länger (Azubi (Test), Lauf entsprechend später).
+const DUR = () => S.dur || 50;
+const storyMin = () => S.startAt ? Math.min(DUR(), Math.floor((Date.now() - S.startAt)/60000)) : 0;
 const storyTime = (m = storyMin()) => { const t = 40 + m; return (15 + Math.floor(t/60)) + ":" + pad(t % 60); };
+const RUN = () => storyTime(DUR());
+// Texte nennen den Lauf mit „16:30“ (und Webers Rückkehr mit „16:34“) – im Azubi-Modus werden sie auf die spätere Uhrzeit umgeschrieben.
+const rt = t => DUR() === 50 ? t : String(t).replace(/16:30/g, RUN()).replace(/16:34/g, storyTime(DUR() + 4));
 function tick(){
   const remaining = Math.max(0, S.deadline - Date.now()), sec = Math.ceil(remaining/1000);
   $("timer").textContent = pad(Math.floor(sec/60)) + ":" + pad(sec % 60);
   $("clock").textContent = "Uhrzeit " + storyTime();
   $("trayTime").textContent = storyTime();
-  $("trayRun").textContent = (S.f.code ? "16:30 in " : "Lauf in ") + Math.ceil(sec/60) + " Min.";
+  $("trayRun").textContent = (S.f.code ? RUN() + " in " : "Lauf in ") + Math.ceil(sec/60) + " Min.";
   $("timerBox").classList.toggle("urgent", sec <= 300);
-  EVENTS.forEach((e, i) => { if (!S.firedEvents[i] && storyMin() >= e.at){ S.firedEvents[i] = true; e.fn(); } });
+  EVENTS.forEach((e, i) => { if (!S.firedEvents[i] && storyMin() >= (e.at < 0 ? DUR() + e.at : e.at)){ S.firedEvents[i] = true; e.fn(); } });
   if (sec % 5 === 0) saveGame();
   const el = $("zvCountdown"); if (el) el.textContent = pad(Math.floor(sec/60)) + ":" + pad(sec % 60);
   if (remaining <= 0) finish(true);
@@ -410,9 +415,9 @@ let csDone = null;
 function cutscene({eyebrow, title, lines, button = "Weiter →", onDone}){
   ["start","game","final"].forEach(id => $(id).classList.add("hidden"));
   $("cutscene").classList.remove("hidden");
-  $("csEyebrow").textContent = eyebrow; $("csTitle").textContent = title; $("csBtn").textContent = button;
+  $("csEyebrow").textContent = eyebrow; $("csTitle").textContent = rt(title); $("csBtn").textContent = button;
   csDone = onDone; window.scrollTo(0, 0);
-  typeLines($("csText"), lines);
+  typeLines($("csText"), lines.map(rt));
 }
 $("csText").addEventListener("click", () => { skipType = true; });
 $("csBtn").addEventListener("click", () => {
@@ -476,10 +481,10 @@ function hintErm(){
     "Nehmt die Zahlung, die ihr nicht ausgeführt und eskaliert habt, und gebt die ersten drei Ziffern ihres Betrags ein."]};
   if (!web.nt_reg) return {key:"r1", steps:[
     "Northbridge verrät im Register nicht, wem sie gehört. Gibt es eine Firma mit derselben Adresse, die weniger verschwiegen ist?",
-    "Sucht im Browser nach „Nova Trade“ und öffnet den Registerauszug. Achtet auf Geschäftsführer und Anteilseigner."]};
+    "Sucht im Browser nach „Nova Trade“ und öffnet den Registerauszug. Achtet auf den Geschäftsführer und auf das Organigramm: Wem gehört Nova Trade?"]};
   if (!web.agh) return {key:"r2", steps:[
     "Nova Trade hat eine Eigentümerin. Wem gehört die – und woran ist sie sonst noch beteiligt?",
-    "Sucht im Browser nach „Aurelius Global Holdings“ und schaut euch Gesellschafter und Beteiligungen an."]};
+    "Sucht im Browser nach „Aurelius Global Holdings“ und lest das Organigramm: Wem gehört die Holding – und woran ist sie beteiligt?"]};
   if (!web.aig) return {key:"r3", steps:[
     "Am Ende der Kette steht ein Konzern. Für einen Listenabgleich braucht ihr seine genauen Daten.",
     "Öffnet im Browser das Profil der Aurelius Industrial Group PJSC: Adresse, Land, Registernummer. Das Aktionärsregister daneben braucht ihr später für die Eskalation."]};
@@ -565,11 +570,11 @@ const HELP_TOPIC = {start:["san","Wo anfangen?"], zv:["san","Empfänger von PHAN
   aml0:["aml","Offene AML-Alerts"], aml1:["aml","Auffälliges Kundenkonto"], aml2:["aml","Gegenpartei"], n3:["aml","Webers Notiz 15:17"],
   fraud:["fraud","Zurückgehaltene Zahlungen"], n4:["fraud","Webers Notiz 15:25"], stop:["san","Compliance-Stopp PHANTOME"], r1:["san","Eigentümer von Northbridge"], r2:["san","Eigentümer von Nova Trade"], r3:["san","Konzernstruktur Aurelius"], ubo:["aml","Wirtschaftlich Berechtigter"], zvdec:["san","Vorstandsanweisung PHANTOME"],
   ins1:["rev","Vorstandsmail"], ins2:["rev","Arbeitsplatz-Zuordnung"], ins3:["rev","Webers Postausgang"], ins4:["rev","Hinweis an die Revision"], ins5:["rev","Freigaben PHANTOME"], ins6:["rev","Kontoänderung Mira"]};
-const helpLeft = () => Math.max(0, S.deadline - Date.now()) > (HELP_MIN + 1) * 60000 * (S.scale || 1);
+const helpLeft = () => Math.max(0, S.deadline - Date.now()) > (HELP_MIN + 1) * 60000;
 function requestHelp(){
   const h = hintFor(), used = S.hintUsed[h.key] || 0, [who, topic] = HELP_TOPIC[h.key] || ["san","PHANTOME"], c = HELPERS[who];
   S.hintUsed[h.key] = used + 1; S.hints++;
-  S.startAt -= HELP_MIN * 60000 * (S.scale || 1); S.deadline -= HELP_MIN * 60000 * (S.scale || 1);
+  S.startAt -= HELP_MIN * 60000; S.deadline -= HELP_MIN * 60000;
   const body = [c.hi, c.lead, h.steps[used]].map(t => `<p>${t}</p>`).join("") + `<p>${c.bye.replace("\n", "<br>")}</p>`;
   mailIn({from:c.from, addr:c.addr, subj:"AW: Rückfrage – " + topic, body, hdr:`Received: from ${c.dept} · mail-gw01.kreisbank.intern`}, true);
   showHint("Anfrage verschickt. Die Uhr ist um " + HELP_MIN + " Minuten vorgerückt – die Antwort kommt per Mail.");
@@ -616,7 +621,7 @@ function loadSave(){
   try { const d = JSON.parse(localStorage.getItem(SAVE_KEY)); return d && d.S && d.S.startAt && !d.S.ended ? d : null; } catch(e){ return null; }
 }
 addEventListener("beforeunload", e => { if (S.startAt && !S.ended){ saveGame(); e.preventDefault(); e.returnValue = ""; } });
-function narrate(text){ S.log.unshift({t: storyTime(), text}); renderLog(); }
+function narrate(text){ S.log.unshift({t: storyTime(), text: rt(text)}); renderLog(); }
 function renderLog(){
   $("log").innerHTML = "";
   S.log.forEach(e => { const d = document.createElement("div"), t = document.createElement("time");
@@ -624,12 +629,12 @@ function renderLog(){
 }
 function updateHud(){
   $("score").textContent = S.score; $("mistakes").textContent = S.mistakes; $("hints").textContent = S.hints; $("teamLabel").textContent = S.team;
-  $("objective").textContent = objective();
+  $("objective").textContent = rt(objective());
   const p2 = !!S.f.stopped;
   $("phaseBox").classList.toggle("p2", p2);
   $("phaseLbl").textContent = p2 ? "Phase 2 von 2" : "Phase 1 von 2";
   $("phaseTitle").textContent = p2 ? "Den Verdacht im Haus prüfen und melden" : "Die Zahlung PHANTOME stoppen";
-  $("timerLbl").textContent = p2 ? "ZEIT BIS 16:30" : "BUCHUNGSLAUF IN";
+  $("timerLbl").textContent = p2 ? "ZEIT BIS " + RUN() : "BUCHUNGSLAUF IN";
   const cur = STEPS.findIndex(s => !s.done());
   // Nur erledigte Schritte und den aktuellen zeigen – der Rest bleibt eine Überraschung.
   const shown = cur === -1 ? STEPS : STEPS.slice(0, cur + 1);
@@ -743,6 +748,7 @@ const pts = t => S.mode === "ermittler" ? "" : t;
 function wrong(id, msg){ S.err[id] = (S.err[id] || 0) + 1; S.mistakes++; S.score = Math.max(0, S.score - 20); fb(id, msg + pts(" (−20 Punkte)"), "bad"); updateHud(); }
 let notifTimer;
 function notify(title, text, app){
+  title = rt(title); text = rt(text);
   const n = $("notif"); n.innerHTML = ""; const b = document.createElement("b"); b.textContent = title; n.appendChild(b); n.appendChild(document.createTextNode(text));
   n.onclick = () => { n.classList.add("hidden"); if (app) openApp(app); };
   n.classList.remove("hidden"); clearTimeout(notifTimer); notifTimer = setTimeout(() => n.classList.add("hidden"), 8000);
@@ -836,7 +842,7 @@ RENDER.notes = b => {
       <p class="mini muted">Das Passwort könnt ihr eingeben, sobald ihr die Prüfung im <b>${APPS[n.gate].label}</b> abgeschlossen habt.</p></div>` :
     `<div class="lock"><div class="big">🔒</div><h3>${n.title}</h3><p class="mini" style="margin-bottom:10px">Dieser Eintrag ist passwortgeschützt.</p><details class="pwhint"><summary>💡 Kennworthinweis anzeigen</summary><p>${n.pwHint}</p></details>
       <div class="row"><input id="noteCode" inputmode="numeric" maxlength="6" placeholder="Code" aria-label="Code" class="mono" style="letter-spacing:.25em"><button class="primary" id="noteBtn">Öffnen</button></div></div>`}</div></div>`;
-  if (open) b.querySelector(".notetext").textContent = n.text;
+  if (open) b.querySelector(".notetext").textContent = rt(n.text);
   on(b, ".pwhint", "toggle", e => { if (e.currentTarget.open) S.v.pwhintSeen = true; });
   on(b, ".li", "click", e => { S.v.note = e.currentTarget.dataset.k; render("notes"); });
   if (id === "n1" && !S.v.notesSeen){ S.v.notesSeen = true; narrate("Webers Notizen: Der erste Eintrag ist offen, die weiteren hat er gesperrt – jedes Schloss hat ein Rätsel."); updateHud(); }
@@ -879,11 +885,11 @@ RENDER.mail = b => {
   b.className = "wbody flush";
   b.innerHTML = `<div class="split"><div class="list">
       <div class="tabs" style="margin:0;padding:6px 6px 0">${[["inbox","Posteingang"],["sent","Gesendet"]].map(([k,t]) => `<button data-f="${k}" class="${k === folder ? "on" : ""}">${t}</button>`).join("")}</div>
-      ${list.map((x,i) => `<button class="li ${x === m ? "sel" : ""} ${x.read ? "" : "unread"}" data-i="${i}">${folder === "sent" ? "An: " + x.to : x.from}<small>${x.time} · ${x.subj}</small></button>`).join("")}</div>
-    <div class="pane"><h3>${m.subj}</h3><p class="mini muted" style="margin-bottom:8px">Von: <b>${m.from}</b> &lt;<span class="mono">${m.addr}</span>&gt; · heute ${m.time}<br>An: ${m.to || "m.weber@kreisbank-hohenbrueck.example"}</p>
+      ${list.map((x,i) => `<button class="li ${x === m ? "sel" : ""} ${x.read ? "" : "unread"}" data-i="${i}">${folder === "sent" ? "An: " + x.to : x.from}<small>${x.time} · ${rt(x.subj)}</small></button>`).join("")}</div>
+    <div class="pane"><h3>${rt(m.subj)}</h3><p class="mini muted" style="margin-bottom:8px">Von: <b>${m.from}</b> &lt;<span class="mono">${m.addr}</span>&gt; · heute ${m.time}<br>An: ${m.to || "m.weber@kreisbank-hohenbrueck.example"}</p>
       <button id="hdrBtn" style="font-size:.8rem;padding:4px 10px">${S.v.hdrOpen ? "Kopfzeilen ausblenden" : "⋯ Kopfzeilen anzeigen"}</button>
       ${S.v.hdrOpen ? `<div class="doc mono" style="font-size:.78rem;margin-top:8px">${m.hdr}</div>` : ""}
-      <div style="margin-top:10px">${m.body}</div></div></div>`;
+      <div style="margin-top:10px">${rt(m.body)}</div></div></div>`;
   on(b, "[data-f]", "click", e => { S.v.folder = e.currentTarget.dataset.f; S.v.mail = 0; render("mail"); });
   on(b, ".li", "click", e => { S.v.mail = +e.currentTarget.dataset.i; render("mail"); });
   $("hdrBtn").addEventListener("click", () => { S.v.hdrOpen = !S.v.hdrOpen; render("mail"); });
@@ -984,8 +990,8 @@ const CHATS = {
 RENDER.chat = b => {
   const c = CHATS[S.v.chat];
   b.className = "wbody flush";
-  b.innerHTML = `<div class="split"><div class="list">${Object.entries(CHATS).map(([k,x]) => `<button class="li ${k === S.v.chat ? "sel" : ""}" data-k="${k}">${x.name}<small>${x.msgs[x.msgs.length-1].text.slice(0,38)}…</small></button>`).join("")}</div>
-    <div class="pane" style="background:#f3ecea">${c.msgs.map(m => `<div class="chatmsg ${m.me ? "me" : ""}"><small>${m.me ? "Matthias Weber" : (m.who || c.name)} · ${m.t}</small>${m.text}</div>`).join("")}</div></div>`;
+  b.innerHTML = `<div class="split"><div class="list">${Object.entries(CHATS).map(([k,x]) => `<button class="li ${k === S.v.chat ? "sel" : ""}" data-k="${k}">${x.name}<small>${rt(x.msgs[x.msgs.length-1].text).slice(0,38)}…</small></button>`).join("")}</div>
+    <div class="pane" style="background:#f3ecea">${c.msgs.map(m => `<div class="chatmsg ${m.me ? "me" : ""}"><small>${m.me ? "Matthias Weber" : (m.who || c.name)} · ${m.t}</small>${rt(m.text)}</div>`).join("")}</div></div>`;
   on(b, ".li", "click", e => { S.v.chat = e.currentTarget.dataset.k; render("chat"); });
   const p = b.querySelector(".pane"); p.scrollTop = p.scrollHeight;
   if (S.v.chat === "albers" && !S.v.chatSeen){ S.v.chatSeen = true; narrate("Chat: Weber war „an was Großem dran“. Alles steht in seinen Notizen. Um 15:26 ging er zu einem angeblichen Vorstandstermin."); }
@@ -1353,15 +1359,15 @@ const WEB = {
   aurel:{kw:["aurel"], title:"Mark Aurel – römischer Kaiser (121–180 n. Chr.)", url:"lexikon.example/mark-aurel", snippet:"Römischer Kaiser und Philosoph, Verfasser der „Selbstbetrachtungen“.",
     html:`<h3>Mark Aurel</h3><p>Römischer Kaiser von 161 bis 180 n. Chr. und stoischer Philosoph. Bekannt für seine „Selbstbetrachtungen“.</p><p class="mini muted">Vermutlich nicht das, was ihr sucht.</p>`}};
 // Organigramm: Ebenen von oben (Eigentümer) nach unten (Beteiligungen). Verbindungen mit Anteilen; Knoten mit q lösen eine Suche aus.
-const orgChart = org => {
+const orgChart = (org, cap = "Beteiligungsstruktur laut Register", tip = true) => {
   const ctr = (i, n) => (i + .5) / n * 100;
   const con = (a, b) => { const cs = [...a.map((_, i) => ctr(i, a.length)), ...b.map((_, i) => ctr(i, b.length))], lo = Math.min(...cs), hi = Math.max(...cs);
     return `<div class="ocon">${a.map((n, i) => `<i style="left:${ctr(i, a.length)}%;top:0;height:50%"></i>${n.down ? `<em style="left:${ctr(i, a.length)}%;top:2px">${n.down}</em>` : ""}`).join("")}
       ${hi > lo ? `<i class="bar" style="left:${lo}%;width:${hi - lo}%"></i>` : ""}
       ${b.map((n, i) => `<i style="left:${ctr(i, b.length)}%;top:50%;height:50%"></i>${n.up ? `<em style="left:${ctr(i, b.length)}%;top:calc(50% + 2px)">${n.up}</em>` : ""}`).join("")}</div>`; };
-  return `<div class="org"><div class="orgcap">Beteiligungsstruktur laut Register</div>${org.map((lvl, k) => (k ? con(org[k - 1], lvl) : "") +
+  return `<div class="org"><div class="orgcap">${cap}</div>${org.map((lvl, k) => (k ? con(org[k - 1], lvl) : "") +
     `<div class="orow">${lvl.map(n => `<div class="ocol"><button class="onode ${n.kind || ""} ${n.cur ? "cur" : ""}" ${n.q ? `data-q="${n.q}"` : "disabled"}><b>${n.name}</b>${n.sub ? `<small>${n.sub}</small>` : ""}</button></div>`).join("")}</div>`).join("")}
-    <p class="mini muted" style="margin:8px 0 0">Tippt auf ein Unternehmen, um in einem neuen Tab danach zu suchen.</p></div>`; };
+    ${tip ? `<p class="mini muted" style="margin:8px 0 0">Tippt auf ein Unternehmen, um in einem neuen Tab danach zu suchen.</p>` : ""}</div>`; };
 const orgText = org => org.slice(1).flatMap((lvl, k) => lvl.flatMap(b => org[k].map(a => a.name + " hält " + (a.down || b.up || "?") + " an " + b.name)));
 const webNorm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
 const webSearch = q => { const n = webNorm(q); if (n.length < 4) return [];
@@ -1494,8 +1500,8 @@ RENDER.zv = b => {
   b.className = "wbody";
   const fs = id => !S.f.fraud ? `<span class="tag warn">zurückgehalten · Prüfung im FraudDesk</span>` : id === "mira" ? `<span class="tag no">nicht ausgeführt · eskaliert</span>` : (S.v.fraudDec[id] || "go") === "clarify" ? `<span class="tag warn">in Klärung</span>` : id === "nordlicht" ? `<span class="tag info">Zweitfreigabe</span>` : `<span class="tag info">weiterbearbeitet</span>`;
   const sec = Math.ceil(Math.max(0, S.deadline - Date.now())/1000);
-  b.innerHTML = `<div class="appbar" style="background:#0f3e6e">💶 ZV-Cockpit <small>Buchungslauf 16:30 · noch <b id="zvCountdown">${pad(Math.floor(sec/60))}:${pad(sec%60)}</b></small></div>
-    <h3>Buchungslauf 16:30 – Auszug</h3>
+  b.innerHTML = `<div class="appbar" style="background:#0f3e6e">💶 ZV-Cockpit <small>Buchungslauf ${RUN()} · noch <b id="zvCountdown">${pad(Math.floor(sec/60))}:${pad(sec%60)}</b></small></div>
+    <h3>Buchungslauf ${RUN()} – Auszug</h3>
     <table class="tbl"><tr><th>Empfänger</th><th style="text-align:right">Betrag</th><th>Status</th></tr>
       <tr><td>Sammelauftrag Gehälter Oktober</td><td style="text-align:right">1.214.880,00 €</td><td><span class="tag ok">freigegeben</span></td></tr>
       <tr><td>Nordlicht IT GmbH</td><td style="text-align:right">4.860,00 €</td><td>${fs("nordlicht")}</td></tr>
@@ -1513,7 +1519,7 @@ RENDER.zv = b => {
     <tr><th>Betrag · Zweck</th><td>3.800.000,00 EUR · „Beratungsleistungen“</td></tr>
     <tr><th>Sanktionsscreening</th><td>${S.f.embargo ? `<span class="tag no">Treffer bei der Eigentümerin bestätigt</span> Aurelius Industrial Group PJSC (SAN-4417)` : `<span class="tag ok">Namensabgleich Northbridge S.A.: kein Treffer</span> <small class="muted">Eigentümerstruktur nicht geprüft</small>`}</td></tr>
     <tr><th>Freigaben</th><td><b>1 von 2</b> – Zweitfreigabe ausstehend<br><small>1. Freigabe: heute 15:12 · Sammelkennung <span class="mono">zv.batch07</span> · Arbeitsplatz <span class="mono">PC-ZV-114</span></small></td></tr>
-    <tr><th>Ausführung</th><td>automatisch im Buchungslauf 16:30 · fallverantwortlich: m.weber</td></tr></table></div>
+    <tr><th>Ausführung</th><td>automatisch im Buchungslauf ${RUN()} · fallverantwortlich: m.weber</td></tr></table></div>
     ${S.f.stopped ? `<p><span class="tag no">COMPLIANCE-STOPP · ESKALIERT</span></p>` : S.f.code ? `<p><span class="tag no">⛔ Compliance-Stopp eingetragen – PHANTOME ist aus dem Buchungslauf genommen.</span></p>${S.mode === "ermittler" && S.v.stopNote ? `<div class="doc" style="margin:10px 0"><b>Euer Vermerk</b><p style="margin:6px 0 0;white-space:pre-wrap">${esc(S.v.stopNote)}</p></div>${ZV_MODEL}` : ""}<p><b>Wie geht es jetzt weiter?</b> Der Stopp hält – jetzt muss der Fall richtig eskaliert werden.</p>${ZV_DEC.map(([v,t]) => `<label class="choice"><input type="radio" name="zvdec" value="${v}"><span>${t}</span></label>`).join("")}${S.mode === "ermittler" ? `<p style="margin:12px 0 4px"><b>Angabe für den Geldwäschebeauftragten:</b> Wirtschaftlich Berechtigter der Empfängerstruktur (natürliche Person)</p>${UBO.map(([v,t]) => `<label class="choice"><input type="radio" name="zvubo" value="${v}"><span>${t}</span></label>`).join("")}` : ""}<div class="row"><button class="primary" id="zvDecBtn">Bestätigen</button></div>` :
     `<div class="row"><button id="zvRelease">Jetzt freigeben</button><button id="zvOpenStop" class="primary">Compliance-Stopp setzen …</button></div>
     <div id="zvForm" class="${S.v.zvForm ? "" : "hidden"}" style="margin-top:12px">
@@ -1573,10 +1579,10 @@ function mailIn(m, quiet){
 const EVENTS = [
   {at:6, fn:() => chatIn("Seid ihr in Webers Büro? Er geht nicht ans Handy. Das ist nicht seine Art.")},
   {at:9, fn:() => { if (!S.v.pwhintSeen && !S.notes.n2) chatIn("Habt ihr euch Webers gesperrte Notizen schon angesehen? Er schreibt sich bei Passwörtern immer eine Eselsbrücke dazu – steht direkt unter dem Schloss."); }},
-  {at:18, fn:() => mailIn({from:"ZV-Batch", addr:"zv-batch@kreisbank-hohenbrueck.example", subj:"Erinnerung: Buchungslauf in 30 Minuten", hdr:`Received: from zv-batch01.kreisbank.intern (10.4.1.20)`, body:`<p>Automatische Nachricht. Der Buchungslauf startet um 16:30 Uhr. 1 Zahlung mit offenem Compliance-Vermerk (PHANTOME).</p>`})},
+  {at:-32, fn:() => mailIn({from:"ZV-Batch", addr:"zv-batch@kreisbank-hohenbrueck.example", subj:"Erinnerung: Buchungslauf in 30 Minuten", hdr:`Received: from zv-batch01.kreisbank.intern (10.4.1.20)`, body:`<p>Automatische Nachricht. Der Buchungslauf startet um 16:30 Uhr. 1 Zahlung mit offenem Compliance-Vermerk (PHANTOME).</p>`})},
   {at:31, fn:() => chatIn("Der Empfang sagt: Raum 12.04 ist ein Lagerraum. Da findet nie ein Vorstandsgespräch statt. Wer schickt Weber denn dahin?")},
-  {at:38, fn:() => mailIn({from:"Assistenz des Vorstands", addr:"assistenz.vorstand@kreisbank-hohenbrueck-vorstand.example", subj:"LETZTE ERINNERUNG: PHANTOME", fake:true, hdr:FAKE_HDR, body:`<p>Herr Weber,</p><p>wir erwarten die Ausführung von PHANTOME im Lauf um 16:30 Uhr. Jede weitere Verzögerung wird Konsequenzen haben.</p><p>Assistenz des Vorstands</p>`})},
-  {at:45, fn:() => notify("ZV-Cockpit", "Buchungslauf startet in 5 Minuten.", "zv")}];
+  {at:-12, fn:() => mailIn({from:"Assistenz des Vorstands", addr:"assistenz.vorstand@kreisbank-hohenbrueck-vorstand.example", subj:"LETZTE ERINNERUNG: PHANTOME", fake:true, hdr:FAKE_HDR, body:`<p>Herr Weber,</p><p>wir erwarten die Ausführung von PHANTOME im Lauf um 16:30 Uhr. Jede weitere Verzögerung wird Konsequenzen haben.</p><p>Assistenz des Vorstands</p>`})},
+  {at:-5, fn:() => notify("ZV-Cockpit", "Buchungslauf startet in 5 Minuten.", "zv")}];
 
 /* ---------- Phase 2 ---------- */
 function phaseTwo(){
@@ -1598,8 +1604,8 @@ function phaseTwo(){
 
 /* ---------- Azubi (Test): Lernmodul und Wissenstest ---------- */
 // Fachlicher Entwurf – vor dem Einsatz als Pflichtschulung durch Compliance bzw. den Geldwäschebeauftragten freigeben lassen.
-const AZUBI_MIN = 75;           // echte Spielzeit im Azubi-Modus; die Geschichte läuft weiter von 15:40 bis 16:30
-const QUIZ_N = 12, QUIZ_PASS = 9;
+const AZUBI_MIN = 75;           // Spielzeit im Azubi-Modus in Echtzeit ab 15:40 – der Buchungslauf startet entsprechend später (75 → 16:55)
+
 const LEARN_KEY = "phantome-lernen-v1";
 const MODULES = [
   {title:"Geldwäsche und Geldwäscheprävention", goal:"Ihr versteht, was Geldwäsche ist und warum eine Bank sie verhindern muss.",
@@ -1657,7 +1663,20 @@ const MODULES = [
       <p><b>Informationsverbot (§ 47 GwG, „Tipping-off“):</b> Der Kunde und Dritte dürfen nicht darüber informiert werden, dass eine Verdachtsmeldung beabsichtigt ist oder erstattet wurde oder dass deshalb ermittelt wird. Wer den Kunden „mal fragt, was da los ist“ und dabei den Verdacht schildert, kann die Aufklärung gefährden.</p>`,
     q:{text:"Ihr stellt fest, dass mehrere Transaktionen ungewöhnliche Merkmale haben. Einen eindeutigen Beweis für eine Straftat gibt es nicht. Was ist richtig?",
       opts:["Es muss nichts unternommen werden, solange kein Beweis vorliegt.","Der Sachverhalt wird dokumentiert und nach den internen Melde- und Eskalationsprozessen weitergegeben.","Der Kunde wird über den Verdacht informiert und um eine Erklärung gebeten."], ok:1,
-      why:"Für die interne Weitergabe braucht es keinen Beweis. Und den Kunden über einen Verdacht zu informieren, kann gegen das Informationsverbot verstoßen."}}];
+      why:"Für die interne Weitergabe braucht es keinen Beweis. Und den Kunden über einen Verdacht zu informieren, kann gegen das Informationsverbot verstoßen."}},
+  {title:"Organigramme lesen", goal:"Ihr könnt ein Beteiligungs-Organigramm lesen und daraus ableiten, wem ein Unternehmen gehört – und wo ihr weiter recherchieren müsst.",
+    html:`<p>Registerauszüge zeigen Eigentumsverhältnisse oft als <b>Organigramm</b>. So lest ihr es:</p>
+      <ul><li><b>Oben</b> stehen die Eigentümer, <b>unten</b> die Gesellschaften, an denen sie beteiligt sind.</li>
+      <li>Die <b>Prozentzahl an der Linie</b> ist der Anteil, den der obere Kasten am unteren hält.</li>
+      <li><b>Abgerundete grüne Kästen</b> sind natürliche Personen, <b>eckige blaue</b> sind Unternehmen, <b>gestrichelte graue</b> stehen für Eigentümer, die nicht offengelegt sind oder nur pauschal genannt werden (z. B. Streubesitz).</li>
+      <li>Der <b>rot umrandete Kasten</b> ist das Unternehmen, dessen Auszug ihr gerade lest.</li></ul>
+      ${orgChart([[{name:"Anna Berg", sub:"natürliche Person", kind:"person", down:"70 %"},{name:"Streubesitz", sub:"keiner einzeln über 25 %", kind:"veil", down:"30 %"}],[{name:"Alpha Holding GmbH"}],[{name:"Beta GmbH", up:"100 %", cur:1}]], "Beispiel: Auszug der Beta GmbH", false)}
+      <p><b>Lesen von unten nach oben:</b> Die Beta GmbH gehört vollständig der Alpha Holding. Die Alpha Holding gehört zu 70 % Anna Berg. Mit 70 % beherrscht sie die Holding – und damit mittelbar auch die Beta GmbH. Wirtschaftlich Berechtigte der Beta GmbH ist also <b>Anna Berg</b>, nicht die Holding.</p>
+      <p><b>Wann weitersuchen?</b> Endet ein Organigramm bei einem Unternehmen oder bei einem gestrichelten Kasten, ist die Kette noch nicht zu Ende. Dann braucht ihr den nächsten Auszug – etwa den des Eigentümers oder dessen Aktionärsregister.</p>
+      <p class="mini muted">Organigramme zeigen, was im Register steht. Treuhandvermerke, Stimmrechtsvereinbarungen oder Kontrolle auf andere Weise stehen oft daneben im Text – lest den ganzen Auszug.</p>`,
+    q:{text:"Ein Organigramm endet oben bei „Delta Holdings Ltd. – 100 %“. Was folgt daraus für den wirtschaftlich Berechtigten?",
+      opts:["Delta Holdings Ltd. ist die wirtschaftlich Berechtigte.","Die Kette ist noch nicht zu Ende – ihr müsst herausfinden, welche natürlichen Personen hinter Delta Holdings stehen.","Es gibt keinen wirtschaftlich Berechtigten, weil eine Holding alles hält."], ok:1,
+      why:"Ein Unternehmen ist nie wirtschaftlich berechtigt. Solange oben kein Mensch steht, recherchiert ihr weiter."}}];
 // Pool: 12 Themen mit je zwei Varianten – jeder Versuch zieht eine Variante pro Thema. Die richtige Antwort steht im Pool an erster Stelle.
 const QUIZ = [
   {m:1, v:[["Was versteht man unter Geldwäsche?",["Das Verschleiern der illegalen Herkunft von Vermögenswerten, um sie in den legalen Wirtschaftskreislauf einzuschleusen","Jede Bareinzahlung über 10.000 Euro","Das Verschieben von Geld auf Auslandskonten, um Steuern zu sparen","Das Herstellen und Verbreiten von Falschgeld"]],
@@ -1683,7 +1702,21 @@ const QUIZ = [
   {m:5, v:[["Gibt es für eine Verdachtsmeldung nach § 43 GwG einen Mindestbetrag?",["Nein","Ja, 10.000 Euro","Ja, 15.000 Euro","Nur bei Bargeld"]],
     ["Braucht es einen strafrechtlichen Nachweis, bevor eine Auffälligkeit intern weitergegeben wird?",["Nein – Tatsachen, die auf einen Verdacht hindeuten, genügen","Ja, sonst drohen Schadensersatzklagen","Ja, zuerst muss die Polizei ermitteln","Nur bei Beträgen über 10.000 Euro"]]]},
   {m:5, v:[["Ihr habt mehrere auffällige Transaktionen bemerkt. Was ist richtig?",["Sachverhalt dokumentieren und nach den internen Prozessen eskalieren","Den Kunden um eine Erklärung bitten und ihm den Verdacht schildern","Nichts tun, solange kein Beweis vorliegt","Das Konto selbst sofort kündigen"]],
-    ["Was verbietet § 47 GwG?",["Kunden oder Dritte über eine beabsichtigte oder erstattete Verdachtsmeldung und daraus folgende Ermittlungen zu informieren","Verdachtsmeldungen elektronisch abzugeben","Bargeld über 10.000 Euro anzunehmen","Mit dem Geldwäschebeauftragten über einen Fall zu sprechen"]]]}];
+    ["Was verbietet § 47 GwG?",["Kunden oder Dritte über eine beabsichtigte oder erstattete Verdachtsmeldung und daraus folgende Ermittlungen zu informieren","Verdachtsmeldungen elektronisch abzugeben","Bargeld über 10.000 Euro anzunehmen","Mit dem Geldwäschebeauftragten über einen Fall zu sprechen"]]]},
+  // Organigramme lesen (Modul 6)
+  {m:6, v:[["Wer ist laut diesem Organigramm wirtschaftlich Berechtigte der Kappa GmbH?" + orgChart([[{name:"Maria Lenz", sub:"natürliche Person", kind:"person", down:"80 %"}],[{name:"Holding Nord GmbH"}],[{name:"Kappa GmbH", up:"100 %", cur:1}]], "Auszug der Kappa GmbH", false),
+      ["Maria Lenz – sie beherrscht die Holding und damit mittelbar die Kappa GmbH","Die Holding Nord GmbH, weil sie 100 % hält","Die Kappa GmbH selbst","Niemand – Maria Lenz ist nicht direkt beteiligt"]],
+    ["Wer ist laut diesem Organigramm wirtschaftlich berechtigt an der Omega AG?" + orgChart([[{name:"Jan Roth", sub:"natürliche Person", kind:"person", down:"30 %"},{name:"Eva Roth", sub:"natürliche Person", kind:"person", down:"30 %"},{name:"Streubesitz", sub:"keiner über 25 %", kind:"veil", down:"40 %"}],[{name:"Omega AG", cur:1}]], "Auszug der Omega AG", false),
+      ["Jan Roth und Eva Roth – beide halten mehr als 25 %","Nur Jan Roth, weil er zuerst genannt ist","Der Streubesitz, weil er den größten Anteil hat","Niemand, weil keiner mehr als 50 % hält"]]]},
+  {m:6, v:[["Was bedeutet der gestrichelte Kasten in diesem Organigramm?" + orgChart([[{name:"Anteilseigner nicht offengelegt", sub:"Inhaberaktien · Treuhänder", kind:"veil", down:"? %"}],[{name:"Sigma S.A.", cur:1}]], "Auszug der Sigma S.A.", false),
+      ["Der Eigentümer ist nicht offengelegt – hier muss über andere Quellen weiter recherchiert werden","Die Sigma S.A. hat keinen Eigentümer","Der Treuhänder ist der wirtschaftlich Berechtigte","Die Sigma S.A. steht auf einer Sanktionsliste"]],
+    ["Das Organigramm endet oben bei einer Holding. Reicht das, um den wirtschaftlich Berechtigten der Tau Ltd. zu bestimmen?" + orgChart([[{name:"Tau Holdings Ltd.", down:"100 %"}],[{name:"Tau Ltd.", cur:1}]], "Auszug der Tau Ltd.", false),
+      ["Nein – man muss weiter verfolgen, wem die Holding gehört","Ja – die Holding ist die wirtschaftlich Berechtigte","Ja – bei 100 % ist die Prüfung beendet"]]]},
+  {m:6, v:[["Die Gamma Group steht auf einer Sanktionsliste. Was folgt aus dem Organigramm für eine Zahlung an die Iota S.A.?" + orgChart([[{name:"Gamma Group", down:"100 %"}],[{name:"Gamma Holding Ltd."}],[{name:"Iota S.A.", up:"100 %", cur:1}]], "Auszug der Iota S.A.", false),
+      ["Iota gehört über die Holding vollständig der gelisteten Gamma Group – Eigentum und Kontrolle sind nach dem Sanktionsregime zu bewerten und der Fall ist zu eskalieren","Nichts – die Iota S.A. ist selbst nicht gelistet","Betroffen ist nur die Gamma Holding Ltd.","Die Zahlung darf ausgeführt werden, wenn der Betrag klein ist"]],
+    ["Was verbindet die Lima Ltd. und die Mika Ltd. laut Organigramm?" + orgChart([[{name:"Kilo Ltd.", cur:1}],[{name:"Lima Ltd.", up:"100 %"},{name:"Mika Ltd.", up:"100 %"}]], "Auszug der Kilo Ltd.", false),
+      ["Beide gehören vollständig derselben Muttergesellschaft, der Kilo Ltd.","Die Mika Ltd. gehört der Lima Ltd.","Zwischen beiden besteht keine erkennbare Verbindung"]]]}];
+const QUIZ_N = QUIZ.length, QUIZ_PASS = Math.ceil(QUIZ_N * 0.75);
 const shuffle = a => { const r = [...a]; for (let i = r.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; };
 let L = null;
 const saveLearn = () => { try { localStorage.setItem(LEARN_KEY, JSON.stringify(L)); } catch(e){} };
@@ -1711,7 +1744,7 @@ function renderLearn(){
     body.innerHTML = `<h1>Projekt PHANTOME – dein erster Einsatz in der Compliance</h1>
       <p>Im Bankalltag begegnen dir täglich Kunden, Transaktionen und Geschäftsvorfälle. Die meisten sind unauffällig. Manche haben Besonderheiten, die genauer betrachtet werden müssen.</p>
       <p>Deine Aufgabe: Auffälligkeiten erkennen, Informationen richtig einordnen und die richtigen Schlüsse ziehen. Bevor ihr euren ersten Ermittlungsauftrag übernehmt, geht es um die Grundlagen:</p>
-      <ol><li>Fünf kurze Lernmodule mit je einer Verständnisfrage</li><li>Wissenstest mit ${QUIZ_N} Fragen – bestanden ab ${QUIZ_PASS} richtigen Antworten</li><li>Danach der Escape Room: derselbe Fall wie für die Ermittler, mit ${AZUBI_MIN} Minuten Spielzeit</li></ol>
+      <ol><li>${MODULES.length} kurze Lernmodule mit je einer Verständnisfrage</li><li>Wissenstest mit ${QUIZ_N} Fragen – bestanden ab ${QUIZ_PASS} richtigen Antworten</li><li>Danach der Escape Room: derselbe Fall wie für die Ermittler, mit ${AZUBI_MIN} Minuten Spielzeit (Buchungslauf um ${storyTime(AZUBI_MIN)})</li></ol>
       <p class="mini muted">Fachlicher Entwurf: Vor dem Einsatz als Pflichtschulung sind die Lerninhalte durch Compliance bzw. den Geldwäschebeauftragten freizugeben. Maßgeblich sind immer die internen Arbeitsanweisungen eures Instituts.</p>`;
     nav.innerHTML = `<button class="primary" id="lnNext">Los geht’s →</button>`;
     $("lnNext").addEventListener("click", () => { L.page = 1; renderLearn(); window.scrollTo(0, 0); });
@@ -1731,8 +1764,8 @@ function renderLearn(){
   }
   if (L.phase === "test"){
     $("lnEyebrow").textContent = `AZUBI (TEST) · WISSENSTEST · VERSUCH ${L.attempts}`;
-    body.innerHTML = `<h2>Wissenstest</h2><p class="muted">${QUIZ_N} Fragen, je eine richtige Antwort. Bestanden ab ${QUIZ_PASS} richtigen Antworten (75 %).</p>
-      ${L.draw.map((d, qi) => { const [q, opts] = QUIZ[d.t].v[d.v]; return `<div class="lnq"><b>Frage ${qi + 1}</b><p>${q}</p>${d.order.map(k => `<label class="lnopt"><input type="radio" name="tq${qi}" value="${k}" ${L.ans[qi] === k ? "checked" : ""}><span>${opts[k]}</span></label>`).join("")}</div>`; }).join("")}`;
+    body.innerHTML = `<h2>Wissenstest</h2><p class="muted">${QUIZ_N} Fragen, je eine richtige Antwort – die letzten drei zu Organigrammen. Bestanden ab ${QUIZ_PASS} richtigen Antworten (75 %).</p>
+      ${L.draw.map((d, qi) => { const [q, opts] = QUIZ[d.t].v[d.v]; return `<div class="lnq"><b>Frage ${qi + 1}</b><div class="lnqq">${q}</div>${d.order.map(k => `<label class="lnopt"><input type="radio" name="tq${qi}" value="${k}" ${L.ans[qi] === k ? "checked" : ""}><span>${opts[k]}</span></label>`).join("")}</div>`; }).join("")}`;
     nav.innerHTML = `<button class="primary" id="lnSubmit">Test abgeben</button><span id="lnMiss" class="mini muted" style="align-self:center"></span>`;
     body.querySelectorAll("input[type=radio]").forEach(r => r.addEventListener("change", e => { L.ans[+e.target.name.slice(2)] = +e.target.value; saveLearn(); }));
     $("lnSubmit").addEventListener("click", () => {
@@ -1765,7 +1798,7 @@ function start(){
 }
 // Beide Stufen spielen denselben Fall; Azubi (Test) hat nur mehr echte Zeit und vorher Lernmodul und Wissenstest.
 function prolog(track, team){
-  S.mode = "ermittler"; S.track = track; S.team = team; S.scale = track === "azubi" ? AZUBI_MIN / 50 : 1;
+  S.mode = "ermittler"; S.track = track; S.team = team; S.scale = 1; S.dur = track === "azubi" ? AZUBI_MIN : 50;
   if (track === "azubi" && L) S.quiz = {score:L.score, attempts:L.attempts};
   cutscene({eyebrow:"Prolog", title:"Freitag, 15:40 Uhr",
     lines:["Financial Crime Unit, vierte Etage. Ihr seid das Abendteam und kommt zur Übergabe in das Büro von Senior-Analyst Matthias Weber.",
@@ -1773,11 +1806,12 @@ function prolog(track, team){
       "Webers PC ist nicht gesperrt. Das macht Weber nie. Er muss es sehr eilig gehabt haben. Am Monitor klebt ein Zettel: „Alles steht in meinen Notizen!“",
       "Im Zahlungsverkehr wartet eine Zahlung über 3,8 Millionen Euro an eine Firma in Panama. Projektname: PHANTOME. Buchungslauf: 16:30 Uhr.",
       "Steckt dahinter Geldwäsche oder ein Sanktionsverstoß, drohen Bußgelder in Millionenhöhe, Ermittlungen und Schlagzeilen. Der Schaden für die Bank wäre enorm.",
-      "Weber war an etwas Großem dran. Jetzt müsst ihr weitermachen. Ihr habt " + Math.round(50 * S.scale) + " Minuten."],
+      "Weber war an etwas Großem dran. Jetzt müsst ihr weitermachen. Ihr habt " + S.dur + " Minuten."],
     button:"An Webers PC setzen →", onDone: begin});
 }
 function begin(){
-  S.startAt = Date.now(); S.deadline = S.startAt + 50*60*1000*S.scale; clearLearn(); $("timerBox").classList.remove("hidden");
+  S.startAt = Date.now(); S.deadline = S.startAt + DUR()*60*1000; clearLearn(); $("timerBox").classList.remove("hidden");
+  $("postitRun").textContent = RUN() + " Buchungslauf!!"; $("trayRun").textContent = "Lauf " + RUN();
   $("game").classList.remove("hidden");
   narrate("Ihr sitzt an Webers PC. Der Buchungslauf startet um 16:30 Uhr.");
   updateHud();
@@ -1813,7 +1847,7 @@ function finish(timeout){
   if (S.ended) return; S.ended = true; S.timeout = timeout; clearInterval(S.timerId); clearSave();
   const remaining = Math.max(0, S.deadline - Date.now()), mins = Math.floor(remaining/60000);
   const bonus = timeout || S.f.wrongAccused ? 0 : Math.min(100, mins*2); S.score += bonus;
-  const elapsed = Math.min(3000 * (S.scale || 1), Math.round((Date.now() - S.startAt)/1000)), t = storyTime();
+  const elapsed = Math.min(DUR() * 60, Math.round((Date.now() - S.startAt)/1000)), t = storyTime();
   const parts = solvedCount() + (S.f.code ? 1 : 0);
   const erm = S.mode === "ermittler", rep = report(mins);
   window.phantomeResult = {report:erm ? rep : null, mode:S.mode, track:S.track, topics:topicResults(), team:S.team, score:S.score, completed:parts, mistakes:S.mistakes, hints:S.hints, timeSeconds:elapsed, timeout, stopped:!!S.f.code, escalated:!!S.f.stopped, insider:!!S.f.insider};
@@ -1857,7 +1891,7 @@ function finish(timeout){
   }
   cutscene({eyebrow:"Epilog", title, lines, button:"Zur Auswertung →", onDone:() => {
     $("final").classList.remove("hidden");
-    $("finalEyebrow").textContent = eyebrow; $("finalTitle").textContent = head; $("finalText").textContent = text;
+    $("finalEyebrow").textContent = eyebrow; $("finalTitle").textContent = head; $("finalText").textContent = rt(text);
     $("finalScore").textContent = S.score + " Punkte"; $("finalTeam").textContent = S.team;
     $("finalStats").textContent = `Stufe ${S.mode === "ermittler" ? "Ermittler" : "Azubi"} · ${parts}/4 Kernaufgaben · Täter ${S.f.insider ? "gemeldet" : "nicht gemeldet"} · ${S.mistakes} ${S.mistakes === 1 ? "Fehlversuch" : "Fehlversuche"} · ${S.hints} ${S.hints === 1 ? "Hinweis" : "Hinweise"} · ${Math.floor(elapsed/60)}:${pad(elapsed%60)} Min.`;
     $("finalScore").classList.toggle("hidden", erm);
@@ -1869,9 +1903,9 @@ function finish(timeout){
 }
 // Die Startkarten beschreiben je nach Stufe, wie gespielt wird – Ermittler verrät den Ablauf nicht.
 const START_CARDS = {
-  azubi:[["1 · LERNEN","Fünf kurze Lernmodule","Geldwäsche, wirtschaftlich Berechtigte, Sanktionen, Betrugsprävention, Meldepflichten – jeweils mit einer Verständnisfrage."],
-    ["2 · WISSENSTEST","12 Fragen, ab 9 bestanden","Erst mit bestandenem Test öffnet sich der Escape Room. Bei einem neuen Versuch werden die Fragen neu zusammengestellt."],
-    ["3 · ESCAPE ROOM","Derselbe Fall, mehr Zeit","Ihr spielt den Fall der Ermittler – mit 75 Minuten Spielzeit. Hilfe per Mail kostet auch hier Zeit."]],
+  azubi:[["1 · LERNEN","Sechs kurze Lernmodule","Geldwäsche, wirtschaftlich Berechtigte, Sanktionen, Betrugsprävention, Meldepflichten und Organigramme lesen – jeweils mit einer Verständnisfrage."],
+    ["2 · WISSENSTEST","15 Fragen, ab 12 bestanden","Erst mit bestandenem Test öffnet sich der Escape Room. Bei einem neuen Versuch werden die Fragen neu zusammengestellt."],
+    ["3 · ESCAPE ROOM","Derselbe Fall, mehr Zeit","Ihr spielt den Fall der Ermittler – mit 75 Minuten Spielzeit, der Buchungslauf ist um 16:55. Hilfe per Mail kostet auch hier Zeit."]],
   ermittler:[["DIE LAGE","Rekonstruiert Webers Ermittlung","Ein fremder Arbeitsplatz, halbfertige Notizen, mehrere Programme. Was davon wichtig ist, müsst ihr selbst herausfinden."],
     ["EURE ARBEITSWEISE","Erkenntnisse verbinden","Keine Schrittanzeige, kein automatisches Protokoll. Haltet fest, was ihr findet, und führt die Spuren selbst zusammen."],
     ["ZEIT IST EURE RESSOURCE","Hilfe kostet Zeit","Es gibt keine Punkte. Kommt ihr nicht weiter, fragt ihr Kolleginnen und Kollegen per Mail um Rat – jede Anfrage kostet 3 Minuten. Am Ende steht ein Ermittlungsbericht."]]};
@@ -1879,6 +1913,7 @@ function renderStartCards(){
   const mode = (document.querySelector("input[name=mode]:checked") || {}).value || "ermittler";
   START_CARDS[mode].forEach(([n,h,t], i) => { $("c"+(i+1)+"n").textContent = n; $("c"+(i+1)+"h").textContent = h; $("c"+(i+1)+"p").textContent = t; });
   $("startBtn").textContent = mode === "azubi" ? "Lernmodul starten →" : "Büro betreten →";
+  $("startRun").textContent = mode === "azubi" ? storyTime(AZUBI_MIN) : "16:30"; $("startMin").textContent = (mode === "azubi" ? AZUBI_MIN : 50) + " MINUTEN";
 }
 document.querySelectorAll("input[name=mode]").forEach(r => r.addEventListener("change", renderStartCards));
 renderStartCards();
@@ -1888,6 +1923,7 @@ $("restartBtn").addEventListener("click", () => { clearSave(); location.reload()
 function resume(d){
   Object.assign(S, d.S); MAILS.inbox = d.inbox; CHATS.albers.msgs = d.chat;
   ["start","cutscene","final"].forEach(id => $(id).classList.add("hidden")); $("game").classList.remove("hidden");
+  $("postitRun").textContent = RUN() + " Buchungslauf!!";
   renderLog(); narrate("Spielstand wiederhergestellt – der Timer ist weitergelaufen."); updateHud();
   S.timerId = setInterval(tick, 1000); tick();
 }
@@ -1901,7 +1937,7 @@ if (learnSaved){
 }
 if (saved){
   const left = Math.max(0, Math.ceil((saved.S.deadline - Date.now())/60000));
-  $("resumeBox").innerHTML = `<b>Laufendes Spiel gefunden:</b> Team <span id="resumeTeam"></span> · noch ${left} Min. bis 16:30<div class="rowbuttons"><button class="primary" id="resumeBtn">Spiel fortsetzen →</button><button id="discardBtn">Verwerfen und neu beginnen</button></div>`;
+  $("resumeBox").innerHTML = `<b>Laufendes Spiel gefunden:</b> Team <span id="resumeTeam"></span> · noch ${left} Min. bis zum Buchungslauf<div class="rowbuttons"><button class="primary" id="resumeBtn">Spiel fortsetzen →</button><button id="discardBtn">Verwerfen und neu beginnen</button></div>`;
   $("resumeTeam").textContent = saved.S.team; $("resumeBox").classList.remove("hidden");
   $("resumeBtn").addEventListener("click", () => resume(saved));
   $("discardBtn").addEventListener("click", () => { clearSave(); $("resumeBox").classList.add("hidden"); });
