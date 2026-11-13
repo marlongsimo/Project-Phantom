@@ -201,6 +201,13 @@ h3{font-size:1.05rem;margin-bottom:6px}
 .btab{display:flex;align-items:center;background:#e4dbd9;border-radius:8px 8px 0 0;max-width:200px;min-width:0}.btab.on{background:#f6f2f0}
 .btab button{border:0!important;background:none!important;padding:6px 8px!important;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.btab .btsel{max-width:170px}.btab .btx{padding:6px 6px!important;color:#6f5f62}
 #webNewTab{border:0;background:none;padding:4px 10px;font-size:1rem}
+.org{margin:14px 0 4px;padding:12px 10px;border:1px solid #e0d3d1;border-radius:8px;background:#fff}.orgcap{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6f5f62;margin-bottom:10px}
+.orow{display:flex}.ocol{flex:1;display:flex;justify-content:center;padding:0 4px;min-width:0}
+.onode{display:flex;flex-direction:column;align-items:center;text-align:center;width:100%;max-width:240px;border:1.5px solid #1a4d8f!important;border-radius:8px!important;background:#f2f6fb!important;padding:8px 10px!important;color:#1d2533!important;font:inherit;font-size:.86rem;line-height:1.3}
+.onode small{font-size:.72rem;color:#5d6470;margin-top:3px}.onode[data-q]{cursor:pointer}.onode[data-q]:hover{background:#e3ecf7!important}.onode:disabled{opacity:1}
+.onode.cur{border-color:#a82538!important;background:#fbeff1!important;border-width:2px!important}.onode.veil{border-style:dashed!important;border-color:#8a8f98!important;background:#f5f5f5!important}.onode.person{border-color:#2f6b55!important;background:#eef7f2!important;border-radius:22px!important}
+.ocon{position:relative;height:44px}.ocon i{position:absolute;width:2px;margin-left:-1px;background:#7a8696}.ocon i.bar{top:50%;height:2px;margin:0}
+.ocon em{position:absolute;margin-left:6px;font-size:.72rem;font-style:normal;font-weight:700;color:#1a4d8f;white-space:nowrap}
 .calcgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.calcgrid button{padding:12px 0;font-size:1.1rem}.wbody.web .pane{flex:1;overflow:auto;min-width:0}
 .bbar{flex:none;display:flex;gap:6px;align-items:center;background:#e4dbd9;padding:6px 8px;border-bottom:1px solid #cdbdbb}
 .bbar input{flex:1;min-width:0}.bbar .url{flex:1;min-width:0;font:.8rem ui-monospace,Consolas,monospace;background:#fff;border:1px solid #cdbdbb;border-radius:14px;padding:5px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -347,7 +354,7 @@ h3{font-size:1.05rem;margin-bottom:6px}
   <div class="notice mini">Arbeitsprinzip: Nicht allein aufgrund eines einzelnen Merkmals entscheiden. Bei Unsicherheit nicht eigenmächtig freigeben, sondern eskalieren. „Vorstandsanweisungen“ und Kontoänderungen nur über unabhängig bekannte Kanäle prüfen – und Kunden nicht über laufende Prüfungen informieren.</div>
 </section>
 </main>
-<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.7</footer>
+<footer class="footer">PROJEKT PHANTOME · Fiktive Trainingsumgebung · Die Kreisbank Hohenbrück ist ein erfundenes Institut ohne Verbindung zu einem realen Kreditinstitut · Keine echten Kundendaten verwenden · Version 5.8 (Prototyp Organigramm)</footer>
 </div>
 
 <script>
@@ -1318,7 +1325,8 @@ const WEB = {
   nb_site:{kw:["northbridge"], title:"Northbridge S.A. – Consulting & Trading", url:"www.northbridge-sa.example", snippet:"Beratung und internationaler Handel mit Sitz in Panama-Stadt.",
     html:`<h3>Northbridge S.A.</h3><p><i>Consulting · Trading · Logistics Solutions</i></p><p>Wir begleiten internationale Kunden bei Beschaffung, Handel und Logistik – diskret, schnell, zuverlässig.</p><p class="mini muted">Calle 50, Torre Ámbar, Of. 1207 · Panama-Stadt · info@northbridge-sa.example<br>Impressum: Geschäftsführer Rafael Ordóñez Vega</p>`},
   nb_reg:{kw:["northbridge"], title:"Registro Público de Panamá – Northbridge S.A.", url:"registro-publico.example/sociedad/155-690-1207", snippet:"Registerauszug · Sociedad Anónima · Panama-Stadt", reg:true,
-    rows:[["Firma","Northbridge S.A."],["Registernummer","155-690-1207"],["Sitz","Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt"],["Gegründet","03/2024"],["Geschäftsführer","Rafael Ordóñez Vega"],["Anteilseigner","nicht offengelegt – Inhaberaktien, verwahrt durch Istmo Nominees S.A. (Treuhänder)"]],
+    rows:[["Firma","Northbridge S.A."],["Registernummer","155-690-1207"],["Sitz","Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt"],["Gegründet","03/2024"],["Geschäftsführer","Rafael Ordóñez Vega"]],
+    org:[[{name:"Anteilseigner nicht offengelegt", sub:"Inhaberaktien · verwahrt von Istmo Nominees S.A. (Treuhänder)", kind:"veil", q:"Istmo Nominees", down:"? %"}],[{name:"Northbridge S.A.", sub:"Panama", cur:1}]],
     log:"Browser: Im Register von Panama ist der Eigentümer von Northbridge S.A. nicht offengelegt – die Aktien verwahrt ein Treuhänder."},
   nbh:{kw:["northbridge","north bridge"], title:"North Bridge Holding AG – Zug", url:"www.northbridge-holding.example", snippet:"Immobilienverwaltung in der Zentralschweiz seit 1987.",
     html:`<h3>North Bridge Holding AG</h3><p>Immobilienverwaltung in der Zentralschweiz seit 1987. Familiengeführt.</p><p class="mini muted">Bahnhofstrasse 40 · 6300 Zug</p>`},
@@ -1327,19 +1335,34 @@ const WEB = {
   nt_dir:{kw:["nova trade","novatrade"], title:"Firmenverzeichnis Panamá – Nova Trade Ltd.", url:"empresas-panama.example/nova-trade-ltd", snippet:"Handelsgesellschaft · Calle 50, Panama-Stadt · 0 Mitarbeitende gemeldet",
     html:`<h3>Nova Trade Ltd.</h3><p>Branche: Groß- und Außenhandel<br>Mitarbeitende: 0 gemeldet<br>Website: keine</p><p class="mini muted">Calle 50, Torre Ámbar, Of. 1207 · Panama-Stadt</p>`},
   nt_reg:{kw:["nova trade","novatrade"], title:"Registro Público de Panamá – Nova Trade Ltd.", url:"registro-publico.example/sociedad/155-702-3318", snippet:"Registerauszug · Limited · Panama-Stadt", reg:true,
-    rows:[["Firma","Nova Trade Ltd."],["Registernummer","155-702-3318"],["Sitz","Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt"],["Gegründet","01/2025"],["Geschäftsführer","Rafael Ordóñez Vega"],["Anteilseigner","Aurelius Global Holdings Ltd., Limassol (Zypern) – 100 %"]],
+    rows:[["Firma","Nova Trade Ltd."],["Registernummer","155-702-3318"],["Sitz","Calle 50, Torre Ámbar, Of. 1207, Panama-Stadt"],["Gegründet","01/2025"],["Geschäftsführer","Rafael Ordóñez Vega"]],
+    org:[[{name:"Aurelius Global Holdings Ltd.", sub:"Limassol, Zypern", q:"Aurelius Global Holdings", down:"100 %"}],[{name:"Nova Trade Ltd.", sub:"Panama", cur:1}]],
     log:"Browser: Nova Trade Ltd. sitzt unter derselben Adresse wie Northbridge und hat denselben Geschäftsführer. Eigentümerin: Aurelius Global Holdings Ltd. (100 %)."},
   agh:{kw:["aurelius global","aurelius holdings","aurelius"], title:"Handelsregister Zypern – Aurelius Global Holdings Ltd.", url:"companies-registry.example/HE418207", snippet:"Registerauszug · Private Limited Company · Limassol", reg:true,
-    rows:[["Firma","Aurelius Global Holdings Ltd."],["Registernummer","HE 418207"],["Sitz","Arch. Makariou III 155, Limassol, Zypern"],["Gesellschafter","Aurelius Industrial Group PJSC, Jekaterinburg – 100 %"],["Beteiligungen","Northbridge S.A., Panama – 100 % (Inhaberaktien, gehalten von Istmo Nominees S.A. als Nominee für die Gesellschaft; Weisungsrecht und wirtschaftliche Berechtigung bei Aurelius Global Holdings)<br>Nova Trade Ltd., Panama – 100 % (direkt)"],["Wirtschaftlich Berechtigte","auf Ebene der Gesellschaft keine natürliche Person mit mehr als 25 % – einzige Gesellschafterin ist die Aurelius Industrial Group PJSC"]],
+    rows:[["Firma","Aurelius Global Holdings Ltd."],["Registernummer","HE 418207"],["Sitz","Arch. Makariou III 155, Limassol, Zypern"],["Treuhandvermerk","Die Northbridge-Aktien hält Istmo Nominees S.A. als Nominee für die Gesellschaft; Weisungsrecht und wirtschaftliche Berechtigung liegen bei Aurelius Global Holdings."]],
+    org:[[{name:"Aurelius Industrial Group PJSC", sub:"Jekaterinburg, Russland", q:"Aurelius Industrial Group", down:"100 %"}],[{name:"Aurelius Global Holdings Ltd.", sub:"Limassol, Zypern", cur:1}],[{name:"Northbridge S.A.", sub:"Panama · über Istmo Nominees (Nominee)", q:"Northbridge", up:"100 %"},{name:"Nova Trade Ltd.", sub:"Panama", q:"Nova Trade", up:"100 %"}]],
     log:"Browser: Aurelius Global Holdings hält 100 % an Nova Trade und – treuhänderisch über Istmo Nominees – 100 % an Northbridge S.A. Sie gehört selbst zu 100 % der Aurelius Industrial Group PJSC."},
   aig:{kw:["aurelius industrial","aurelius group","aurelius"], title:"Aurelius Industrial Group PJSC – Unternehmensprofil", url:"www.aurelius-industrial.example/about", snippet:"Maschinenbau und Industrieausrüstung · Jekaterinburg", reg:true,
-    rows:[["Firma","Aurelius Industrial Group PJSC"],["Rechtsform","Öffentliche Aktiengesellschaft"],["Sitz","ul. Zavodskaya 17, Jekaterinburg"],["Land","Russland"],["Registernummer","OGRN 1156658044171"],["Geschäftsfelder","Maschinenbau, Industrieausrüstung, Zulieferung Verteidigungssektor"],["Tochtergesellschaften (Auszug)","Aurelius Global Holdings Ltd., Zypern – 100 %"],["Aktionäre","siehe Aktionärsregister"]],
+    rows:[["Firma","Aurelius Industrial Group PJSC"],["Rechtsform","Öffentliche Aktiengesellschaft"],["Sitz","ul. Zavodskaya 17, Jekaterinburg"],["Land","Russland"],["Registernummer","OGRN 1156658044171"],["Geschäftsfelder","Maschinenbau, Industrieausrüstung, Zulieferung Verteidigungssektor"]],
+    org:[[{name:"Aktionäre", sub:"siehe Aktionärsregister", kind:"veil", q:"Aktionärsregister Aurelius"}],[{name:"Aurelius Industrial Group PJSC", sub:"Jekaterinburg, Russland", cur:1}],[{name:"Aurelius Global Holdings Ltd.", sub:"Limassol, Zypern", q:"Aurelius Global Holdings", up:"100 %"}]],
     log:"Browser: Am Ende der Kette steht die Aurelius Industrial Group PJSC, Jekaterinburg (OGRN 1156658044171)."},
   shr:{kw:["aurelius industrial","aurelius group","aurelius","sokolov","aktionarsregister"], title:"Aktionärsregister – Aurelius Industrial Group PJSC", url:"shareholder-registry.example/ogrn-1156658044171", snippet:"Offenlegung der Aktionäre mit wesentlicher Beteiligung · Stand 30.09.2026", reg:true,
-    rows:[["Gesellschaft","Aurelius Industrial Group PJSC (OGRN 1156658044171)"],["Aktionär","<b>Viktor Sokolov</b> – Kapitalanteil 60 %, Stimmrechte 60 %"],["Geburtsdatum","14.02.1972"],["Staatsangehörigkeit","russisch"],["Wohnort","Jekaterinburg"],["Weitere Aktionäre","40 % im Streubesitz – kein Aktionär einzeln über 25 %, keine Stimmbindung oder sonstige Kontrolle bekannt"]],
+    rows:[["Gesellschaft","Aurelius Industrial Group PJSC (OGRN 1156658044171)"],["Stimmrechte","entsprechen den Kapitalanteilen; keine Stimmbindung oder sonstige Kontrolle bekannt"]],
+    org:[[{name:"Viktor Sokolov", sub:"geb. 14.02.1972 · russisch · Jekaterinburg", kind:"person", q:"Viktor Sokolov", down:"60 %"},{name:"Streubesitz", sub:"viele Aktionäre, keiner einzeln über 25 %", kind:"veil", down:"40 %"}],[{name:"Aurelius Industrial Group PJSC", sub:"Jekaterinburg, Russland", cur:1}]],
     log:"Browser: Laut Aktionärsregister hält Viktor Sokolov 60 % der Anteile und Stimmrechte an der Aurelius Industrial Group PJSC. Die übrigen 40 % liegen im Streubesitz."},
   aurel:{kw:["aurel"], title:"Mark Aurel – römischer Kaiser (121–180 n. Chr.)", url:"lexikon.example/mark-aurel", snippet:"Römischer Kaiser und Philosoph, Verfasser der „Selbstbetrachtungen“.",
     html:`<h3>Mark Aurel</h3><p>Römischer Kaiser von 161 bis 180 n. Chr. und stoischer Philosoph. Bekannt für seine „Selbstbetrachtungen“.</p><p class="mini muted">Vermutlich nicht das, was ihr sucht.</p>`}};
+// Organigramm: Ebenen von oben (Eigentümer) nach unten (Beteiligungen). Verbindungen mit Anteilen; Knoten mit q lösen eine Suche aus.
+const orgChart = org => {
+  const ctr = (i, n) => (i + .5) / n * 100;
+  const con = (a, b) => { const cs = [...a.map((_, i) => ctr(i, a.length)), ...b.map((_, i) => ctr(i, b.length))], lo = Math.min(...cs), hi = Math.max(...cs);
+    return `<div class="ocon">${a.map((n, i) => `<i style="left:${ctr(i, a.length)}%;top:0;height:50%"></i>${n.down ? `<em style="left:${ctr(i, a.length)}%;top:2px">${n.down}</em>` : ""}`).join("")}
+      ${hi > lo ? `<i class="bar" style="left:${lo}%;width:${hi - lo}%"></i>` : ""}
+      ${b.map((n, i) => `<i style="left:${ctr(i, b.length)}%;top:50%;height:50%"></i>${n.up ? `<em style="left:${ctr(i, b.length)}%;top:calc(50% + 2px)">${n.up}</em>` : ""}`).join("")}</div>`; };
+  return `<div class="org"><div class="orgcap">Beteiligungsstruktur laut Register</div>${org.map((lvl, k) => (k ? con(org[k - 1], lvl) : "") +
+    `<div class="orow">${lvl.map(n => `<div class="ocol"><button class="onode ${n.kind || ""} ${n.cur ? "cur" : ""}" ${n.q ? `data-q="${n.q}"` : "disabled"}><b>${n.name}</b>${n.sub ? `<small>${n.sub}</small>` : ""}</button></div>`).join("")}</div>`).join("")}
+    <p class="mini muted" style="margin:8px 0 0">Tippt auf ein Unternehmen, um in einem neuen Tab danach zu suchen.</p></div>`; };
+const orgText = org => org.slice(1).flatMap((lvl, k) => lvl.flatMap(b => org[k].map(a => a.name + " hält " + (a.down || b.up || "?") + " an " + b.name)));
 const webNorm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
 const webSearch = q => { const n = webNorm(q); if (n.length < 4) return [];
   return Object.entries(WEB).filter(([, w]) => w.kw.some(k => n.includes(k) || k.startsWith(n))).map(([id]) => id); };
@@ -1353,7 +1376,7 @@ RENDER.browser = b => {
   const res = webSearch(q);
   b.innerHTML = `<div class="btabs">${tabs.map((t, i) => `<div class="btab ${i === S.v.tab ? "on" : ""}"><button class="btsel" data-t="${i}">${esc(tabTitle(t))}</button>${tabs.length > 1 ? `<button class="btx" data-t="${i}" aria-label="Tab schließen">✕</button>` : ""}</div>`).join("")}<button id="webNewTab" aria-label="Neuer Tab">＋</button></div>
     <div class="bbar"><button id="webBack" ${page ? "" : "disabled"} aria-label="Zurück">←</button>${page ? `<div class="url">🔒 ${page.url}</div>` : `<input id="webQ" placeholder="Suchen …" aria-label="Suche"><button class="primary" id="webGo">Suchen</button>`}</div>
-    <div class="pane" style="padding:14px 16px">${page ? (page.reg ? `<div class="doc"><span class="stamp">REGISTERAUSZUG</span><h3>${page.title}</h3><table>${page.rows.map(([k,v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join("")}</table></div>
+    <div class="pane" style="padding:14px 16px">${page ? (page.reg ? `<div class="doc"><span class="stamp">REGISTERAUSZUG</span><h3>${page.title}</h3><table>${page.rows.map(([k,v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join("")}</table>${page.org ? orgChart(page.org) : ""}</div>
       <div class="row"><button id="webJournal">${(S.v.webJ || {})[tab.page] ? "✓ Im Ermittlungsjournal" : "＋ Ins Ermittlungsjournal übernehmen"}</button></div>` : page.html) :
       !q ? `<h3 style="margin-top:20px">Findr</h3><p class="mini muted">Websuche. Gebt einen Firmennamen ein.</p>` :
       res.length ? `<p class="mini muted">${res.length} Ergebnis${res.length === 1 ? "" : "se"} für „${esc(q)}“</p>${res.map(id => `<button class="sres" data-w="${id}"><b>${WEB[id].title}</b><small>${WEB[id].url}</small><span>${WEB[id].snippet}</span></button>`).join("")}` :
@@ -1364,6 +1387,7 @@ RENDER.browser = b => {
     $("webGo").addEventListener("click", go); $("webQ").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
   }
   $("webBack").addEventListener("click", () => { tab.page = null; render("browser"); });
+  on(b, ".onode[data-q]", "click", e => { tabs.push({q:e.currentTarget.dataset.q, page:null}); S.v.tab = tabs.length - 1; render("browser"); });
   $("webNewTab").addEventListener("click", () => { tabs.push({q:"", page:null}); S.v.tab = tabs.length - 1; render("browser"); });
   on(b, ".btsel", "click", e => { S.v.tab = +e.currentTarget.dataset.t; render("browser"); });
   on(b, ".btx", "click", e => { e.stopPropagation(); const i = +e.currentTarget.dataset.t; tabs.splice(i, 1); if (S.v.tab >= i && S.v.tab > 0) S.v.tab--; render("browser"); });
@@ -1374,7 +1398,7 @@ RENDER.browser = b => {
     render("browser"); });
   if ($("webJournal")) $("webJournal").addEventListener("click", () => {
     const j = S.v.webJ || (S.v.webJ = {}); if (j[tab.page]) return;
-    j[tab.page] = true; (S.journal || (S.journal = [])).unshift({id:Date.now(), t:storyTime(), title:page.title, text:page.rows.map(([k,v]) => k + ": " + v.replace(/<br>/g, "; ")).join("\n")});
+    j[tab.page] = true; (S.journal || (S.journal = [])).unshift({id:Date.now(), t:storyTime(), title:page.title, text:[...page.rows.map(([k,v]) => k + ": " + v.replace(/<br>/g, "; ")), ...(page.org ? ["Beteiligungen:", ...orgText(page.org)] : [])].join("\n")});
     fb("browser", "Registerauszug ins Ermittlungsjournal übernommen.", "good"); render("browser"); render("journal"); saveGame();
   });
 };
